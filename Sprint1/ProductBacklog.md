@@ -17,16 +17,20 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 
 ## Tabelarni prikaz Backloga
 
-| ID                | Naziv stavke                   | Tip stavke    | Prioritet | Složenost | Status  | Sprint   |
-| :---------------- | :----------------------------- | :------------ | :-------: | :-------: | :------ | :------- |
-| [SP2-01](#sp2-01) | Definisati Acceptance Criteria | Dokumentacija |     2     |     S     | To-Do   | Sprint 2 |
-| [SP2-02](#sp2-02) | Definisanje User Stories       | Dokumentacija |     1     |    XS     | To-Do   | Sprint 2 |
-| [SP2-03](#sp2-03) | Definisati listu NFR zahtjeva  | Dokumentacija |     2     |     M     | To-Do   | Sprint 2 |
-| [SP3-01](#sp3-01) | Kreirati Risk Register         | Dokumentacija |     1     |     S     | Backlog | Sprint 3 |
-| [SP3-02](#sp3-02) | Izraditi Domain Model          | Dokumentacija |     1     |     M     | Backlog | Sprint 3 |
-| [SP3-03](#sp3-03) | Izraditi Use Case Model        | Dokumentacija |     1     |     M     | Backlog | Sprint 3 |
-| [SP3-04](#sp3-04) | Izraditi Architecture Overview | Dokumentacija |     1     |     M     | Backlog | Sprint 3 |
-| [SP3-05](#sp3-05) | Definisati Test Strategy       | Dokumentacija |     1     |    ML     | Backlog | Sprint 3 |
+| ID                | Naziv stavke                                   | Tip stavke                     | Prioritet | Složenost | Status  | Sprint   |
+| :---------------- | :--------------------------------------------- | :----------------------------- | :-------: | :-------: | :------ | :------- |
+| [SP2-01](#sp2-01) | Definisati Acceptance Criteria                 | Dokumentacija                  |     2     |     S     | To-Do   | Sprint 2 |
+| [SP2-02](#sp2-02) | Definisanje User Stories                       | Dokumentacija                  |     1     |    XS     | To-Do   | Sprint 2 |
+| [SP2-03](#sp2-03) | Definisati listu NFR zahtjeva                  | Dokumentacija                  |     2     |     M     | To-Do   | Sprint 2 |
+| [SP3-01](#sp3-01) | Kreirati Risk Register                         | Dokumentacija                  |     1     |     S     | Backlog | Sprint 3 |
+| [SP3-02](#sp3-02) | Izraditi Domain Model                          | Dokumentacija                  |     1     |     M     | Backlog | Sprint 3 |
+| [SP3-03](#sp3-03) | Izraditi Use Case Model                        | Dokumentacija                  |     1     |     M     | Backlog | Sprint 3 |
+| [SP3-04](#sp3-04) | Izraditi Architecture Overview                 | Dokumentacija                  |     1     |     M     | Backlog | Sprint 3 |
+| [SP3-05](#sp3-05) | Definisati Test Strategy                       | Dokumentacija                  |     1     |    ML     | Backlog | Sprint 3 |
+| [SP4-01](#sp4-01) | Definisati Definition of Done                  | Dokumentacija                  |     1     |     M     | Backlog | Sprint 4 |
+| [SP4-02](#sp4-02) | Kreirati Initial Release Plan                  | Dokumentacija                  |     1     |     M     | Backlog | Sprint 4 |
+| [SP4-03](#sp4-03) | Uspostaviti osnovni skeleton projekta          | Technical Task / Dokumentacija |     2     |     S     | Backlog | Sprint 4 |
+| [SP4-04](#sp4-04) | Postaviti inicijalnu strukturu repozitorija... | Technical Task / Dokumentacija |     2     |     L     | Backlog | Sprint 4 |
 
 ---
 
@@ -122,3 +126,51 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 3
+
+---
+
+### SP4-01
+
+- **Naziv Stavke:** Definisati Definition of Done
+- **Opis:** Kreirati i dokumentovati zajednički dogovoreni skup kriterija koje svaki product increment mora zadovoljiti prije nego što se smatra završenim
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** M
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 4
+
+---
+
+### SP4-02
+
+- **Naziv Stavke:** Kreirati Initial Release Plan
+- **Opis:** Napraviti pregled planiranih isporuka funkcionalnosti
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** M
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 4
+
+---
+
+### SP4-03
+
+- **Naziv Stavke:** Uspostaviti osnovni skeleton projekta
+- **Opis:** Kreirati minimalnu, ali funkcionalnu strukturu foldera
+- **Tip Stavke:** Technical Task / Dokumentacija
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** S
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 4
+
+---
+
+### SP4-04
+
+- **Naziv Stavke:** Postaviti inicijalnu strukturu repozitorija i osnovni tehnički setup
+- **Opis:** Kreirati repozitorij i konfigurisati razvojno okruženje
+- **Tip Stavke:** Technical Task / Dokumentacija
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** L
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 4
