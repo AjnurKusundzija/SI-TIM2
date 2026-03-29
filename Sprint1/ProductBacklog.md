@@ -21,6 +21,7 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 | :---------------- | :----------------------------- | :------------ | :-------: | :-------: | :----- | :------- |
 | [SP2-01](#sp2-01) | Definisati Acceptance Criteria | Dokumentacija |     2     |     S     | To-Do  | Sprint 2 |
 | [SP2-02](#sp2-02) | Definisanje User Stories       | Dokumentacija |     1     |    XS     | To-Do  | Sprint 2 |
+| [SP2-03](#sp2-03) | Definisati listu NFR zahtjeva  | Dokumentacija |     2     |     M     | To-Do  | Sprint 2 |
 
 ---
 
@@ -47,3 +48,14 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 - **Procjena složenosti ili napora:** XS
 - **Status:** To-Do
 - **Veza sa sprintom ili release planom:** Sprint 2
+
+---
+
+### SP2-03
+
+- **Naziv Stavke:** Definisati listu NFR zahtjeva
+- **Opis:** Identifikovati i dokumentovati nefunkcionalne zahtjeve sistema (brzina učitavanja, broj istovremenih korisnika, sigurnost)
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** To-Do -**Veza sa sprintom ili release planom:** Sprint 2
