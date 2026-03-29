@@ -120,6 +120,8 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 - **Status:** To-Do
 - **Veza sa sprintom ili release planom:** Sprint 1
 
+---
+
 ### SP2-01
 
 - **Naziv Stavke:** Definisati Acceptance Criteria
@@ -152,6 +154,8 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
 - **Status:** To-Do -**Veza sa sprintom ili release planom:** Sprint 2
+
+---
 
 ### SP3-01
 
