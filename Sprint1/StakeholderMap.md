@@ -1,0 +1,14 @@
+# Stakeholder Mapa
+
+Ovaj dokument opisuje ključne dionike (stakeholdere) helpdesk/ticketing sistema, njihove uloge, interese i očekivanja. Služi kao referenca pri definisanju funkcionalnih zahtjeva, prioritizaciji MVP funkcionalnosti i planiranju komunikacije tokom razvoja.
+
+---
+
+| Stakeholder | Uloga u sistemu | Interes | Očekivanja | Uticaj na sistem | Važnost za MVP |
+|---|---|---|---|---|---|
+| Korisnik (klijent / zaposleni) | Prijavljuje problem ili zahtjev kroz sistem, prati status svog tiketa i komunicira sa agentom. | Brza i jednostavna prijava problema i povratna informacija o statusu zahtjeva. | Jednostavna forma za prijavu, obavijest kada se status zahtjeva promjeni, jednostavan UI za prijavu. | Visok – on je onaj zbog koga sistem uopće postoji, pa su njegove potrebe osnova za većinu funkcionalnih zahtjeva. | Visok |
+| Agent / Operater helpdeska | Prima i obrađuje tikete, mijenja statuse, komunicira s korisnikom i dokumentuje rješenje. | Preglednost svih tiketa koji su mu dodijeljeni, lako filtriranje po prioritetu i statusu. | Pregled liste otvorenih tiketa, mogućnost komentiranja i promjene statusa, dodjela tiketa drugom agentu po potrebi. | Visok – svakodnevno radi u sistemu, njegova radna rutina direktno određuje kako treba izgledati tok obrade tiketa. | Visok |
+| Tehničar (tim na terenu) | Preuzima terenske radne naloge, ažurira status tiketa s terena i zatvara tiket po završetku intervencije. | Jasan pregled dodijeljenih tiketa, osnovne informacije o korisniku i lokaciji. | Lista dodijeljenih tiketa, prikaz adrese i kontakta korisnika, mogućnost komentarisanja i zatvaranja tiketa. | Visok | Visok |
+| Administrator sistema | Upravljanje korisnicima, kategorijama tiketa, rolama i opštim postavkama sistema. | Potpuna kontrola nad tim ko može i šta raditi u sistemu. | Admin panel za upravljanje korisnicima i rolama, pregled logova, mogućnost konfiguracije kategorija. | Visok – nije svakodnevni operativni korisnik ali definiše pravila i strukturu koja utiče na zahtjeve. | Srednji |
+| Product Owner | Definiše i prioritizuje zahtjeve, prihvata isporuke na sprint reviewu. | Da tim isporuči funkcionalan i dokumentovan sistem u okviru dogovorenog scopea. | Jasna dokumentacija, redovni sprint reviewi, poštovanje dogovorenog MVP opsega i kriterija prihvatljivosti. | Visok – odobrava zahtjeve i definiše šta je gotovo, njegovo mišljenje direktno mijenja smjer razvoja. | Visok |
+| Razvojni tim | Dizajnira arhitekturu i implementira sistem na osnovu dogovorenih zahtjeva. | Jasni i stabilni zahtjevi, realni rokovi, sloboda pri odabiru tehničkih rješenja. | User stories s jasnim kriterijima prihvatljivosti, pravovremena povratna informacija od PO-a, nema izmjena scopea bez dogovora. | Visok – donosi tehničke odluke koje direktno utiču na arhitekturu, izvedivost i kvalitet sistema. | Interna |
