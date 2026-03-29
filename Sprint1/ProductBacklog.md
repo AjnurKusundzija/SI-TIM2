@@ -12,6 +12,7 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 - **Procjena složenosti:** XS, S, M, L, XL
 - **Oznaka prioriteta:** 1, 2, 3, 4, 5 (1 je najbitnije, 5 je najmanje bitno)
 - **Tipovi stavki:** Feature, Bug, Dokumentacija, Research, Technical Task
+- Konvencija za ID Backlogova: SP[Broj sprinta]-[Broj Id-a]
 
 ---
 
@@ -19,6 +20,10 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 
 | ID                | Naziv stavke                                   | Tip stavke                     | Prioritet | Složenost | Status  | Sprint   |
 | :---------------- | :--------------------------------------------- | :----------------------------- | :-------: | :-------: | :------ | :------- |
+| [SP1-01](#sp1-01) | Definisati Team Charter                        | Dokumentacija                  |     1     |     -     | To-Do   | Sprint 1 |
+| [SP1-02](#sp1-02) | Definisati Product Vision                      | Dokumentacija                  |     1     |     -     | To-Do   | Sprint 1 |
+| [SP1-03](#sp1-03) | Definisati Stakeholder Map                     | Dokumentacija                  |     1     |     -     | To-Do   | Sprint 1 |
+| [SP1-04](#sp1-04) | Definisati početni Product Backlog             | Dokumentacija                  |     1     |     -     | To-Do   | Sprint 1 |
 | [SP2-01](#sp2-01) | Definisati Acceptance Criteria                 | Dokumentacija                  |     2     |     S     | To-Do   | Sprint 2 |
 | [SP2-02](#sp2-02) | Definisanje User Stories                       | Dokumentacija                  |     1     |    XS     | To-Do   | Sprint 2 |
 | [SP2-03](#sp2-03) | Definisati listu NFR zahtjeva                  | Dokumentacija                  |     2     |     M     | To-Do   | Sprint 2 |
@@ -37,6 +42,52 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 ---
 
 ## Detalji Backlog stavki
+
+### SP1-01
+
+- **Naziv Stavke:** Definisati Team Charter
+- **Opis:** Kreirati i dogovoriti Team Charter: sastav tima, komunikacija, radna pravila, odgovornosti i pravila neispunjavanja
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** -
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 1
+
+---
+
+### SP1-02
+
+- **Naziv Stavke:** Definisati Product Vision
+- **Opis:** Kreirati Product Vision: problem, ciljni korisnici, vrijednst sistema, MVP, scope i ograničenja
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** -
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 1
+
+---
+
+### SP1-03
+
+- **Naziv Stavke:** Definisati Stakeholder Map
+- **Opis:** Idetifikovati sve stakeholdere sistema, njihove uloge, i interese
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** -
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 1
+
+---
+
+### SP1-04
+
+- **Naziv Stavke:** Definisati početni Product Backlog
+- **Opis:** Kreirati početu listu stavki za izvođenje projekta
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** -
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 1
 
 ### SP2-01
 
