@@ -31,6 +31,8 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 | [SP4-02](#sp4-02) | Kreirati Initial Release Plan                  | Dokumentacija                  |     1     |     M     | Backlog | Sprint 4 |
 | [SP4-03](#sp4-03) | Uspostaviti osnovni skeleton projekta          | Technical Task / Dokumentacija |     2     |     S     | Backlog | Sprint 4 |
 | [SP4-04](#sp4-04) | Postaviti inicijalnu strukturu repozitorija... | Technical Task / Dokumentacija |     2     |     L     | Backlog | Sprint 4 |
+| [SP5-01](#sp5-01) | Uspostava AI Usage Loga                        | Dokumentacija                  |     1     |    XS     | Backlog | Sprint 5 |
+| [SP5-02](#sp5-02) | Uspostava Decision Loga                        | Dokumentacija                  |     1     |    XS     | Backlog | Sprint 5 |
 
 ---
 
@@ -174,3 +176,27 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 - **Procjena složenosti ili napora:** L
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 4
+
+---
+
+### SP5-01
+
+- **Naziv Stavke:** Uspostava AI Usage Loga
+- **Opis:** Kreirati i održavati dokument u kojem se bilježi svako korištenje AI alata tokom free AI usage faze razvoja softvera
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** XS
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 5
+
+---
+
+### SP5-02
+
+- **Naziv Stavke:** Uspostava Decision Loga
+- **Opis:** Napraviti Decision Log dokument koji se koristi za evidentiranje važnih projektnih, zahtjevnih, arhitektonskih, tehničkih i procesnih odluka. Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i prati odluke.
+- **Tip Stavke:** Dokumentacija
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** XS
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 5
