@@ -1,6 +1,6 @@
 # Stakeholder Mapa
 
-Ovaj dokument opisuje ključne dionike (stakeholdere) helpdesk/ticketing sistema, njihove uloge, interese i očekivanja. Služi kao referenca pri definisanju funkcionalnih zahtjeva, prioritizaciji MVP funkcionalnosti i planiranju komunikacije tokom razvoja.
+Ovaj dokument opisuje ključne sudionike (stakeholdere) helpdesk/ticketing sistema, njihove uloge, interese i očekivanja. Služi kao referenca pri definisanju funkcionalnih zahtjeva, prioritizaciji MVP funkcionalnosti i planiranju komunikacije tokom razvoja.
 
 ---
 
