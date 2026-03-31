@@ -1,7 +1,6 @@
 
 
-| TEAM CHARTER Softverski inžinjering · 2025/26 Grupa 2  |  Tema 2: Helpdesk i ticketing sistem |
-| ----- |
+| TEAM CHARTER Softverski inžinjering · 2025/26 · Grupa 2  |  Tema 2: Helpdesk i ticketing sistem |
 
 # **1\. Naziv i članovi tima**
 
@@ -48,7 +47,7 @@
 
 * Vanredni sastanci: zakazuju se u grupi po potrebi (u slučaju blokera i slično)
 
-* Sažetak sastanaka bilježi dokumentarista tima
+* Sažetak sastanaka bilježi zapisničar tima
 
 * Odsustvo s dogovorenog sastanka: član je dužan obavijestiti tim unaprijed i naknadno pregledati bilješke
 
@@ -66,7 +65,7 @@
 
 ## **3.2 Dogovor i praćenje zadataka**
 
-* Zadaci se raspoređuju na sprint planningu i upisuju u Github board
+* Zadaci se raspoređuju na sprint planningu, upisuju i prate u Gihub projects
 
 * Svaki zadatak ima jasno definisanu odgovornu/e osobu/e, opis i rok
 
@@ -75,6 +74,10 @@
 * Ako član ne može završiti zadatak u roku, obavještava tim kako bi se pronašlo rješenje
 
 * Evidencija rada vodi se kroz historiju na GitHubu i sprint backlog
+
+* Svaki član tima može ostaviti feedback za bilo koji issue koji će se uzeti u razmatranje pri izvođenju tog zadatka (prihvatiti ili odbaciti sugestiju, po osobnoj procjeni)
+
+* Issue se zatvara tek nakon pregleda od strane svakog člana tima i uz saglasnost svakog člana tima
 
 ## **3.3 Dokumentovanje odluka**
 
@@ -110,7 +113,7 @@
 
 * Na sedmičnom sastanku s Product Ownerom tim zajedno predstavlja rezultate i predlaže plan za naredni sprint
 
-* Svaki bloker ili kašnjenje prijavljuje se timu čim se pojavi, a ne tek na kraju sedmice
+* Svaka prepreka u izradi zadataka ili kašnjenje prijavljuje se timu čim se pojavi, a ne tek na kraju sedmice
 
 ## **4.2 Backlog i zahtjevi**
 
