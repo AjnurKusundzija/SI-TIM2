@@ -4,8 +4,6 @@
 
 Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizvoda. Backlog treba biti **živ dokument i redovno ažuriran**.
 
-Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prioritet, Procjena složenosti ili napora, Status i Veza sa sprintom ili release planom i po potrebi napisati i napomenu za backlog.
-
 ### Legenda za oznake
 
 - **Statusi za backlog:** Backlog, To-Do, In Progress, Testing, Done
@@ -41,7 +39,6 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 | [SP6-10-01](#sp6-10-01) | Login korisnika                                | Feature                        |     1     |     L     | Backlog | Sprint 6-10 |
 | [SP6-10-02](#sp6-10-02) | Upravljanje korisničkim profilom               | Feature                        |     2     |     M     | Backlog | Sprint 6-10 |
 | [SP6-10-03](#sp6-10-03) | Prikaz paketa i pretplata                      | Feature                        |     4     |     M     | Backlog | Sprint 6-10 |
-| [SP6-10-04](#sp6-10-04) | Prikaz računa i uputa za plaćanje              | Feature                        |     2     |     M     | Backlog | Sprint 6-10 |
 | [SP6-10-05](#sp6-10-05) | Kreiranje novog ticketa                        | Feature                        |     1     |     M     | Backlog | Sprint 6-10 |
 | [SP6-10-06](#sp6-10-06) | Pregled vlastitih tiketa                       | Feature                        |     1     |     S     | Backlog | Sprint 6-10 |
 | [SP6-10-07](#sp6-10-07) | Detaljan prikaz tiketa                         | Feature                        |     1     |     M     | Backlog | Sprint 6-10 |
@@ -57,7 +54,6 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 | [SP6-10-17](#sp6-10-17) | Pregled i uređivanje korisničkih profila       | Feature                        |     2     |     M     | Backlog | Sprint 6-10 |
 | [SP6-10-18](#sp6-10-18) | Pregled dodijeljenih tiketa (tehničari)        | Feature                        |     1     |     S     | Backlog | Sprint 6-10 |
 | [SP6-10-19](#sp6-10-19) | Ažuriranje statusa tiketa                      | Feature                        |     1     |     S     | Backlog | Sprint 6-10 |
-| [SP6-10-20](#sp6-10-20) | Komentar tehničara                             | Feature                        |     2     |    XS     | Backlog | Sprint 6-10 |
 | [SP6-10-21](#sp6-10-21) | Tehničar vidi osnovne informacije...           | Feature                        |     2     |     S     | Backlog | Sprint 6-10 |
 | [SP6-10-22](#sp6-10-22) | Izvještaj o broju tiketa                       | Feature                        |     1     |     M     | Backlog | Sprint 6-10 |
 | [SP6-10-23](#sp6-10-23) | Izvještaj po statusu tiketa                    | Feature                        |     5     |     M     | Backlog | Sprint 6-10 |
@@ -325,18 +321,6 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 
 ---
 
-### SP6-10-04
-
-- **Naziv Stavke:** Prikaz računa i uputa za plaćanje
-- **Opis:** Korisnik može da vidi sve neplaćene račune i upute o načinima plaćanja
-- **Tip Stavke:** Feature
-- **Prioritet:** 2
-- **Procjena složenosti ili napora:** M
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6-10
-
----
-
 ### SP6-10-05
 
 - **Naziv Stavke:** Kreiranje novog ticketa
@@ -472,12 +456,13 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 ### SP6-10-16
 
 - **Naziv Stavke:** Pretraživanje i filtriranje tiketa
-- **Opis:** Omogućiti pretragu i filtriranje tiketa prema različitim kriterijima. **Napomena:** Agentima omogućiti pregled i filtriranje svih tiketa (status, prioritet, tip, korisnik, vremenski opseg), dok krajnji korisnici mogu pretraživati i filtrirati isključivo vlastite tikete.
+- **Opis:** Omogućiti pretragu i filtriranje tiketa prema različitim kriterijima.
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Napomena:** Agentima omogućiti pregled i filtriranje svih tiketa (status, prioritet, tip, korisnik, vremenski opseg), dok krajnji korisnici mogu pretraživati i filtrirati isključivo vlastite tikete.
 
 ---
 
@@ -517,18 +502,6 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 
 ---
 
-### SP6-10-20
-
-- **Naziv Stavke:** Komentar tehničara
-- **Opis:** Tehničar može ostaviti poruku na tiket koji mu je dodijeljen (npr. “Doći ćemo oko 13:00”)
-- **Tip Stavke:** Feature
-- **Prioritet:** 2
-- **Procjena složenosti ili napora:** XS
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6-10
-
----
-
 ### SP6-10-21
 
 - **Naziv Stavke:** Tehničar vidi osnovne informacije o korisniku
@@ -556,12 +529,13 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 ### SP6-10-23
 
 - **Naziv Stavke:** Izvještaj po statusu tiketa
-- **Opis:** Broj tiketa po statusima (u nekom vremenskom opsegu), i procentualni udio. **Napomena:** Ovaj izvještaj gubi smisao za veće vremenske opsege.
+- **Opis:** Broj tiketa po statusima (u nekom vremenskom opsegu), i procentualni udio.
 - **Tip Stavke:** Feature
 - **Prioritet:** 5
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Napomena:** Ovaj izvještaj gubi smisao za veće vremenske opsege.
 
 ---
 
@@ -642,7 +616,7 @@ Za svaki backlog item navodi se: ID, Naziv stavke, Kratak opis, Tip stavke, Prio
 - **Naziv Stavke:** Export izvještaja
 - **Opis:** Izvoz izvještaja u CSV formatu
 - **Tip Stavke:** Feature
-- **Prioritet:** 3
+- **Prioritet:** 5
 - **Procjena složenosti ili napora:** S
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 6-10
