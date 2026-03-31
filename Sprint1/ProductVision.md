@@ -41,11 +41,11 @@ Rezidencijalni korisnici (Mlađa populacija): Fokusirani na mobilni internet i s
 
 Rezidencijalni korisnici (Starija populacija): Primarno koriste fiksnu telefoniju i TV usluge. Često se suočavaju sa tehničkim poteškoćama u korištenju digitalnih servisa i zahtijevaju jednostavnu komunikaciju sa podrškom.
 
-Poslovni korisnici (Pravna lica): Zahtijevaju najviši nivo pouzdanosti (SLA) i sigurnosti mreže. Svaki zastoj za njih znači finansijski gubitak, zbog čega im je potreban prioritetni tretman i brza tehnička podrška.
+Poslovni korisnici (Pravna lica): Zahtijevaju najviši nivo pouzdanosti (SLA - Service Level Agreement) i sigurnosti mreže. Svaki zastoj za njih znači finansijski gubitak, zbog čega im je potreban prioritetni tretman i brza tehnička podrška.
 
 ### 2. Operativni timovi (Unutrašnji korisnici)
 
-Korisnička podrška (Agenti): Prva linija kontakta koja prima pozive i poruke. Cilj je imati sve podatke o korisniku na jednom mjestu radi bržeg i tačnijeg rada.
+Korisnička podrška (Agenti): Prva linija kontakta koja prima pozive i poruke. Cilj je imati sve podatke o korisniku na jednom mjestu radi bržeg i tačnijeg rada. Takodjer, agenti služe kao prvi paket za osnovna pitanja oko informacija o paketima, uslugama i slično.
 
 Tehničko osoblje (Serviseri i mrežni inženjeri): Terenske ekipe koje rješavaju fizičke kvarove. Sistem im omogućava efikasnu dodjelu radnih naloga, jasnu prioritizaciju (hitni vs. rutinski kvarovi) i pristup podacima o kvaru direktno sa terena.
 
@@ -89,16 +89,25 @@ Dodjela zadataka: Ručno ili jednostavno automatsko prosljeđivanje tiketa slobo
 Sistem komunikacije: Interna komunikacija između timova i mogućnost direktnog feedbacka prema korisniku.
 Modul za tehničare: Poseban pregled radnih naloga za terenske ekipe sa detaljnim opisom kvara.
 
+### Sistem izvještaja:
+Generisanje različitih vrsta izvještaja i statistika.
+
 ---
 
 ## Šta ne ulazi u MVP
 Kako bi se razvoj primarno fokusirao na rješavanje kritičnih problema i osigurala brža isporuka stabilnog rješenja, sljedeće funkcionalnosti su svjesno izostavljene iz prve faze:
 
-Mobilna aplikacija: MVP verzija će biti isključivo web-bazirana (optimizovana za desktop i mobile browser-e). Posebne aplikacije za iOS i Android platforme za korisnike i terenske tehničare planirane su za kasnije faze.
+Sistem za online plaćanje
+Integracija sa payment gateway sistemima i mogućnost online plaćanja računa neće biti dio MVP verzije. Fokus ostaje isključivo na upravljanju korisničkom podrškom i rješavanju kvarova, dok će se finansijske funkcionalnosti razmatrati u kasnijim fazama razvoja.
 
-AI Chatbot i Automatizacija Odgovora: Neće biti implementirana vještačka inteligencija za automatsko odgovaranje na upite. Sva komunikacija u ovoj fazi odvija se direktno između agenata i korisnika.
+Višejezična podrška (Multilingual support)
+MVP će podržavati samo jedan jezik. Implementacija višejezičnosti (npr. engleski, njemački i drugi jezici) planirana je za naredne faze kako bi se omogućila šira dostupnost sistema različitim korisničkim grupama.
 
-Napredni sistemi notifikacija: Funkcionalnosti poput automatizovanih SMS-ova, push notifikacija na telefonima ili kompleksnih e-mail kampanja ostaju van opsega. Obavještenja će biti ograničena na osnovne statusne promjene unutar samog sistema.
+Napredna statistika i AI analitika
+Iako MVP uključuje osnovne izvještaje, napredna analitika poput prediktivnih modela, AI-driven uvida (npr. predviđanje kvarova, analiza ponašanja korisnika, automatska optimizacija resursa) neće biti implementirana u ovoj fazi. Ove funkcionalnosti zahtijevaju kompleksniju obradu podataka i biće dio budućih unapređenja sistema.
+
+Napredni sistemi notifikacija
+Funkcionalnosti poput automatizovanih SMS-ova, push notifikacija na telefonima ili kompleksnih e-mail kampanja ostaju van opsega. Obavještenja će biti ograničena na osnovne statusne promjene unutar samog sistema.
 
 ---
 
@@ -107,7 +116,7 @@ Napredni sistemi notifikacija: Funkcionalnosti poput automatizovanih SMS-ova, pu
 ### Ograničenja (Constraints)
 Vremensko i razvojno ograničenje: Razvoj MVP-a strogo je limitiran trajanjem sprinta. Ovo zahtijeva beskompromisan fokus na osnovne funkcionalnosti i odlaganje bilo kakve "nice-to-have" kompleksnosti.
 
-Tehnička arhitektura: Sistem je inicijalno ograničen na web platformu. Isključena je mobilna podrška i duboka integracija sa eksternim billing ili CRM sistemima u ovoj fazi (sistem funkcioniše kao standalone rješenje).
+Tehnička arhitektura: Sistem je inicijalno ograničen na web platformu. Isključena je mobilna podrška i duboka integracija sa eksternim billing ili CRM sistemima u ovoj fazi (sistem funkcioniše kao standalone rješenje). Također, sistem mora podržavati rad u realnom vremenu, što znači da se sve promjene (npr. status tiketa ili ažuriranja od strane tehničara) odmah prikazuju svim korisnicima bez osvježavanja stranice. Ovo zahtijeva stabilnu dvosmjernu komunikaciju (npr. WebSocket), podršku za veći broj istovremenih konekcija i osnovne mehanizme za očuvanje konzistentnosti podataka i reconnect u slučaju prekida veze.
 
 Podaci i validacija: Zbog nedostupnosti realnih produkcionih podataka, za razvoj se koriste isključivo testni i simulirani setovi podataka. To može uticati na preciznost predviđanja opterećenja sistema u realnim uslovima.
 
