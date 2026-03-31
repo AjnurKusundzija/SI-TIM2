@@ -72,7 +72,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP1-01
 
-- **Naziv Stavke:** Definisati Team Charter
+- **Naziv Stavke:** Team Charter
 - **Opis:** Kreirati i dogovoriti Team Charter: sastav tima, komunikacija, radna pravila, odgovornosti i pravila neispunjavanja
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -84,7 +84,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP1-02
 
-- **Naziv Stavke:** Definisati Product Vision
+- **Naziv Stavke:** Product Vision
 - **Opis:** Kreirati Product Vision: problem, ciljni korisnici, vrijednst sistema, MVP, scope i ograničenja
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -96,7 +96,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP1-03
 
-- **Naziv Stavke:** Definisati Stakeholder Map
+- **Naziv Stavke:** Stakeholder Map
 - **Opis:** Idetifikovati sve stakeholdere sistema, njihove uloge, i interese
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -108,8 +108,8 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP1-04
 
-- **Naziv Stavke:** Definisati početni Product Backlog
-- **Opis:** Kreirati početu listu stavki za izvođenje projekta
+- **Naziv Stavke:** Product Backlog
+- **Opis:** Kreirati početnu listu stavki za izvođenje projekta
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** -
@@ -120,7 +120,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP2-01
 
-- **Naziv Stavke:** Definisati Acceptance Criteria
+- **Naziv Stavke:** Acceptance Criteria
 - **Opis:** Za svaki User Story definisati jasne i mjerljive uslove koje funkcionalnost mora zadovoljiti kako bi bila smatrana gotovom
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 2
@@ -132,7 +132,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP2-02
 
-- **Naziv Stavke:** Definisanje User Stories
+- **Naziv Stavke:** User Stories
 - **Opis:** Kreirati strukturisanu listu User Stories, iz perspektive krajnjeg korisnika
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -144,7 +144,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP2-03
 
-- **Naziv Stavke:** Definisati listu NFR zahtjeva
+- **Naziv Stavke:** NFR zahtjevi
 - **Opis:** Identifikovati i dokumentovati nefunkcionalne zahtjeve sistema (brzina učitavanja, broj istovremenih korisnika, sigurnost)
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 2
@@ -155,7 +155,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP3-01
 
-- **Naziv Stavke:** Kreirati Risk Register
+- **Naziv Stavke:** Risk Register
 - **Opis:** Potrebno je napraviti dokument u kojem se procijenjuju sve prijetnje i rizici prije, tokom i poslije implementacije projekta
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -167,7 +167,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP3-02
 
-- **Naziv Stavke:** Izraditi Domain Model
+- **Naziv Stavke:** Domain Model
 - **Opis:** Potrebno je izradii dokument Domain model u kojem se nalazi reprezentacija specificnog problema u nasem domenu. Model se koristi kao most izmedju stakeholdera i developera. Definisati ključne entitete sistema njihove atribute, ponašanja i međusobne veze
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -179,7 +179,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP3-03
 
-- **Naziv Stavke:** Izraditi Use Case Model
+- **Naziv Stavke:** Use Case Model
 - **Opis:** Definisati funkcionalne zahtjeve sistema kroz UML Use Case dijagrame
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -191,7 +191,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP3-04
 
-- **Naziv Stavke:** Izraditi Architecture Overview
+- **Naziv Stavke:** Architecture Overview
 - **Opis:** Dokumentovati arhitekturu sistema. Prikazati ključne komponente, njihove veze, i odgovornosti
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -203,7 +203,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP3-05
 
-- **Naziv Stavke:** Definisati Test Strategy
+- **Naziv Stavke:** Test Strategy
 - **Opis:** Dokumentovati pristup testiranju (vrste testova, odgovornosti, alate)
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -215,7 +215,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP4-01
 
-- **Naziv Stavke:** Definisati Definition of Done
+- **Naziv Stavke:** Definition of Done
 - **Opis:** Kreirati i dokumentovati zajednički dogovoreni skup kriterija koje svaki product increment mora zadovoljiti prije nego što se smatra završenim
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -227,7 +227,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP4-02
 
-- **Naziv Stavke:** Kreirati Initial Release Plan
+- **Naziv Stavke:** Initial Release Plan
 - **Opis:** Napraviti pregled planiranih isporuka funkcionalnosti
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -239,7 +239,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP4-03
 
-- **Naziv Stavke:** Uspostaviti osnovni skeleton projekta
+- **Naziv Stavke:** Osnovni skeleton projekta
 - **Opis:** Kreirati minimalnu, ali funkcionalnu strukturu foldera
 - **Tip Stavke:** Technical Task / Dokumentacija
 - **Prioritet:** 2
@@ -251,7 +251,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP4-04
 
-- **Naziv Stavke:** Postaviti inicijalnu strukturu repozitorija i osnovni tehnički setup
+- **Naziv Stavke:** Inicijalna struktura repozitorija i osnovni tehnički setup
 - **Opis:** Kreirati repozitorij i konfigurisati razvojno okruženje
 - **Tip Stavke:** Technical Task / Dokumentacija
 - **Prioritet:** 2
@@ -263,7 +263,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP5-01
 
-- **Naziv Stavke:** Uspostava AI Usage Loga
+- **Naziv Stavke:** AI Usage log
 - **Opis:** Kreirati i održavati dokument u kojem se bilježi svako korištenje AI alata tokom free AI usage faze razvoja softvera
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -275,7 +275,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### SP5-02
 
-- **Naziv Stavke:** Uspostava Decision Loga
+- **Naziv Stavke:** Decision Log
 - **Opis:** Napraviti Decision Log dokument koji se koristi za evidentiranje važnih projektnih, zahtjevnih, arhitektonskih, tehničkih i procesnih odluka. Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i prati odluke.
 - **Tip Stavke:** Dokumentacija
 - **Prioritet:** 1
@@ -288,19 +288,20 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-01
 
 - **Naziv Stavke:** Login korisnika
-- **Opis:** Za korisnika smatramo da već ima registrovan profil, omogućiti Login preko podataka sa ugovora
+- **Opis:** Implementirati autentikaciju i autorizaciju korisnika za koristenje Ticket/Helpdesk sistema
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Napomena:** Za korisnika smatramo da već ima registrovan profil gdje pristupni podaci se nalaze u njegovom ugovoru za paket koji koristi
 
 ---
 
 ### SP6-10-02
 
 - **Naziv Stavke:** Upravljanje korisničkim profilom
-- **Opis:** Korisnik može mijenjati neke podatke vezane za svoj profil (email, lozinka)
+- **Opis:** Implementirati feature gdje korisnik može da mijenjati neke podatke vezane za svoj profil (email, lozinka)
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
@@ -312,7 +313,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-03
 
 - **Naziv Stavke:** Prikaz paketa i pretplata
-- **Opis:** Korisnik ima uvid i svoje pakete: Internet, TV, mobilni paketi
+- **Opis:** Implementirati feature gdje korisnik ima uvid i svoje pakete: Internet, TV, mobilni paketi
 - **Tip Stavke:** Feature
 - **Prioritet:** 4
 - **Procjena složenosti ili napora:** M
@@ -324,7 +325,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-05
 
 - **Naziv Stavke:** Kreiranje novog ticketa
-- **Opis:** Forma za prijavu problema i postavljanje pitanja (subject, tip, opis, prioritet)
+- **Opis:** Implementirati feature za prikaz forme za prijavu problema i postavljanje pitanja (subject, tip, opis, prioritet)
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
@@ -336,7 +337,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-06
 
 - **Naziv Stavke:** Pregled vlastitih tiketa
-- **Opis:** Prikaz liste svih tiketa koje je korisnik kreirao
+- **Opis:** Implementirati feature za prikaz liste svih tiketa koje je korisnik kreirao
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** S
@@ -348,7 +349,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-07
 
 - **Naziv Stavke:** Detaljan prikaz tiketa
-- **Opis:** Prikaz kompletnog sadržaja tiketa (status, prioritet, historija komunikacije)
+- **Opis:** Implementirati feature za prikaz kompletnog sadržaja tiketa (status, prioritet, historija komunikacije)
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
@@ -360,19 +361,20 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-08
 
 - **Naziv Stavke:** Zatvaranje ticketa
-- **Opis:** Omogućiti zatvaranje ticketa. Ticket može zatvoriti i korisnik i agent kome je ticket dodijeljen kao i tehničar koji je na terenu riješio problem
+- **Opis:** Implementirati feature za zatvaranje ticketa.
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Napomena:** Ticket može zatvoriti i korisnik i agent kome je ticket dodijeljen kao i tehničar koji je na terenu riješio problem
 
 ---
 
 ### SP6-10-09
 
 - **Naziv Stavke:** Ocjenjivanje ticketa
-- **Opis:** Korisnik može ocijeniti kvalitet rješenja
+- **Opis:** Implementirati feature gdje korisnik može ocijeniti kvalitet rješenja
 - **Tip Stavke:** Feature
 - **Prioritet:** 5
 - **Procjena složenosti ili napora:** S
@@ -384,7 +386,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-10
 
 - **Naziv Stavke:** Komunikacija kroz tiket
-- **Opis:** Omogućiti da korisnik i agent/tehničar mogu razmjenjivati poruke kroz tiket. Korisnik je ograničen na jednu poruku po odgovoru
+- **Opis:** Implementirati feature gdje korisnik i agent/tehničar mogu razmjenjivati poruke kroz tiket. Korisnik je ograničen na jednu poruku po odgovoru
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
@@ -396,19 +398,20 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-11
 
 - **Naziv Stavke:** Upravljanje prioritetima tiketa
-- **Opis:** Definisati 2 različita prioriteta za svaki tiket. Korisnički i interni prioritet tiketa. Korisnik nema uvid u internu evaluaciju tiketa
+- **Opis:** Definisati 2 različita prioriteta za svaki tiket. Korisnički i interni prioritet tiketa. Nakon definisanja i implementirati navedeni feature
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Napomena:** Korisnik nema uvid u internu evaluaciju tiketa
 
 ---
 
 ### SP6-10-12
 
 - **Naziv Stavke:** Preraspodjela agenata po timovima
-- **Opis:** Administrator ima mogućnost da organizuje agente po timovima i stručnosti
+- **Opis:** Implementirati feature gdje administrator ima mogućnost da organizuje agente po timovima i stručnosti
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
@@ -420,7 +423,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-13
 
 - **Naziv Stavke:** Automatska dodjela tiketa timovima
-- **Opis:** Sistem raspodjele tiketa prema tipu problema
+- **Opis:** Implementirati feature za prikaz sistema raspodjele tiketa prema tipu problema
 - **Tip Stavke:** Feature
 - **Prioritet:** 3
 - **Procjena složenosti ili napora:** XS
@@ -432,7 +435,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-14
 
 - **Naziv Stavke:** Prosljeđivanje tiketa
-- **Opis:** Agent može prebaciti tiket drugom timu/osobi
+- **Opis:** Implementirati feature gdje Agent može daprebaciti tiket drugom timu/osobi
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
@@ -444,7 +447,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-15
 
 - **Naziv Stavke:** Pregled svih tiketa
-- **Opis:** Agent može da vidi sve tikete i odgovori na tikete van svoje struke
+- **Opis:** Implementirat feature da agent može da vidi sve tikete i odgovori na tikete van svoje struke
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
@@ -456,7 +459,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-16
 
 - **Naziv Stavke:** Pretraživanje i filtriranje tiketa
-- **Opis:** Omogućiti pretragu i filtriranje tiketa prema različitim kriterijima.
+- **Opis:** Implementirati feature za pretragu i filtriranje tiketa prema različitim kriterijima.
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
@@ -469,7 +472,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-17
 
 - **Naziv Stavke:** Pregled i uređivanje korisničkih profila
-- **Opis:** Agent može vidjeti detalje korisnika, historiju tiketa i upravljati njegovim paketima i pretplatama
+- **Opis:** Implementirati feature da agent može da vidi detalje korisnika, historiju tiketa i upravljati njegovim paketima i pretplatama
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
@@ -481,7 +484,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-18
 
 - **Naziv Stavke:** Pregled dodijeljenih tiketa (tehničari)
-- **Opis:** Lista radnih naloga za teren
+- **Opis:**Implementirati feature za pregled i prikaz liste radnih naloga za teren
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** S
@@ -493,7 +496,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-19
 
 - **Naziv Stavke:** Ažuriranje statusa tiketa
-- **Opis:** Tehničar ima mogućnost da promjeni stanje tiketa i na kraju ga i zatvori ako je problem riješen
+- **Opis:** Implementirati mogucnost i feature da tehničar promjeni stanje tiketa i na kraju ga i zatvori ako je problem riješen
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** S
@@ -505,7 +508,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-21
 
 - **Naziv Stavke:** Tehničar vidi osnovne informacije o korisniku
-- **Opis:** Omogućiti tehničaru da vidi osnovne informacije ko korisniku koji je prijavio problem. To podrazumijeva ime, prezime, adresu, broj telefona, pakete, pretplate, instalirane uređaje
+- **Opis:** Implementirati mogucnost za tehničara da vidi osnovne informacije ko korisniku koji je prijavio problem. To podrazumijeva ime, prezime, adresu, broj telefona, pakete, pretplate, instalirane uređaje
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** S
@@ -517,7 +520,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-22
 
 - **Naziv Stavke:** Izvještaj o broju tiketa
-- **Opis:** Prikaz ukupnog broja tiketa po vremenskom periodu (dnevno, sedmično, mjesečno)
+- **Opis:** Implementirati mogucnost za izracunavanje i prikaz ukupnog broja tiketa po vremenskom periodu (dnevno, sedmično, mjesečno)
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
@@ -529,7 +532,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-23
 
 - **Naziv Stavke:** Izvještaj po statusu tiketa
-- **Opis:** Broj tiketa po statusima (u nekom vremenskom opsegu), i procentualni udio.
+- **Opis:** Implementirati mogucnost za izracunavanje i prikaz izvjestaja za broj tiketa po statusima (u nekom vremenskom opsegu), i procentualni udio.
 - **Tip Stavke:** Feature
 - **Prioritet:** 5
 - **Procjena složenosti ili napora:** M
@@ -542,7 +545,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-24
 
 - **Naziv Stavke:** Izvještaj po tipu problema
-- **Opis:** Analiza tiketa po predefinisanim kategorijama problema
+- **Opis:** Implementirati mogucnost za izracunavanje i prikaz izvjestaja za analizu tiketa po predefinisanim kategorijama problema
 - **Tip Stavke:** Feature
 - **Prioritet:** 3
 - **Procjena složenosti ili napora:** S
@@ -554,7 +557,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-25
 
 - **Naziv Stavke:** Prosječno vrijeme rješavanja tiketa
-- **Opis:** Izračun prosječnog vremena od kreiranja do zatvaranja tiketa
+- **Opis:** Implementirati mogucnost za izracunavanja i prikaz za izračun prosječnog vremena od kreiranja do zatvaranja tiketa
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
@@ -566,7 +569,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-26
 
 - **Naziv Stavke:** Vrijeme prvog odgovora
-- **Opis:** Prosječno vrijeme do prvog odgovora na tiket
+- **Opis:** Implementirati mogucnost za izracunavanje i prikaz prosječno vrijeme do prvog odgovora na tiket
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
@@ -578,7 +581,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-27
 
 - **Naziv Stavke:** Izvještaj o opterećenju agenata
-- **Opis:** Detaljan izvještaj o broju riješenih tiketa po danu | sedmici | mjesecu za sve agente
+- **Opis:** Implementirati mogucnost za Detaljan izvještaj o broju riješenih tiketa po danu | sedmici | mjesecu za sve agente
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
@@ -590,7 +593,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-28
 
 - **Naziv Stavke:** Izvještaj o ocjenama korisnika
-- **Opis:** Analiza ocjena koje korisnici daju nakon zatvaranja tiketa
+- **Opis:** Implementirati mogucnost feature za analizu ocjena koje korisnici daju nakon zatvaranja tiketa
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** S
@@ -602,7 +605,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-29
 
 - **Naziv Stavke:** Admin Dashboard sa ključnim metrikama
-- **Opis:** Dashboard gdje se prikazuju ključne metrike sistema i mogućnost generisanja dostupnih izvještaja
+- **Opis:**Dizajnirati i implementirati admin dashboard gdje se prikazuju ključne metrike sistema i mogućnost generisanja dostupnih izvještaja
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
@@ -614,7 +617,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-30
 
 - **Naziv Stavke:** Export izvještaja
-- **Opis:** Izvoz izvještaja u CSV formatu
+- **Opis:** implementirati mogucnost za izvoz izvještaja u CSV formatu
 - **Tip Stavke:** Feature
 - **Prioritet:** 5
 - **Procjena složenosti ili napora:** S
@@ -626,7 +629,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### SP6-10-31
 
 - **Naziv Stavke:** FAQ segment
-- **Opis:** Lista često postavljenih pitanja i odgovora
+- **Opis:** Napraviti, dokumentovati i implementirati Listu često postavljenih pitanja i odgovora
 - **Tip Stavke:** Feature
 - **Prioritet:** 3
 - **Procjena složenosti ili napora:** S
