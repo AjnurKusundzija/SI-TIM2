@@ -45,7 +45,7 @@ Poslovni korisnici (Pravna lica): Zahtijevaju najviši nivo pouzdanosti (SLA - S
 
 ### 2. Operativni timovi (Unutrašnji korisnici)
 
-Korisnička podrška (Agenti): Prva linija kontakta koja prima pozive i poruke. Cilj je imati sve podatke o korisniku na jednom mjestu radi bržeg i tačnijeg rada. Takodjer, agenti služe kao prvi paket za osnovna pitanja oko informacija o paketima, uslugama i slično.
+Korisnička podrška (Agenti): Prva linija kontakta koja prima pozive i poruke. Cilj je imati sve podatke o korisniku na jednom mjestu radi bržeg i tačnijeg rada. Takodjer, agenti služe kao prvi kontakt za osnovna pitanja oko informacija o paketima, uslugama i slično.
 
 Tehničko osoblje (Serviseri i mrežni inženjeri): Terenske ekipe koje rješavaju fizičke kvarove. Sistem im omogućava efikasnu dodjelu radnih naloga, jasnu prioritizaciju (hitni vs. rutinski kvarovi) i pristup podacima o kvaru direktno sa terena.
 
@@ -97,16 +97,16 @@ Generisanje različitih vrsta izvještaja i statistika.
 ## Šta ne ulazi u MVP
 Kako bi se razvoj primarno fokusirao na rješavanje kritičnih problema i osigurala brža isporuka stabilnog rješenja, sljedeće funkcionalnosti su svjesno izostavljene iz prve faze:
 
-Sistem za online plaćanje
+Sistem za online plaćanje:
 Integracija sa payment gateway sistemima i mogućnost online plaćanja računa neće biti dio MVP verzije. Fokus ostaje isključivo na upravljanju korisničkom podrškom i rješavanju kvarova, dok će se finansijske funkcionalnosti razmatrati u kasnijim fazama razvoja.
 
-Višejezična podrška (Multilingual support)
+Višejezična podrška (Multilingual support):
 MVP će podržavati samo jedan jezik. Implementacija višejezičnosti (npr. engleski, njemački i drugi jezici) planirana je za naredne faze kako bi se omogućila šira dostupnost sistema različitim korisničkim grupama.
 
-Napredna statistika i AI analitika
+Napredna statistika i AI analitika:
 Iako MVP uključuje osnovne izvještaje, napredna analitika poput prediktivnih modela, AI-driven uvida (npr. predviđanje kvarova, analiza ponašanja korisnika, automatska optimizacija resursa) neće biti implementirana u ovoj fazi. Ove funkcionalnosti zahtijevaju kompleksniju obradu podataka i biće dio budućih unapređenja sistema.
 
-Napredni sistemi notifikacija
+Napredni sistemi notifikacija:
 Funkcionalnosti poput automatizovanih SMS-ova, push notifikacija na telefonima ili kompleksnih e-mail kampanja ostaju van opsega. Obavještenja će biti ograničena na osnovne statusne promjene unutar samog sistema.
 
 ---
