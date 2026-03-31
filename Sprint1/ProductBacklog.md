@@ -10,7 +10,6 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti:** XS, S, M, L, XL
 - **Oznaka prioriteta:** 1, 2, 3, 4, 5 (1 je najbitnije, 5 je najmanje bitno)
 - **Tipovi stavki:** Feature, Bug, Dokumentacija, Research, Technical Task
-- Konvencija za ID Backlogova: SP[Broj sprinta]-[Broj Id-a]
 
 ---
 
