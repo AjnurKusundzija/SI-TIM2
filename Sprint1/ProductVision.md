@@ -4,28 +4,31 @@
 Telecom Customer Support System
 
 ## Problem koji sistem rješava:
-Telekom operateri suočavaju se sa nizom konkretnih problema u svakodnevnom radu, uključujući sporo rješavanje korisničkih prijava, neefikasnu komunikaciju između timova i nepovezanost različitih sistema kao što su CRM, tehnička podrška i sistemi za naplatu. Dodatno, upravljanje kvarovima često nije automatizovano niti prioritetizovano, što dovodi do kašnjenja u rješavanju kritičnih problema. Nedostatak centralizovanih i real-time podataka otežava donošenje poslovnih odluka, dok ručni procesi povećavaju mogućnost grešaka i smanjuju efikasnost. Ovi problemi direktno utiču na kvalitet usluge i zadovoljstvo korisnika. Trenutni proces korisničke podrške u telekomunikacijama karakteriše visoka fragmentacija i neefikasnost, što se manifestuje kroz sedam ključnih identifikovanih barijera:
+Telekom operateri suočavaju se sa nizom konkretnih problema u svakodnevnom radu, uključujući sporo rješavanje korisničkih prijava, neefikasnu komunikaciju između timova i nepovezanost različitih sistema kao što su CRM, tehnička podrška i sistemi za naplatu. Dodatno, upravljanje kvarovima često nije automatizovano niti prioritetizovano, što dovodi do kašnjenja u rješavanju kritičnih problema. Nedostatak centralizovanih i real-time podataka otežava donošenje poslovnih odluka, dok ručni procesi povećavaju mogućnost grešaka i smanjuju efikasnost. Ovi problemi direktno utiču na kvalitet usluge i zadovoljstvo korisnika. Trenutni proces korisničke podrške u telekomunikacijama karakteriše visoka neefikasnost, što se prikazuje kroz sedam ključnih problema:
 
 ### Netransparentnost i sporost u rješavanju prijava:
 Zbog ručne evidencije i neadekvatnih kanala (e-mail, telefon bez traga), zahtjevi za kvarove (npr. prekid interneta, slab signal) često kasne u obradi ili se potpuno gube. Korisnici nemaju uvid u status svoje prijave, što direktno uzrokuje nezadovoljstvo i prelazak konkurenciji.
 
-### Informacioni silosi (Nepovezani sistemi):
-Podaci su rasuti između CRM-a, tehničke podrške i billing sistema. Ovakva nepovezanost uzrokuje dupliranje podataka, greške u informacijama i onemogućava zaposlenicima da imaju "360° pogled" na korisnika i njegove aktivne usluge (internet, TV, mobilna).
 
 ### Kolaps interne komunikacije:
 Komunikacija između call centra i tehničara na terenu je spora i bez povratne informacije (feedback loop). Informacije se gube u transferu, zbog čega korisnik mora više puta ponavljati isti problem različitim agentima.
 
+
 ### Kritični propusti u upravljanju incidentima:
 Bez jasne prioritizacije (hitno vs. nehitno) i automatizacije, kritični kvarovi se tretiraju isto kao rutinski upiti. Nedostatak historije kvarova dovodi do toga da se isti tehnički problemi stalno ponavljaju bez trajnog rješenja.
 
-### Operativno "sljepilo" menadžmenta:
-Zbog nedostatka real-time podataka i automatizovanih izvještaja, donosioci odluka nemaju uvid u ključne metrike poput vremena rješavanja (MTTR) ili identifikacije "uskih grla" u procesima, što onemogućava bilo kakvu optimizaciju.
-
-### Neorganizovano upravljanje uslugama:
-Budući da podaci o korisniku koji koristi više usluga nisu objedinjeni, često dolazi do grešaka u naplati i lošeg korisničkog iskustva pri pokušaju nadogradnje ili promjene paketa.
 
 ### Visoka stopa ljudske greške:
 Dominacija ručnih procesa pri dodjeli zadataka tehničarima i ručno praćenje statusa značajno usporavaju rad i povećavaju rizik od administrativnih propusta koji direktno utiču na profitabilnost.
+
+
+### Nedostatak uvida u status prijave unutar aplikacije:
+Korisnici nemaju mogućnost da unutar aplikacije provjere status svojih prijava (npr. zaprimljeno, u obradi, riješeno). Zbog toga su primorani ponovo kontaktirati korisničku podršku kako bi dobili informacije, što dodatno opterećuje sistem.
+
+
+### Nedovoljna automatizacija i skalabilnost sistema:
+Sistem korisničke podrške ne može lako podnijeti veliki broj zahtjeva odjednom. Kada ima puno korisnika (npr. kvar u mreži), dolazi do zagušenja, sporog odgovora i pada kvaliteta usluge. Nedostatak automatizacije znači da se sve radi ručno, što dodatno usporava proces i stvara opterećenje za zaposlenike.
+
 
 ---
 
@@ -42,26 +45,26 @@ Poslovni korisnici (Pravna lica): Zahtijevaju najviši nivo pouzdanosti (SLA) i 
 
 ### 2. Operativni timovi (Unutrašnji korisnici)
 
-Korisnička podrška (Agenti L1 i L2): Prva linija kontakta koja prima pozive i poruke. Njihov cilj je integrisan pregled svih informacija o korisniku (billing, CRM, historija kvarova) kako bi izbjegli dupliranje posla i pružili tačne informacije.
+Korisnička podrška (Agenti): Prva linija kontakta koja prima pozive i poruke. Cilj je imati sve podatke o korisniku na jednom mjestu radi bržeg i tačnijeg rada.
 
 Tehničko osoblje (Serviseri i mrežni inženjeri): Terenske ekipe koje rješavaju fizičke kvarove. Sistem im omogućava efikasnu dodjelu radnih naloga, jasnu prioritizaciju (hitni vs. rutinski kvarovi) i pristup podacima o kvaru direktno sa terena.
 
 ### 3. Upravljački sektor (Menadžment i administracija)
 
-Supervizori i menadžment: Donosioci strateških odluka koji koriste sistem za praćenje performansi tima (KPI). Njihov fokus je na real-time izvještajima o broju otvorenih tiketa, vremenu rješavanja i kvaliteti pružene usluge, kako bi identifikovali "uska grla" i optimizovali resurse.
+Supervizori i menadžment: Donosioci odluka koriste sistem za praćenje rada tima. Fokusiraju se na broj tiketa, vrijeme rješavanja i kvalitet usluge kako bi prepoznali probleme i efikasnije rasporedili resurse.
 
 ---
 
 ## Vrijednost sistema:
 Implementacija sistema donosi višestruku vrijednost kroz digitalnu transformaciju i optimizaciju operativnih procesa telekom operatera:
 
-Superiorno korisničko iskustvo i lojalnost: Sistem omogućava brže, transparentnije i pouzdanije rješavanje problema. Korisnici više ne moraju nagađati u kojoj je fazi njihov zahtjev, jer imaju uvid u realnom vremenu. Ovakav pristup direktno smanjuje stopu odlaska korisnika (churn rate) i povećava njihovo povjerenje, posebno u kritičnim situacijama prekida usluge.
+Korisničko iskustvo: Sistem omogućava brže, transparentnije i pouzdanije rješavanje problema. Korisnici više ne moraju nagađati u kojoj je fazi njihov zahtjev, jer imaju uvid u realnom vremenu. Ovakav pristup direktno smanjuje stopu odlaska korisnika (churn rate) i povećava njihovo povjerenje, posebno u kritičnim situacijama prekida usluge.
 
-Operativna efikasnost i centralizacija : Eliminisanjem informacionih silosa (povezivanjem podrške, tehničke službe i billinga), sistem sprečava dupliranje podataka i administrativne greške. Centralizacija komunikacije dramatično skraćuje srednje vrijeme rješavanja kvara (MTTR - Mean Time To Resolution). Automatizacija dodjele zadataka i pametna prioritizacija omogućavaju timovima da urade više sa manje manuelnog angažmana.
+Operativna efikasnost i centralizacija: Centralizacija komunikacije skraćuje srednje vrijeme rješavanja kvara (MTTR - Mean Time To Resolution). Automatizacija dodjele zadataka i prioritizacija omogućavaju timovima da urade više sa manje resursa.
 
-Preventivno održavanje i proaktivna podrška: Stvaranjem centralizovane baze znanja o najčešćim kvarovima i incidentima, organizacija prelazi iz reaktivnog u proaktivni mod rada. Analiza historijskih podataka omogućava identifikaciju slabih tačaka u mrežnoj infrastrukturi, što pomaže u planiranju preventivnog održavanja prije nego što dođe do masovnih pritužbi.
+Preventivno održavanje i podrška: Uspostavljanjem centralizovane baze znanja o najčešćim kvarovima i incidentima, organizacija može bolje razumjeti ponavljajuće probleme. Analiza prethodnih podataka omogućava prepoznavanje slabih tačaka u sistemu i planiranje preventivnog održavanja prije nego što dođe do većih problema.
 
-Strateško upravljanje zasnovano na podacima: Menadžment dobija moćan alat za analitiku i izvještavanje u realnom vremenu. Umjesto oslanjanja na procjene, odluke se donose na osnovu egzaktnih podataka o performansama sistema, "uskim grlima" u procesima i kvalitetu usluge. Ovo direktno doprinosi dugoročnoj skalabilnosti, smanjenju operativnih troškova i jačanju konkurentske pozicije na tržištu.
+Strateško upravljanje zasnovano na podacima: Menadžment dobija alat za analitiku i izvještavanje u realnom vremenu. Umjesto oslanjanja na procjene, odluke se donose na osnovu tačnih podataka o performansama sistema i kvalitetu usluge. Ovo direktno doprinosi dugoročnoj skalabilnosti, smanjenju operativnih troškova i jačanju konkurentske pozicije na tržištu.
 
 ---
 
@@ -69,7 +72,7 @@ Strateško upravljanje zasnovano na podacima: Menadžment dobija moćan alat za 
 Cilj MVP-a je eliminacija neefikasnog upravljanja zahtjevima kroz centralizovano evidentiranje, praćenje i rješavanje kvarova uz minimalan, ali moćan skup funkcionalnosti:
 
 ### Upravljanje korisničkim nalozima:
-Registracija i autentifikacija za krajnje korisnike i zaposlenike (Agenti, Tehničari, Menadžment).
+Registracija i autentifikacija za krajnje korisnike i zaposlenike (Klijenti, Agenti, Tehničari, Menadžment).
 Osnovni profili sa podacima o uslugama koje korisnik koristi (Internet, TV, Mobilna).
 
 ### Portal za prijavu i evidenciju kvarova:
@@ -79,11 +82,11 @@ Automatsko generisanje jedinstvenog ID-a tiketa za svaki zahtjev.
 ### Centralizovani Ticketing Dashboard & Workflow:
 Pregled svih aktivnih prijava na jednom mjestu za korisničku podršku.
 Praćenje životnog ciklusa tiketa: Vizuelni prikaz statusa (Zaprimljeno, U obradi, Na čekanju, Riješen, Arhiviran).
-Pametna kategorizacija i prioritizacija: Automatsko razvrstavanje po tipu usluge i prepoznavanje prioritetnih (npr. Poslovni korisnici).
+Kategorizacija i prioritizacija: Automatsko razvrstavanje po tipu usluge i prepoznavanje prioritetnih (npr. Poslovni korisnici).
 
 ### Sistem komunikacije i dodjele:
 Dodjela zadataka: Ručno ili jednostavno automatsko prosljeđivanje tiketa slobodnim agentima ili tehničkom osoblju.
-Sistem komentara: Interna komunikacija između timova i mogućnost direktnog feedbacka prema korisniku.
+Sistem komunikacije: Interna komunikacija između timova i mogućnost direktnog feedbacka prema korisniku.
 Modul za tehničare: Poseban pregled radnih naloga za terenske ekipe sa detaljnim opisom kvara.
 
 ---
@@ -91,7 +94,7 @@ Modul za tehničare: Poseban pregled radnih naloga za terenske ekipe sa detaljni
 ## Šta ne ulazi u MVP
 Kako bi se razvoj primarno fokusirao na rješavanje kritičnih problema i osigurala brža isporuka stabilnog rješenja, sljedeće funkcionalnosti su svjesno izostavljene iz prve faze:
 
-Mobilna aplikacija (Native): MVP verzija će biti isključivo web-bazirana (optimizovana za desktop i mobile browser-e). Posebne aplikacije za iOS i Android platforme za korisnike i terenske tehničare planirane su za kasnije faze.
+Mobilna aplikacija: MVP verzija će biti isključivo web-bazirana (optimizovana za desktop i mobile browser-e). Posebne aplikacije za iOS i Android platforme za korisnike i terenske tehničare planirane su za kasnije faze.
 
 AI Chatbot i Automatizacija Odgovora: Neće biti implementirana vještačka inteligencija za automatsko odgovaranje na upite. Sva komunikacija u ovoj fazi odvija se direktno između agenata i korisnika.
 
@@ -104,16 +107,14 @@ Napredni sistemi notifikacija: Funkcionalnosti poput automatizovanih SMS-ova, pu
 ### Ograničenja (Constraints)
 Vremensko i razvojno ograničenje: Razvoj MVP-a strogo je limitiran trajanjem sprinta. Ovo zahtijeva beskompromisan fokus na osnovne funkcionalnosti i odlaganje bilo kakve "nice-to-have" kompleksnosti.
 
-Tehnička arhitektura: Sistem je inicijalno ograničen na web platformu. Isključena je nativna mobilna podrška i duboka integracija sa eksternim billing ili CRM sistemima u ovoj fazi (sistem funkcioniše kao standalone rješenje).
+Tehnička arhitektura: Sistem je inicijalno ograničen na web platformu. Isključena je mobilna podrška i duboka integracija sa eksternim billing ili CRM sistemima u ovoj fazi (sistem funkcioniše kao standalone rješenje).
 
 Podaci i validacija: Zbog nedostupnosti realnih produkcionih podataka, za razvoj se koriste isključivo testni i simulirani setovi podataka. To može uticati na preciznost predviđanja opterećenja sistema u realnim uslovima.
 
-Sigurnosna i pravna regulativa: Obrada podataka o korisnicima i njihovim kvarovima podliježe strogoj usklađenosti sa GDPR-om. Pristup osjetljivim informacijama je ograničen prema ulogama (Role-based access control), što utiče na dizajn korisničkog interfejsa.
+Sigurnosna i pravna regulativa: Sigurnost i pravna regulativa: Obrada korisničkih podataka mora biti u skladu sa GDPR pravilima (Zakonska odluka o zaštiti podataka – zakon koji štiti privatnost i lične podatke korisnika). Pristup osjetljivim informacijama je ograničen prema korisničkim ulogama, što utiče na način na koji je sistem dizajniran.
 
 ### Pretpostavke (Assumptions)
-Ažurnost operativaca: Pretpostavlja se da će tehničko osoblje i agenti redovno ažurirati statuse prijava u realnom vremenu te da će sistem prihvatiti kao svoj primarni alat za rad.
-
-Kvalitet unosa: Pretpostavlja se da su osnovni podaci o korisnicima (uvezeni u sistem) tačni i validni za identifikaciju usluga.
+Ažurnost tehničara: Pretpostavlja se da će tehničko osoblje i agenti redovno ažurirati statuse prijava u realnom vremenu te da će sistem prihvatiti kao svoj primarni alat za rad.
 
 Infrastrukturna podrška: Pretpostavlja se da tehničko osoblje na terenu ima stabilan pristup mobilnom internetu kako bi mogli slati povratne informacije izravno sa lokacije kvara.
 
