@@ -237,3 +237,267 @@ Zavisi od sistema za tikete.
 
 ### Otvorena pitanja
 - Ko može mijenjati prioritet i da li se vidi korisniku?  
+
+---
+ 
+## PB-29 Preraspodjela agenata po timovima
+ 
+### User Stories
+
+- **US-1:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.  
+
+- **US-2:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+1  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+
+- Da li može doći do zamjene tiketa prilikom preraspodjele?  
+ 
+---
+ 
+## PB-30 Automatska dodjela tiketa
+ 
+### User Stories
+
+- **US-1:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.  
+
+- **US-2:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+3  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+ 
+---
+ 
+## PB-31 Prosljeđivanje tiketa
+ 
+### User Stories
+
+- **US-1:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.  
+
+- **US-2:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+2  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+ 
+---
+ 
+## PB-32 Pregled svih tiketa
+ 
+### User Stories
+
+- **US-1:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.  
+
+- **US-2:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+1  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+ 
+---
+ 
+## PB-33 Pretraživanje i filtriranje tiketa
+ 
+### User Stories
+
+- **US-1:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.  
+
+- **US-2:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+1  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+ 
+---
+ 
+## PB-34 Pregled i uređivanje korisničkih profila
+ 
+### User Stories
+
+- **US-1:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.  
+
+- **US-2:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+2  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+ 
+---
+ 
+## PB-35 Pregled dodijeljenih tiketa (tehničari)
+ 
+### User Stories
+
+- **US-1:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.  
+
+- **US-2:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+1  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+ 
+---
+ 
+## PB-36 Ažuriranje statusa tiketa
+ 
+### User Stories
+
+- **US-1:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.  
+
+- **US-2:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+1  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+ 
+---
+ 
+## PB-37 Tehničar vidi osnovne informacije
+ 
+### User Stories
+
+- **US-1:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.  
+
+- **US-2:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.  
+ 
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.  
+ 
+### Prioritet
+2  
+ 
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.  
+ 
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima  
+ 
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?  
+ 
