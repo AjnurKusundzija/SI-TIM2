@@ -150,16 +150,16 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 - **Napomena:** Product Vision eksplicitno navodi kao ograničenje potrebu za "osnovnim mehanizmima za očuvanje konzistentnosti podataka i ponovnog povezivanja u slučaju prekida veze". Kritično za tehničare koji rade s terena na nestabilnoj mreži.
 
 ---
-
+ 
 #### NFR-08
-
+ 
 - **Naziv zahtjeva:** Automatski WebSocket ponovni pokušaj spajanja
 - **Kategorija:** Pouzdanost (`PO`)
-- **Opis zahtjeva:** Klijentska strana sistema mora automatski pokušavati ponovo uspostaviti WebSocket konekciju u slučaju njenog prekida, bez potrebe za ručnom intervencijom korisnika. Korisnik mora biti obaviješten o gubitku veze putem statusne poruke.
-- **Kako će se provjeravati:** Manuelno testiranje simulacijom prekida mrežnog interfejsa u pregledavačkim DevTools alatima. Provjera da li se konekcija automatski obnavlja i da li se korisničko sučelje ispravno sinhronizira.
+- **Opis zahtjeva:** Klijentska strana sistema mora automatski pokušavati ponovo uspostaviti WebSocket konekciju u slučaju njenog prekida, bez potrebe za ručnom intervencijom korisnika. Prvi pokušaj ponovnog spajanja mora biti iniciran unutar **3 sekunde** od detekcije prekida, s maksimalno **5 uzastopnih pokušaja** u intervalima od 3 sekunde. Korisnik mora biti obaviješten o gubitku veze vidljivom statusnom porukom unutar **1 sekunde** od detekcije prekida, a po uspješnom ponovnom spajanju poruka se automatski uklanja.
+- **Kako će se provjeravati:** Manuelno testiranje simulacijom prekida mrežnog interfejsa putem pregledničkih DevTools alata. Mjeri se: (1) vrijeme od prekida do prve obavijesti korisniku, (2) broj i interval pokušaja reconnecta vidljiv u Network tabu, (3) ispravna sinhronizacija korisničkog sučelja nakon ponovnog uspostavljanja veze.
 - **Prioritet:** 2
 - **Napomena:** Direktno podržava rad tehničara na terenu, koji prema pretpostavkama iz Product Vision dokumenta ne raspolažu uvijek stabilnim mobilnim internetom.
-
+ 
 ---
 
 #### NFR-09
@@ -172,16 +172,16 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 - **Napomena:** Agenti su svakodnevni operativni korisnici sistema. Loša upotrebljivost direktno usporava obradu tiketa i povećava broj grešaka u radu, što je identificirano kao jedan od ključnih problema u Product Vision dokumentu.
 
 ---
-
+ 
 #### NFR-10
-
+ 
 - **Naziv zahtjeva:** Jasne i razumljive poruke o greškama
 - **Kategorija:** Upotrebljivost (`UP`)
-- **Opis zahtjeva:** Svaka poruka o grešci prikazana korisniku mora biti napisana jasnim jezikom (bez tehničkih kodova), mora sadržavati opis problema i, gdje je to moguće, prijedlog kako korisnik treba postupiti. Poruke moraju biti prikazane na vidljivom dijelu ekrana i stilski se razlikuju od ostalih elemenata interfejsa (poruke upozorenja).
-- **Kako će se provjeravati:** Pregled svih definisanih scenarija grešaka (neuspješna prijava, greška pri kreiranju tiketa, gubitak veze i sl.) i provjera prikaza poruka kroz manuelno testiranje. Ocjenjuje se jasnoća poruka bez tehničke pozadine.
+- **Opis zahtjeva:** Svaka poruka o grešci prikazana korisniku mora biti napisana jezikom razumljivim krajnjem korisniku (bez tehničkih kodova poput HTTP statusnih kodova), mora sadržavati opis problema i konkretan prijedlog daljnjeg postupanja (npr. "Pokušajte ponovo" ili "Kontaktirajte podršku"). Poruka mora biti prikazana unutar **500ms od nastanka greške**, pozicionirana na vrhu aktivne forme ili stranice, minimalne veličine fonta **14px**, s vizuelno distinktivnim stilom (crvena boja pozadine) koji je jasno razlikuje od ostalih elemenata interfejsa.
+- **Kako će se provjeravati:** Manuelno testiranje svih definisanih scenarija grešaka (neuspješna prijava, greška pri kreiranju tiketa, gubitak veze i sl.). Za svaki scenario mjeri se: (1) vrijeme prikaza poruke od nastanka greške, (2) prisutnost opisnog teksta bez tehničkih kodova, (3) prisutnost prijedloga za postupanje, (4) vizuelna distinktivnost poruke. Testiranje se provodi na svim podržanim preglednicima.
 - **Prioritet:** 2
 - **Napomena:** Posebno bitno za stariju populaciju korisnika i tehničare koji rade na terenu s manjim tehničkim predznanjem. Poruke o greškama trebaju biti logovane interno, ali ne i prikazane korisniku.
-
+ 
 ---
 
 #### NFR-11
@@ -194,16 +194,16 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 - **Napomena:** Product Vision definiše sistem kao isključivo web platformu. Mobilna (smartphone) podrška je eksplicitno isključena iz MVP scope-a. Tehničari na terenu mogu koristiti tablete za pristup sistemu.
 
 ---
-
+ 
 #### NFR-12
-
+ 
 - **Naziv zahtjeva:** Pristupačnost interfejsa za stariju populaciju
 - **Kategorija:** Upotrebljivost (`UP`)
-- **Opis zahtjeva:** Interfejs namijenjen krajnjim korisnicima (posebno forma za prijavu kvara) mora koristiti font veličine najmanje 14px, dovoljno visok kontrast između teksta i pozadine (minimalan kontrast ratio prema Nielsenovim principima upotrebljivosti), te jednostavnu navigaciju s minimalnim brojem koraka za prijavu kvara (ne više od 3 koraka prema dobrim UX praksama).
-- **Kako će se provjeravati:** Provjera kontrasta pomoću Google Lighthouse alata. Manuelni pregled veličine fontova u CSS -u i složenosti toka prijave. Po mogućnosti, kratki test prihvatljivosti s predstavnicima starije populacije korisnika.
+- **Opis zahtjeva:** Interfejs namijenjen krajnjim korisnicima (posebno forma za prijavu kvara) mora zadovoljiti sljedeće mjerljive kriterije pristupačnosti: (1) minimalna veličina fonta **14px** za sve elemente forme i navigacije, (2) minimalni kontrast ratio između teksta i pozadine **4.5:1** prema **WCAG 2.1 AA standardu**, (3) tok prijave kvara mora biti realizovan u **najviše 3 koraka**, pri čemu svaki korak smije sadržavati najviše 5 polja za unos.
+- **Kako će se provjeravati:** Automatska provjera kontrast omjera putem Google Lighthouse alata (ciljna ocjena pristupačnosti minimalno 90/100). Manuelni pregled veličine fontova u CSS-u. Provjera broja koraka u toku prijave kvara kroz funkcionalno testiranje. Po mogućnosti, testiranje prihvatljivosti s najmanje 3 ispitanika iz ciljne grupe (65+ godina).
 - **Prioritet:** 2
 - **Napomena:** Poseban fokus stavljen je na jednostavnost korištenja kako bi se starijim rezidentima olakšao pristup digitalnim servisima i spriječila njihova digitalna izolacija.
-
+ 
 ---
 
 #### NFR-13
@@ -216,25 +216,25 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 - **Napomena:** Sistem je web-based i nema kontrolu nad tim koji preglednik koriste krajnji korisnici ili zaposlenici. Podrška za zastarjele preglednike nije obavezna.
 
 ---
-
+ 
 #### NFR-14
-
+ 
 - **Naziv zahtjeva:** Nezavisnost od operativnog sistema na serveru
 - **Kategorija:** Portabilnost (`PT`)
-- **Opis zahtjeva:** Kod ovog zahtjeva nam je cilj da aplikacija "ne bira stranu" kada je u pitanju operativni sistem. Pošto BH Telecom možda već ima spremne Linux servere, a možda preferira Windows, sistem moramo razviti tako da radi na oba bez diranja samog koda.
-- **Kako će se provjeravati:** Izbjegavamo bilo kakve fiksne putanje ili specifične sistemske komande. Sve što se tiče okruženja rješavamo kroz konfiguracione fajlove i sistemske varijable. Na kraju ćemo to testirati tako što ćemo isti kod pokušati "podići" na Ubuntu i Windows okruženju.
+- **Opis zahtjeva:** Serverska komponenta sistema mora biti funkcionalna na **Linux (Ubuntu 22.04 LTS)** i **Windows Server 2019** operativnim sistemima bez izmjena izvornog koda. Sve putanje do fajlova i sistemske konfiguracije moraju biti definirane isključivo putem konfiguracijskih fajlova i varijabli okruženja (environment variables), bez hard-kodiranih putanja ili komandi.
+- **Kako će se provjeravati:** Deployment i funkcionalno testiranje kompletnog toka rada (kreiranje tiketa, promjena statusa, WebSocket komunikacija) na Ubuntu 22.04 LTS i Windows Server 2019 okruženju. Pregledom koda (code review) provjerava se odsutnost hard-kodiranih putanja.
 - **Prioritet:** 2
 - **Napomena:** Naručilac sistema (BH Telecom) može imati specifičnu serversku infrastrukturu. Nezavisnost od OS-a osigurava fleksibilnost migracije bez dodatnih troškova prilagodbe.
-
+ 
 ---
-
+ 
 #### NFR-15
-
+ 
 - **Naziv zahtjeva:** Fleksibilnost baze podataka
 - **Kategorija:** Portabilnost (`PT`)
-- **Opis zahtjeva:** Ovdje igramo na sigurno za budućnost. Kako još uvijek nismo 100% sigurni koju će bazu podataka klijent na kraju koristiti (npr. PostgreSQL, MySQL ili nešto treće), uvodimo ORM sloj. To je "prevodilac" koji omogućava da pišemo kod u objektima, a on se sam brine o SQL upitima.
-- **Kako će se provjeravati:** Kroz pregled koda (code review) osiguravamo da su svi upiti prema bazi izolovani unutar ORM-a. Cilj je eliminisati bilo kakav SQL kod koji je vezan isključivo za jednu vrstu baze podataka.
+- **Opis zahtjeva:** Svi pristupi bazi podataka u sistemu moraju biti realizovani isključivo putem ORM (Object-Relational Mapping) sloja, bez direktno pisanih SQL upita specifičnih za određenu bazu podataka. Sistem mora biti kompatibilan s najmanje dva relaciona sistema za upravljanje bazama podataka — **PostgreSQL** i **MySQL** — pri čemu promjena između njih ne smije zahtijevati izmjenu izvornog koda, već isključivo izmjenu konfiguracijskih parametara konekcije.
+- **Kako će se provjeravati:** Pregled koda (code review) verificira odsutnost SQL upita pisanih izvan ORM sloja i odsutnost bazi-specifičnih funkcija ili sintakse. Funkcionalno testiranje osnovnih operacija (kreiranje, čitanje, ažuriranje i brisanje tiketa) provodi se na PostgreSQL i MySQL instancama korištenjem iste baze koda uz promjenu isključivo konfiguracijskih parametara.
 - **Prioritet:** 3
-- **Napomena:** Ako se za godinu dana odluči da se prelazi na drugi tip baze, ne želimo da moramo prepisivati stotine upita kroz cijelu aplikaciju. Cilj je da u tom slučaju samo promijenimo par linija u konfiguraciji konekcije. Tokom revizije koda ćemo paziti da niko ne piše "sirove" SQL upite koji su specifični samo za jednu bazu, jer bi nas to kasnije "zaključalo" za tu tehnologiju.
-
+- **Napomena:** Naručilac sistema možda nije finalizovao odabir konkretnog RDBMS-a. Apstrakcija kroz ORM sloj smanjuje rizik tehnološkog zaključavanja (vendor lock-in) i olakšava eventualnu migraciju bez potrebe za prepisom podatkovnog sloja aplikacije.
+ 
 ---
