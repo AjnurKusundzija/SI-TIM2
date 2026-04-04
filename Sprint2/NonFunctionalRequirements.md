@@ -238,3 +238,224 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 - **Napomena:** Naručilac sistema možda nije finalizovao odabir konkretnog RDBMS-a. Apstrakcija kroz ORM sloj smanjuje rizik tehnološkog zaključavanja (vendor lock-in) i olakšava eventualnu migraciju bez potrebe za prepisom podatkovnog sloja aplikacije.
  
 ---
+
+
+## Organizacioni zahtjevi
+
+Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se tim treba pridržavati tokom razvoja sistema. Oni ne definišu šta sistem radi, nego pod kojim uslovima se razvija, održava i isporučuje.
+
+---
+
+### Tabelarni prikaz organizacionih zahtjeva
+
+| ID                | Naziv zahtjeva                                    | Kategorija    | Prioritet | Status        |
+| :---------------- | :------------------------------------------------ | :------------ | :-------: | :------------ |
+| [NFR-16](#nfr-16) | Razvoj sistema kroz zajednički GitHub repozitorij | Organizacioni |     1     | Identifikovan |
+| [NFR-17](#nfr-17) | Dogovoreni tehnološki stack                       | Organizacioni |     1     | Identifikovan |
+| [NFR-18](#nfr-18) | Standardizovan način evidentiranja zadataka       | Organizacioni |     2     | Identifikovan |
+| [NFR-19](#nfr-19) | Održavanje ažurne projektne dokumentacije         | Organizacioni |     2     | Identifikovan |
+| [NFR-20](#nfr-20) | Poštivanje standarda kodiranja                    | Organizacioni |     2     | Identifikovan |
+| [NFR-21](#nfr-21) | Jasna struktura projekta i razdvajanje slojeva    | Organizacioni |     2     | Identifikovan |
+| [NFR-22](#nfr-22) | Praćenje promjena kroz commit historiju           | Organizacioni |     3     | Identifikovan |
+| [NFR-23](#nfr-23) | Usklađenost rada sa sprintovima i rokovima        | Organizacioni |     1     | Identifikovan |
+
+---
+
+### Detalji organizacionih zahtjeva
+
+#### NFR-16
+
+- **Naziv zahtjeva:** Razvoj sistema kroz zajednički GitHub repozitorij
+- **Kategorija:** Organizacioni (`OZ`)
+- **Opis zahtjeva:** Sav izvorni kod, dokumentacija i ostali projektni materijali moraju se voditi kroz zajednički GitHub repozitorij kako bi svi članovi tima imali pristup istim, ažurnim verzijama fajlova.
+- **Kako će se provjeravati:** Pregledom repozitorija, foldera i dostupnih projektnih fajlova.
+- **Prioritet:** 1
+- **Napomena:** Ovim se izbjegava rad u više nepovezanih verzija istog dokumenta ili koda.
+
+---
+
+#### NFR-17
+
+- **Naziv zahtjeva:** Dogovoreni tehnološki stack
+- **Kategorija:** Organizacioni (`OZ`)
+- **Opis zahtjeva:** Sistem treba biti razvijen kao web aplikacija koristeći **C# / ASP.NET** za backend, **React** za frontend i **PostgreSQL** ili **SQL** za bazu podataka, u skladu s dogovorom tima.
+- **Kako će se provjeravati:** Pregledom strukture projekta, konfiguracije i korištenih tehnologija u repozitoriju.
+- **Prioritet:** 1
+- **Napomena:** Korištenje istog tehnološkog stacka svim članovima olakšava razvoj i održavanje sistema.
+
+---
+
+#### NFR-18
+
+- **Naziv zahtjeva:** Standardizovan način evidentiranja zadataka
+- **Kategorija:** Organizacioni (`OZ`)
+- **Opis zahtjeva:** Zadatke na projektu potrebno je pratiti kroz backlog stavke, issue zadatke i statuse rada, tako da bude jasno šta je planirano, šta je u toku i šta je završeno.
+- **Kako će se provjeravati:** Pregledom issue zadataka, backloga i statusa rada unutar GitHub okruženja.
+- **Prioritet:** 2
+- **Napomena:** Ovo pomaže timu da lakše prati napredak i raspodjelu obaveza.
+
+---
+
+#### NFR-19
+
+- **Naziv zahtjeva:** Održavanje ažurne projektne dokumentacije
+- **Kategorija:** Organizacioni (`OZ`)
+- **Opis zahtjeva:** Projektna dokumentacija treba biti redovno ažurirana i usklađena sa stvarnim stanjem projekta. Kada se promijeni zahtjev, odluka ili dogovor, to treba biti vidljivo i u dokumentima.
+- **Kako će se provjeravati:** Poređenjem dokumentacije sa backlogom, issue zadacima i aktuelnim projektnim odlukama.
+- **Prioritet:** 2
+- **Napomena:** Dobra dokumentacija olakšava komunikaciju u timu i sa Product Ownerom.
+
+---
+
+#### NFR-20
+
+- **Naziv zahtjeva:** Poštivanje standarda kodiranja
+- **Kategorija:** Organizacioni (`OZ`)
+- **Opis zahtjeva:** Kod treba biti pisan uredno i dosljedno, uz jasna imena klasa, metoda, funkcija, varijabli i komponenti, kako bi svi članovi tima mogli lako razumjeti i nastaviti rad na istom dijelu sistema.
+- **Kako će se provjeravati:** Pregledom koda i internim code review pristupom unutar tima.
+- **Prioritet:** 2
+- **Napomena:** Dosljedan stil kodiranja smanjuje zabune i olakšava održavanje projekta.
+
+---
+
+#### NFR-21
+
+- **Naziv zahtjeva:** Jasna struktura projekta i razdvajanje slojeva
+- **Kategorija:** Organizacioni (`OZ`)
+- **Opis zahtjeva:** Projekt treba biti organizovan pregledno, sa jasnim razdvajanjem backend, frontend i baza sloja, kao i logičnim rasporedom fajlova i foldera unutar repozitorija.
+- **Kako će se provjeravati:** Pregledom strukture projekta i rasporeda foldera.
+- **Prioritet:** 2
+- **Napomena:** Dobra organizacija projekta olakšava snalaženje i ubrzava razvoj.
+
+---
+
+#### NFR-22
+
+- **Naziv zahtjeva:** Praćenje promjena kroz commit historiju
+- **Kategorija:** Organizacioni (`OZ`)
+- **Opis zahtjeva:** Sve značajne izmjene u kodu i dokumentaciji trebaju biti evidentirane kroz commit historiju, tako da se može pratiti ko je šta radio i kada je promjena napravljena.
+- **Kako će se provjeravati:** Pregledom commit historije i opisa commit poruka.
+- **Prioritet:** 3
+- **Napomena:** Ovo je korisno za pregled razvoja projekta i lakše vraćanje na starije verzije po potrebi.
+
+---
+
+#### NFR-23
+
+- **Naziv zahtjeva:** Usklađenost rada sa sprintovima i rokovima
+- **Kategorija:** Organizacioni (`OZ`)
+- **Opis zahtjeva:** Rad na projektu treba biti usklađen sa sprintovima, sedmičnim planiranjem i rokovima definisanim u okviru predmeta, kako bi tim mogao na vrijeme pripremiti dokumentaciju i isporuke.
+- **Kako će se provjeravati:** Poređenjem planiranih i završenih zadataka po sprintovima.
+- **Prioritet:** 1
+- **Napomena:** Poštivanje rokova je važno da bi tim mogao redovno predstavljati napredak i završavati obaveze bez kašnjenja.
+
+---
+
+## Vanjski zahtjevi
+
+Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke implementacije. To su zahtjevi vezani za zaštitu podataka, pristupačnost, transparentnost rada sistema i mogućnost praćenja važnih aktivnosti.
+
+---
+
+### Tabelarni prikaz vanjskih zahtjeva
+
+| ID                | Naziv zahtjeva                                  | Kategorija | Prioritet | Status        |
+| :---------------- | :---------------------------------------------- | :--------- | :-------: | :------------ |
+| [NFR-24](#nfr-24) | Zaštita korisničkih i ličnih podataka           | Vanjski    |     1     | Identifikovan |
+| [NFR-25](#nfr-25) | Ograničen pristup prema korisničkim ulogama     | Vanjski    |     1     | Identifikovan |
+| [NFR-26](#nfr-26) | Transparentan prikaz statusa tiketa             | Vanjski    |     2     | Identifikovan |
+| [NFR-27](#nfr-27) | Evidencija važnih aktivnosti u sistemu          | Vanjski    |     1     | Identifikovan |
+| [NFR-28](#nfr-28) | Mogućnost revizije promjena nad tiketima        | Vanjski    |     1     | Identifikovan |
+| [NFR-29](#nfr-29) | Pristupačan i razumljiv korisnički interfejs    | Vanjski    |     2     | Identifikovan |
+| [NFR-30](#nfr-30) | Jednaka dostupnost funkcionalnosti korisnicima  | Vanjski    |     2     | Identifikovan |
+| [NFR-31](#nfr-31) | Sigurno čuvanje operativnih i korisničkih podata| Vanjski    |     1     | Identifikovan |
+
+---
+
+### Detalji vanjskih zahtjeva
+
+#### NFR-24
+
+- **Naziv zahtjeva:** Zaštita korisničkih i ličnih podataka
+- **Kategorija:** Vanjski (`VZ`)
+- **Opis zahtjeva:** Sistem mora štititi lične i korisničke podatke od neovlaštenog pristupa, izmjene ili zloupotrebe, posebno podatke o korisnicima, tiketima i komunikaciji unutar sistema.
+- **Kako će se provjeravati:** Pregledom pravila pristupa, strukture podataka i načina na koji sistem rukuje osjetljivim informacijama.
+- **Prioritet:** 1
+- **Napomena:** Zaštita podataka je obavezna jer sistem obrađuje informacije koje ne smiju biti javno dostupne.
+
+---
+
+#### NFR-25
+
+- **Naziv zahtjeva:** Ograničen pristup prema korisničkim ulogama
+- **Kategorija:** Vanjski (`VZ`)
+- **Opis zahtjeva:** Korisnici sistema trebaju imati pristup samo onim opcijama i podacima koji su im potrebni za njihov posao ili korištenje sistema. Klijent, agent, tehničar i administrator ne trebaju imati isti nivo pristupa.
+- **Kako će se provjeravati:** Testiranjem korisničkih naloga sa različitim ulogama.
+- **Prioritet:** 1
+- **Napomena:** Ovim se smanjuje mogućnost grešaka i neovlaštenih radnji unutar sistema.
+
+---
+
+#### NFR-26
+
+- **Naziv zahtjeva:** Transparentan prikaz statusa tiketa
+- **Kategorija:** Vanjski (`VZ`)
+- **Opis zahtjeva:** Sistem treba korisniku jasno prikazivati u kojoj se fazi njegov tiket nalazi, kako bi imao uvid u tok obrade bez dodatnog kontaktiranja podrške.
+- **Kako će se provjeravati:** Testiranjem prikaza tiketa iz perspektive krajnjeg korisnika.
+- **Prioritet:** 2
+- **Napomena:** Transparentnost povećava povjerenje korisnika i smanjuje opterećenje helpdeska.
+
+---
+
+#### NFR-27
+
+- **Naziv zahtjeva:** Evidencija važnih aktivnosti u sistemu
+- **Kategorija:** Vanjski (`VZ`)
+- **Opis zahtjeva:** Sistem treba bilježiti važne aktivnosti kao što su kreiranje tiketa, promjena statusa, dodjela tiketa, zatvaranje tiketa i izmjene važnih korisničkih podataka.
+- **Kako će se provjeravati:** Pregledom logova aktivnosti ili historije događaja u sistemu.
+- **Prioritet:** 1
+- **Napomena:** Ova evidencija je važna za praćenje rada i lakše otkrivanje eventualnih problema.
+
+---
+
+#### NFR-28
+
+- **Naziv zahtjeva:** Mogućnost revizije promjena nad tiketima
+- **Kategorija:** Vanjski (`VZ`)
+- **Opis zahtjeva:** Za svaku važnu promjenu nad tiketom treba biti moguće utvrditi ko je izvršio radnju i kada se ta radnja dogodila.
+- **Kako će se provjeravati:** Pregledom historije promjena na konkretnim tiketima.
+- **Prioritet:** 1
+- **Napomena:** Ovo je važno radi odgovornosti, kontrole i eventualne interne provjere rada.
+
+---
+
+#### NFR-29
+
+- **Naziv zahtjeva:** Pristupačan i razumljiv korisnički interfejs
+- **Kategorija:** Vanjski (`VZ`)
+- **Opis zahtjeva:** Interfejs sistema treba biti dovoljno jasan i jednostavan da ga mogu koristiti i korisnici sa manjim tehničkim znanjem, bez nepotrebno komplikovanih koraka i nejasnih poruka.
+- **Kako će se provjeravati:** Pregledom ekrana, formi i osnovnih korisničkih tokova.
+- **Prioritet:** 2
+- **Napomena:** Ovo je posebno važno jer sistem koriste različiti profili korisnika.
+
+---
+
+#### NFR-30
+
+- **Naziv zahtjeva:** Jednaka dostupnost funkcionalnosti korisnicima
+- **Kategorija:** Vanjski (`VZ`)
+- **Opis zahtjeva:** Sistem ne smije neopravdano ograničavati pristup funkcionalnostima korisnicima koji imaju istu ulogu i iste dozvole, nego im treba pružiti jednak i konzistentan nivo pristupa.
+- **Kako će se provjeravati:** Poređenjem prava pristupa između korisnika istih uloga.
+- **Prioritet:** 2
+- **Napomena:** Ovim se osigurava fer i dosljedno korištenje sistema.
+
+---
+
+#### NFR-31
+
+- **Naziv zahtjeva:** Sigurno čuvanje operativnih i korisničkih podataka
+- **Kategorija:** Vanjski (`VZ`)
+- **Opis zahtjeva:** Podaci o tiketima, korisnicima, statusima i komunikaciji trebaju se čuvati na način koji smanjuje rizik od gubitka, neovlaštene izmjene ili oštećenja podataka.
+- **Kako će se provjeravati:** Pregledom načina pohrane podataka i osnovnih sigurnosnih mjera u sistemu.
+- **Prioritet:** 1
+- **Napomena:** Pouzdano čuvanje podataka je važno za kontinuitet rada i vjerodostojnost sistema.
