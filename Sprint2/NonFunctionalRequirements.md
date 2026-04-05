@@ -412,7 +412,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 - **Naziv zahtjeva:** Evidencija važnih aktivnosti u sistemu
 - **Kategorija:** Vanjski (`VZ`)
 - **Opis zahtjeva:** Sistem treba bilježiti važne aktivnosti kao što su kreiranje tiketa, promjena statusa, dodjela tiketa, zatvaranje tiketa i izmjene važnih korisničkih podataka.
-- **Kako će se provjeravati:** Pregledom logova aktivnosti ili historije događaja u sistemu.
+- **Kako će se provjeravati:** Pregledom statusa aktivnosti ili historije događaja u sistemu.
 - **Prioritet:** 1
 - **Napomena:** Ova evidencija je važna za praćenje rada i lakše otkrivanje eventualnih problema.
 
@@ -422,7 +422,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 - **Naziv zahtjeva:** Mogućnost revizije promjena nad tiketima
 - **Kategorija:** Vanjski (`VZ`)
-- **Opis zahtjeva:** Za svaku važnu promjenu nad tiketom treba biti moguće utvrditi ko je izvršio radnju i kada se ta radnja dogodila.
+- **Opis zahtjeva:** Za svaku važnu promjenu nad tiketom treba biti moguće utvrditi ko je izvršio radnju.
 - **Kako će se provjeravati:** Pregledom historije promjena na konkretnim tiketima.
 - **Prioritet:** 1
 - **Napomena:** Ovo je važno radi odgovornosti, kontrole i eventualne interne provjere rada.
