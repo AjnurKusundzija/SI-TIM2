@@ -576,22 +576,26 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa
+
+- **US-2:** Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu
 
 
 ### Poslovna vrijednost
+Omogućava se bolji uvid o statistici, problemima i analizi o količini tiketa
 
 
 ### Prioritet
-
+5
 
 ### Zavisnosti
-
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
 
 ### Pretpostavke
-
+- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
 
 ### Otvorena pitanja
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
 ---
 
@@ -599,22 +603,26 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima
+
+- **US-2:**Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti
 
 
 ### Poslovna vrijednost
-
+Omogućava se bolji uvid o statistici, problemima i analizi o statusima tiketa
 
 ### Prioritet
-
+5
 
 ### Zavisnosti
-
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
 
 ### Pretpostavke
-
+- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
 
 ### Otvorena pitanja
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
 
 ---
 
