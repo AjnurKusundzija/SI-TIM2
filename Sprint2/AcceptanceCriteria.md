@@ -165,7 +165,6 @@ Prema uputama sa prošlog sastanka:
 - Kada tehničar otvori izvještaj, tada vidi raspodjelu svojih tiketa po statusima  
 - Kada podaci postoje, tada izvještaj odgovara stvarnim podacima  
 - Sistem mora omogućiti pristup izvještaju tehničaru  
-- Sistem ne smije dozvoliti pristup neovlaštenim korisnicima  
 - Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
 - Tehničar treba dobiti poruku ako nema podataka
 
@@ -180,7 +179,8 @@ Prema uputama sa prošlog sastanka:
 - Kada administrator otvori izvještaj, tada vidi ukupni broj tiketa po tipu problema  
 - Kada podaci postoje, tada su prikazani tačni tipovi i količine  
 - Sistem mora grupisati tikete po tipu problema  
-- Korisnik treba dobiti poruku ako nema podataka  
+- Korisnik treba dobiti poruku ako nema podataka
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
 
 ---
 
@@ -188,11 +188,11 @@ Prema uputama sa prošlog sastanka:
 
 **Acceptance Criteria:**
 
-- Kada tehničar otvori izvještaj, tada vidi tipove problema i broj tiketa  
-- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima  
-- Sistem mora omogućiti pregled izvještaja  
-- Sistem ne smije dozvoliti pristup bez odgovarajuće uloge  
-- Korisnik treba dobiti poruku ako nema dostupnih podataka  
+- Kada tehničar otvori izvještaj, tada vidi ukupni broj tiketa koji su raspoređeni njemu po tipu problema 
+- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima
+- Sistem mora grupisati tikete po tipu problema  
+- Korisnik treba dobiti poruku ako nema dostupnih podataka
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
 
 ---
 
