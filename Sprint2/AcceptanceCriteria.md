@@ -21,6 +21,7 @@ Za svaki User Story koristiti sljedeće obrasce:
 Prema uputama sa prošlog sastanka: 
 - svaki kriterij mora biti testabilan  
 - izbjegavati nejasne izraze poput “brzo”, “dobro”, “efikasno”  
+- od US-13 pa nadalje ispraviti ID **nakon** što se isto uradi sa UserStorys
 
   
 
@@ -84,6 +85,223 @@ Prema uputama sa prošlog sastanka:
 - Sistem mora provjeriti minimalne sigurnosne zahtjeve lozinke  
 - Sistem ne smije dozvoliti lozinku koja ne zadovoljava sigurnosne zahtjeve 
 - Korisnik treba dobiti potvrdu o uspješnoj promjeni lozinke  
+
+---
+
+# PB-21 Prikaz paketa i pretplata
+
+### US-6: *Kao korisnik, želim da vidim svoje aktivne pakete i pretplate, kako bih imao pregled usluga koje koristim.*
+
+**Acceptance Criteria:**
+
+- Kada je korisnik prijavljen, ako pristupi sekciji "Paketi", tada vidi listu svojih aktivnih paketa i pretplata  
+- Kada korisnik ima više paketa, tada sistem prikazuje sve aktivne pakete u listi  
+- Sistem mora prikazati osnovne informacije o svakom paketu 
+- Sistem ne smije prikazivati pakete koji nisu povezani sa korisnikom  
+- Korisnik treba dobiti jasan pregled svojih aktivnih usluga  
+
+---
+
+### US-7: *Kao korisnik, želim da vidim detalje paketa (internet, TV, mobilni), kako bih razumio šta moj paket uključuje.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik odabere paket, tada sistem prikazuje detalje paketa  
+- Kada paket sadrži više usluga, tada sistem prikazuje sve uključene usluge  
+- Sistem mora prikazati relevantne informacije (npr. brzina interneta, broj kanala, mobilni podaci)  
+- Sistem ne smije prikazivati netačne ili nepotpune informacije o paketu  
+- Korisnik treba dobiti jasan i razumljiv prikaz sadržaja paketa  
+
+---
+
+# PB-22 Kreiranje novog ticketa
+
+### US-8: *Kao korisnik, želim da kreiram novi tiket unosom problema, kako bih prijavio poteškoću.*
+
+**Acceptance Criteria:**
+
+- Kada je korisnik prijavljen, ako popuni formu i klikne "Pošalji", tada se tiket kreira  
+- Kada tiket bude kreiran, tada se sprema u bazu podataka  
+- Sistem mora omogućiti unos potrebnih podataka za tiket  
+- Sistem ne smije dozvoliti kreiranje tiketa bez obaveznih polja  
+- Korisnik treba dobiti potvrdu o uspješnom kreiranju tiketa  
+
+---
+
+### US-9: *Kao korisnik, želim da odaberem tip i prioritet tiketa, kako bih bolje opisao problem.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik kreira tiket, tada može odabrati tip tiketa  
+- Kada korisnik kreira tiket, tada može odabrati prioritet tiketa  
+- Sistem mora ponuditi unaprijed definisane opcije tipa i prioriteta  
+- Sistem ne smije dozvoliti unos nepostojećih vrijednosti  
+- Korisnik treba vidjeti jasno označene opcije za izbor  
+
+---
+
+### US-10: *Kao korisnik, želim da unesem opis problema, kako bih agentu dao dovoljno informacija.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik popunjava formu za novi tiket, ako unese opis problema, tada se opis sprema uz tiket    
+- Kada korisnik pokuša kreirati tiket bez opisa, tada sistem prikazuje grešku  
+- Sistem mora omogućiti unos tekstualnog opisa  
+- Sistem ne smije dozvoliti prazan opis problema  
+- Korisnik treba dobiti povratnu informaciju ako opis nedostaje  
+
+---
+
+# PB-23 Pregled vlastitih tiketa
+
+### US-11: *Kao korisnik, želim da vidim listu svih svojih tiketa, kako bih pratio njihove statuse.*
+
+**Acceptance Criteria:**
+
+- Kada je korisnik prijavljen, ako pristupi sekciji “Moji tiketi”, tada vidi listu svojih tiketa  
+- Kada korisnik ima više tiketa, tada sistem prikazuje sve tikete u listi  
+- Sistem mora prikazati osnovne informacije (naslov, status, datum)  
+- Sistem ne smije prikazivati tikete drugih korisnika  
+- Korisnik treba dobiti pregled svih svojih tiketa  
+
+---
+
+### US-12: *Kao korisnik, želim da vidim status tiketa (otvoren, u toku, zatvoren), kako bih znao u kojoj fazi je rješavanje.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik pregleda svoje tikete, tada vidi njihov status  
+- Kada se status promijeni, tada se ažurira prikaz statusa  
+- Sistem mora koristiti jasno definisane statuse  
+- Sistem ne smije prikazivati nepoznate statuse  
+- Korisnik treba dobiti jasan prikaz trenutnog statusa tiketa  
+
+---
+
+### US-13: *Kao korisnik, želim mogućnost filtriranja tiketa (po prioritetu, datumu i slično), kako bih lakše pronašao željeni tiket.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik pregledava svoje tikete, ako odabere opciju za filtriranje, tada sistem prikazuje filtrirani prikaz tiketa  
+- Kada primijenjeni filter ne daje rezultate, tada sistem prikazuje poruku da nema odgovarajućih tiketa  
+- Sistem mora omogućiti filtriranje po prioritetu, datumu, statusu i tipu  
+- Sistem ne smije prikazivati tikete koji ne odgovaraju odabranim filterima  
+- Korisnik treba dobiti tačne rezultate filtriranja   
+
+---
+
+# PB-24 Detaljan prikaz ticketa
+
+### US-13: *Kao korisnik, želim da vidim detalje tiketa, kako bih imao potpuni uvid u problem.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik pregledava listu svojih tiketa, ako odabere jedan tiket, tada sistem prikazuje njegove detalje   
+- Sistem mora prikazati sve relevantne informacije (opis, status, datum)  
+- Sistem ne smije prikazivati nepotpune podatke  
+- Korisnik treba dobiti jasan prikaz svih informacija o tiketu  
+
+---
+
+### US-14: *Kao korisnik, želim da vidim historiju komunikacije, kako bih pratio tok rješavanja.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik pregleda tiket, tada vidi historiju komunikacije  
+- Kada postoji više poruka, tada se prikazuju hronološki  
+- Sistem mora prikazati pošiljaoca i vrijeme poruke  
+- Sistem ne smije izostaviti nijednu poruku  
+- Korisnik treba dobiti jasan pregled komunikacije  
+
+---
+
+# PB-25 Zatvaranje ticketa
+
+### US-15: *Kao korisnik, želim da zatvorim tiket kada je problem riješen, kako bih završio proces.*
+
+**Acceptance Criteria:**
+
+- Kada je tiket riješen, ako korisnik klikne “Zatvori tiket”, tada se status mijenja u zatvoren 
+- Sistem ne smije dozvoliti zatvaranje već zatvorenog tiketa  
+- Korisnik treba dobiti potvrdu o zatvaranju tiketa  
+
+---
+
+### US-16: *Kao agent ili tehničar, želim da zatvorim tiket nakon rješavanja problema, kako bih označio zadatak kao završen.*
+
+**Acceptance Criteria:**
+
+- Kada agent želi zatvoriti tiket, ako smatra da je zadatak završen, tada može poslati zahtjev za zatvaranje korisniku  
+- Kada korisnik primi zahtjev za zatvaranje, tada može prihvatiti ili odbiti zatvaranje tiketa  
+- Ako korisnik prihvati zahtjev, tada se tiket zatvara i poprima status zatvoren  
+- Ako korisnik odbije zahtjev, tada tiket ostaje otvoren
+- Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada se tiket automatski zatvara  
+- Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje i automatsko zatvaranje tiketa nakon 7 dana bez odgovora  
+
+---
+
+# PB-26 Ocjenjivanje ticketa
+
+### US-17: *Kao korisnik, želim da ocijenim rješenje ticketa, kako bih dao feedback o kvaliteti usluge.*
+
+**Acceptance Criteria:**
+
+- Kada je tiket zatvoren, ako korisnik klikne na opciju "Ocijeni", tada sistem omogućava unos i slanje ocjene  
+- Kada korisnik pošalje ocjenu, tada se ona sprema u sistem  
+- Sistem mora omogućiti izbor ocjene  
+- Sistem ne smije dozvoliti ocjenjivanje otvorenog tiketa  
+- Korisnik treba dobiti potvrdu o uspješnom slanju ocjene  
+
+---
+
+# PB-27 Komunikacija kroz tiket
+
+### US-18: *Kao korisnik, želim da šaljem poruke kroz tiket, kako bih komunicirao sa agentom.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik unese novu poruku, ako klikne na dugme za slanje, tada se poruka sprema i prikazuje u historiji komunikacije    
+- Sistem mora omogućiti unos poruke  
+- Sistem ne smije dozvoliti slanje prazne poruke  
+- Korisnik treba vidjeti svoju poslanu poruku  
+
+---
+
+### US-19: *Kao agent, želim da odgovaram na poruke korisnika, kako bih riješio problem.*
+
+**Acceptance Criteria:**
+
+- Kada agent napiše odgovor na korisnikov upit, ako klikne na dugme za slanje odgovora, tada se poruka sprema i prikazuje korisniku  
+- Kada postoji nova poruka, tada se dodaje u historiju komunikacije  
+- Sistem mora omogućiti agentu slanje poruka  
+- Sistem ne smije dozvoliti slanje praznih poruka  
+- Korisnik treba vidjeti odgovor agenta   
+
+---
+
+# PB-28 Upravljanje prioritetima tiketa
+
+### US-20: *Kao agent, želim da postavim interni prioritet tiketa, kako bih efikasno upravljao zadacima.*
+
+**Acceptance Criteria:**
+
+- Kada agent pregleda tiket, ako postavi prioritet, tada se prioritet sprema uz tiket  
+- Kada agent promijeni prioritet, tada se ažurira prikaz  
+- Sistem mora omogućiti izbor prioriteta iz definisane liste  
+- Sistem ne smije dozvoliti nepostojeće vrijednosti prioriteta  
+- Agent treba vidjeti trenutno postavljeni prioritet  
+
+---
+
+### US-21: *Kao korisnik, želim da postavim prioritet svog problema, kako bih označio hitnost.*
+
+**Acceptance Criteria:**
+
+- Kada korisnik kreira tiket, ako odabere prioritet, tada se prioritet sprema uz tiket  
+- Sistem mora ponuditi unaprijed definisane prioritete  
+- Sistem ne smije dozvoliti nevažeće vrijednosti  
+- Sistem ne smije dozvoliti kreiranje tiketa bez postavljanja prioriteta  
+- Korisnik treba vidjeti odabrani prioritet  
 
 ---
 
