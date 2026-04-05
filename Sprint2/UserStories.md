@@ -148,7 +148,7 @@ Zavisi od login funkcionalnosti i baze podataka.
 
 ---
 
-## PB-22 Kreiranje novog ticketa
+## PB-22 Kreiranje novog tiketa
 
 ### User Stories
 
@@ -210,7 +210,7 @@ Zavisi od kreiranja tiketa.
 
 ---
 
-## PB-24 Detaljan prikaz ticketa
+## PB-24 Detaljan prikaz tiketa
 
 ### User Stories
 
@@ -239,7 +239,7 @@ Zavisi od pregleda tiketa.
 
 ---
 
-## PB-25 Zatvaranje ticketa
+## PB-25 Zatvaranje tiketa
 
 ### User Stories
 
@@ -268,11 +268,11 @@ Zavisi od postojanja tiketa.
 
 ---
 
-## PB-26 Ocjenjivanje ticketa
+## PB-26 Ocjenjivanje tiketa
 
 ### User Stories
 
-- **US-17:** Kao korisnik, želim da ocijenim rješenje ticketa, kako bih dao feedback o kvaliteti usluge.
+- **US-17:** Kao korisnik, želim da ocijenim rješenje tiketa, kako bih dao feedback o kvaliteti usluge.
 
 ### Poslovna vrijednost
 
@@ -284,7 +284,7 @@ Omogućava unapređenje kvaliteta usluge.
 
 ### Zavisnosti
 
-Zavisi od zatvorenog ticketa.
+Zavisi od zatvorenog tiketa.
 
 ### Pretpostavke
 

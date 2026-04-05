@@ -39,11 +39,11 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-19](#pb-19) | Login korisnika                          | Feature        |     1     |     L     | Backlog | Sprint 6-10 |
 | [PB-20](#pb-20) | Upravljanje korisničkim profilom         | Feature        |     2     |     M     | Backlog | Sprint 6-10 |
 | [PB-21](#pb-21) | Prikaz paketa i pretplata                | Feature        |     4     |     M     | Backlog | Sprint 6-10 |
-| [PB-22](#pb-22) | Kreiranje novog ticketa                  | Feature        |     1     |     M     | Backlog | Sprint 6-10 |
+| [PB-22](#pb-22) | Kreiranje novog tiketa                  | Feature        |     1     |     M     | Backlog | Sprint 6-10 |
 | [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Backlog | Sprint 6-10 |
 | [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Backlog | Sprint 6-10 |
-| [PB-25](#pb-25) | Zatvaranje ticketa                       | Feature        |     1     |     L     | Backlog | Sprint 6-10 |
-| [PB-26](#pb-26) | Ocjenjivanje ticketa                     | Feature        |     5     |     S     | Backlog | Sprint 6-10 |
+| [PB-25](#pb-25) | Zatvaranje tiketa                       | Feature        |     1     |     L     | Backlog | Sprint 6-10 |
+| [PB-26](#pb-26) | Ocjenjivanje tiketa                     | Feature        |     5     |     S     | Backlog | Sprint 6-10 |
 | [PB-27](#pb-27) | Komunikacija kroz tiket                  | Feature        |     1     |     M     | Backlog | Sprint 6-10 |
 | [PB-28](#pb-28) | Upravljanje prioritetima tiketa          | Feature        |     2     |     M     | Backlog | Sprint 6-10 |
 | [PB-29](#pb-29) | Preraspodjela agenata po timovima        | Feature        |     1     |     M     | Backlog | Sprint 6-10 |
@@ -290,7 +290,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ### PB-19
 
 - **Naziv Stavke:** Login korisnika
-- **Opis:** Implementirati autentikaciju i autorizaciju korisnika za korištenje Ticket/Helpdesk sistema
+- **Opis:** Implementirati autentikaciju i autorizaciju korisnika za korištenje Tiket/Helpdesk sistema
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
@@ -326,7 +326,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### PB-22
 
-- **Naziv Stavke:** Kreiranje novog ticketa
+- **Naziv Stavke:** Kreiranje novog tiketa
 - **Opis:** Implementirati feature za prikaz forme za prijavu problema i postavljanje pitanja (subject, tip, opis, prioritet)
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
@@ -362,20 +362,20 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### PB-25
 
-- **Naziv Stavke:** Zatvaranje ticketa
-- **Opis:** Implementirati feature za zatvaranje ticketa
+- **Naziv Stavke:** Zatvaranje tiketa
+- **Opis:** Implementirati feature za zatvaranje tiketa
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 6-10
-- **Napomena:** Ticket može zatvoriti i korisnik i agent kome je ticket dodijeljen kao i tehničar koji je na terenu riješio problem
+- **Napomena:** Tiket može zatvoriti i korisnik i agent kome je tiket dodijeljen kao i tehničar koji je na terenu riješio problem
 
 ---
 
 ### PB-26
 
-- **Naziv Stavke:** Ocjenjivanje ticketa
+- **Naziv Stavke:** Ocjenjivanje tiketa
 - **Opis:** Implementirati feature gdje korisnik može ocijeniti kvalitet rješenja
 - **Tip Stavke:** Feature
 - **Prioritet:** 5

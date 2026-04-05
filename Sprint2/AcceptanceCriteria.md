@@ -114,7 +114,7 @@ Prema uputama sa prošlog sastanka:
 
 ---
 
-# PB-22 Kreiranje novog ticketa
+# PB-22 Kreiranje novog tiketa
 
 ### US-8: *Kao korisnik, želim da kreiram novi tiket unosom problema, kako bih prijavio poteškoću.*
 
@@ -190,7 +190,7 @@ Prema uputama sa prošlog sastanka:
 
 ---
 
-# PB-24 Detaljan prikaz ticketa
+# PB-24 Detaljan prikaz tiketa
 
 ### US-13: *Kao korisnik, želim da vidim detalje tiketa, kako bih imao potpuni uvid u problem.*
 
@@ -215,7 +215,7 @@ Prema uputama sa prošlog sastanka:
 
 ---
 
-# PB-25 Zatvaranje ticketa
+# PB-25 Zatvaranje tiketa
 
 ### US-15: *Kao korisnik, želim da zatvorim tiket kada je problem riješen, kako bih završio proces.*
 
@@ -240,9 +240,9 @@ Prema uputama sa prošlog sastanka:
 
 ---
 
-# PB-26 Ocjenjivanje ticketa
+# PB-26 Ocjenjivanje tiketa
 
-### US-17: *Kao korisnik, želim da ocijenim rješenje ticketa, kako bih dao feedback o kvaliteti usluge.*
+### US-17: *Kao korisnik, želim da ocijenim rješenje tiketa, kako bih dao feedback o kvaliteti usluge.*
 
 **Acceptance Criteria:**
 
