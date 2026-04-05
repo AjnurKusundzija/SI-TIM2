@@ -606,7 +606,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### PB-45
 
-- **Naziv Stavke:** 
+- **Naziv Stavke:** Admin Dashboard sa ključnim metrikama
 - **Opis:**Dizajnirati i implementirati admin dashboard gdje se prikazuju ključne metrike sistema i mogućnost generisanja dostupnih izvještaja
 - **Tip Stavke:** Feature
 - **Prioritet:** 1

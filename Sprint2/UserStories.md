@@ -714,22 +714,23 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.
 
 
 ### Poslovna vrijednost
-
+Omogućava menadžmentu donošenje odluka zasnovanih na podacima (data-driven decisions). Pomaže u prepoznavanju "uskih grla" u podršci i pravednijoj raspodjeli posla, što direktno utiče na smanjenje sagorijevanja (burnout) zaposlenih.
 
 ### Prioritet
-
+2
 
 ### Zavisnosti
-
+Potrebno je imati modul za upravljanje tiketima i relevantne podatke u bazi podatake za prikaz količine poslanih tiketa 
 
 ### Pretpostavke
-
+Sistem već bilježi tačno vrijeme zatvaranja svakog tiketa i ID agenta koji ga je riješio.
 
 ### Otvorena pitanja
+- Da li je potreban vizuelni prikaz (grafikon) ili je dovoljna tabela sa mogućnošću filtriranja?
 
 ---
 
@@ -737,22 +738,26 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.
 
 
 ### Poslovna vrijednost
-
+Direktno mjerenje zadovoljstva korisnika je ključno za zadržavanje klijenata. Ovaj feedback omogućava timu da reaguje na negativna iskustva prije nego što ona postanu kritična za poslovanje.
 
 ### Prioritet
-
+2
 
 ### Zavisnosti
+Navedeni User Story zavisi od funkcionalnosti zatvaranja tiketa i sistema za prikupljanje feedbacka.
 
+Također potrebno je imati podatak u bazi podataka o statusu samog tiketa
 
 ### Pretpostavke
+Implementiran je mehanizam koji šalje upit za ocjenu korisniku odmah nakon zatvaranja tiketa.
 
 
 ### Otvorena pitanja
+- Da li se analiziraju samo numeričke ocjene (npr. 1-5) ili i tekstualni komentari?
 
 ---
 
@@ -760,22 +765,27 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara
 
 
 ### Poslovna vrijednost
 
+Lakši uvid o cijelom tiket/helpdesk sistemu za lakši pregled statistike i analizu istog
+
 
 ### Prioritet
-
+1
 
 ### Zavisnosti
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketu i vremenu slanja i odgovora tiketa
+
 
 
 ### Pretpostavke
-
+Svi relevanti tabele i podaci su dostupni u bazi podataka za prikaz na admin dashboardu
 
 ### Otvorena pitanja
+- Koji podaci su relevantni za prikaz istih na admin dashboardu?
 
 ---
 
@@ -783,22 +793,29 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.
 
 
 ### Poslovna vrijednost
+- Prijenos podataka i izvještaja u okviru cijeloga telekoma, a ne samo za radnike koji su povezani u tiket/helpdesk sistem
 
 
 ### Prioritet
+5
 
 
 ### Zavisnosti
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima za sigurno exportiranje 
+
+Eventualno će se trebati uključiti druga biblioteka za exportiranje podataka u .csv fileu
 
 
 ### Pretpostavke
+U bazi podataka se nalaze svi relevantni podaci za export izvještaja tiketa 
 
 
 ### Otvorena pitanja
+- Koji podaci su relevantni za ubacivanje u .csv file?
 
 ---
 
