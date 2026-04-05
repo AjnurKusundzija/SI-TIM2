@@ -276,7 +276,26 @@ Zavisi od postojanja tiketa.
 ### User Stories
 
 - **US-20:** Kao agent, želim da postavim interni prioritet tiketa, kako bih efikasno upravljao zadacima.
+
+**Acceptance Criteria:**
+- Kada je agent prijavljen u sistem i nalazi se na stranici tiketa, ako odabere opciju za postavljanje prioriteta, tada sistem mora postaviti odabrani prioritet
+- Sistem mora omogućiti listu predefinisanih prioriteta
+- Kada tiket ima postavljen interni prioritet, ako korisnik pristupi tiketu, tada sistem ne smije dozvoliti prikaz niti izmjenu internog prioriteta
+- Kada agent postavi ili izmijeni prioritet tiketa, ako je akcija uspješno izvršena, tada sistem mora prikazati potvrdu
+- Kada agent postavi ili izmijeni prioritet tiketa, ako je akcija neuspješno izvršena, tada sistem mora prikazati poruku upozorenja
+- Kada nema odabranog internog priroteta, tada sistem mora prikazati poruku da prioritet nije postavljen
+
+
 - **US-21:** Kao korisnik, želim da postavim prioritet svog problema, kako bih označio hitnost.
+
+**Acceptance Criteria:**
+- Kada je korisnik prijavljen u sistem i kreira novi tiket, ako dođe do koraka odabira prioriteta, tada sistem mora omogućiti izbor iz predefinisane liste
+- Kada je korisnik dođe do koraka odabira prioriteta, ako odabere jednu od predefinisanih opcija, tada sistem mora dodijeliti tiketu taj atribut
+- Kada korisnik unosi prioritet, ako vrijednost nije iz predefinisane liste, tada sistem ne smije dozvoliti nastavak
+- Kada je tiket kreiran, ako korisnik pregleda tiket, tada sistem mora prikazati odabrani prioritet
+- Kada agent pregleda postojeći tiket tada sistem mora prikazati korisnikov prioritet
+
+
 
 ### Poslovna vrijednost
 
@@ -306,7 +325,24 @@ Zavisi od sistema za tikete.
 
 - **US-22:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
 
+**Acceptance Criteria:**
+- Kada je administrator prijavljen i nalazi se u sekciji upravljanja timovima, ako odabere agenta i premjesti ga u drugi tim, tada sistem mora izvršiti promjenu 
+- Sistem mora omogućiti primjenu bez gubitka informacija
+- Kada administrator izvrši preraspodjelu agenta, ako je akcija potvrđena, tada sistem mora evidentirati promjenu sa vremenskim pečatom i imenom administratora
+- Sistem mora omogućiti da ne dođe do promjene podataka ukoliko administrator ne potvrdi akciju promjene agenata
+- Kada administrator izvrši pokušaj preraaspodjele agenata, ako dođe do greške ili nemogućnosti odabrane perraspodjele, sistme mora poslati poruku upozorenja
+
+
+
 - **US-23:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
+
+**Acceptance Criteria:**
+- Kada administrator pristupi sekciji timova tada sistem mora prikazati sve timove i njihove članove
+- Kada se prikazuju članovi tima, ako agent nije aktivan ili je obrisan, tada sistem ne smije prikazivati tog agenta kao aktivnog
+- Kada administrator koristi opcije pregleda, ako primijeni filter/sortiranje, tada sistem mora ažurirati prikaz prema odabranim kriterijima
+- Sistem mora prikazati aktivno stanje timova
+
+
 
 ### Poslovna vrijednost
 
