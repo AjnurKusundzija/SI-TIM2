@@ -63,8 +63,7 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 | [NFR-11](#nfr-11)   | Responzivan dizajn za desktop i tablet                 | Upotrebljivost |     2     | Identifikovan |
 | [NFR-12](#nfr-12)   | Pristupačnost interfejsa za stariju populaciju         | Upotrebljivost |     3     | Identifikovan |
 | [NFR-13](#nfr-13)   | Podrška za savremene web browsere                      | Portabilnost   |     1     | Identifikovan |
-| [NFR-14](#nfr-14)   | Nezavisnost od operativnog sistema na serveru          | Portabilnost   |     2     | Identifikovan |
-| [NFR-15](#nfr-15)   | Apstrakcija sloja baze podataka                        | Portabilnost   |     3     | Identifikovan |
+| [NFR-14](#nfr-14)   | Apstrakcija sloja baze podataka                        | Portabilnost   |     3     | Identifikovan |
 
 ---
 
@@ -219,17 +218,6 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
  
 #### NFR-14
  
-- **Naziv zahtjeva:** Nezavisnost od operativnog sistema na serveru
-- **Kategorija:** Portabilnost (`PT`)
-- **Opis zahtjeva:** Serverska komponenta sistema mora biti funkcionalna na **Linux (Ubuntu 22.04 LTS)** i **Windows Server 2019** operativnim sistemima bez izmjena izvornog koda. Sve putanje do fajlova i sistemske konfiguracije moraju biti definirane isključivo putem konfiguracijskih fajlova i varijabli okruženja (environment variables), bez hard-kodiranih putanja ili komandi.
-- **Kako će se provjeravati:** Deployment i funkcionalno testiranje kompletnog toka rada (kreiranje tiketa, promjena statusa, WebSocket komunikacija) na Ubuntu 22.04 LTS i Windows Server 2019 okruženju. Pregledom koda (code review) provjerava se odsutnost hard-kodiranih putanja.
-- **Prioritet:** 2
-- **Napomena:** Naručilac sistema (BH Telecom) može imati specifičnu serversku infrastrukturu. Nezavisnost od OS-a osigurava fleksibilnost migracije bez dodatnih troškova prilagodbe.
- 
----
- 
-#### NFR-15
- 
 - **Naziv zahtjeva:** Fleksibilnost baze podataka
 - **Kategorija:** Portabilnost (`PT`)
 - **Opis zahtjeva:** Svi pristupi bazi podataka u sistemu moraju biti realizovani isključivo putem ORM (Object-Relational Mapping) sloja, bez direktno pisanih SQL upita specifičnih za određenu bazu podataka. Sistem mora biti kompatibilan s najmanje dva relaciona sistema za upravljanje bazama podataka — **PostgreSQL** i **MySQL** — pri čemu promjena između njih ne smije zahtijevati izmjenu izvornog koda, već isključivo izmjenu konfiguracijskih parametara konekcije.
@@ -250,20 +238,20 @@ Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se ti
 
 | ID                | Naziv zahtjeva                                    | Kategorija    | Prioritet | Status        |
 | :---------------- | :------------------------------------------------ | :------------ | :-------: | :------------ |
-| [NFR-16](#nfr-16) | Razvoj sistema kroz zajednički GitHub repozitorij | Organizacioni |     1     | Identifikovan |
-| [NFR-17](#nfr-17) | Dogovoreni tehnološki stack                       | Organizacioni |     1     | Identifikovan |
-| [NFR-18](#nfr-18) | Standardizovan način evidentiranja zadataka       | Organizacioni |     2     | Identifikovan |
-| [NFR-19](#nfr-19) | Održavanje ažurne projektne dokumentacije         | Organizacioni |     2     | Identifikovan |
-| [NFR-20](#nfr-20) | Poštivanje standarda kodiranja                    | Organizacioni |     2     | Identifikovan |
-| [NFR-21](#nfr-21) | Jasna struktura projekta i razdvajanje slojeva    | Organizacioni |     2     | Identifikovan |
-| [NFR-22](#nfr-22) | Praćenje promjena kroz commit historiju           | Organizacioni |     3     | Identifikovan |
-| [NFR-23](#nfr-23) | Usklađenost rada sa sprintovima i rokovima        | Organizacioni |     1     | Identifikovan |
+| [NFR-15](#nfr-15) | Razvoj sistema kroz zajednički GitHub repozitorij | Organizacioni |     1     | Identifikovan |
+| [NFR-16](#nfr-16) | Dogovoreni tehnološki stack                       | Organizacioni |     1     | Identifikovan |
+| [NFR-17](#nfr-17) | Standardizovan način evidentiranja zadataka       | Organizacioni |     2     | Identifikovan |
+| [NFR-18](#nfr-18) | Održavanje ažurne projektne dokumentacije         | Organizacioni |     2     | Identifikovan |
+| [NFR-19](#nfr-19) | Poštivanje standarda kodiranja                    | Organizacioni |     2     | Identifikovan |
+| [NFR-20](#nfr-20) | Jasna struktura projekta i razdvajanje slojeva    | Organizacioni |     2     | Identifikovan |
+| [NFR-21](#nfr-21) | Praćenje promjena kroz commit historiju           | Organizacioni |     3     | Identifikovan |
+| [NFR-22](#nfr-22) | Usklađenost rada sa sprintovima i rokovima        | Organizacioni |     1     | Identifikovan |
 
 ---
 
 ### Detalji organizacionih zahtjeva
 
-#### NFR-16
+#### NFR-15
 
 - **Naziv zahtjeva:** Razvoj sistema kroz zajednički GitHub repozitorij
 - **Kategorija:** Organizacioni (`OZ`)
@@ -274,7 +262,7 @@ Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se ti
 
 ---
 
-#### NFR-17
+#### NFR-16
 
 - **Naziv zahtjeva:** Dogovoreni tehnološki stack
 - **Kategorija:** Organizacioni (`OZ`)
@@ -285,7 +273,7 @@ Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se ti
 
 ---
 
-#### NFR-18
+#### NFR-17
 
 - **Naziv zahtjeva:** Standardizovan način evidentiranja zadataka
 - **Kategorija:** Organizacioni (`OZ`)
@@ -296,7 +284,7 @@ Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se ti
 
 ---
 
-#### NFR-19
+#### NFR-18
 
 - **Naziv zahtjeva:** Održavanje ažurne projektne dokumentacije
 - **Kategorija:** Organizacioni (`OZ`)
@@ -307,7 +295,7 @@ Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se ti
 
 ---
 
-#### NFR-20
+#### NFR-19
 
 - **Naziv zahtjeva:** Poštivanje standarda kodiranja
 - **Kategorija:** Organizacioni (`OZ`)
@@ -318,7 +306,7 @@ Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se ti
 
 ---
 
-#### NFR-21
+#### NFR-20
 
 - **Naziv zahtjeva:** Jasna struktura projekta i razdvajanje slojeva
 - **Kategorija:** Organizacioni (`OZ`)
@@ -329,7 +317,7 @@ Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se ti
 
 ---
 
-#### NFR-22
+#### NFR-21
 
 - **Naziv zahtjeva:** Praćenje promjena kroz commit historiju
 - **Kategorija:** Organizacioni (`OZ`)
@@ -340,7 +328,7 @@ Organizacioni zahtjevi opisuju pravila, standarde i tehničke odluke kojih se ti
 
 ---
 
-#### NFR-23
+#### NFR-22
 
 - **Naziv zahtjeva:** Usklađenost rada sa sprintovima i rokovima
 - **Kategorija:** Organizacioni (`OZ`)
@@ -361,20 +349,20 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 | ID                | Naziv zahtjeva                                  | Kategorija | Prioritet | Status        |
 | :---------------- | :---------------------------------------------- | :--------- | :-------: | :------------ |
-| [NFR-24](#nfr-24) | Zaštita korisničkih i ličnih podataka           | Vanjski    |     1     | Identifikovan |
-| [NFR-25](#nfr-25) | Ograničen pristup prema korisničkim ulogama     | Vanjski    |     1     | Identifikovan |
-| [NFR-26](#nfr-26) | Transparentan prikaz statusa tiketa             | Vanjski    |     2     | Identifikovan |
-| [NFR-27](#nfr-27) | Evidencija važnih aktivnosti u sistemu          | Vanjski    |     1     | Identifikovan |
-| [NFR-28](#nfr-28) | Mogućnost revizije promjena nad tiketima        | Vanjski    |     1     | Identifikovan |
-| [NFR-29](#nfr-29) | Pristupačan i razumljiv korisnički interfejs    | Vanjski    |     2     | Identifikovan |
-| [NFR-30](#nfr-30) | Jednaka dostupnost funkcionalnosti korisnicima  | Vanjski    |     2     | Identifikovan |
-| [NFR-31](#nfr-31) | Sigurno čuvanje operativnih i korisničkih podata| Vanjski    |     1     | Identifikovan |
+| [NFR-23](#nfr-23) | Zaštita korisničkih i ličnih podataka           | Vanjski    |     1     | Identifikovan |
+| [NFR-24](#nfr-24) | Ograničen pristup prema korisničkim ulogama     | Vanjski    |     1     | Identifikovan |
+| [NFR-25](#nfr-25) | Transparentan prikaz statusa tiketa             | Vanjski    |     2     | Identifikovan |
+| [NFR-26](#nfr-26) | Evidencija važnih aktivnosti u sistemu          | Vanjski    |     1     | Identifikovan |
+| [NFR-27](#nfr-27) | Mogućnost revizije promjena nad tiketima        | Vanjski    |     1     | Identifikovan |
+| [NFR-28](#nfr-28) | Pristupačan i razumljiv korisnički interfejs    | Vanjski    |     2     | Identifikovan |
+| [NFR-29](#nfr-29) | Jednaka dostupnost funkcionalnosti korisnicima  | Vanjski    |     2     | Identifikovan |
+| [NFR-30](#nfr-30) | Sigurno čuvanje operativnih i korisničkih podata| Vanjski    |     1     | Identifikovan |
 
 ---
 
 ### Detalji vanjskih zahtjeva
 
-#### NFR-24
+#### NFR-23
 
 - **Naziv zahtjeva:** Zaštita korisničkih i ličnih podataka
 - **Kategorija:** Vanjski (`VZ`)
@@ -385,7 +373,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 ---
 
-#### NFR-25
+#### NFR-24
 
 - **Naziv zahtjeva:** Ograničen pristup prema korisničkim ulogama
 - **Kategorija:** Vanjski (`VZ`)
@@ -396,7 +384,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 ---
 
-#### NFR-26
+#### NFR-25
 
 - **Naziv zahtjeva:** Transparentan prikaz statusa tiketa
 - **Kategorija:** Vanjski (`VZ`)
@@ -407,7 +395,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 ---
 
-#### NFR-27
+#### NFR-26
 
 - **Naziv zahtjeva:** Evidencija važnih aktivnosti u sistemu
 - **Kategorija:** Vanjski (`VZ`)
@@ -418,7 +406,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 ---
 
-#### NFR-28
+#### NFR-27
 
 - **Naziv zahtjeva:** Mogućnost revizije promjena nad tiketima
 - **Kategorija:** Vanjski (`VZ`)
@@ -429,7 +417,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 ---
 
-#### NFR-29
+#### NFR-28
 
 - **Naziv zahtjeva:** Pristupačan i razumljiv korisnički interfejs
 - **Kategorija:** Vanjski (`VZ`)
@@ -440,7 +428,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 ---
 
-#### NFR-30
+#### NFR-29
 
 - **Naziv zahtjeva:** Jednaka dostupnost funkcionalnosti korisnicima
 - **Kategorija:** Vanjski (`VZ`)
@@ -451,7 +439,7 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 ---
 
-#### NFR-31
+#### NFR-30
 
 - **Naziv zahtjeva:** Sigurno čuvanje operativnih i korisničkih podataka
 - **Kategorija:** Vanjski (`VZ`)
