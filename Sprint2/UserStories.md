@@ -374,7 +374,24 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-24:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
 
+Acceptance Criteria:
+Kada korisnik kreira novi tiket, ako su definisana pravila dodjele, tada sistem mora automatski dodijeliti tiket odgovarajućem agentu
+Kada sistem dodjeljuje tiket, ako je agent nedostupan, tada sistem ne smije dodijeliti tiket tom agentu
+Kada je tiket dodijeljen agentu, ako je dodjela uspješna, tada agent mora dobiti notifikaciju
+Kada sistem ne može pronaći dostupnog agenta, ako se izvrši pokušaj dodjele, tada tiket mora biti označen kao "Nedodijeljen"
+Sistem mora dodijeliti tiket prema predefinisanin pravilima dodjele
+Sistem mora prikazati poruku ukoliko nema definisanih pravila dodjele
+
+
 - **US-25:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
+
+Acceptance Criteria:
+Kada administrator pristupi sekciji pravila, ako želi upravljati pravilima, tada sistem mora omogućiti administratoru editovanje pravila
+Sistem mora omogućiti pravljenje, uređivanje, i brisanje pravila
+Kada administrator pregleda pravila, ako postoje aktivna pravila, tada sistem mora prikazati sva aktivna pravila
+Sistem mora prikazati poruku ukoliko nema definisanih pravila
+Kada tiket odgovara više pravila, ako se primjenjuju pravila, tada sistem mora koristiti prioritizaciju
+
 
 ### Poslovna vrijednost
 
@@ -404,7 +421,23 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-26:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
 
+Acceptance Criteria:
+Kada je agent prijavljen i nalazi se na tiketu, ako želi proslijediti tiket, tada sistem mora omogućiti izbor samo aktivnih agenata
+Sistem mora omogućiti prosljeđivanje tiketa od strane agenta ukoliko on njemu nije dodijeljen
+Kada agent pokušava proslijediti tiket, ako je tiket zatvoren, tada sistem ne smije dozvoliti prosljeđivanje
+Kada agent proslijedi tiket, ako je akcija uspješna, tada novi agent mora dobiti obavijest
+Kada agent pokuša proslijediti tiket samom sebi, ako izvrši tu akciju, tada sistem mora spriječiti prosljeđivanje
+
+
 - **US-27:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
+
+**Acceptance Criteria:**
+- Kada agent prosljeđuje tiket, ako želi dodati komentar, tada sistem mora omogućiti unos komentara
+- Kada postoji interni komentar, ako korisnik pregleda tiket, tada sistem ne smije prikazati taj komentar
+- Sistem mora ograničiti dužinu komentara
+- Kada novi agent primi tiket, ako postoji komentar, tada sistem mora prikazati komentar u detaljima tiketa
+- Kada novi agent primi tiket sa internim komentarom, tada sistem mora onemogućiti opciju da agent mijenja komentar tiketa
+
 
 ### Poslovna vrijednost
 
@@ -434,7 +467,19 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-28:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.
 
+**Acceptance Criteria:**
+- Kada administrator otvori listu tiketa, ako se podaci učitaju, tada sistem mora prikazati sve tikete
+- Kada postoji veliki broj tiketa, ako korisnik skrola ili traži više, tada sistem mora omogućiti učitavanje dodatnih rezultata
+- Sistem prikazuje sve tikete neovisno od stanja
+- Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti 
+
+
 - **US-29:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
+
+**Acceptance Criteria:**
+- Kada administrator otvori tiket, ako tiket postoji, tada sistem mora prikazati sve informacije o tiketu
+- Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti pristup
+
 
 ### Poslovna vrijednost
 
@@ -464,7 +509,22 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-30:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.
 
+**Acceptance Criteria:**
+- Kada korisnik unese tekst u polje za pretragu, ako pokrene pretragu, tada sistem mora pretraživati po ID-u
+- Sistem traži podudaranje pretrage sa tiketom, neovisno od malog i velikog slova
+- Kada se prikazuju rezultati, ako tiket ne pripada korisniku, tada sistem ne smije prikazati taj tiket
+- Kada pretraga ne vrati rezultate, ako nema podudaranja, tada sistem mora prikazati poruku "Nema rezultata"
+
+
 - **US-31:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.
+
+**Acceptance Criteria:**
+- Kada je korisnik na listi tiketa, ako primijeni filtere, tada sistem mora filtrirati po odabranim kriterijima
+- Sistem mora imati predefinisanu listu kriterija iz koje korisnik može birati 
+- Kada su filteri aktivni, ako korisnik pregleda listu, tada sistem mora jasno prikazati aktivne filtere
+- Sistem ne može dozvoliti korisniku da ubacuje vlastite filtere
+- Kada je korisnik odabrao više filtera, ako postoje tiketi koji zadovoljavaju iste, tada sistem mora imati prioritizaciju
+
 
 ### Poslovna vrijednost
 
@@ -494,7 +554,25 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-32:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
 
+**Acceptance Criteria:**
+
+- Kada administrator pregleda postojeće korisnike, ako odabere specifičan korinsički profil, tada sistem omogućava dostup više informacija
+- Kada administrator otvori profil korisnika, tada sistem mora prikazati sve relevantne podatke
+- Sistem adminsitratoru prikazuje samo spisak trenutno postojećih korisnika
+- Kada se prikazuju podaci, tada sistem ne smije prikazivati lozinke ili osjetljive informacije.
+- Kada administrator traži korisnika, tada sistem mora omogućiti pretragu po imenu ili emailu.
+- Kada administrator vrši pretragu korisnika, ako nema podudaranja, tada sistem šalje poruku da korisnik nike pronađen
+
+
 - **US-33:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
+
+**Acceptance Criteria:**
+- Kada administrator mijenja podatke, tada sistem mora omogućiti uređivanje osnovnih informacija
+- Kada se radi o lozinki, tada sistem ne smije dozvoliti direktnu izmjenu
+- Kada se izmjena sačuva, tada sistem mora prikazati potvrdu
+- Kada se napravi izmjena, tada sistem mora evidentirati promjenu
+- Kada administrator izvrši promjenu podataka, ukoliko ne potvrdi promjenu, tada sistem ne smije gubiti niti mijenjati prethodne informacije
+
 
 ### Poslovna vrijednost
 
@@ -524,7 +602,20 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-34:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
 
+**Acceptance Criteria:**
+- Kada tehničar otvori listu tiketa, ako je prijavljen, tada sistem mora prikazati samo njegove tikete
+- Kada se prikazuje lista tiketa, ako tiket nije dodijeljen tom tehničaru, tada sistem ne smije prikazati taj tiket
+- Kada se prikazuju tiketi, ako imaju različite statuse, tada sistem mora jasno razlikovati statuse
+- Kada tehničar nema dodijeljenih tiketa, ako otvori listu, tada sistem mora prikazati poruku o praznoj listi
+
+
 - **US-35:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
+
+**Acceptance Criteria:**
+- Kada je tehničar prijavljen i nalazi se na listi tiketa, ako primijeni filtere, tada sistem mora filtrirati po odabranim kriterijima
+- Kada tehničar primijeni filtere, ako nijedan tiket ne odgovara kriterijima, tada sistem mora prikazati odgovarajuću poruku
+- Kada tehničar unosi raspon datuma, ako je početni datum veći od krajnjeg, tada sistem ne smije dozvoliti primjenu filtera
+
 
 ### Poslovna vrijednost
 
@@ -554,7 +645,21 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-36:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.
 
+**Acceptance Criteria:**
+- Kada tehničar pregleda tiket, ako želi promijeniti status, tada sistem mora omogućiti izbor između definisanih stanja
+- Kada tehničar promijeni status tiketa, ako je promjena uspješna, tada korisnik mora dobiti obavijest
+- Kada je tiket zatvoren, ako tehničar pokuša promijeniti status, tada sistem ne smije dozvoliti promjenu
+- Sistem mora evidentirati promjenu stanja tiketa
+
+
 - **US-37:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.
+
+**Acceptance Criteria:**
+- Kada tehničar promijeni status tiketa, ako se promjena izvrši, tada sistem mora evidentirati promjenu
+- Korisnik ne može izvršiti izmjene ili brisanje tiketa
+- Kada tehničar otvori tiket, ako postoji historija, tada sistem mora prikazati kompletnu historiju
+- Sistem ne smije omogućiti tehničaru da vidi neovlaštene podatke
+
 
 ### Poslovna vrijednost
 
@@ -584,7 +689,22 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-38:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
 
+**Acceptance Criteria:**
+- Kada tehničar pregleda tikete, ako otvori postojeći tiket, tada sistem mora prikazati osnovne informacije
+- Kada se prikazuju podaci, ako su interne napomene prisutne, tada sistem ne smije prikazati te napomene
+- Kada tehničar otvori ekran tiketa, ako su podaci učitani, tada sve informacije moraju biti dostupne bez dodatnih klikova
+- Sistem ne smije omogućiti pregled tiketa koji nisu dodijeljeni tehničaru
+
+
 - **US-39:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
+
+**Acceptance Criteria:**
+- Kada tehničar pregleda tiket, ako želi pogledati detaljne informacije, tada sistem mora prikazati korisničke informacije 
+- Kada se prikazuju podaci korisnika, ako su osjetljivi, tada sistem ne smije prikazati te podatke
+- Kada tehničar pregleda korisnika, ako postoje prethodni tiketi, tada sistem mora omogućiti uvid u njih
+- Sistem ne sme omogućiti promjenu korisničkih podatak prilikom pregleda 
+
+
 
 ### Poslovna vrijednost
 
