@@ -304,9 +304,9 @@ Zavisi od sistema za tikete.
 
 ### User Stories
 
-- **US-1:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
+- **US-22:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
 
-- **US-2:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
+- **US-23:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
 
 ### Poslovna vrijednost
 
@@ -336,9 +336,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
+- **US-24:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
 
-- **US-2:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
+- **US-25:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
 
 ### Poslovna vrijednost
 
@@ -366,9 +366,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
+- **US-26:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
 
-- **US-2:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
+- **US-27:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
 
 ### Poslovna vrijednost
 
@@ -396,9 +396,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.
+- **US-28:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.
 
-- **US-2:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
+- **US-29:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
 
 ### Poslovna vrijednost
 
@@ -426,9 +426,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.
+- **US-30:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.
 
-- **US-2:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.
+- **US-31:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.
 
 ### Poslovna vrijednost
 
@@ -456,9 +456,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
+- **US-32:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
 
-- **US-2:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
+- **US-33:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
 
 ### Poslovna vrijednost
 
@@ -486,9 +486,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
+- **US-34:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
 
-- **US-2:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
+- **US-35:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
 
 ### Poslovna vrijednost
 
@@ -516,9 +516,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.
+- **US-36:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.
 
-- **US-2:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.
+- **US-37:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.
 
 ### Poslovna vrijednost
 
@@ -546,9 +546,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
+- **US-38:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
 
-- **US-2:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
+- **US-39:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
 
 ### Poslovna vrijednost
 
@@ -576,9 +576,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-1:** Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa
+- **US-40:** Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa
 
-- **US-2:** Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu
+- **US-41:** Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu
 
 
 ### Poslovna vrijednost
@@ -603,9 +603,9 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:** Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima
+- **US-42:** Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima
 
-- **US-2:**Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti
+- **US-43:**Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti
 
 
 ### Poslovna vrijednost
@@ -630,9 +630,9 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:** Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema
+- **US-44:** Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema
 
-- **US-2:**Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti
+- **US-45:**Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti
 
 ### Poslovna vrijednost
 Omogućava se bolji uvid o statistici, problemima i analizi po tipovima problema pojedinačnog tiketa
@@ -656,9 +656,9 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:** Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika
+- **US-46:** Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika
 
-- **US-2:** Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio
+- **US-47:** Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio
 
 ### Poslovna vrijednost
 Omogućava se bolji uvid o statistici, težini problemima i analizi svakog tiketa
@@ -682,15 +682,15 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:** Kao administrator, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih imao informaciju da li su tehničari responzivni i odgovorni
+- **US-48:** Kao administrator, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih imao informaciju da li su tehničari responzivni i odgovorni
 
-- **US-2:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da poredam prioritete za poslane tikete
+- **US-49:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da poredam prioritete za poslane tikete
 
-- **US-3:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li su druge kolege odgovorili na tiket
+- **US-50:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li su druge kolege odgovorili na tiket
 
-- **US-4:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li korisnik dugo čeka na odgovor
+- **US-51:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li korisnik dugo čeka na odgovor
 
-- **US-5:** Kao korisnik, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih znao koliko se mogu pouzdati na cijeli helpdesk/tiket sistem
+- **US-52:** Kao korisnik, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih znao koliko se mogu pouzdati na cijeli helpdesk/tiket sistem
 
 ### Poslovna vrijednost
 Omogućava se bolji uvid o pouzdanosti i težini problema koji je postavljen u tiketu
@@ -714,7 +714,7 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:** Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.
+- **US-53:** Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.
 
 
 ### Poslovna vrijednost
@@ -738,7 +738,7 @@ Sistem već bilježi tačno vrijeme zatvaranja svakog tiketa i ID agenta koji ga
 
 ### User Stories
 
-- **US-1:** Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.
+- **US-54:** Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.
 
 
 ### Poslovna vrijednost
@@ -765,7 +765,7 @@ Implementiran je mehanizam koji šalje upit za ocjenu korisniku odmah nakon zatv
 
 ### User Stories
 
-- **US-1:** Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara
+- **US-55:** Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara
 
 
 ### Poslovna vrijednost
@@ -793,7 +793,7 @@ Svi relevanti tabele i podaci su dostupni u bazi podataka za prikaz na admin das
 
 ### User Stories
 
-- **US-1:** Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.
+- **US-56:** Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.
 
 
 ### Poslovna vrijednost
@@ -823,7 +823,7 @@ U bazi podataka se nalaze svi relevantni podaci za export izvještaja tiketa
 
 ### User Stories
 
-- **US-1:** Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa
+- **US-57:** Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa
 
 
 ### Poslovna vrijednost
