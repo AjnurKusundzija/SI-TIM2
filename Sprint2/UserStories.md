@@ -7,9 +7,27 @@
 ### User Stories
 
 - **US-1:** Kao registrovani korisnik, želim da se prijavim u sistem koristeći email i lozinku, kako bih pristupio svom nalogu.
+    - **Acceptance Criteria:**
+        - Kada korisnik nije prijavljen, ako unese ispravan email i lozinku, tada se uspješno prijavljuje u sistem  
+        - Kada korisnik unese validne podatke, ako klikne na “Login”, tada se preusmjerava na početnu stranicu  
+        - Sistem mora omogućiti unos emaila i lozinke  
+        - Sistem ne smije dozvoliti prijavu bez unosa obaveznih polja  
+        - Korisnik treba dobiti potvrdu o uspješnoj prijavi 
+---    
 - **US-2:** Kao korisnik, želim da se odjavim iz sistema, kako bih zaštitio svoj nalog.
+    - **Acceptance Criteria:**
+        - Kada je korisnik prijavljen, ako klikne na “Logout”, tada se odjavljuje iz sistema  
+        - Kada se korisnik odjavi, tada se preusmjerava na login stranicu  
+        - Sistem mora onemogućiti pristup zaštićenim stranicama nakon logout-a  
+        - Korisnik ne smije ostati autentifikovan nakon odjave  
+---
 - **US-3:** Kao korisnik, želim da budem obaviješten ako unesem pogrešne podatke za prijavu, kako bih mogao ponovo pokušati.
-
+    - **Acceptance Criteria:**
+        - Kada korisnik unese pogrešan email ili lozinku, ako pokuša login, tada sistem odbija prijavu  
+        - Kada login ne uspije, tada korisnik dobija poruku o grešci  
+        - Sistem ne smije otkriti da li je email ili lozinka pogrešna   
+        - Korisnik treba dobiti mogućnost ponovnog pokušaja prijave 
+---
 ### Poslovna vrijednost
 
 Omogućava korisnicima pristup sistemu i svim ostalim funkcionalnostima. Bez login-a sistem nema smisla jer korisnici ne mogu koristiti usluge.
@@ -38,8 +56,27 @@ Zavisi od postojanja korisničkih naloga u bazi podataka.
 
 ### User Stories
 
-- **US-4:** Kao korisnik, želim da promijenim svoj email, kako bih imao tačne kontakt informacije.
-- **US-5:** Kao korisnik, želim da promijenim lozinku, kako bih povećao sigurnost svog naloga.
+### US-4: *Kao korisnik, želim da promijenim svoj email, kako bih imao tačne kontakt informacije.*
+
+**Acceptance Criteria:**
+
+    - Kada je korisnik prijavljen, ako unese novi email i potvrdi izmjenu, tada se email ažurira u sistemu  
+    - Kada korisnik unese nevalidan email, tada sistem prikazuje grešku  
+    - Sistem mora provjeriti format email adrese  
+    - Sistem ne smije dozvoliti unos već postojećeg emaila u sistemu  
+    - Korisnik treba dobiti potvrdu o uspješnoj promjeni emaila  
+---
+
+### US-5: *Kao korisnik, želim da promijenim lozinku, kako bih povećao sigurnost svog naloga.*
+**Acceptance Criteria:**
+    
+    - Kada je korisnik prijavljen, ako unese trenutnu i novu lozinku, tada se lozinka uspješno mijenja  
+    - Kada korisnik unese pogrešnu trenutnu lozinku, tada sistem odbija promjenu  
+    - Sistem mora zahtijevati unos trenutne lozinke prije promjene  
+    - Sistem mora provjeriti minimalne sigurnosne zahtjeve lozinke  
+    - Sistem ne smije dozvoliti lozinku koja ne zadovoljava sigurnosne zahtjeve 
+    - Korisnik treba dobiti potvrdu o uspješnoj promjeni lozinke  
+---
 
 ### Poslovna vrijednost
 
@@ -68,8 +105,25 @@ Zavisi od login funkcionalnosti.
 
 ### User Stories
 
-- **US-6:** Kao korisnik, želim da vidim svoje aktivne pakete i pretplate, kako bih imao pregled usluga koje koristim.
-- **US-7:** Kao korisnik, želim da vidim detalje paketa (internet, TV, mobilni), kako bih razumio šta moj paket uključuje.
+### US-6: *Kao korisnik, želim da vidim svoje aktivne pakete i pretplate, kako bih imao pregled usluga koje koristim.*
+**Acceptance Criteria:**
+
+- Kada je korisnik prijavljen, ako pristupi sekciji "Paketi", tada vidi listu svojih aktivnih paketa i pretplata  
+- Kada korisnik ima više paketa, tada sistem prikazuje sve aktivne pakete u listi  
+- Sistem mora prikazati osnovne informacije o svakom paketu 
+- Sistem ne smije prikazivati pakete koji nisu povezani sa korisnikom  
+- Korisnik treba dobiti jasan pregled svojih aktivnih usluga  
+---
+
+### US-7: *Kao korisnik, želim da vidim detalje paketa (internet, TV, mobilni), kako bih razumio šta moj paket uključuje.*
+**Acceptance Criteria:**
+
+- Kada korisnik odabere paket, tada sistem prikazuje detalje paketa  
+- Kada paket sadrži više usluga, tada sistem prikazuje sve uključene usluge  
+- Sistem mora prikazati relevantne informacije (npr. brzina interneta, broj kanala, mobilni podaci)  
+- Sistem ne smije prikazivati netačne ili nepotpune informacije o paketu  
+- Korisnik treba dobiti jasan i razumljiv prikaz sadržaja paketa  
+---
 
 ### Poslovna vrijednost
 
