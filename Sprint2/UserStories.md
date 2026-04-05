@@ -374,23 +374,23 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-24:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
 
-Acceptance Criteria:
-Kada korisnik kreira novi tiket, ako su definisana pravila dodjele, tada sistem mora automatski dodijeliti tiket odgovarajućem agentu
-Kada sistem dodjeljuje tiket, ako je agent nedostupan, tada sistem ne smije dodijeliti tiket tom agentu
-Kada je tiket dodijeljen agentu, ako je dodjela uspješna, tada agent mora dobiti notifikaciju
-Kada sistem ne može pronaći dostupnog agenta, ako se izvrši pokušaj dodjele, tada tiket mora biti označen kao "Nedodijeljen"
-Sistem mora dodijeliti tiket prema predefinisanin pravilima dodjele
-Sistem mora prikazati poruku ukoliko nema definisanih pravila dodjele
+**Acceptance Criteria:**
+- Kada korisnik kreira novi tiket, ako su definisana pravila dodjele, tada sistem mora automatski dodijeliti tiket odgovarajućem agentu
+- Kada sistem dodjeljuje tiket, ako je agent nedostupan, tada sistem ne smije dodijeliti tiket tom agentu
+- Kada je tiket dodijeljen agentu, ako je dodjela uspješna, tada agent mora dobiti notifikaciju
+- Kada sistem ne može pronaći dostupnog agenta, ako se izvrši pokušaj dodjele, tada tiket mora biti označen kao "Nedodijeljen"
+- Sistem mora dodijeliti tiket prema predefinisanin pravilima dodjele
+- Sistem mora prikazati poruku ukoliko nema definisanih pravila dodjele
 
 
 - **US-25:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
 
-Acceptance Criteria:
-Kada administrator pristupi sekciji pravila, ako želi upravljati pravilima, tada sistem mora omogućiti administratoru editovanje pravila
-Sistem mora omogućiti pravljenje, uređivanje, i brisanje pravila
-Kada administrator pregleda pravila, ako postoje aktivna pravila, tada sistem mora prikazati sva aktivna pravila
-Sistem mora prikazati poruku ukoliko nema definisanih pravila
-Kada tiket odgovara više pravila, ako se primjenjuju pravila, tada sistem mora koristiti prioritizaciju
+**Acceptance Criteria:**
+- Kada administrator pristupi sekciji pravila, ako želi upravljati pravilima, tada sistem mora omogućiti administratoru editovanje pravila
+- Sistem mora omogućiti pravljenje, uređivanje, i brisanje pravila
+- Kada administrator pregleda pravila, ako postoje aktivna pravila, tada sistem mora prikazati sva aktivna pravila
+- Sistem mora prikazati poruku ukoliko nema definisanih pravila
+- Kada tiket odgovara više pravila, ako se primjenjuju pravila, tada sistem mora koristiti prioritizaciju
 
 
 ### Poslovna vrijednost
@@ -421,12 +421,12 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - **US-26:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
 
-Acceptance Criteria:
-Kada je agent prijavljen i nalazi se na tiketu, ako želi proslijediti tiket, tada sistem mora omogućiti izbor samo aktivnih agenata
-Sistem mora omogućiti prosljeđivanje tiketa od strane agenta ukoliko on njemu nije dodijeljen
-Kada agent pokušava proslijediti tiket, ako je tiket zatvoren, tada sistem ne smije dozvoliti prosljeđivanje
-Kada agent proslijedi tiket, ako je akcija uspješna, tada novi agent mora dobiti obavijest
-Kada agent pokuša proslijediti tiket samom sebi, ako izvrši tu akciju, tada sistem mora spriječiti prosljeđivanje
+**Acceptance Criteria:**
+- Kada je agent prijavljen i nalazi se na tiketu, ako želi proslijediti tiket, tada sistem mora omogućiti izbor samo aktivnih agenata
+- Sistem mora omogućiti prosljeđivanje tiketa od strane agenta ukoliko on njemu nije dodijeljen
+- Kada agent pokušava proslijediti tiket, ako je tiket zatvoren, tada sistem ne smije dozvoliti prosljeđivanje
+- Kada agent proslijedi tiket, ako je akcija uspješna, tada novi agent mora dobiti obavijest
+- Kada agent pokuša proslijediti tiket samom sebi, ako izvrši tu akciju, tada sistem mora spriječiti prosljeđivanje
 
 
 - **US-27:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
