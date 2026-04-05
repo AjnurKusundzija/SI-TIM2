@@ -275,7 +275,7 @@ Zavisi od postojanja tiketa.
 
 ### User Stories
 
-- **US-20:** Kao agent, želim da postavim interni prioritet tiketa, kako bih efikasno upravljao zadacima.
+#### **US-20:** Kao agent, želim da postavim interni prioritet tiketa, kako bih efikasno upravljao zadacima.
 
 **Acceptance Criteria:**
 - Kada je agent prijavljen u sistem i nalazi se na stranici tiketa, ako odabere opciju za postavljanje prioriteta, tada sistem mora postaviti odabrani prioritet
@@ -286,7 +286,7 @@ Zavisi od postojanja tiketa.
 - Kada nema odabranog internog priroteta, tada sistem mora prikazati poruku da prioritet nije postavljen
 
 
-- **US-21:** Kao korisnik, želim da postavim prioritet svog problema, kako bih označio hitnost.
+#### **US-21:** Kao korisnik, želim da postavim prioritet svog problema, kako bih označio hitnost.
 
 **Acceptance Criteria:**
 - Kada je korisnik prijavljen u sistem i kreira novi tiket, ako dođe do koraka odabira prioriteta, tada sistem mora omogućiti izbor iz predefinisane liste
@@ -323,7 +323,7 @@ Zavisi od sistema za tikete.
 
 ### User Stories
 
-- **US-22:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
+#### **US-22:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
 
 **Acceptance Criteria:**
 - Kada je administrator prijavljen i nalazi se u sekciji upravljanja timovima, ako odabere agenta i premjesti ga u drugi tim, tada sistem mora izvršiti promjenu 
@@ -333,8 +333,7 @@ Zavisi od sistema za tikete.
 - Kada administrator izvrši pokušaj preraaspodjele agenata, ako dođe do greške ili nemogućnosti odabrane perraspodjele, sistme mora poslati poruku upozorenja
 
 
-
-- **US-23:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
+#### **US-23:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
 
 **Acceptance Criteria:**
 - Kada administrator pristupi sekciji timova tada sistem mora prikazati sve timove i njihove članove
@@ -372,7 +371,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-24:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
+#### **US-24:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
 
 **Acceptance Criteria:**
 - Kada korisnik kreira novi tiket, ako su definisana pravila dodjele, tada sistem mora automatski dodijeliti tiket odgovarajućem agentu
@@ -383,7 +382,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Sistem mora prikazati poruku ukoliko nema definisanih pravila dodjele
 
 
-- **US-25:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
+#### **US-25:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
 
 **Acceptance Criteria:**
 - Kada administrator pristupi sekciji pravila, ako želi upravljati pravilima, tada sistem mora omogućiti administratoru editovanje pravila
@@ -391,6 +390,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Kada administrator pregleda pravila, ako postoje aktivna pravila, tada sistem mora prikazati sva aktivna pravila
 - Sistem mora prikazati poruku ukoliko nema definisanih pravila
 - Kada tiket odgovara više pravila, ako se primjenjuju pravila, tada sistem mora koristiti prioritizaciju
+ 
 
 
 ### Poslovna vrijednost
@@ -419,7 +419,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-26:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
+#### **US-26:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
 
 **Acceptance Criteria:**
 - Kada je agent prijavljen i nalazi se na tiketu, ako želi proslijediti tiket, tada sistem mora omogućiti izbor samo aktivnih agenata
@@ -429,7 +429,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Kada agent pokuša proslijediti tiket samom sebi, ako izvrši tu akciju, tada sistem mora spriječiti prosljeđivanje
 
 
-- **US-27:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
+#### **US-27:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
 
 **Acceptance Criteria:**
 - Kada agent prosljeđuje tiket, ako želi dodati komentar, tada sistem mora omogućiti unos komentara
@@ -437,6 +437,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Sistem mora ograničiti dužinu komentara
 - Kada novi agent primi tiket, ako postoji komentar, tada sistem mora prikazati komentar u detaljima tiketa
 - Kada novi agent primi tiket sa internim komentarom, tada sistem mora onemogućiti opciju da agent mijenja komentar tiketa
+ 
 
 
 ### Poslovna vrijednost
@@ -465,7 +466,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-28:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.
+#### **US-28:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.
 
 **Acceptance Criteria:**
 - Kada administrator otvori listu tiketa, ako se podaci učitaju, tada sistem mora prikazati sve tikete
@@ -474,11 +475,12 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti 
 
 
-- **US-29:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
+#### **US-29:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
 
 **Acceptance Criteria:**
 - Kada administrator otvori tiket, ako tiket postoji, tada sistem mora prikazati sve informacije o tiketu
 - Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti pristup
+
 
 
 ### Poslovna vrijednost
@@ -507,7 +509,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-30:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.
+#### **US-30:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.
 
 **Acceptance Criteria:**
 - Kada korisnik unese tekst u polje za pretragu, ako pokrene pretragu, tada sistem mora pretraživati po ID-u
@@ -516,7 +518,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Kada pretraga ne vrati rezultate, ako nema podudaranja, tada sistem mora prikazati poruku "Nema rezultata"
 
 
-- **US-31:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.
+#### **US-31:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.
 
 **Acceptance Criteria:**
 - Kada je korisnik na listi tiketa, ako primijeni filtere, tada sistem mora filtrirati po odabranim kriterijima
@@ -524,6 +526,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Kada su filteri aktivni, ako korisnik pregleda listu, tada sistem mora jasno prikazati aktivne filtere
 - Sistem ne može dozvoliti korisniku da ubacuje vlastite filtere
 - Kada je korisnik odabrao više filtera, ako postoje tiketi koji zadovoljavaju iste, tada sistem mora imati prioritizaciju
+
 
 
 ### Poslovna vrijednost
@@ -552,10 +555,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-32:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
+#### **US-32:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
 
 **Acceptance Criteria:**
-
 - Kada administrator pregleda postojeće korisnike, ako odabere specifičan korinsički profil, tada sistem omogućava dostup više informacija
 - Kada administrator otvori profil korisnika, tada sistem mora prikazati sve relevantne podatke
 - Sistem adminsitratoru prikazuje samo spisak trenutno postojećih korisnika
@@ -564,7 +566,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Kada administrator vrši pretragu korisnika, ako nema podudaranja, tada sistem šalje poruku da korisnik nike pronađen
 
 
-- **US-33:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
+#### **US-33:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
 
 **Acceptance Criteria:**
 - Kada administrator mijenja podatke, tada sistem mora omogućiti uređivanje osnovnih informacija
@@ -572,6 +574,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Kada se izmjena sačuva, tada sistem mora prikazati potvrdu
 - Kada se napravi izmjena, tada sistem mora evidentirati promjenu
 - Kada administrator izvrši promjenu podataka, ukoliko ne potvrdi promjenu, tada sistem ne smije gubiti niti mijenjati prethodne informacije
+
 
 
 ### Poslovna vrijednost
@@ -600,7 +603,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-34:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
+#### **US-34:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
 
 **Acceptance Criteria:**
 - Kada tehničar otvori listu tiketa, ako je prijavljen, tada sistem mora prikazati samo njegove tikete
@@ -609,12 +612,13 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Kada tehničar nema dodijeljenih tiketa, ako otvori listu, tada sistem mora prikazati poruku o praznoj listi
 
 
-- **US-35:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
+#### **US-35:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
 
 **Acceptance Criteria:**
 - Kada je tehničar prijavljen i nalazi se na listi tiketa, ako primijeni filtere, tada sistem mora filtrirati po odabranim kriterijima
 - Kada tehničar primijeni filtere, ako nijedan tiket ne odgovara kriterijima, tada sistem mora prikazati odgovarajuću poruku
 - Kada tehničar unosi raspon datuma, ako je početni datum veći od krajnjeg, tada sistem ne smije dozvoliti primjenu filtera
+
 
 
 ### Poslovna vrijednost
@@ -643,7 +647,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-36:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.
+#### **US-36:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.
 
 **Acceptance Criteria:**
 - Kada tehničar pregleda tiket, ako želi promijeniti status, tada sistem mora omogućiti izbor između definisanih stanja
@@ -652,13 +656,14 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Sistem mora evidentirati promjenu stanja tiketa
 
 
-- **US-37:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.
+#### **US-37:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.
 
 **Acceptance Criteria:**
 - Kada tehničar promijeni status tiketa, ako se promjena izvrši, tada sistem mora evidentirati promjenu
 - Korisnik ne može izvršiti izmjene ili brisanje tiketa
 - Kada tehničar otvori tiket, ako postoji historija, tada sistem mora prikazati kompletnu historiju
 - Sistem ne smije omogućiti tehničaru da vidi neovlaštene podatke
+
 
 
 ### Poslovna vrijednost
@@ -687,7 +692,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### User Stories
 
-- **US-38:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
+#### **US-38:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
 
 **Acceptance Criteria:**
 - Kada tehničar pregleda tikete, ako otvori postojeći tiket, tada sistem mora prikazati osnovne informacije
@@ -696,7 +701,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Sistem ne smije omogućiti pregled tiketa koji nisu dodijeljeni tehničaru
 
 
-- **US-39:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
+#### **US-39:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
 
 **Acceptance Criteria:**
 - Kada tehničar pregleda tiket, ako želi pogledati detaljne informacije, tada sistem mora prikazati korisničke informacije 
