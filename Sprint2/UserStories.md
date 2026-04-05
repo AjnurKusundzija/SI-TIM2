@@ -630,22 +630,24 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema
 
+- **US-2:**Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti
 
 ### Poslovna vrijednost
-
+Omogućava se bolji uvid o statistici, problemima i analizi po tipovima problema pojedinačnog tiketa
 
 ### Prioritet
-
+5
 
 ### Zavisnosti
-
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
 
 ### Pretpostavke
-
+- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
 
 ### Otvorena pitanja
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
 
 ---
@@ -654,22 +656,25 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika
 
+- **US-2:** Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio
 
 ### Poslovna vrijednost
-
+Omogućava se bolji uvid o statistici, težini problemima i analizi svakog tiketa
 
 ### Prioritet
-
+5
 
 ### Zavisnosti
-
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
 
 ### Pretpostavke
-
+- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
 
 ### Otvorena pitanja
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
 
 ---
 
@@ -677,22 +682,31 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao administrator, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih imao informaciju da li su tehničari responzivni i odgovorni
 
+- **US-2:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da poredam prioritete za poslane tikete
+
+- **US-3:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li su druge kolege odgovorili na tiket
+
+- **US-4:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li korisnik dugo čeka na odgovor
+
+- **US-5:** Kao korisnik, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih znao koliko se mogu pouzdati na cijeli helpdesk/tiket sistem
 
 ### Poslovna vrijednost
-
+Omogućava se bolji uvid o pouzdanosti i težini problema koji je postavljen u tiketu
 
 ### Prioritet
-
+2
 
 ### Zavisnosti
-
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketu i vremenu slanja i odgovora tiketa
 
 ### Pretpostavke
-
+- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
 
 ### Otvorena pitanja
+- Da li se postavlja vrijeme samo prvoga odgovora ili vrijeme i ostalih odgovora na isti tiket?
+
 
 ---
 
@@ -792,22 +806,25 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### User Stories
 
-- **US-1:**
+- **US-1:** Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa
 
 
 ### Poslovna vrijednost
-
+Eventualno smanjenje slanja tiketa 
 
 ### Prioritet
-
+3
 
 ### Zavisnosti
-
+Potrebno je analizirati najčešće probleme koji se javljaju u telekom sistemu radi efikasnog sastavljanja FAQ Segmenta
 
 ### Pretpostavke
 
+Za svako pitanje u FAQ Segmentu postavljen je odgovor koji zasigurno rješava nedoumicu iz postavljenog pitanja
 
 ### Otvorena pitanja
+
+- Koja pitanja u relevantna za ubacivanje u FAQ Segment?
 
 
 
