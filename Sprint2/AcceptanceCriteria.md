@@ -233,10 +233,10 @@ Prema uputama sa prošlog sastanka:
 
 - Kada agent želi zatvoriti tiket, ako smatra da je zadatak završen, tada može poslati zahtjev za zatvaranje korisniku  
 - Kada korisnik primi zahtjev za zatvaranje, tada može prihvatiti ili odbiti zatvaranje tiketa  
-- Ako korisnik prihvati zahtjev, tada se tiket zatvara i poprima status zatvoren  
+- Ako korisnik prihvati zahtjev, tada se tiket zatvara, poprima status zatvoren i sistem evidentira koji je agent zatvorio tiket  
 - Ako korisnik odbije zahtjev, tada tiket ostaje otvoren
-- Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada se tiket automatski zatvara  
-- Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje i automatsko zatvaranje tiketa nakon 7 dana bez odgovora  
+- Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada se tiket automatski zatvara, a sistem evidentira koji je agent inicirao zahtjev za zatvaranje 
+- Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje, automatsko zatvaranje tiketa nakon 7 dana bez odgovora, i prikaz agenta koji je zatvorio tiket    
 
 ---
 
