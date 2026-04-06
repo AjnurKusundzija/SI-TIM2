@@ -263,6 +263,8 @@ Prema uputama sa prošlog sastanka:
 - Kada korisnik unese novu poruku, ako klikne na dugme za slanje, tada se poruka sprema i prikazuje u historiji komunikacije    
 - Sistem mora omogućiti unos poruke  
 - Sistem ne smije dozvoliti slanje prazne poruke  
+- Sistem mora ograničiti korisnika na maksimalno 3 poruke po ciklusu (inicijalno 3, a nakon svakog odgovora agenta, korisnik dobija ponovo do 3 poruke)  
+- Sistem mora ograničiti dužinu poruke na maksimalan broj karaktera (1000 karaktera) 
 - Korisnik treba vidjeti svoju poslanu poruku  
 
 ---
