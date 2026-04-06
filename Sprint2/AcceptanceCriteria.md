@@ -108,7 +108,7 @@ Prema uputama sa prošlog sastanka:
 
 - Kada korisnik odabere paket, tada sistem prikazuje detalje paketa  
 - Kada paket sadrži više usluga, tada sistem prikazuje sve uključene usluge  
-- Sistem mora prikazati relevantne informacije (npr. brzina interneta, broj kanala, mobilni podaci)  
+- Sistem mora prikazati relevantne informacije (brzina interneta, broj kanala, mobilni podaci)  
 - Sistem ne smije prikazivati netačne ili nepotpune informacije o paketu  
 - Korisnik treba dobiti jasan i razumljiv prikaz sadržaja paketa  
 
@@ -166,7 +166,7 @@ Prema uputama sa prošlog sastanka:
 
 ---
 
-### US-12: *Kao korisnik, želim da vidim status tiketa (otvoren, u toku, zatvoren), kako bih znao u kojoj fazi je rješavanje.*
+### US-12: *Kao korisnik, želim da vidim status tiketa (otvoren, zatvoren), kako bih znao u kojoj fazi je rješavanje.*
 
 **Acceptance Criteria:**
 
