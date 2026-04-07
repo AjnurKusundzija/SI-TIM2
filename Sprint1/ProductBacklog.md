@@ -36,10 +36,10 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-16](#pb-16) | Inicijalna struktura repozitorija        | Technical Task |     1     |     L     | Backlog | Sprint 4    |
 | [PB-17](#pb-17) | AI Usage Log                             | Dokumentacija  |     3     |     XS    | Backlog | Sprint 5    |
 | [PB-18](#pb-18) | Decision Log                             | Dokumentacija  |     2     |     XS    | Backlog | Sprint 5    |
-| [PB-19](#pb-19) | Login korisnika                          | Feature        |     1     |     L     | Backlog | Sprint 6-10 |
+| [PB-19](#pb-19) | Login korisnika                          | Feature        |     1     |     L     | Backlog | Sprint 5 |
 | [PB-20](#pb-20) | Upravljanje korisničkim profilom         | Feature        |     2     |     M     | Backlog | Sprint 9 |
 | [PB-21](#pb-21) | Prikaz paketa i pretplata                | Feature        |     4     |     M     | Backlog | Sprint 9 |
-| [PB-22](#pb-22) | Kreiranje novog tiketa                  | Feature        |     1     |     M     | Backlog | Sprint 6-10 |
+| [PB-22](#pb-22) | Kreiranje novog tiketa                  | Feature        |     1     |     M     | Backlog | Sprint 5 |
 | [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Backlog | Sprint 6-10 |
 | [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Backlog | Sprint 6-10 |
 | [PB-25](#pb-25) | Zatvaranje tiketa                       | Feature        |     1     |     L     | Backlog | Sprint 6-10 |
