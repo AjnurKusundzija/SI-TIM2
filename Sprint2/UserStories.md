@@ -412,6 +412,8 @@ Zavisi od zatvorenog tiketa.
 
 - Koja skala ocjenjivanja se koristi?
 
+### Poveznica sa sprintom
+Sprint 8
 ---
 
 ## PB-27 Komunikacija kroz tiket
