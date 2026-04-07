@@ -40,12 +40,12 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-20](#pb-20) | Upravljanje korisničkim profilom         | Feature        |     2     |     M     | Backlog | Sprint 9 |
 | [PB-21](#pb-21) | Prikaz paketa i pretplata                | Feature        |     4     |     M     | Backlog | Sprint 9 |
 | [PB-22](#pb-22) | Kreiranje novog tiketa                  | Feature        |     1     |     M     | Backlog | Sprint 5 |
-| [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Backlog | Sprint 7 |
-| [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Backlog | Sprint 7 |
-| [PB-25](#pb-25) | Zatvaranje tiketa                       | Feature        |     1     |     L     | Backlog | Sprint 8 |
+| [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Backlog | Sprint 6 |
+| [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Backlog | Sprint 6 |
+| [PB-25](#pb-25) | Zatvaranje tiketa                       | Feature        |     1     |     L     | Backlog | Sprint 7 |
 | [PB-26](#pb-26) | Ocjenjivanje tiketa                     | Feature        |     5     |     S     | Backlog | Sprint 8 |
-| [PB-27](#pb-27) | Komunikacija kroz tiket                  | Feature        |     1     |     M     | Backlog | Sprint 8 |
-| [PB-28](#pb-28) | Upravljanje prioritetima tiketa          | Feature        |     2     |     M     | Backlog | Sprint 9 |
+| [PB-27](#pb-27) | Komunikacija kroz tiket                  | Feature        |     1     |     M     | Backlog | Sprint 7 |
+| [PB-28](#pb-28) | Upravljanje prioritetima tiketa          | Feature        |     2     |     M     | Backlog | Sprint 7 |
 | [PB-29](#pb-29) | Preraspodjela agenata po timovima        | Feature        |     1     |     M     | Backlog | Sprint 10 |
 | [PB-30](#pb-30) | Automatska dodjela tiketa                | Feature        |     3     |     XS    | Backlog | Sprint 10 |
 | [PB-31](#pb-31) | Prosljeđivanje tiketa                    | Feature        |     2     |     M     | Backlog | Sprint 10 |
@@ -64,7 +64,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-44](#pb-44) | Izvještaj o ocjenama korisnika           | Feature        |     2     |     S     | Backlog | Sprint 11 |
 | [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama    | Feature        |     1     |     L     | Backlog | Sprint 11 |
 | [PB-46](#pb-46) | Export izvještaja                        | Feature        |     5     |     S     | Backlog | Sprint 11 |
-| [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Backlog | Sprint 11 |
+| [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Backlog | Sprint 6 |
 
 
 
