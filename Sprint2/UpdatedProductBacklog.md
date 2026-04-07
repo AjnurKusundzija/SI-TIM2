@@ -295,7 +295,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6
+- **Veza sa sprintom ili release planom:** Sprint 5
 - **Napomena:** Za korisnika smatramo da već ima registrovan profil gdje pristupni podaci se nalaze u njegovom ugovoru za paket koji koristi
 
 ---
@@ -332,7 +332,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6
+- **Veza sa sprintom ili release planom:** Sprint 5
 
 ---
 
@@ -344,7 +344,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** S
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 7
+- **Veza sa sprintom ili release planom:** Sprint 6
 
 ---
 
@@ -356,7 +356,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 7
+- **Veza sa sprintom ili release planom:** Sprint 6
 
 ---
 
@@ -368,7 +368,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 8
+- **Veza sa sprintom ili release planom:** Sprint 7
 - **Napomena:** Tiket može zatvoriti i korisnik i agent kome je tiket dodijeljen kao i tehničar koji je na terenu riješio problem
 
 ---
@@ -393,7 +393,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 8
+- **Veza sa sprintom ili release planom:** Sprint 7
 
 ---
 
@@ -405,7 +405,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 9
+- **Veza sa sprintom ili release planom:** Sprint 7
 - **Napomena:** Korisnik nema uvid u internu evaluaciju tiketa
 
 ---
@@ -636,4 +636,4 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 3
 - **Procjena složenosti ili napora:** S
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
+- **Veza sa sprintom ili release planom:** Sprint 6
