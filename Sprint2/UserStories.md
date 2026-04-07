@@ -672,20 +672,20 @@ Sprint 10
 
 ### User Stories
 
-#### **US-29:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.
+#### **US-29:** Kao agent, želim da vidim sve tikete, kako bih imao potpuni pregled.
 
 **Acceptance Criteria:**
-- Kada administrator otvori listu tiketa, ako se podaci učitaju, tada sistem mora prikazati sve tikete
+- Kada agent otvori listu tiketa, ako se podaci učitaju, tada sistem mora prikazati sve tikete
 - Kada postoji veliki broj tiketa, ako korisnik skrola ili traži više, tada sistem mora omogućiti učitavanje dodatnih rezultata
 - Sistem prikazuje sve tikete neovisno od stanja
 - Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti 
 
 
-#### **US-30:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
+#### **US-30:** Kao agent, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
 
 **Acceptance Criteria:**
-- Kada administrator otvori tiket, ako tiket postoji, tada sistem mora prikazati sve informacije o tiketu
-- Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti pristup
+- Kada agent otvori tiket, ako tiket postoji, tada sistem mora prikazati sve informacije o tiketu
+- Kada agent koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti pristup
 
 
 
