@@ -54,7 +54,7 @@ Zavisi od postojanja korisničkih naloga u bazi podataka.
 - Koliko pokušaja logina je dozvoljeno?
 
 ### Poveznica sa sprintom
-Sprint 6
+Sprint 5
 
 ---
 
@@ -216,7 +216,7 @@ Zavisi od login funkcionalnosti.
 - Da li se mogu dodavati prilozi?
 
 ### Poveznica sa sprintom
-Sprint 6
+Sprint 5
 
 ---
 
@@ -276,7 +276,7 @@ Zavisi od kreiranja tiketa.
 - Da li je potrebno ograničenje historije tiketa na određeni vremenski period?
 
 ### Poveznica sa sprintom
-Sprint 7
+Sprint 6
 
 ---
 
@@ -325,7 +325,7 @@ Zavisi od pregleda tiketa.
 - Kako prikazati historiju komunikacije (timeline ili lista)?
 
 ### Poveznica sa sprintom
-Sprint 7
+Sprint 6
 ---
 
 ## PB-25 Zatvaranje tiketa
@@ -373,7 +373,7 @@ Zavisi od postojanja tiketa.
 - Može li se tiket ponovo otvoriti nakon zatvaranja?
 
 ### Poveznica sa sprintom
-Sprint 8
+Sprint 7
 
 ---
 
@@ -463,7 +463,7 @@ Zavisi od postojanja tiketa.
 - Da li postoji limit poruka ili notifikacije?
 
 ### Poveznica sa sprintom
-Sprint 8
+Sprint 7
 
 ---
 
@@ -514,7 +514,7 @@ Zavisi od sistema za tikete.
 - Ko može mijenjati prioritet i da li se vidi korisniku?
 
 ### Poveznica sa sprintom
-Sprint 8
+Sprint 7
 
 ---
 
@@ -566,7 +566,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 
 ### Poveznica sa sprintom
-Sprint 11
+Sprint 10
 ---
 
 ## PB-30 Automatska dodjela tiketa
@@ -616,7 +616,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
 ### Poveznica sa sprintom
-Sprint 11
+Sprint 10
 ---
 
 ## PB-31 Prosljeđivanje tiketa
@@ -1344,5 +1344,5 @@ Za svako pitanje u FAQ Segmentu postavljen je odgovor koji zasigurno rješava ne
 - Koja pitanja u relevantna za ubacivanje u FAQ Segment?
 
 ### Poveznica sa sprintom
-Sprint 11
+Sprint 6
 
