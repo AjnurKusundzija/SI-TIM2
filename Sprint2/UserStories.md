@@ -53,6 +53,9 @@ Zavisi od postojanja korisničkih naloga u bazi podataka.
 - Da li je potrebna dvofaktorska autentikacija?
 - Koliko pokušaja logina je dozvoljeno?
 
+### Poveznica sa sprintom
+Sprint 6
+
 ---
 
 ## PB-20 Upravljanje korisničkim profilom
@@ -102,6 +105,9 @@ Zavisi od login funkcionalnosti.
 - Da li je potrebna verifikacija emaila nakon promjene?
 - Koji su zahtjevi za jačinu lozinke?
 
+### Poveznica sa sprintom
+Sprint 9
+
 ---
 
 ## PB-21 Prikaz paketa i pretplata
@@ -148,6 +154,9 @@ Zavisi od login funkcionalnosti i baze podataka.
 
 - Da li korisnik može mijenjati paket kroz sistem?
 - Koliko detalja prikazati?
+
+### Poveznica sa sprintom
+Sprint 9
 
 ---
 
@@ -206,6 +215,9 @@ Zavisi od login funkcionalnosti.
 - Koja polja su obavezna?
 - Da li se mogu dodavati prilozi?
 
+### Poveznica sa sprintom
+Sprint 6
+
 ---
 
 ## PB-23 Pregled vlastitih tiketa
@@ -263,6 +275,9 @@ Zavisi od kreiranja tiketa.
 
 - Da li je potrebno ograničenje historije tiketa na određeni vremenski period?
 
+### Poveznica sa sprintom
+Sprint 7
+
 ---
 
 ## PB-24 Detaljan prikaz tiketa
@@ -309,6 +324,8 @@ Zavisi od pregleda tiketa.
 
 - Kako prikazati historiju komunikacije (timeline ili lista)?
 
+### Poveznica sa sprintom
+Sprint 7
 ---
 
 ## PB-25 Zatvaranje tiketa
@@ -354,6 +371,9 @@ Zavisi od postojanja tiketa.
 ### Otvorena pitanja
 
 - Može li se tiket ponovo otvoriti nakon zatvaranja?
+
+### Poveznica sa sprintom
+Sprint 8
 
 ---
 
@@ -440,6 +460,9 @@ Zavisi od postojanja tiketa.
 
 - Da li postoji limit poruka ili notifikacije?
 
+### Poveznica sa sprintom
+Sprint 8
+
 ---
 
 ## PB-28 Upravljanje prioritetima tiketa
@@ -487,6 +510,9 @@ Zavisi od sistema za tikete.
 ### Otvorena pitanja
 
 - Ko može mijenjati prioritet i da li se vidi korisniku?
+
+### Poveznica sa sprintom
+Sprint 8
 
 ---
 
@@ -536,6 +562,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - Da li može doći do zamjene tiketa prilikom preraspodjele?
 
+
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-30 Automatska dodjela tiketa
@@ -584,6 +613,8 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-31 Prosljeđivanje tiketa
@@ -631,6 +662,8 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
+### Poveznica sa sprintom
+Sprint 10
 ---
 
 ## PB-32 Pregled svih tiketa
@@ -673,6 +706,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 ### Otvorena pitanja
 
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+### Poveznica sa sprintom
+Sprint 10
 
 ---
 
@@ -719,6 +755,9 @@ Zavisi od sistema za tikete i korisničkih uloga.
 ### Otvorena pitanja
 
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+### Poveznica sa sprintom
+Sprint 8
 
 ---
 
@@ -768,6 +807,8 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
+### Poveznica sa sprintom
+Sprint 9
 ---
 
 ## PB-35 Pregled dodijeljenih tiketa (tehničari)
@@ -812,6 +853,8 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
+### Poveznica sa sprintom
+Sprint 10
 ---
 
 ## PB-36 Ažuriranje statusa tiketa
@@ -857,6 +900,8 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
+### Poveznica sa sprintom
+Sprint 8
 ---
 
 ## PB-37 Tehničar vidi osnovne informacije
@@ -902,6 +947,8 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
+### Poveznica sa sprintom
+Sprint 7
 ---
 
 ## PB-38 Izvještaj o broju tiketa
@@ -929,6 +976,8 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 ### Otvorena pitanja
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-39 Izvještaj po statusu tiketa
@@ -955,7 +1004,8 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 ### Otvorena pitanja
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
-
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-40 Izvještaj po tipu problema
@@ -981,7 +1031,8 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 ### Otvorena pitanja
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
-
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-41 Prosječno vrijeme rješavanja tiketa
@@ -1007,7 +1058,8 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 ### Otvorena pitanja
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
-
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-42 Vrijeme prvog odgovora
@@ -1039,7 +1091,8 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 ### Otvorena pitanja
 - Da li se postavlja vrijeme samo prvoga odgovora ili vrijeme i ostalih odgovora na isti tiket?
 
-
+### Poveznica sa sprintom
+Sprint 8
 ---
 
 ## PB-43 Izvještaj o opterećenju agenata
@@ -1064,6 +1117,8 @@ Sistem već bilježi tačno vrijeme zatvaranja svakog tiketa i ID agenta koji ga
 ### Otvorena pitanja
 - Da li je potreban vizuelni prikaz (grafikon) ili je dovoljna tabela sa mogućnošću filtriranja?
 
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-44 Izvještaj o ocjenama korisnika
@@ -1091,6 +1146,8 @@ Implementiran je mehanizam koji šalje upit za ocjenu korisniku odmah nakon zatv
 ### Otvorena pitanja
 - Da li se analiziraju samo numeričke ocjene (npr. 1-5) ili i tekstualni komentari?
 
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-45 Admin Dashboard sa ključnim metrikama
@@ -1119,6 +1176,8 @@ Svi relevanti tabele i podaci su dostupni u bazi podataka za prikaz na admin das
 ### Otvorena pitanja
 - Koji podaci su relevantni za prikaz istih na admin dashboardu?
 
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-46 Export Izvještaja
@@ -1149,6 +1208,8 @@ U bazi podataka se nalaze svi relevantni podaci za export izvještaja tiketa
 ### Otvorena pitanja
 - Koji podaci su relevantni za ubacivanje u .csv file?
 
+### Poveznica sa sprintom
+Sprint 11
 ---
 
 ## PB-47 FAQ Segment
@@ -1175,6 +1236,6 @@ Za svako pitanje u FAQ Segmentu postavljen je odgovor koji zasigurno rješava ne
 
 - Koja pitanja u relevantna za ubacivanje u FAQ Segment?
 
-
-
+### Poveznica sa sprintom
+Sprint 11
 
