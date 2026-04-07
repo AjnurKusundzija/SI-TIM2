@@ -3,7 +3,7 @@
 
 ## Sprint cilj
 
-Cilj sprinta je definisati ključne administrativne i sigurnosne aspekte Tiketing/Help Desk sistema, osiguravajući da su procesi kreiranja, dodjeljivanja i rješavanja tiketa pokriveni jasnim korisničkim pričama, kriterijima prihvatljivosti i nefunkcionalnim zahtjevima. 
+Cilj sprinta je definisati ključne administrativne i sigurnosne aspekte Telecom Customer Support System-a, osiguravajući da su procesi kreiranja, dodjeljivanja i rješavanja tiketa pokriveni jasnim korisničkim pričama, kriterijima prihvatljivosti i nefunkcionalnim zahtjevima. 
 
 ---
 
