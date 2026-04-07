@@ -6,7 +6,7 @@
 
 ### User Stories
 
-## US-1: *Kao registrovani korisnik, želim da se prijavim u sistem koristeći email i lozinku, kako bih pristupio svom nalogu.*
+### US-1: *Kao registrovani korisnik, želim da se prijavim u sistem koristeći email i lozinku, kako bih pristupio svom nalogu.*
 **Acceptance Criteria:**
 
 - Kada korisnik nije prijavljen, ako unese ispravan email i lozinku, tada se uspješno prijavljuje u sistem  
@@ -284,7 +284,7 @@ Sprint 7
 
 ### User Stories
 
-### US-13: *Kao korisnik, želim da vidim detalje tiketa, kako bih imao potpuni uvid u problem.*
+### US-14: *Kao korisnik, želim da vidim detalje tiketa, kako bih imao potpuni uvid u problem.*
 **Acceptance Criteria:**
 
 - Kada korisnik pregledava listu svojih tiketa, ako odabere jedan tiket, tada sistem prikazuje njegove detalje   
@@ -293,7 +293,7 @@ Sprint 7
 - Korisnik treba dobiti jasan prikaz svih informacija o tiketu  
 
 ---
-### US-14: *Kao korisnik, želim da vidim historiju komunikacije, kako bih pratio tok rješavanja.*
+### US-15: *Kao korisnik, želim da vidim historiju komunikacije, kako bih pratio tok rješavanja.*
 **Acceptance Criteria:**
 
 - Kada korisnik pregleda tiket, tada vidi historiju komunikacije  
@@ -332,7 +332,7 @@ Sprint 7
 
 ### User Stories
 
-### US-15: *Kao korisnik, želim da zatvorim tiket kada je problem riješen, kako bih završio proces.*
+### US-16: *Kao korisnik, želim da zatvorim tiket kada je problem riješen, kako bih završio proces.*
 **Acceptance Criteria:**
 
 - Kada je tiket riješen, ako korisnik klikne “Zatvori tiket”, tada se status mijenja u zatvoren 
@@ -340,7 +340,7 @@ Sprint 7
 - Korisnik treba dobiti potvrdu o zatvaranju tiketa  
 
 ---
-### US-16: *Kao agent ili tehničar, želim da zatvorim tiket nakon rješavanja problema, kako bih označio zadatak kao završen.*
+### US-17: *Kao agent ili tehničar, želim da zatvorim tiket nakon rješavanja problema, kako bih označio zadatak kao završen.*
 **Acceptance Criteria:**
 
 - Kada agent želi zatvoriti tiket, ako smatra da je zadatak završen, tada može poslati zahtjev za zatvaranje korisniku  
@@ -381,7 +381,7 @@ Sprint 8
 
 ### User Stories
 
-### US-17: *Kao korisnik, želim da ocijenim rješenje tiketa, kako bih dao feedback o kvaliteti usluge.*
+### US-18: *Kao korisnik, želim da ocijenim rješenje tiketa, kako bih dao feedback o kvaliteti usluge.*
 **Acceptance Criteria:**
 
 - Kada je tiket zatvoren, ako korisnik klikne na opciju "Ocijeni", tada sistem omogućava unos i slanje ocjene  
@@ -418,7 +418,7 @@ Zavisi od zatvorenog tiketa.
 
 ### User Stories
 
-### US-18: *Kao korisnik, želim da šaljem poruke kroz tiket, kako bih komunicirao sa agentom.*
+### US-19: *Kao korisnik, želim da šaljem poruke kroz tiket, kako bih komunicirao sa agentom.*
 **Acceptance Criteria:**
 
 - Kada korisnik unese novu poruku, ako klikne na dugme za slanje, tada se poruka sprema i prikazuje u historiji komunikacije    
@@ -429,7 +429,7 @@ Zavisi od zatvorenog tiketa.
 - Korisnik treba vidjeti svoju poslanu poruku  
 
 ---
-### US-19: *Kao agent, želim da odgovaram na poruke korisnika, kako bih riješio problem.*
+### US-20: *Kao agent, želim da odgovaram na poruke korisnika, kako bih riješio problem.*
 **Acceptance Criteria:**
 
 - Kada agent napiše odgovor na korisnikov upit, ako klikne na dugme za slanje odgovora, tada se poruka sprema i prikazuje korisniku  
@@ -469,7 +469,7 @@ Sprint 8
 
 ### User Stories
 
-#### **US-20:** Kao agent, želim da postavim interni prioritet tiketa, kako bih efikasno upravljao zadacima.
+#### **US-21:** Kao agent, želim da postavim interni prioritet tiketa, kako bih efikasno upravljao zadacima.
 
 **Acceptance Criteria:**
 - Kada je agent prijavljen u sistem i nalazi se na stranici tiketa, ako odabere opciju za postavljanje prioriteta, tada sistem mora postaviti odabrani prioritet
@@ -480,7 +480,7 @@ Sprint 8
 - Kada nema odabranog internog priroteta, tada sistem mora prikazati poruku da prioritet nije postavljen
 
 
-#### **US-21:** Kao korisnik, želim da postavim prioritet svog problema, kako bih označio hitnost.
+#### **US-22:** Kao korisnik, želim da postavim prioritet svog problema, kako bih označio hitnost.
 
 **Acceptance Criteria:**
 - Kada je korisnik prijavljen u sistem i kreira novi tiket, ako dođe do koraka odabira prioriteta, tada sistem mora omogućiti izbor iz predefinisane liste
@@ -520,7 +520,7 @@ Sprint 8
 
 ### User Stories
 
-#### **US-22:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
+#### **US-23:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
 
 **Acceptance Criteria:**
 - Kada je administrator prijavljen i nalazi se u sekciji upravljanja timovima, ako odabere agenta i premjesti ga u drugi tim, tada sistem mora izvršiti promjenu 
@@ -530,7 +530,7 @@ Sprint 8
 - Kada administrator izvrši pokušaj preraaspodjele agenata, ako dođe do greške ili nemogućnosti odabrane perraspodjele, sistme mora poslati poruku upozorenja
 
 
-#### **US-23:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
+#### **US-24:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
 
 **Acceptance Criteria:**
 - Kada administrator pristupi sekciji timova tada sistem mora prikazati sve timove i njihove članove
@@ -571,7 +571,7 @@ Sprint 11
 
 ### User Stories
 
-#### **US-24:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
+#### **US-25:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
 
 **Acceptance Criteria:**
 - Kada korisnik kreira novi tiket, ako su definisana pravila dodjele, tada sistem mora automatski dodijeliti tiket odgovarajućem agentu
@@ -582,7 +582,7 @@ Sprint 11
 - Sistem mora prikazati poruku ukoliko nema definisanih pravila dodjele
 
 
-#### **US-25:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
+#### **US-26:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
 
 **Acceptance Criteria:**
 - Kada administrator pristupi sekciji pravila, ako želi upravljati pravilima, tada sistem mora omogućiti administratoru editovanje pravila
@@ -621,7 +621,7 @@ Sprint 11
 
 ### User Stories
 
-#### **US-26:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
+#### **US-27:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
 
 **Acceptance Criteria:**
 - Kada je agent prijavljen i nalazi se na tiketu, ako želi proslijediti tiket, tada sistem mora omogućiti izbor samo aktivnih agenata
@@ -631,7 +631,7 @@ Sprint 11
 - Kada agent pokuša proslijediti tiket samom sebi, ako izvrši tu akciju, tada sistem mora spriječiti prosljeđivanje
 
 
-#### **US-27:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
+#### **US-28:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
 
 **Acceptance Criteria:**
 - Kada agent prosljeđuje tiket, ako želi dodati komentar, tada sistem mora omogućiti unos komentara
@@ -670,7 +670,7 @@ Sprint 10
 
 ### User Stories
 
-#### **US-28:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.
+#### **US-29:** Kao administrator, želim da vidim sve tikete, kako bih imao potpuni pregled.
 
 **Acceptance Criteria:**
 - Kada administrator otvori listu tiketa, ako se podaci učitaju, tada sistem mora prikazati sve tikete
@@ -679,7 +679,7 @@ Sprint 10
 - Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti 
 
 
-#### **US-29:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
+#### **US-30:** Kao administrator, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
 
 **Acceptance Criteria:**
 - Kada administrator otvori tiket, ako tiket postoji, tada sistem mora prikazati sve informacije o tiketu
@@ -716,7 +716,7 @@ Sprint 10
 
 ### User Stories
 
-#### **US-30:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.
+#### **US-31:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.
 
 **Acceptance Criteria:**
 - Kada korisnik unese tekst u polje za pretragu, ako pokrene pretragu, tada sistem mora pretraživati po ID-u
@@ -725,7 +725,7 @@ Sprint 10
 - Kada pretraga ne vrati rezultate, ako nema podudaranja, tada sistem mora prikazati poruku "Nema rezultata"
 
 
-#### **US-31:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.
+#### **US-32:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.
 
 **Acceptance Criteria:**
 - Kada je korisnik na listi tiketa, ako primijeni filtere, tada sistem mora filtrirati po odabranim kriterijima
@@ -765,7 +765,7 @@ Sprint 8
 
 ### User Stories
 
-#### **US-32:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
+#### **US-33:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
 
 **Acceptance Criteria:**
 - Kada administrator pregleda postojeće korisnike, ako odabere specifičan korinsički profil, tada sistem omogućava dostup više informacija
@@ -776,7 +776,7 @@ Sprint 8
 - Kada administrator vrši pretragu korisnika, ako nema podudaranja, tada sistem šalje poruku da korisnik nike pronađen
 
 
-#### **US-33:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
+#### **US-34:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
 
 **Acceptance Criteria:**
 - Kada administrator mijenja podatke, tada sistem mora omogućiti uređivanje osnovnih informacija
@@ -815,7 +815,7 @@ Sprint 9
 
 ### User Stories
 
-#### **US-34:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
+#### **US-35:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
 
 **Acceptance Criteria:**
 - Kada tehničar otvori listu tiketa, ako je prijavljen, tada sistem mora prikazati samo njegove tikete
@@ -824,7 +824,7 @@ Sprint 9
 - Kada tehničar nema dodijeljenih tiketa, ako otvori listu, tada sistem mora prikazati poruku o praznoj listi
 
 
-#### **US-35:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
+#### **US-36:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
 
 **Acceptance Criteria:**
 - Kada je tehničar prijavljen i nalazi se na listi tiketa, ako primijeni filtere, tada sistem mora filtrirati po odabranim kriterijima
@@ -861,7 +861,7 @@ Sprint 10
 
 ### User Stories
 
-#### **US-36:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.
+#### **US-37:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.
 
 **Acceptance Criteria:**
 - Kada tehničar pregleda tiket, ako želi promijeniti status, tada sistem mora omogućiti izbor između definisanih stanja
@@ -870,7 +870,7 @@ Sprint 10
 - Sistem mora evidentirati promjenu stanja tiketa
 
 
-#### **US-37:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.
+#### **US-38:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.
 
 **Acceptance Criteria:**
 - Kada tehničar promijeni status tiketa, ako se promjena izvrši, tada sistem mora evidentirati promjenu
@@ -908,7 +908,7 @@ Sprint 8
 
 ### User Stories
 
-#### **US-38:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
+#### **US-39:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
 
 **Acceptance Criteria:**
 - Kada tehničar pregleda tikete, ako otvori postojeći tiket, tada sistem mora prikazati osnovne informacije
@@ -917,7 +917,7 @@ Sprint 8
 - Sistem ne smije omogućiti pregled tiketa koji nisu dodijeljeni tehničaru
 
 
-#### **US-39:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
+#### **US-40:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
 
 **Acceptance Criteria:**
 - Kada tehničar pregleda tiket, ako želi pogledati detaljne informacije, tada sistem mora prikazati korisničke informacije 
@@ -955,9 +955,9 @@ Sprint 7
 
 ### User Stories
 
-- **US-40:** Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa
+- **US-41:** Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa
 
-- **US-41:** Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu
+- **US-42:** Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu
 
 
 ### Poslovna vrijednost
@@ -984,9 +984,9 @@ Sprint 11
 
 ### User Stories
 
-- **US-42:** Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima
+- **US-43:** Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima
 
-- **US-43:**Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti
+- **US-44:**Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti
 
 
 ### Poslovna vrijednost
@@ -1012,9 +1012,9 @@ Sprint 11
 
 ### User Stories
 
-- **US-44:** Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema
+- **US-45:** Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema
 
-- **US-45:**Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti
+- **US-46:**Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti
 
 ### Poslovna vrijednost
 Omogućava se bolji uvid o statistici, problemima i analizi po tipovima problema pojedinačnog tiketa
@@ -1039,9 +1039,9 @@ Sprint 11
 
 ### User Stories
 
-- **US-46:** Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika
+- **US-47:** Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika
 
-- **US-47:** Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio
+- **US-48:** Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio
 
 ### Poslovna vrijednost
 Omogućava se bolji uvid o statistici, težini problemima i analizi svakog tiketa
@@ -1066,15 +1066,15 @@ Sprint 11
 
 ### User Stories
 
-- **US-48:** Kao administrator, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih imao informaciju da li su tehničari responzivni i odgovorni
+- **US-49:** Kao administrator, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih imao informaciju da li su tehničari responzivni i odgovorni
 
-- **US-49:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da poredam prioritete za poslane tikete
+- **US-50:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da poredam prioritete za poslane tikete
 
-- **US-50:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li su druge kolege odgovorili na tiket
+- **US-51:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li su druge kolege odgovorili na tiket
 
-- **US-51:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li korisnik dugo čeka na odgovor
+- **US-52:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li korisnik dugo čeka na odgovor
 
-- **US-52:** Kao korisnik, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih znao koliko se mogu pouzdati na cijeli helpdesk/tiket sistem
+- **US-53:** Kao korisnik, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih znao koliko se mogu pouzdati na cijeli helpdesk/tiket sistem
 
 ### Poslovna vrijednost
 Omogućava se bolji uvid o pouzdanosti i težini problema koji je postavljen u tiketu
@@ -1099,7 +1099,7 @@ Sprint 8
 
 ### User Stories
 
-- **US-53:** Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.
+- **US-54:** Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.
 
 
 ### Poslovna vrijednost
@@ -1125,7 +1125,7 @@ Sprint 11
 
 ### User Stories
 
-- **US-54:** Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.
+- **US-55:** Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.
 
 
 ### Poslovna vrijednost
@@ -1154,7 +1154,7 @@ Sprint 11
 
 ### User Stories
 
-- **US-55:** Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara
+- **US-56:** Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara
 
 
 ### Poslovna vrijednost
@@ -1184,7 +1184,7 @@ Sprint 11
 
 ### User Stories
 
-- **US-56:** Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.
+- **US-57:** Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.
 
 
 ### Poslovna vrijednost
@@ -1216,7 +1216,7 @@ Sprint 11
 
 ### User Stories
 
-- **US-57:** Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa
+- **US-58:** Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa
 
 
 ### Poslovna vrijednost
