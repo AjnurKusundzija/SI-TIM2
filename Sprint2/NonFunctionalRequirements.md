@@ -394,14 +394,14 @@ Vanjski zahtjevi nastaju iz obaveza koje dolaze izvan samog tima i tehničke imp
 
 | ID                | Naziv zahtjeva                                  | Kategorija | Prioritet | Status        |
 | :---------------- | :---------------------------------------------- | :--------- | :-------: | :------------ |
-| [NFR-23](#nfr-27) | Zaštita korisničkih i ličnih podataka           | Vanjski    |     1     | Identifikovan |
-| [NFR-24](#nfr-28) | Ograničen pristup prema korisničkim ulogama     | Vanjski    |     1     | Identifikovan |
-| [NFR-25](#nfr-29) | Transparentan prikaz statusa tiketa             | Vanjski    |     2     | Identifikovan |
-| [NFR-26](#nfr-30) | Evidencija važnih aktivnosti u sistemu          | Vanjski    |     1     | Identifikovan |
-| [NFR-27](#nfr-31) | Mogućnost revizije promjena nad tiketima        | Vanjski    |     1     | Identifikovan |
-| [NFR-28](#nfr-32) | Pristupačan i razumljiv korisnički interfejs    | Vanjski    |     2     | Identifikovan |
-| [NFR-29](#nfr-33) | Jednaka dostupnost funkcionalnosti korisnicima  | Vanjski    |     2     | Identifikovan |
-| [NFR-30](#nfr-34) | Sigurno čuvanje operativnih i korisničkih podata| Vanjski    |     1     | Identifikovan |
+| [NFR-27](#nfr-27) | Zaštita korisničkih i ličnih podataka           | Vanjski    |     1     | Identifikovan |
+| [NFR-28](#nfr-28) | Ograničen pristup prema korisničkim ulogama     | Vanjski    |     1     | Identifikovan |
+| [NFR-29](#nfr-29) | Transparentan prikaz statusa tiketa             | Vanjski    |     2     | Identifikovan |
+| [NFR-30](#nfr-30) | Evidencija važnih aktivnosti u sistemu          | Vanjski    |     1     | Identifikovan |
+| [NFR-31](#nfr-31) | Mogućnost revizije promjena nad tiketima        | Vanjski    |     1     | Identifikovan |
+| [NFR-32](#nfr-32) | Pristupačan i razumljiv korisnički interfejs    | Vanjski    |     2     | Identifikovan |
+| [NFR-33](#nfr-33) | Jednaka dostupnost funkcionalnosti korisnicima  | Vanjski    |     2     | Identifikovan |
+| [NFR-34](#nfr-34) | Sigurno čuvanje operativnih i korisničkih podata| Vanjski    |     1     | Identifikovan |
 | [NFR-35](#nfr-35) | Enkripcija podataka u prenosu                   | Vanjski    |     1     | Identifikovan |
 | [NFR-36](#nfr-36) | Sigurno upravljanje lozinkama                   | Vanjski    |     1     | Identifikovan |
 | [NFR-37](#nfr-37) | Anonimizacija i pravo na brisanje podataka      | Vanjski    |     1     | Identifikovan |
