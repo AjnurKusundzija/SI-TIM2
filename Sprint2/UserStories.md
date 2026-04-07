@@ -1080,7 +1080,7 @@ Sprint 11
 Omogućava se bolji uvid o pouzdanosti i težini problema koji je postavljen u tiketu
 
 ### Prioritet
-2
+3
 
 ### Zavisnosti
 Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketu i vremenu slanja i odgovora tiketa
@@ -1106,7 +1106,7 @@ Sprint 8
 Omogućava menadžmentu donošenje odluka zasnovanih na podacima (data-driven decisions). Pomaže u prepoznavanju "uskih grla" u podršci i pravednijoj raspodjeli posla, što direktno utiče na smanjenje sagorijevanja (burnout) zaposlenih.
 
 ### Prioritet
-2
+3
 
 ### Zavisnosti
 Potrebno je imati modul za upravljanje tiketima i relevantne podatke u bazi podatake za prikaz količine poslanih tiketa 
@@ -1132,7 +1132,7 @@ Sprint 11
 Direktno mjerenje zadovoljstva korisnika je ključno za zadržavanje klijenata. Ovaj feedback omogućava timu da reaguje na negativna iskustva prije nego što ona postanu kritična za poslovanje.
 
 ### Prioritet
-2
+3
 
 ### Zavisnosti
 Navedeni User Story zavisi od funkcionalnosti zatvaranja tiketa i sistema za prikupljanje feedbacka.
