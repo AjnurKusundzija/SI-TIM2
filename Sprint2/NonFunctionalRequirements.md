@@ -80,7 +80,7 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 - **Opis zahtjeva:** Sve stranice sistema (dashboard, lista tiketa, detalji tiketa) moraju se u potpunosti učitati i biti interaktivne u roku od **2 sekunde** pri normalnom opterećenju sistema koje podrazumijeva do 50 istovremenih korisnika i stabilnu mrežnu vezu. Ovo se odnosi na sve korisničke uloge: klijente, agente, tehničare na terenu i administratore.
 - **Kako će se provjeravati:** Testiranje performansi radit će se alatima poput Lighthouse ili k6, mjerenjem vremena učitavanja ključnih stranica u simuliranom okruženju s 50 istovremenih korisnika. Rezultati se dokumentuju u okviru sprint reviewa.
 - **Prioritet:** 1
-- **Napomena:** Zahtjev je direktno vezan uz Product Vision – sporo učitavanje stranica povećava frustraciju korisnika i smanjuje efikasnost agenata tokom obrade tiketa. Mjeri se pod normalnim, ne vršnim opterećenjem.
+- **Napomena:** Zahtjev je direktno vezan uz Product Vision – sporo učitavanje stranica povećava frustraciju korisnika i smanjuje efikasnost agenata tokom obrade tiketa. Mjeri se pod normalnim, ne maksimalnim opterećenjem.
 
 ---
 
