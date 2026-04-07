@@ -1124,16 +1124,33 @@ Sprint 11
 
 ### User Stories
 
-- **US-49:** Kao administrator, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih imao informaciju da li su tehničari responzivni i odgovorni
+### US-49: *Kao administrator, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih imao informaciju da li su tehničari responzivni i odgovorni*
+**Acceptance Criteria:**
 
-- **US-50:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da poredam prioritete za poslane tikete
+- Kada administrator otvori tiket, tada vidi vrijeme prvog odgovora  
+- Kada odgovor postoji, tada se prikazuje tačan timestamp prvog odgovora  
+- Sistem mora zabilježiti vrijeme prvog odgovora na tiket  
+- Sistem ne smije mijenjati vrijeme prvog odgovora nakon inicijalnog zapisa  
+- Korisnik treba dobiti informaciju ako odgovor još nije poslan
+---
+### US-50: *Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da poredam prioritete za poslane tikete, da li su druge kolege odgovorili na tiket i da li korisnik dugo čeka na odgovor*
+**Acceptance Criteria:**
 
-- **US-51:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li su druge kolege odgovorili na tiket
+- Kada tehničar otvori tiket, tada vidi vrijeme prvog odgovora  
+- Kada odgovor postoji, tada se prikazuje tačan timestamp prvog odgovora  
+- Sistem mora zabilježiti vrijeme prvog odgovora na tiket  
+- Sistem ne smije mijenjati vrijeme prvog odgovora nakon inicijalnog zapisa  
+- Korisnik treba dobiti informaciju ako odgovor još nije poslan
+---
+### US-51: *Kao korisnik, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih znao koliko se mogu pouzdati na cijeli helpdesk/tiket sistem*
+**Acceptance Criteria:**
 
-- **US-52:** Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da li korisnik dugo čeka na odgovor
-
-- **US-53:** Kao korisnik, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih znao koliko se mogu pouzdati na cijeli helpdesk/tiket sistem
-
+- Kada korisnik otvori tiket, tada vidi vrijeme prvog odgovora  
+- Kada odgovor postoji, tada se prikazuje tačan timestamp prvog odgovora  
+- Sistem mora zabilježiti vrijeme prvog odgovora na tiket  
+- Sistem ne smije mijenjati vrijeme prvog odgovora nakon inicijalnog zapisa  
+- Korisnik treba dobiti informaciju ako odgovor još nije poslan
+---
 ### Poslovna vrijednost
 Omogućava se bolji uvid o pouzdanosti i težini problema koji je postavljen u tiketu
 
@@ -1157,9 +1174,15 @@ Sprint 8
 
 ### User Stories
 
-- **US-54:** Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.
+### US-52: *Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.*
+**Acceptance Criteria:**
 
-
+- Kada administrator odabere period, tada vidi broj riješenih tiketa po agentu  
+- Kada podaci postoje, tada izvještaj prikazuje tačne vrijednosti  
+- Sistem mora omogućiti filtriranje po vremenskom periodu  
+- Sistem ne smije prikazati netačne ili duplirane podatke  
+- Korisnik treba dobiti poruku ako nema podataka 
+---
 ### Poslovna vrijednost
 Omogućava menadžmentu donošenje odluka zasnovanih na podacima (data-driven decisions). Pomaže u prepoznavanju "uskih grla" u podršci i pravednijoj raspodjeli posla, što direktno utiče na smanjenje sagorijevanja (burnout) zaposlenih.
 
@@ -1183,9 +1206,15 @@ Sprint 11
 
 ### User Stories
 
-- **US-55:** Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.
+### US-53: *Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.*
+**Acceptance Criteria:**
 
-
+- Kada agent otvori izvještaj, tada vidi prosječnu ocjenu i listu ocjena  
+- Kada podaci postoje, tada su prikazane tačne ocjene iz sistema  
+- Sistem mora prikazati samo ocjene vezane za zatvorene tikete  
+- Sistem ne smije prikazati ocjene za otvorene tikete  
+- Korisnik treba dobiti poruku ako nema dostupnih ocjena  
+---
 ### Poslovna vrijednost
 Direktno mjerenje zadovoljstva korisnika je ključno za zadržavanje klijenata. Ovaj feedback omogućava timu da reaguje na negativna iskustva prije nego što ona postanu kritična za poslovanje.
 
@@ -1212,9 +1241,15 @@ Sprint 11
 
 ### User Stories
 
-- **US-56:** Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara
+### US-54: *Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara*
+**Acceptance Criteria:**
 
-
+- Kada administrator otvori dashboard, tada vidi ključne metrike (broj tiketa, statusi, prosječno vrijeme)  
+- Kada podaci postoje, tada su svi prikazi ažurirani i tačni  
+- Sistem mora prikazati više metrika na jednoj stranici  
+- Sistem ne smije prikazati nevažeće ili zastarjele podatke  
+- Korisnik treba dobiti poruku ako podaci nisu dostupni  
+---
 ### Poslovna vrijednost
 
 Lakši uvid o cijelom tiket/helpdesk sistemu za lakši pregled statistike i analizu istog
@@ -1242,9 +1277,15 @@ Sprint 11
 
 ### User Stories
 
-- **US-57:** Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.
+### US-55: *Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.*
+**Acceptance Criteria:**
 
-
+- Kada tehničar klikne na “Export CSV”, tada se generiše CSV fajl  
+- Kada podaci postoje, tada fajl sadrži tačne podatke iz izvještaja  
+- Sistem mora omogućiti preuzimanje fajla  
+- Sistem ne smije generisati prazan fajl bez upozorenja  
+- Korisnik treba dobiti poruku ako export nije moguć  
+---
 ### Poslovna vrijednost
 - Prijenos podataka i izvještaja u okviru cijeloga telekoma, a ne samo za radnike koji su povezani u tiket/helpdesk sistem
 
@@ -1274,9 +1315,15 @@ Sprint 11
 
 ### User Stories
 
-- **US-58:** Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa
+### US-56: *Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa*
+**Acceptance Criteria:**
 
-
+- Kada korisnik otvori FAQ sekciju, tada vidi listu pitanja i odgovora  
+- Kada podaci postoje, tada su prikazani tačni odgovori  
+- Sistem mora omogućiti pregled svih FAQ stavki  
+- Sistem ne smije prikazati praznu listu bez obavještenja  
+- Korisnik treba dobiti poruku ako nema dostupnih pitanja  
+---
 ### Poslovna vrijednost
 Eventualno smanjenje slanja tiketa 
 
