@@ -955,11 +955,28 @@ Sprint 7
 
 ### User Stories
 
-- **US-41:** Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa
+#### US-41: *Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa*
+**Acceptance Criteria:**
 
-- **US-42:** Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu
+- Kada administrator odabere vremenski period (dnevni, sedmični, mjesečni, godišnji), tada se prikazuje ukupan broj tiketa za taj period 
+- Kada podaci postoje u sistemu, tada podaci odgovaraju stvarnom stanju u bazi   
+- Sistem mora omogućiti izbor vremenskog perioda
+- Sistem mora omogućiti pregled izvještaja administratoru
+- Sistem ne smije prikazati pogrešne ili duplirane podatke
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
+- Administrator treba dobiti poruku ako nema podataka za odabrani period
+---
+#### US-42: *Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu*
+**Acceptance Criteria:**
 
-
+- Kada tehničar odabere vremenski period, tada vidi broj tiketa koji su raspoređeni njemu za taj period  
+- Kada podaci postoje u sistemu, tada podaci odgovaraju stvarnom stanju u bazi
+- Sistem mora omogućiti izbor vremenskog perioda  
+- Sistem mora omogućiti pregled izvještaja tehničaru
+- Sistem ne smije prikazati pogrešne ili duplirane podatke  
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
+- Tehničar treba dobiti poruku ako nema podataka za odabrani period 
+___
 ### Poslovna vrijednost
 Omogućava se bolji uvid o statistici, problemima i analizi o količini tiketa
 
@@ -984,11 +1001,24 @@ Sprint 11
 
 ### User Stories
 
-- **US-43:** Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima
+### US-43: *Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima*
+**Acceptance Criteria:**
 
-- **US-44:**Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti
+- Kada administrator otvori izvještaj, tada vidi ukupni broj tiketa po statusima (otvoren, u toku, zatvoren)  
+- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima  
+- Sistem mora grupisati tikete po statusu  
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
+- Administrator treba dobiti poruku ako nema podataka
+---
+### US-44: *Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti*
+**Acceptance Criteria:**
 
-
+- Kada tehničar otvori izvještaj, tada vidi raspodjelu svojih tiketa po statusima  
+- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima  
+- Sistem mora omogućiti pristup izvještaju tehničaru  
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
+- Tehničar treba dobiti poruku ako nema podataka
+---
 ### Poslovna vrijednost
 Omogućava se bolji uvid o statistici, problemima i analizi o statusima tiketa
 
@@ -1012,10 +1042,24 @@ Sprint 11
 
 ### User Stories
 
-- **US-45:** Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema
+### US-45: *Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema*
+**Acceptance Criteria:**
 
-- **US-46:**Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti
+- Kada administrator otvori izvještaj, tada vidi ukupni broj tiketa po tipu problema  
+- Kada podaci postoje, tada su prikazani tačni tipovi i količine  
+- Sistem mora grupisati tikete po tipu problema  
+- Korisnik treba dobiti poruku ako nema podataka
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
+---
+### US-46: *Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti*
+**Acceptance Criteria:**
 
+- Kada tehničar otvori izvještaj, tada vidi ukupni broj tiketa koji su raspoređeni njemu po tipu problema 
+- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima
+- Sistem mora grupisati tikete po tipu problema  
+- Korisnik treba dobiti poruku ako nema dostupnih podataka
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
+---
 ### Poslovna vrijednost
 Omogućava se bolji uvid o statistici, problemima i analizi po tipovima problema pojedinačnog tiketa
 
@@ -1039,10 +1083,24 @@ Sprint 11
 
 ### User Stories
 
-- **US-47:** Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika
+### US-47: *Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika*
+**Acceptance Criteria:**
 
-- **US-48:** Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio
+- Kada administrator otvori izvještaj, tada vidi prosječno vrijeme zatvaranja tiketa  
+- Kada podaci postoje, tada je izračun tačan (vrijeme zatvaranja - vrijeme kreiranja)  
+- Sistem mora izračunati prosjek na osnovu svih zatvorenih tiketa  
+- Sistem ne smije uključiti nezatvorene tikete u izračun  
+- Korisnik treba dobiti poruku ako nema podataka
+---
+### US-48: *Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio*
+**Acceptance Criteria:**
 
+- Kada tehničar otvori izvještaj, tada vidi prosječno vrijeme rješavanja  
+- Kada podaci postoje, tada izračun odgovara stvarnim podacima  
+- Sistem mora omogućiti pristup izvještaju  
+- Sistem ne smije dozvoliti pristup neovlaštenim korisnicima  
+- Korisnik treba dobiti poruku ako nema dostupnih podataka
+---
 ### Poslovna vrijednost
 Omogućava se bolji uvid o statistici, težini problemima i analizi svakog tiketa
 
