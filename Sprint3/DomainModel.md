@@ -40,8 +40,6 @@ Korisnik predstavlja svaku osobu koja koristi sistem, bilo kao krajnji korisnik 
 - `tehnicar`
 - `administrator`
 
-Napomena: atributi `korisnickoIme` i `lozinka` posebno su važni za prijavu u sistem, dok atribut `adresa` ima veću važnost kod korisnika koji prijavljuju terenske tehničke probleme.
-
 ---
 
 ### 2. Tiket
