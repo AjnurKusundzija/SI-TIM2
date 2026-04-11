@@ -1,4 +1,4 @@
-# Dokumentacija Korisničkih Priča (User Stories)
+﻿# Dokumentacija Korisničkih Priča (User Stories)
 
 ---
 
@@ -6,6 +6,7 @@
 
 ### User Stories
 
+<a id="us-1"></a>
 ### US-1: *Kao registrovani korisnik, želim da se prijavim u sistem koristeći email i lozinku, kako bih pristupio svom nalogu.*
 **Acceptance Criteria:**
 
@@ -15,6 +16,7 @@
 - Sistem ne smije dozvoliti prijavu bez unosa obaveznih polja  
 - Korisnik treba dobiti potvrdu o uspješnoj prijavi 
 ---    
+<a id="us-2"></a>
 ### US-2: *Kao korisnik, želim da se odjavim iz sistema, kako bih zaštitio svoj nalog.*
 **Acceptance Criteria:**
 
@@ -23,6 +25,7 @@
 - Sistem mora onemogućiti pristup zaštićenim stranicama nakon logout-a  
 - Korisnik ne smije ostati autentifikovan nakon odjave  
 ---
+<a id="us-3"></a>
 ### US-3: *Kao korisnik, želim da budem obaviješten ako unesem pogrešne podatke za prijavu, kako bih mogao ponovo pokušati.*
 **Acceptance Criteria:**
 
@@ -62,6 +65,7 @@ Sprint 5
 
 ### User Stories
 
+<a id="us-4"></a>
 ### US-4: *Kao korisnik, želim da promijenim svoj email, kako bih imao tačne kontakt informacije.*
 
 **Acceptance Criteria:**
@@ -73,6 +77,7 @@ Sprint 5
 - Korisnik treba dobiti potvrdu o uspješnoj promjeni emaila  
 ---
 
+<a id="us-5"></a>
 ### US-5: *Kao korisnik, želim da promijenim lozinku, kako bih povećao sigurnost svog naloga.*
 **Acceptance Criteria:**
     
@@ -114,6 +119,7 @@ Sprint 9
 
 ### User Stories
 
+<a id="us-6"></a>
 ### US-6: *Kao korisnik, želim da vidim svoje aktivne pakete i pretplate, kako bih imao pregled usluga koje koristim.*
 **Acceptance Criteria:**
 
@@ -124,6 +130,7 @@ Sprint 9
 - Korisnik treba dobiti jasan pregled svojih aktivnih usluga  
 ---
 
+<a id="us-7"></a>
 ### US-7: *Kao korisnik, želim da vidim detalje paketa (internet, TV, mobilni), kako bih razumio šta moj paket uključuje.*
 **Acceptance Criteria:**
 
@@ -164,6 +171,7 @@ Sprint 9
 
 ### User Stories
 
+<a id="us-8"></a>
 ### US-8: *Kao korisnik, želim da kreiram novi tiket unosom problema, kako bih prijavio poteškoću.*
 **Acceptance Criteria:**
 
@@ -173,6 +181,7 @@ Sprint 9
 - Sistem ne smije dozvoliti kreiranje tiketa bez obaveznih polja  
 - Korisnik treba dobiti potvrdu o uspješnom kreiranju tiketa  
 ---
+<a id="us-9"></a>
 ### US-9: *Kao korisnik, želim da odaberem tip i prioritet tiketa, kako bih bolje opisao problem.*
 **Acceptance Criteria:**
 
@@ -182,6 +191,7 @@ Sprint 9
 - Sistem ne smije dozvoliti unos nepostojećih vrijednosti  
 - Korisnik treba vidjeti jasno označene opcije za izbor 
 ---
+<a id="us-10"></a>
 ### US-10: *Kao korisnik, želim da unesem opis problema, kako bih agentu dao dovoljno informacija.*
 **Acceptance Criteria:**
 
@@ -224,6 +234,7 @@ Sprint 5
 
 ### User Stories
 
+<a id="us-11"></a>
 ### US-11: *Kao korisnik, želim da vidim listu svih svojih tiketa, kako bih pratio njihove statuse.*
 **Acceptance Criteria:**
 
@@ -234,6 +245,7 @@ Sprint 5
 - Korisnik treba dobiti pregled svih svojih tiketa  
 
 ---
+<a id="us-12"></a>
 ### US-12: *Kao korisnik, želim da vidim status tiketa (otvoren, zatvoren), kako bih znao u kojoj fazi je rješavanje.*
 **Acceptance Criteria:**
 
@@ -244,6 +256,7 @@ Sprint 5
 - Korisnik treba dobiti jasan prikaz trenutnog statusa tiketa  
 
 ---
+<a id="us-13"></a>
 ### US-13: *Kao korisnik, želim mogućnost filtriranja tiketa (po prioritetu, datumu i slično), kako bih lakše pronašao željeni tiket.*
 **Acceptance Criteria:**
 
@@ -284,6 +297,7 @@ Sprint 6
 
 ### User Stories
 
+<a id="us-14"></a>
 ### US-14: *Kao korisnik, želim da vidim detalje tiketa, kako bih imao potpuni uvid u problem.*
 **Acceptance Criteria:**
 
@@ -293,6 +307,7 @@ Sprint 6
 - Korisnik treba dobiti jasan prikaz svih informacija o tiketu  
 
 ---
+<a id="us-15"></a>
 ### US-15: *Kao korisnik, želim da vidim historiju komunikacije, kako bih pratio tok rješavanja.*
 **Acceptance Criteria:**
 
@@ -332,6 +347,7 @@ Sprint 6
 
 ### User Stories
 
+<a id="us-16"></a>
 ### US-16: *Kao korisnik, želim da zatvorim tiket kada je problem riješen, kako bih završio proces.*
 **Acceptance Criteria:**
 
@@ -340,6 +356,7 @@ Sprint 6
 - Korisnik treba dobiti potvrdu o zatvaranju tiketa  
 
 ---
+<a id="us-17"></a>
 ### US-17: *Kao agent ili tehničar, želim da zatvorim tiket nakon rješavanja problema, kako bih označio zadatak kao završen.*
 **Acceptance Criteria:**
 
@@ -381,6 +398,7 @@ Sprint 7
 
 ### User Stories
 
+<a id="us-18"></a>
 ### US-18: *Kao korisnik, želim da ocijenim rješenje tiketa, kako bih dao feedback o kvaliteti usluge.*
 **Acceptance Criteria:**
 
@@ -420,6 +438,7 @@ Sprint 8
 
 ### User Stories
 
+<a id="us-19"></a>
 ### US-19: *Kao korisnik, želim da šaljem poruke kroz tiket, kako bih komunicirao sa agentom.*
 **Acceptance Criteria:**
 
@@ -431,6 +450,7 @@ Sprint 8
 - Korisnik treba vidjeti svoju poslanu poruku  
 
 ---
+<a id="us-20"></a>
 ### US-20: *Kao agent, želim da odgovaram na poruke korisnika, kako bih riješio problem.*
 **Acceptance Criteria:**
 
@@ -957,6 +977,7 @@ Sprint 7
 
 ### User Stories
 
+<a id="us-41"></a>
 #### US-41: *Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa*
 **Acceptance Criteria:**
 
@@ -968,6 +989,7 @@ Sprint 7
 - Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
 - Administrator treba dobiti poruku ako nema podataka za odabrani period
 ---
+<a id="us-42"></a>
 #### US-42: *Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu*
 **Acceptance Criteria:**
 
@@ -1003,6 +1025,7 @@ Sprint 11
 
 ### User Stories
 
+<a id="us-43"></a>
 ### US-43: *Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima*
 **Acceptance Criteria:**
 
@@ -1012,6 +1035,7 @@ Sprint 11
 - Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
 - Administrator treba dobiti poruku ako nema podataka
 ---
+<a id="us-44"></a>
 ### US-44: *Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti*
 **Acceptance Criteria:**
 
@@ -1044,6 +1068,7 @@ Sprint 11
 
 ### User Stories
 
+<a id="us-45"></a>
 ### US-45: *Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema*
 **Acceptance Criteria:**
 
@@ -1053,6 +1078,7 @@ Sprint 11
 - Korisnik treba dobiti poruku ako nema podataka
 - Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
 ---
+<a id="us-46"></a>
 ### US-46: *Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti*
 **Acceptance Criteria:**
 
@@ -1085,6 +1111,7 @@ Sprint 11
 
 ### User Stories
 
+<a id="us-47"></a>
 ### US-47: *Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika*
 **Acceptance Criteria:**
 
@@ -1094,6 +1121,7 @@ Sprint 11
 - Sistem ne smije uključiti nezatvorene tikete u izračun  
 - Korisnik treba dobiti poruku ako nema podataka
 ---
+<a id="us-48"></a>
 ### US-48: *Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio*
 **Acceptance Criteria:**
 
@@ -1126,6 +1154,7 @@ Sprint 11
 
 ### User Stories
 
+<a id="us-49"></a>
 ### US-49: *Kao administrator, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih imao informaciju da li su tehničari responzivni i odgovorni*
 **Acceptance Criteria:**
 
@@ -1135,6 +1164,7 @@ Sprint 11
 - Sistem ne smije mijenjati vrijeme prvog odgovora nakon inicijalnog zapisa  
 - Korisnik treba dobiti informaciju ako odgovor još nije poslan
 ---
+<a id="us-50"></a>
 ### US-50: *Kao tehničar, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih mogao znati da poredam prioritete za poslane tikete, da li su druge kolege odgovorili na tiket i da li korisnik dugo čeka na odgovor*
 **Acceptance Criteria:**
 
@@ -1144,6 +1174,7 @@ Sprint 11
 - Sistem ne smije mijenjati vrijeme prvog odgovora nakon inicijalnog zapisa  
 - Korisnik treba dobiti informaciju ako odgovor još nije poslan
 ---
+<a id="us-51"></a>
 ### US-51: *Kao korisnik, želim da imam uvid o informaciji kada se desio prvi odgovor na tiket, kako bih znao koliko se mogu pouzdati na cijeli helpdesk/tiket sistem*
 **Acceptance Criteria:**
 
@@ -1176,6 +1207,7 @@ Sprint 8
 
 ### User Stories
 
+<a id="us-52"></a>
 ### US-52: *Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.*
 **Acceptance Criteria:**
 
@@ -1208,6 +1240,7 @@ Sprint 11
 
 ### User Stories
 
+<a id="us-53"></a>
 ### US-53: *Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.*
 **Acceptance Criteria:**
 
@@ -1243,6 +1276,7 @@ Sprint 11
 
 ### User Stories
 
+<a id="us-54"></a>
 ### US-54: *Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara*
 **Acceptance Criteria:**
 
@@ -1279,6 +1313,7 @@ Sprint 11
 
 ### User Stories
 
+<a id="us-55"></a>
 ### US-55: *Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.*
 **Acceptance Criteria:**
 
@@ -1317,6 +1352,7 @@ Sprint 11
 
 ### User Stories
 
+<a id="us-56"></a>
 ### US-56: *Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa*
 **Acceptance Criteria:**
 
@@ -1345,4 +1381,5 @@ Za svako pitanje u FAQ Segmentu postavljen je odgovor koji zasigurno rješava ne
 
 ### Poveznica sa sprintom
 Sprint 6
+
 
