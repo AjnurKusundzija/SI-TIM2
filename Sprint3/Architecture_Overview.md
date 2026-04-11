@@ -1,9 +1,4 @@
 # Architecture Overview
-## Telecom Customer Support System
-
-> **Verzija:** 1.0 | **Status:** Draft | **Datum:** April 2026
-
----
 
 ## 1. Arhitektonski pristup
 
