@@ -1,6 +1,21 @@
 ﻿# Dokumentacija Korisničkih Priča (User Stories)
 
+## Navigacija po sprintovima
+
+| Sprint | Povezani zahtjevi (Product Backlog Items) |
+| :--- | :--- |
+| [**Sprint 5**](#sprint-5) | PB-19 (Login korisnika), PB-22 (Kreiranje novog tiketa) |
+| [**Sprint 6**](#sprint-6) | PB-23 (Pregled vlastitih tiketa), PB-24 (Detaljan prikaz tiketa), PB-47 (FAQ Segment) |
+| [**Sprint 7**](#sprint-7) | PB-25 (Zatvaranje tiketa), PB-27 (Komunikacija kroz tiket), PB-28 (Upravljanje prioritetima tiketa), PB-37 (Tehničar vidi osnovne informacije) |
+| [**Sprint 8**](#sprint-8) | PB-26 (Ocjenjivanje tiketa), PB-33 (Pretraživanje i filtriranje tiketa), PB-36 (Ažuriranje statusa tiketa), PB-42 (Vrijeme prvog odgovora) |
+| [**Sprint 9**](#sprint-9) | PB-20 (Upravljanje korisničkim profilom), PB-21 (Prikaz paketa i pretplata), PB-34 (Pregled i uređivanje korisničkih profila) |
+| [**Sprint 10**](#sprint-10) | PB-29 (Preraspodjela agenata po timovima), PB-30 (Automatska dodjela tiketa), PB-31 (Prosljeđivanje tiketa), PB-32 (Pregled svih tiketa), PB-35 (Pregled dodijeljenih tiketa) |
+| [**Sprint 11**](#sprint-11) | PB-38, PB-39, PB-40, PB-41, PB-43, PB-44, PB-45, PB-46 (Razni izvještaji i dashboard) |
+
 ---
+
+<a id="sprint-5"></a>
+# Sprint 5
 
 ## PB-19 Login korisnika
 
@@ -58,112 +73,6 @@ Zavisi od postojanja korisničkih naloga u bazi podataka.
 
 ### Poveznica sa sprintom
 Sprint 5
-
----
-
-## PB-20 Upravljanje korisničkim profilom
-
-### User Stories
-
-<a id="us-4"></a>
-### US-4: *Kao korisnik, želim da promijenim svoj email, kako bih imao tačne kontakt informacije.*
-
-**Acceptance Criteria:**
-
-- Kada je korisnik prijavljen, ako unese novi email i potvrdi izmjenu, tada se email ažurira u sistemu  
-- Kada korisnik unese nevalidan email, tada sistem prikazuje grešku  
-- Sistem mora provjeriti format email adrese  
-- Sistem ne smije dozvoliti unos već postojećeg emaila u sistemu  
-- Korisnik treba dobiti potvrdu o uspješnoj promjeni emaila  
----
-
-<a id="us-5"></a>
-### US-5: *Kao korisnik, želim da promijenim lozinku, kako bih povećao sigurnost svog naloga.*
-**Acceptance Criteria:**
-    
-- Kada je korisnik prijavljen, ako unese trenutnu i novu lozinku, tada se lozinka uspješno mijenja  
-- Kada korisnik unese pogrešnu trenutnu lozinku, tada sistem odbija promjenu  
-- Sistem mora zahtijevati unos trenutne lozinke prije promjene  
-- Sistem mora provjeriti minimalne sigurnosne zahtjeve lozinke  
-- Sistem ne smije dozvoliti lozinku koja ne zadovoljava sigurnosne zahtjeve 
-- Korisnik treba dobiti potvrdu o uspješnoj promjeni lozinke  
----
-
-### Poslovna vrijednost
-
-Omogućava korisnicima kontrolu nad svojim podacima i povećava sigurnost naloga.
-
-### Prioritet
-
-2
-
-### Zavisnosti
-
-Zavisi od login funkcionalnosti.
-
-### Pretpostavke
-
-- Korisnik mora biti prijavljen
-
-### Otvorena pitanja
-
-- Da li je potrebna verifikacija emaila nakon promjene?
-- Koji su zahtjevi za jačinu lozinke?
-
-### Poveznica sa sprintom
-Sprint 9
-
----
-
-## PB-21 Prikaz paketa i pretplata
-
-### User Stories
-
-<a id="us-6"></a>
-### US-6: *Kao korisnik, želim da vidim svoje aktivne pakete i pretplate, kako bih imao pregled usluga koje koristim.*
-**Acceptance Criteria:**
-
-- Kada je korisnik prijavljen, ako pristupi sekciji "Paketi", tada vidi listu svojih aktivnih paketa i pretplata  
-- Kada korisnik ima više paketa, tada sistem prikazuje sve aktivne pakete u listi  
-- Sistem mora prikazati osnovne informacije o svakom paketu 
-- Sistem ne smije prikazivati pakete koji nisu povezani sa korisnikom  
-- Korisnik treba dobiti jasan pregled svojih aktivnih usluga  
----
-
-<a id="us-7"></a>
-### US-7: *Kao korisnik, želim da vidim detalje paketa (internet, TV, mobilni), kako bih razumio šta moj paket uključuje.*
-**Acceptance Criteria:**
-
-- Kada korisnik odabere paket, tada sistem prikazuje detalje paketa  
-- Kada paket sadrži više usluga, tada sistem prikazuje sve uključene usluge  
-- Sistem mora prikazati relevantne informacije (brzina interneta, broj kanala, mobilni podaci)  
-- Sistem ne smije prikazivati netačne ili nepotpune informacije o paketu  
-- Korisnik treba dobiti jasan i razumljiv prikaz sadržaja paketa  
----
-
-### Poslovna vrijednost
-
-Pruža korisnicima jasan pregled usluga i povećava transparentnost.
-
-### Prioritet
-
-4
-
-### Zavisnosti
-
-Zavisi od login funkcionalnosti i baze podataka.
-
-### Pretpostavke
-
-- Podaci o paketima su već dostupni u sistemu
-
-### Otvorena pitanja
-
-- Da li korisnik može mijenjati paket kroz sistem?
-- Koliko detalja prikazati?
-
-### Poveznica sa sprintom
-Sprint 9
 
 ---
 
@@ -229,6 +138,9 @@ Zavisi od login funkcionalnosti.
 Sprint 5
 
 ---
+
+<a id="sprint-6"></a>
+# Sprint 6
 
 ## PB-23 Pregled vlastitih tiketa
 
@@ -341,7 +253,47 @@ Zavisi od pregleda tiketa.
 
 ### Poveznica sa sprintom
 Sprint 6
+
 ---
+
+## PB-47 FAQ Segment
+
+### User Stories
+
+<a id="us-56"></a>
+### US-56: *Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa*
+**Acceptance Criteria:**
+
+- Kada korisnik otvori FAQ sekciju, tada vidi listu pitanja i odgovora  
+- Kada podaci postoje, tada su prikazani tačni odgovori  
+- Sistem mora omogućiti pregled svih FAQ stavki  
+- Sistem ne smije prikazati praznu listu bez obavještenja  
+- Korisnik treba dobiti poruku ako nema dostupnih pitanja  
+---
+### Poslovna vrijednost
+Eventualno smanjenje slanja tiketa 
+
+### Prioritet
+3
+
+### Zavisnosti
+Potrebno je analizirati najčešće probleme koji se javljaju u telekom sistemu radi efikasnog sastavljanja FAQ Segmenta
+
+### Pretpostavke
+
+Za svako pitanje u FAQ Segmentu postavljen je odgovor koji zasigurno rješava nedoumicu iz postavljenog pitanja
+
+### Otvorena pitanja
+
+- Koja pitanja u relevantna za ubacivanje u FAQ Segment?
+
+### Poveznica sa sprintom
+Sprint 6
+
+---
+
+<a id="sprint-7"></a>
+# Sprint 7
 
 ## PB-25 Zatvaranje tiketa
 
@@ -392,46 +344,6 @@ Zavisi od postojanja tiketa.
 ### Poveznica sa sprintom
 Sprint 7
 
----
-
-## PB-26 Ocjenjivanje tiketa
-
-### User Stories
-
-<a id="us-18"></a>
-### US-18: *Kao korisnik, želim da ocijenim rješenje tiketa, kako bih dao feedback o kvaliteti usluge.*
-**Acceptance Criteria:**
-
-- Kada je tiket zatvoren, ako korisnik klikne na opciju "Ocijeni", tada sistem omogućava unos i slanje ocjene  
-- Kada korisnik pošalje ocjenu, tada se ona sprema u sistem  
-- Sistem mora omogućiti izbor ocjene  
-- Sistem ne smije dozvoliti ocjenjivanje otvorenog tiketa  
-- Korisnik treba dobiti potvrdu o uspješnom slanju ocjene  
-
----
-
-### Poslovna vrijednost
-
-Omogućava unapređenje kvaliteta usluge.
-
-### Prioritet
-
-5
-
-### Zavisnosti
-
-Zavisi od zatvorenog tiketa.
-
-### Pretpostavke
-
-- Tiket mora biti zatvoren
-
-### Otvorena pitanja
-
-- Koja skala ocjenjivanja se koristi?
-
-### Poveznica sa sprintom
-Sprint 8
 ---
 
 ## PB-27 Komunikacija kroz tiket
@@ -538,130 +450,27 @@ Sprint 7
 
 ---
 
-## PB-29 Preraspodjela agenata po timovima
+## PB-37 Tehničar vidi osnovne informacije
 
 ### User Stories
 
-#### **US-23:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
+#### **US-39:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
 
 **Acceptance Criteria:**
-- Kada je administrator prijavljen i nalazi se u sekciji upravljanja timovima, ako odabere agenta i premjesti ga u drugi tim, tada sistem mora izvršiti promjenu 
-- Sistem mora omogućiti primjenu bez gubitka informacija
-- Kada administrator izvrši preraspodjelu agenta, ako je akcija potvrđena, tada sistem mora evidentirati promjenu sa vremenskim pečatom i imenom administratora
-- Sistem mora omogućiti da ne dođe do promjene podataka ukoliko administrator ne potvrdi akciju promjene agenata
-- Kada administrator izvrši pokušaj preraaspodjele agenata, ako dođe do greške ili nemogućnosti odabrane perraspodjele, sistme mora poslati poruku upozorenja
+- Kada tehničar pregleda tikete, ako otvori postojeći tiket, tada sistem mora prikazati osnovne informacije
+- Kada se prikazuju podaci, ako su interne napomene prisutne, tada sistem ne smije prikazati te napomene
+- Kada tehničar otvori ekran tiketa, ako su podaci učitani, tada sve informacije moraju biti dostupne bez dodatnih klikova
+- Sistem ne smije omogućiti pregled tiketa koji nisu dodijeljeni tehničaru
 
 
-#### **US-24:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
-
-**Acceptance Criteria:**
-- Kada administrator pristupi sekciji timova tada sistem mora prikazati sve timove i njihove članove
-- Kada se prikazuju članovi tima, ako agent nije aktivan ili je obrisan, tada sistem ne smije prikazivati tog agenta kao aktivnog
-- Kada administrator koristi opcije pregleda, ako primijeni filter/sortiranje, tada sistem mora ažurirati prikaz prema odabranim kriterijima
-- Sistem mora prikazati aktivno stanje timova
-
-
-
-### Poslovna vrijednost
-
-Omogućava efikasnije upravljanje tiketima i resursima.
-
-### Prioritet
-
-1
-
-### Zavisnosti
-
-Zavisi od sistema za tikete i korisničkih uloga.
-
-### Pretpostavke
-
-- Sistem podržava rad sa tiketima i korisnicima
-
-### Otvorena pitanja
-
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-- Da li može doći do zamjene tiketa prilikom preraspodjele?
-
-
-### Poveznica sa sprintom
-Sprint 10
----
-
-## PB-30 Automatska dodjela tiketa
-
-### User Stories
-
-#### **US-25:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
+#### **US-40:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
 
 **Acceptance Criteria:**
-- Kada korisnik kreira novi tiket, ako su definisana pravila dodjele, tada sistem mora automatski dodijeliti tiket odgovarajućem agentu
-- Kada sistem dodjeljuje tiket, ako je agent nedostupan, tada sistem ne smije dodijeliti tiket tom agentu
-- Kada je tiket dodijeljen agentu, ako je dodjela uspješna, tada agent mora dobiti notifikaciju
-- Kada sistem ne može pronaći dostupnog agenta, ako se izvrši pokušaj dodjele, tada tiket mora biti označen kao "Nedodijeljen"
-- Sistem mora dodijeliti tiket prema predefinisanin pravilima dodjele
-- Sistem mora prikazati poruku ukoliko nema definisanih pravila dodjele
+- Kada tehničar pregleda tiket, ako želi pogledati detaljne informacije, tada sistem mora prikazati korisničke informacije 
+- Kada se prikazuju podaci korisnika, ako su osjetljivi, tada sistem ne smije prikazati te podatke
+- Kada tehničar pregleda korisnika, ako postoje prethodni tiketi, tada sistem mora omogućiti uvid u njih
+- Sistem ne sme omogućiti promjenu korisničkih podatak prilikom pregleda 
 
-
-#### **US-26:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
-
-**Acceptance Criteria:**
-- Kada administrator pristupi sekciji pravila, ako želi upravljati pravilima, tada sistem mora omogućiti administratoru editovanje pravila
-- Sistem mora omogućiti pravljenje, uređivanje, i brisanje pravila
-- Kada administrator pregleda pravila, ako postoje aktivna pravila, tada sistem mora prikazati sva aktivna pravila
-- Sistem mora prikazati poruku ukoliko nema definisanih pravila
-- Kada tiket odgovara više pravila, ako se primjenjuju pravila, tada sistem mora koristiti prioritizaciju
- 
-
-
-### Poslovna vrijednost
-
-Omogućava efikasnije upravljanje tiketima i resursima.
-
-### Prioritet
-
-3
-
-### Zavisnosti
-
-Zavisi od sistema za tikete i korisničkih uloga.
-
-### Pretpostavke
-
-- Sistem podržava rad sa tiketima i korisnicima
-
-### Otvorena pitanja
-
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-### Poveznica sa sprintom
-Sprint 10
----
-
-## PB-31 Prosljeđivanje tiketa
-
-### User Stories
-
-#### **US-27:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
-
-**Acceptance Criteria:**
-- Kada je agent prijavljen i nalazi se na tiketu, ako želi proslijediti tiket, tada sistem mora omogućiti izbor samo aktivnih agenata
-- Sistem mora omogućiti prosljeđivanje tiketa od strane agenta ukoliko on njemu nije dodijeljen
-- Kada agent pokušava proslijediti tiket, ako je tiket zatvoren, tada sistem ne smije dozvoliti prosljeđivanje
-- Kada agent proslijedi tiket, ako je akcija uspješna, tada novi agent mora dobiti obavijest
-- Kada agent pokuša proslijediti tiket samom sebi, ako izvrši tu akciju, tada sistem mora spriječiti prosljeđivanje
-
-
-#### **US-28:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
-
-**Acceptance Criteria:**
-- Kada agent prosljeđuje tiket, ako želi dodati komentar, tada sistem mora omogućiti unos komentara
-- Kada postoji interni komentar, ako korisnik pregleda tiket, tada sistem ne smije prikazati taj komentar
-- Sistem mora ograničiti dužinu komentara
-- Kada novi agent primi tiket, ako postoji komentar, tada sistem mora prikazati komentar u detaljima tiketa
-- Kada novi agent primi tiket sa internim komentarom, tada sistem mora onemogućiti opciju da agent mijenja komentar tiketa
- 
 
 
 ### Poslovna vrijednost
@@ -685,52 +494,51 @@ Zavisi od sistema za tikete i korisničkih uloga.
 - Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
 ### Poveznica sa sprintom
-Sprint 10
+Sprint 7
+
 ---
 
-## PB-32 Pregled svih tiketa
+<a id="sprint-8"></a>
+# Sprint 8
+
+## PB-26 Ocjenjivanje tiketa
 
 ### User Stories
 
-#### **US-29:** Kao agent, želim da vidim sve tikete, kako bih imao potpuni pregled.
-
+<a id="us-18"></a>
+### US-18: *Kao korisnik, želim da ocijenim rješenje tiketa, kako bih dao feedback o kvaliteti usluge.*
 **Acceptance Criteria:**
-- Kada agent otvori listu tiketa, ako se podaci učitaju, tada sistem mora prikazati sve tikete
-- Kada postoji veliki broj tiketa, ako korisnik skrola ili traži više, tada sistem mora omogućiti učitavanje dodatnih rezultata
-- Sistem prikazuje sve tikete neovisno od stanja
-- Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti 
 
+- Kada je tiket zatvoren, ako korisnik klikne na opciju "Ocijeni", tada sistem omogućava unos i slanje ocjene  
+- Kada korisnik pošalje ocjenu, tada se ona sprema u sistem  
+- Sistem mora omogućiti izbor ocjene  
+- Sistem ne smije dozvoliti ocjenjivanje otvorenog tiketa  
+- Korisnik treba dobiti potvrdu o uspješnom slanju ocjene  
 
-#### **US-30:** Kao agent, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
-
-**Acceptance Criteria:**
-- Kada agent otvori tiket, ako tiket postoji, tada sistem mora prikazati sve informacije o tiketu
-- Kada agent koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti pristup
-
-
+---
 
 ### Poslovna vrijednost
 
-Omogućava efikasnije upravljanje tiketima i resursima.
+Omogućava unapređenje kvaliteta usluge.
 
 ### Prioritet
 
-1
+5
 
 ### Zavisnosti
 
-Zavisi od sistema za tikete i korisničkih uloga.
+Zavisi od zatvorenog tiketa.
 
 ### Pretpostavke
 
-- Sistem podržava rad sa tiketima i korisnicima
+- Tiket mora biti zatvoren
 
 ### Otvorena pitanja
 
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+- Koja skala ocjenjivanja se koristi?
 
 ### Poveznica sa sprintom
-Sprint 10
+Sprint 8
 
 ---
 
@@ -783,102 +591,6 @@ Sprint 8
 
 ---
 
-## PB-34 Pregled i uređivanje korisničkih profila
-
-### User Stories
-
-#### **US-33:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
-
-**Acceptance Criteria:**
-- Kada administrator pregleda postojeće korisnike, ako odabere specifičan korinsički profil, tada sistem omogućava dostup više informacija
-- Kada administrator otvori profil korisnika, tada sistem mora prikazati sve relevantne podatke
-- Sistem adminsitratoru prikazuje samo spisak trenutno postojećih korisnika
-- Kada se prikazuju podaci, tada sistem ne smije prikazivati lozinke ili osjetljive informacije.
-- Kada administrator traži korisnika, tada sistem mora omogućiti pretragu po imenu ili emailu.
-- Kada administrator vrši pretragu korisnika, ako nema podudaranja, tada sistem šalje poruku da korisnik nike pronađen
-
-
-#### **US-34:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
-
-**Acceptance Criteria:**
-- Kada administrator mijenja podatke, tada sistem mora omogućiti uređivanje osnovnih informacija
-- Kada se radi o lozinki, tada sistem ne smije dozvoliti direktnu izmjenu
-- Kada se izmjena sačuva, tada sistem mora prikazati potvrdu
-- Kada se napravi izmjena, tada sistem mora evidentirati promjenu
-- Kada administrator izvrši promjenu podataka, ukoliko ne potvrdi promjenu, tada sistem ne smije gubiti niti mijenjati prethodne informacije
-
-
-
-### Poslovna vrijednost
-
-Omogućava efikasnije upravljanje tiketima i resursima.
-
-### Prioritet
-
-2
-
-### Zavisnosti
-
-Zavisi od sistema za tikete i korisničkih uloga.
-
-### Pretpostavke
-
-- Sistem podržava rad sa tiketima i korisnicima
-
-### Otvorena pitanja
-
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-### Poveznica sa sprintom
-Sprint 9
----
-
-## PB-35 Pregled dodijeljenih tiketa (tehničari)
-
-### User Stories
-
-#### **US-35:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
-
-**Acceptance Criteria:**
-- Kada tehničar otvori listu tiketa, ako je prijavljen, tada sistem mora prikazati samo njegove tikete
-- Kada se prikazuje lista tiketa, ako tiket nije dodijeljen tom tehničaru, tada sistem ne smije prikazati taj tiket
-- Kada se prikazuju tiketi, ako imaju različite statuse, tada sistem mora jasno razlikovati statuse
-- Kada tehničar nema dodijeljenih tiketa, ako otvori listu, tada sistem mora prikazati poruku o praznoj listi
-
-
-#### **US-36:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
-
-**Acceptance Criteria:**
-- Kada je tehničar prijavljen i nalazi se na listi tiketa, ako primijeni filtere, tada sistem mora filtrirati po odabranim kriterijima
-- Kada tehničar primijeni filtere, ako nijedan tiket ne odgovara kriterijima, tada sistem mora prikazati odgovarajuću poruku
-- Kada tehničar unosi raspon datuma, ako je početni datum veći od krajnjeg, tada sistem ne smije dozvoliti primjenu filtera
-
-
-
-### Poslovna vrijednost
-
-Omogućava efikasnije upravljanje tiketima i resursima.
-
-### Prioritet
-
-1
-
-### Zavisnosti
-
-Zavisi od sistema za tikete i korisničkih uloga.
-
-### Pretpostavke
-
-- Sistem podržava rad sa tiketima i korisnicima
-
-### Otvorena pitanja
-
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-### Poveznica sa sprintom
-Sprint 10
----
-
 ## PB-36 Ažuriranje statusa tiketa
 
 ### User Stories
@@ -924,230 +636,7 @@ Zavisi od sistema za tikete i korisničkih uloga.
 
 ### Poveznica sa sprintom
 Sprint 8
----
 
-## PB-37 Tehničar vidi osnovne informacije
-
-### User Stories
-
-#### **US-39:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
-
-**Acceptance Criteria:**
-- Kada tehničar pregleda tikete, ako otvori postojeći tiket, tada sistem mora prikazati osnovne informacije
-- Kada se prikazuju podaci, ako su interne napomene prisutne, tada sistem ne smije prikazati te napomene
-- Kada tehničar otvori ekran tiketa, ako su podaci učitani, tada sve informacije moraju biti dostupne bez dodatnih klikova
-- Sistem ne smije omogućiti pregled tiketa koji nisu dodijeljeni tehničaru
-
-
-#### **US-40:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
-
-**Acceptance Criteria:**
-- Kada tehničar pregleda tiket, ako želi pogledati detaljne informacije, tada sistem mora prikazati korisničke informacije 
-- Kada se prikazuju podaci korisnika, ako su osjetljivi, tada sistem ne smije prikazati te podatke
-- Kada tehničar pregleda korisnika, ako postoje prethodni tiketi, tada sistem mora omogućiti uvid u njih
-- Sistem ne sme omogućiti promjenu korisničkih podatak prilikom pregleda 
-
-
-
-### Poslovna vrijednost
-
-Omogućava efikasnije upravljanje tiketima i resursima.
-
-### Prioritet
-
-2
-
-### Zavisnosti
-
-Zavisi od sistema za tikete i korisničkih uloga.
-
-### Pretpostavke
-
-- Sistem podržava rad sa tiketima i korisnicima
-
-### Otvorena pitanja
-
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-### Poveznica sa sprintom
-Sprint 7
----
-
-## PB-38 Izvještaj o broju tiketa
-
-### User Stories
-
-<a id="us-41"></a>
-#### US-41: *Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa*
-**Acceptance Criteria:**
-
-- Kada administrator odabere vremenski period (dnevni, sedmični, mjesečni, godišnji), tada se prikazuje ukupan broj tiketa za taj period 
-- Kada podaci postoje u sistemu, tada podaci odgovaraju stvarnom stanju u bazi   
-- Sistem mora omogućiti izbor vremenskog perioda
-- Sistem mora omogućiti pregled izvještaja administratoru
-- Sistem ne smije prikazati pogrešne ili duplirane podatke
-- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
-- Administrator treba dobiti poruku ako nema podataka za odabrani period
----
-<a id="us-42"></a>
-#### US-42: *Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu*
-**Acceptance Criteria:**
-
-- Kada tehničar odabere vremenski period, tada vidi broj tiketa koji su raspoređeni njemu za taj period  
-- Kada podaci postoje u sistemu, tada podaci odgovaraju stvarnom stanju u bazi
-- Sistem mora omogućiti izbor vremenskog perioda  
-- Sistem mora omogućiti pregled izvještaja tehničaru
-- Sistem ne smije prikazati pogrešne ili duplirane podatke  
-- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
-- Tehničar treba dobiti poruku ako nema podataka za odabrani period 
-___
-### Poslovna vrijednost
-Omogućava se bolji uvid o statistici, problemima i analizi o količini tiketa
-
-
-### Prioritet
-5
-
-### Zavisnosti
-Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
-
-### Pretpostavke
-- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
-
-### Otvorena pitanja
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-### Poveznica sa sprintom
-Sprint 11
----
-
-## PB-39 Izvještaj po statusu tiketa
-
-### User Stories
-
-<a id="us-43"></a>
-### US-43: *Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima*
-**Acceptance Criteria:**
-
-- Kada administrator otvori izvještaj, tada vidi ukupni broj tiketa po statusima (otvoren, u toku, zatvoren)  
-- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima  
-- Sistem mora grupisati tikete po statusu  
-- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
-- Administrator treba dobiti poruku ako nema podataka
----
-<a id="us-44"></a>
-### US-44: *Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti*
-**Acceptance Criteria:**
-
-- Kada tehničar otvori izvještaj, tada vidi raspodjelu svojih tiketa po statusima  
-- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima  
-- Sistem mora omogućiti pristup izvještaju tehničaru  
-- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
-- Tehničar treba dobiti poruku ako nema podataka
----
-### Poslovna vrijednost
-Omogućava se bolji uvid o statistici, problemima i analizi o statusima tiketa
-
-### Prioritet
-5
-
-### Zavisnosti
-Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
-
-### Pretpostavke
-- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
-
-### Otvorena pitanja
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-### Poveznica sa sprintom
-Sprint 11
----
-
-## PB-40 Izvještaj po tipu problema
-
-### User Stories
-
-<a id="us-45"></a>
-### US-45: *Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema*
-**Acceptance Criteria:**
-
-- Kada administrator otvori izvještaj, tada vidi ukupni broj tiketa po tipu problema  
-- Kada podaci postoje, tada su prikazani tačni tipovi i količine  
-- Sistem mora grupisati tikete po tipu problema  
-- Korisnik treba dobiti poruku ako nema podataka
-- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
----
-<a id="us-46"></a>
-### US-46: *Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti*
-**Acceptance Criteria:**
-
-- Kada tehničar otvori izvještaj, tada vidi ukupni broj tiketa koji su raspoređeni njemu po tipu problema 
-- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima
-- Sistem mora grupisati tikete po tipu problema  
-- Korisnik treba dobiti poruku ako nema dostupnih podataka
-- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
----
-### Poslovna vrijednost
-Omogućava se bolji uvid o statistici, problemima i analizi po tipovima problema pojedinačnog tiketa
-
-### Prioritet
-5
-
-### Zavisnosti
-Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
-
-### Pretpostavke
-- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
-
-### Otvorena pitanja
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-### Poveznica sa sprintom
-Sprint 11
----
-
-## PB-41 Prosječno vrijeme rješavanja tiketa
-
-### User Stories
-
-<a id="us-47"></a>
-### US-47: *Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika*
-**Acceptance Criteria:**
-
-- Kada administrator otvori izvještaj, tada vidi prosječno vrijeme zatvaranja tiketa  
-- Kada podaci postoje, tada je izračun tačan (vrijeme zatvaranja - vrijeme kreiranja)  
-- Sistem mora izračunati prosjek na osnovu svih zatvorenih tiketa  
-- Sistem ne smije uključiti nezatvorene tikete u izračun  
-- Korisnik treba dobiti poruku ako nema podataka
----
-<a id="us-48"></a>
-### US-48: *Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio*
-**Acceptance Criteria:**
-
-- Kada tehničar otvori izvještaj, tada vidi prosječno vrijeme rješavanja  
-- Kada podaci postoje, tada izračun odgovara stvarnim podacima  
-- Sistem mora omogućiti pristup izvještaju  
-- Sistem ne smije dozvoliti pristup neovlaštenim korisnicima  
-- Korisnik treba dobiti poruku ako nema dostupnih podataka
----
-### Poslovna vrijednost
-Omogućava se bolji uvid o statistici, težini problemima i analizi svakog tiketa
-
-### Prioritet
-5
-
-### Zavisnosti
-Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
-
-### Pretpostavke
-- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
-
-### Otvorena pitanja
-- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
-
-### Poveznica sa sprintom
-Sprint 11
 ---
 
 ## PB-42 Vrijeme prvog odgovora
@@ -1201,185 +690,575 @@ Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kak
 
 ### Poveznica sa sprintom
 Sprint 8
+
 ---
 
-## PB-43 Izvještaj o opterećenju agenata
+<a id="sprint-9"></a>
+# Sprint 9
+
+## PB-20 Upravljanje korisničkim profilom
 
 ### User Stories
 
-<a id="us-52"></a>
-### US-52: *Kao Administrator, želim da imam uvid u detaljan izvještaj o broju riješenih tiketa po agentu u dnevnim, sedmičnim i mjesečnim intervalima,kako bih mogao da pratim opterećenje tima, identifikujem najproduktivnije radnike i optimizujem raspodjelu resursa.*
+<a id="us-4"></a>
+### US-4: *Kao korisnik, želim da promijenim svoj email, kako bih imao tačne kontakt informacije.*
+
 **Acceptance Criteria:**
 
-- Kada administrator odabere period, tada vidi broj riješenih tiketa po agentu  
-- Kada podaci postoje, tada izvještaj prikazuje tačne vrijednosti  
-- Sistem mora omogućiti filtriranje po vremenskom periodu  
-- Sistem ne smije prikazati netačne ili duplirane podatke  
-- Korisnik treba dobiti poruku ako nema podataka 
+- Kada je korisnik prijavljen, ako unese novi email i potvrdi izmjenu, tada se email ažurira u sistemu  
+- Kada korisnik unese nevalidan email, tada sistem prikazuje grešku  
+- Sistem mora provjeriti format email adrese  
+- Sistem ne smije dozvoliti unos već postojećeg emaila u sistemu  
+- Korisnik treba dobiti potvrdu o uspješnoj promjeni emaila  
 ---
+
+<a id="us-5"></a>
+### US-5: *Kao korisnik, želim da promijenim lozinku, kako bih povećao sigurnost svog naloga.*
+**Acceptance Criteria:**
+    
+- Kada je korisnik prijavljen, ako unese trenutnu i novu lozinku, tada se lozinka uspješno mijenja  
+- Kada korisnik unese pogrešnu trenutnu lozinku, tada sistem odbija promjenu  
+- Sistem mora zahtijevati unos trenutne lozinke prije promjene  
+- Sistem mora provjeriti minimalne sigurnosne zahtjeve lozinke  
+- Sistem ne smije dozvoliti lozinku koja ne zadovoljava sigurnosne zahtjeve 
+- Korisnik treba dobiti potvrdu o uspješnoj promjeni lozinke  
+---
+
 ### Poslovna vrijednost
-Omogućava menadžmentu donošenje odluka zasnovanih na podacima (data-driven decisions). Pomaže u prepoznavanju "uskih grla" u podršci i pravednijoj raspodjeli posla, što direktno utiče na smanjenje sagorijevanja (burnout) zaposlenih.
+
+Omogućava korisnicima kontrolu nad svojim podacima i povećava sigurnost naloga.
 
 ### Prioritet
-3
+
+2
 
 ### Zavisnosti
-Potrebno je imati modul za upravljanje tiketima i relevantne podatke u bazi podatake za prikaz količine poslanih tiketa 
+
+Zavisi od login funkcionalnosti.
 
 ### Pretpostavke
-Sistem već bilježi tačno vrijeme zatvaranja svakog tiketa i ID agenta koji ga je riješio.
+
+- Korisnik mora biti prijavljen
 
 ### Otvorena pitanja
-- Da li je potreban vizuelni prikaz (grafikon) ili je dovoljna tabela sa mogućnošću filtriranja?
+
+- Da li je potrebna verifikacija emaila nakon promjene?
+- Koji su zahtjevi za jačinu lozinke?
 
 ### Poveznica sa sprintom
-Sprint 11
+Sprint 9
+
 ---
 
-## PB-44 Izvještaj o ocjenama korisnika
+## PB-21 Prikaz paketa i pretplata
 
 ### User Stories
 
-<a id="us-53"></a>
-### US-53: *Kao Agent, želim da analiziram ocjene koje korisnici ostavljaju nakon zatvaranja tiketa kako bih mogao da procijenim kvalitet pružene podrške i identifikujem oblasti u kojima je potrebna dodatna edukacija agenata.*
+<a id="us-6"></a>
+### US-6: *Kao korisnik, želim da vidim svoje aktivne pakete i pretplate, kako bih imao pregled usluga koje koristim.*
 **Acceptance Criteria:**
 
-- Kada agent otvori izvještaj, tada vidi prosječnu ocjenu i listu ocjena  
-- Kada podaci postoje, tada su prikazane tačne ocjene iz sistema  
-- Sistem mora prikazati samo ocjene vezane za zatvorene tikete  
-- Sistem ne smije prikazati ocjene za otvorene tikete  
-- Korisnik treba dobiti poruku ako nema dostupnih ocjena  
+- Kada je korisnik prijavljen, ako pristupi sekciji "Paketi", tada vidi listu svojih aktivnih paketa i pretplata  
+- Kada korisnik ima više paketa, tada sistem prikazuje sve aktivne pakete u listi  
+- Sistem mora prikazati osnovne informacije o svakom paketu 
+- Sistem ne smije prikazivati pakete koji nisu povezani sa korisnikom  
+- Korisnik treba dobiti jasan pregled svojih aktivnih usluga  
 ---
+
+<a id="us-7"></a>
+### US-7: *Kao korisnik, želim da vidim detalje paketa (internet, TV, mobilni), kako bih razumio šta moj paket uključuje.*
+**Acceptance Criteria:**
+
+- Kada korisnik odabere paket, tada sistem prikazuje detalje paketa  
+- Kada paket sadrži više usluga, tada sistem prikazuje sve uključene usluge  
+- Sistem mora prikazati relevantne informacije (brzina interneta, broj kanala, mobilni podaci)  
+- Sistem ne smije prikazivati netačne ili nepotpune informacije o paketu  
+- Korisnik treba dobiti jasan i razumljiv prikaz sadržaja paketa  
+---
+
 ### Poslovna vrijednost
-Direktno mjerenje zadovoljstva korisnika je ključno za zadržavanje klijenata. Ovaj feedback omogućava timu da reaguje na negativna iskustva prije nego što ona postanu kritična za poslovanje.
+
+Pruža korisnicima jasan pregled usluga i povećava transparentnost.
 
 ### Prioritet
-3
+
+4
 
 ### Zavisnosti
-Navedeni User Story zavisi od funkcionalnosti zatvaranja tiketa i sistema za prikupljanje feedbacka.
 
-Također potrebno je imati podatak u bazi podataka o statusu samog tiketa
+Zavisi od login funkcionalnosti i baze podataka.
 
 ### Pretpostavke
-Implementiran je mehanizam koji šalje upit za ocjenu korisniku odmah nakon zatvaranja tiketa.
 
+- Podaci o paketima su već dostupni u sistemu
 
 ### Otvorena pitanja
-- Da li se analiziraju samo numeričke ocjene (npr. 1-5) ili i tekstualni komentari?
+
+- Da li korisnik može mijenjati paket kroz sistem?
+- Koliko detalja prikazati?
 
 ### Poveznica sa sprintom
-Sprint 11
+Sprint 9
+
 ---
 
-## PB-45 Admin Dashboard sa ključnim metrikama
+## PB-34 Pregled i uređivanje korisničkih profila
 
 ### User Stories
 
-<a id="us-54"></a>
-### US-54: *Kao administrator, želim da imam spreman cijeli dashboard sa ključnim metrikama o tiketima, kako bih imao uvid o cijelom sistemu i radu naših tehničara*
-**Acceptance Criteria:**
+#### **US-33:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
 
-- Kada administrator otvori dashboard, tada vidi ključne metrike (broj tiketa, statusi, prosječno vrijeme)  
-- Kada podaci postoje, tada su svi prikazi ažurirani i tačni  
-- Sistem mora prikazati više metrika na jednoj stranici  
-- Sistem ne smije prikazati nevažeće ili zastarjele podatke  
-- Korisnik treba dobiti poruku ako podaci nisu dostupni  
----
+**Acceptance Criteria:**
+- Kada administrator pregleda postojeće korisnike, ako odabere specifičan korinsički profil, tada sistem omogućava dostup više informacija
+- Kada administrator otvori profil korisnika, tada sistem mora prikazati sve relevantne podatke
+- Sistem adminsitratoru prikazuje samo spisak trenutno postojećih korisnika
+- Kada se prikazuju podaci, tada sistem ne smije prikazivati lozinke ili osjetljive informacije.
+- Kada administrator traži korisnika, tada sistem mora omogućiti pretragu po imenu ili emailu.
+- Kada administrator vrši pretragu korisnika, ako nema podudaranja, tada sistem šalje poruku da korisnik nike pronađen
+
+
+#### **US-34:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
+
+**Acceptance Criteria:**
+- Kada administrator mijenja podatke, tada sistem mora omogućiti uređivanje osnovnih informacija
+- Kada se radi o lozinki, tada sistem ne smije dozvoliti direktnu izmjenu
+- Kada se izmjena sačuva, tada sistem mora prikazati potvrdu
+- Kada se napravi izmjena, tada sistem mora evidentirati promjenu
+- Kada administrator izvrši promjenu podataka, ukoliko ne potvrdi promjenu, tada sistem ne smije gubiti niti mijenjati prethodne informacije
+
+
+
 ### Poslovna vrijednost
 
-Lakši uvid o cijelom tiket/helpdesk sistemu za lakši pregled statistike i analizu istog
-
+Omogućava efikasnije upravljanje tiketima i resursima.
 
 ### Prioritet
+
+2
+
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.
+
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima
+
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+### Poveznica sa sprintom
+Sprint 9
+
+---
+
+<a id="sprint-10"></a>
+# Sprint 10
+
+## PB-29 Preraspodjela agenata po timovima
+
+### User Stories
+
+#### **US-23:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
+
+**Acceptance Criteria:**
+- Kada je administrator prijavljen i nalazi se u sekciji upravljanja timovima, ako odabere agenta i premjesti ga u drugi tim, tada sistem mora izvršiti promjenu 
+- Sistem mora omogućiti primjenu bez gubitka informacija
+- Kada administrator izvrši preraspodjelu agenta, ako je akcija potvrđena, tada sistem mora evidentirati promjenu sa vremenskim pečatom i imenom administratora
+- Sistem mora omogućiti da ne dođe do promjene podataka ukoliko administrator ne potvrdi akciju promjene agenata
+- Kada administrator izvrši pokušaj preraaspodjele agenata, ako dođe do greške ili nemogućnosti odabrane perraspodjele, sistme mora poslati poruku upozorenja
+
+
+#### **US-24:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
+
+**Acceptance Criteria:**
+- Kada administrator pristupi sekciji timova tada sistem mora prikazati sve timove i njihove članove
+- Kada se prikazuju članovi tima, ako agent nije aktivan ili je obrisan, tada sistem ne smije prikazivati tog agenta kao aktivnog
+- Kada administrator koristi opcije pregleda, ako primijeni filter/sortiranje, tada sistem mora ažurirati prikaz prema odabranim kriterijima
+- Sistem mora prikazati aktivno stanje timova
+
+
+
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.
+
+### Prioritet
+
 1
 
 ### Zavisnosti
-Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketu i vremenu slanja i odgovora tiketa
 
-
+Zavisi od sistema za tikete i korisničkih uloga.
 
 ### Pretpostavke
-Svi relevanti tabele i podaci su dostupni u bazi podataka za prikaz na admin dashboardu
+
+- Sistem podržava rad sa tiketima i korisnicima
 
 ### Otvorena pitanja
-- Koji podaci su relevantni za prikaz istih na admin dashboardu?
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+- Da li može doći do zamjene tiketa prilikom preraspodjele?
+
 
 ### Poveznica sa sprintom
-Sprint 11
+Sprint 10
+
 ---
 
-## PB-46 Export Izvještaja
+## PB-30 Automatska dodjela tiketa
 
 ### User Stories
 
-<a id="us-55"></a>
-### US-55: *Kao tehničar, želim da imam mogućnost za export izvještaja tiketa u CSV formati, radi lakšeg prosljeđivanja podataka kolegama koji nisu direktno povezani sa tiket/helpdesk sistemom.*
+#### **US-25:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
+
+**Acceptance Criteria:**
+- Kada korisnik kreira novi tiket, ako su definisana pravila dodjele, tada sistem mora automatski dodijeliti tiket odgovarajućem agentu
+- Kada sistem dodjeljuje tiket, ako je agent nedostupan, tada sistem ne smije dodijeliti tiket tom agentu
+- Kada je tiket dodijeljen agentu, ako je dodjela uspješna, tada agent mora dobiti notifikaciju
+- Kada sistem ne može pronaći dostupnog agenta, ako se izvrši pokušaj dodjele, tada tiket mora biti označen kao "Nedodijeljen"
+- Sistem mora dodijeliti tiket prema predefinisanin pravilima dodjele
+- Sistem mora prikazati poruku ukoliko nema definisanih pravila dodjele
+
+
+#### **US-26:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
+
+**Acceptance Criteria:**
+- Kada administrator pristupi sekciji pravila, ako želi upravljati pravilima, tada sistem mora omogućiti administratoru editovanje pravila
+- Sistem mora omogućiti pravljenje, uređivanje, i brisanje pravila
+- Kada administrator pregleda pravila, ako postoje aktivna pravila, tada sistem mora prikazati sva aktivna pravila
+- Sistem mora prikazati poruku ukoliko nema definisanih pravila
+- Kada tiket odgovara više pravila, ako se primjenjuju pravila, tada sistem mora koristiti prioritizaciju
+ 
+
+
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.
+
+### Prioritet
+
+3
+
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.
+
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima
+
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+### Poveznica sa sprintom
+Sprint 10
+
+---
+
+## PB-31 Prosljeđivanje tiketa
+
+### User Stories
+
+#### **US-27:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
+
+**Acceptance Criteria:**
+- Kada je agent prijavljen i nalazi se na tiketu, ako želi proslijediti tiket, tada sistem mora omogućiti izbor samo aktivnih agenata
+- Sistem mora omogućiti prosljeđivanje tiketa od strane agenta ukoliko on njemu nije dodijeljen
+- Kada agent pokušava proslijediti tiket, ako je tiket zatvoren, tada sistem ne smije dozvoliti prosljeđivanje
+- Kada agent proslijedi tiket, ako je akcija uspješna, tada novi agent mora dobiti obavijest
+- Kada agent pokuša proslijediti tiket samom sebi, ako izvrši tu akciju, tada sistem mora spriječiti prosljeđivanje
+
+
+#### **US-28:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
+
+**Acceptance Criteria:**
+- Kada agent prosljeđuje tiket, ako želi dodati komentar, tada sistem mora omogućiti unos komentara
+- Kada postoji interni komentar, ako korisnik pregleda tiket, tada sistem ne smije prikazati taj komentar
+- Sistem mora ograničiti dužinu komentara
+- Kada novi agent primi tiket, ako postoji komentar, tada sistem mora prikazati komentar u detaljima tiketa
+- Kada novi agent primi tiket sa internim komentarom, tada sistem mora onemogućiti opciju da agent mijenja komentar tiketa
+ 
+
+
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.
+
+### Prioritet
+
+2
+
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.
+
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima
+
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+### Poveznica sa sprintom
+Sprint 10
+
+---
+
+## PB-32 Pregled svih tiketa
+
+### User Stories
+
+#### **US-29:** Kao agent, želim da vidim sve tikete, kako bih imao potpuni pregled.
+
+**Acceptance Criteria:**
+- Kada agent otvori listu tiketa, ako se podaci učitaju, tada sistem mora prikazati sve tikete
+- Kada postoji veliki broj tiketa, ako korisnik skrola ili traži više, tada sistem mora omogućiti učitavanje dodatnih rezultata
+- Sistem prikazuje sve tikete neovisno od stanja
+- Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti 
+
+
+#### **US-30:** Kao agent, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
+
+**Acceptance Criteria:**
+- Kada agent otvori tiket, ako tiket postoji, tada sistem mora prikazati sve informacije o tiketu
+- Kada agent koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti pristup
+
+
+
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.
+
+### Prioritet
+
+1
+
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.
+
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima
+
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+### Poveznica sa sprintom
+Sprint 10
+
+---
+
+## PB-35 Pregled dodijeljenih tiketa (tehničari)
+
+### User Stories
+
+#### **US-35:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
+
+**Acceptance Criteria:**
+- Kada tehničar otvori listu tiketa, ako je prijavljen, tada sistem mora prikazati samo njegove tikete
+- Kada se prikazuje lista tiketa, ako tiket nije dodijeljen tom tehničaru, tada sistem ne smije prikazati taj tiket
+- Kada se prikazuju tiketi, ako imaju različite statuse, tada sistem mora jasno razlikovati statuse
+- Kada tehničar nema dodijeljenih tiketa, ako otvori listu, tada sistem mora prikazati poruku o praznoj listi
+
+
+#### **US-36:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
+
+**Acceptance Criteria:**
+- Kada je tehničar prijavljen i nalazi se na listi tiketa, ako primijeni filtere, tada sistem mora filtrirati po odabranim kriterijima
+- Kada tehničar primijeni filtere, ako nijedan tiket ne odgovara kriterijima, tada sistem mora prikazati odgovarajuću poruku
+- Kada tehničar unosi raspon datuma, ako je početni datum veći od krajnjeg, tada sistem ne smije dozvoliti primjenu filtera
+
+
+
+### Poslovna vrijednost
+
+Omogućava efikasnije upravljanje tiketima i resursima.
+
+### Prioritet
+
+1
+
+### Zavisnosti
+
+Zavisi od sistema za tikete i korisničkih uloga.
+
+### Pretpostavke
+
+- Sistem podržava rad sa tiketima i korisnicima
+
+### Otvorena pitanja
+
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+### Poveznica sa sprintom
+Sprint 10
+
+---
+
+<a id="sprint-11"></a>
+# Sprint 11
+
+## PB-38 Izvještaj o broju tiketa
+
+### User Stories
+
+<a id="us-41"></a>
+#### US-41: *Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani kako bih imao uvid o situaciji i količini tiketa*
 **Acceptance Criteria:**
 
-- Kada tehničar klikne na “Export CSV”, tada se generiše CSV fajl  
-- Kada podaci postoje, tada fajl sadrži tačne podatke iz izvještaja  
-- Sistem mora omogućiti preuzimanje fajla  
-- Sistem ne smije generisati prazan fajl bez upozorenja  
-- Korisnik treba dobiti poruku ako export nije moguć  
+- Kada administrator odabere vremenski period (dnevni, sedmični, mjesečni, godišnji), tada se prikazuje ukupan broj tiketa za taj period 
+- Kada podaci postoje u sistemu, tada podaci odgovaraju stvarnom stanju u bazi   
+- Sistem mora omogućiti izbor vremenskog perioda
+- Sistem mora omogućiti pregled izvještaja administratoru
+- Sistem ne smije prikazati pogrešne ili duplirane podatke
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
+- Administrator treba dobiti poruku ako nema podataka za odabrani period
 ---
-### Poslovna vrijednost
-- Prijenos podataka i izvještaja u okviru cijeloga telekoma, a ne samo za radnike koji su povezani u tiket/helpdesk sistem
+<a id="us-42"></a>
+#### US-42: *Kao tehničar, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o količini tiketa, situaciji i količini posla kojeg moram uraditi u kancelariji ili na terenu*
+**Acceptance Criteria:**
 
+- Kada tehničar odabere vremenski period, tada vidi broj tiketa koji su raspoređeni njemu za taj period  
+- Kada podaci postoje u sistemu, tada podaci odgovaraju stvarnom stanju u bazi
+- Sistem mora omogućiti izbor vremenskog perioda  
+- Sistem mora omogućiti pregled izvještaja tehničaru
+- Sistem ne smije prikazati pogrešne ili duplirane podatke  
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
+- Tehničar treba dobiti poruku ako nema podataka za odabrani period 
+___
+### Poslovna vrijednost
+Omogućava se bolji uvid o statistici, problemima i analizi o količini tiketa
 
 ### Prioritet
 5
 
-
 ### Zavisnosti
-Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima za sigurno exportiranje 
-
-Eventualno će se trebati uključiti druga biblioteka za exportiranje podataka u .csv fileu
-
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
 
 ### Pretpostavke
-U bazi podataka se nalaze svi relevantni podaci za export izvještaja tiketa 
-
+- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
 
 ### Otvorena pitanja
-- Koji podaci su relevantni za ubacivanje u .csv file?
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
 ### Poveznica sa sprintom
 Sprint 11
+
 ---
 
-## PB-47 FAQ Segment
+## PB-39 Izvještaj po statusu tiketa
 
 ### User Stories
 
-<a id="us-56"></a>
-### US-56: *Kao korisnik, želim da vidim listu najčešće postavljanih pitanja koje su vezane za razne probleme, kako bih mogao eventualno riješiti problem bez postavljanja tiketa*
+<a id="us-43"></a>
+### US-43: *Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima*
 **Acceptance Criteria:**
 
-- Kada korisnik otvori FAQ sekciju, tada vidi listu pitanja i odgovora  
-- Kada podaci postoje, tada su prikazani tačni odgovori  
-- Sistem mora omogućiti pregled svih FAQ stavki  
-- Sistem ne smije prikazati praznu listu bez obavještenja  
-- Korisnik treba dobiti poruku ako nema dostupnih pitanja  
+- Kada administrator otvori izvještaj, tada vidi ukupni broj tiketa po statusima (otvoren, u toku, zatvoren)  
+- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima  
+- Sistem mora grupisati tikete po statusu  
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
+- Administrator treba dobiti poruku ako nema podataka
+---
+<a id="us-44"></a>
+### US-44: *Kao tehničar, želim da imam izvještaj o statusu tiketa, kako bih imao uvid o stanju na terenu i koji tiket ću prije riješiti*
+**Acceptance Criteria:**
+
+- Kada tehničar otvori izvještaj, tada vidi raspodjelu svojih tiketa po statusima  
+- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima  
+- Sistem mora omogućiti pristup izvještaju tehničaru  
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten
+- Tehničar treba dobiti poruku ako nema podataka
 ---
 ### Poslovna vrijednost
-Eventualno smanjenje slanja tiketa 
+Omogućava se bolji uvid o statistici, problemima i analizi o statusima tiketa
 
 ### Prioritet
-3
+5
 
 ### Zavisnosti
-Potrebno je analizirati najčešće probleme koji se javljaju u telekom sistemu radi efikasnog sastavljanja FAQ Segmenta
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
 
 ### Pretpostavke
-
-Za svako pitanje u FAQ Segmentu postavljen je odgovor koji zasigurno rješava nedoumicu iz postavljenog pitanja
+- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
 
 ### Otvorena pitanja
-
-- Koja pitanja u relevantna za ubacivanje u FAQ Segment?
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
 
 ### Poveznica sa sprintom
-Sprint 6
+Sprint 11
 
+---
 
+## PB-40 Izvještaj po tipu problema
+
+### User Stories
+
+<a id="us-45"></a>
+### US-45: *Kao Administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema*
+**Acceptance Criteria:**
+
+- Kada administrator otvori izvještaj, tada vidi ukupni broj tiketa po tipu problema  
+- Kada podaci postoje, tada su prikazani tačni tipovi i količine  
+- Sistem mora grupisati tikete po tipu problema  
+- Korisnik treba dobiti poruku ako nema podataka
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
+---
+<a id="us-46"></a>
+### US-46: *Kao Tehničar, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovim problema koje se trebaju riješiti na terenu i kako bih bio spremniji da riješim isti*
+**Acceptance Criteria:**
+
+- Kada tehničar otvori izvještaj, tada vidi ukupni broj tiketa koji su raspoređeni njemu po tipu problema 
+- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima
+- Sistem mora grupisati tikete po tipu problema  
+- Korisnik treba dobiti poruku ako nema dostupnih podataka
+- Sistem ne smije dozvoliti pristup izvještaju ako korisnik nema odgovarajuću ulogu, uz poruku da korisnik nije ovlašten 
+---
+### Poslovna vrijednost
+Omogućava se bolji uvid o statistici, problemima i analizi po tipovima problema pojedinačnog tiketa
+
+### Prioritet
+5
+
+### Zavisnosti
+Sistem i features za dobavljanje podataka u real-time-u su dobro napravljeni kako bi se efikasno mogli dobavljati podaci o tiketima 
+
+### Pretpostavke
+- Baza podataka je dobro napravljena kako bi se mogli podaci o tiketima dobavljati pomoću backenda
+
+### Otvorena pitanja
+- Ko ima pristup ovoj funkcionalnosti i pod kojim uslovima?
+
+### Poveznica sa sprintom
+Sprint 11
+
+---
+
+## PB-41 Prosječno vrijeme rješavanja tiketa
+
+### User Stories
+
+<a id="us-47"></a>
+### US-47: *Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika*
+**Acceptance Criteria:**
+
+- Kada administrator otvori izvještaj, tada vidi prosječno vrijeme zatvaranja tiketa  
+- Kada podaci postoje, tada je izračun tačan (vrijeme zatvaranja - vrijeme kreiranja)  
+- Sistem mora izračunati prosjek na osnovu svih zatvorenih tiketa  
+- Sistem ne smije uključiti nezatvorene tikete u izračun  
+- Korisnik treba dobiti poruku ako nema podataka
+---
+<a id="us-48"></a>
+### US-48: *Kao tehničar, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid o težini problema koji se riješio*
+**Acceptance Criteria:**
+
+- Kada tehničar otvori izvještaj, tada vidi prosječno vrijeme rješavanja  
+- Kada podaci postoje, tada izračun odgovara stvarnim podacima  
+- Sistem
