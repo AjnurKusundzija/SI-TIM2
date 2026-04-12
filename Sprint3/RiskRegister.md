@@ -16,11 +16,10 @@ Ovaj dokument služi za identifikaciju, analizu i planiranje odgovora na rizike 
 | R-08 |  Neovlašteni pristup podacima | Dolazak do situacije gdje neovlaštena uloga ima pristup informacijama(na primjer, korisnik ima pristup admin dashboardu, admin ima pristup ličnim podacima korisnika, itd.) | Loša tehnička implementacija autorizacijskog dijela projekta. | Niska |  Visok | Srednje  | | Developeri, backend developeri, arhitekta za bazu podataka  | Identifikovan
 | R-09 | Pogrešna automatizacija i generisanje svih vrsta izvještaja | Pogrešan prikaz izvještaja koji su dostupni u admin dashboardu i ostalo | Loš preračun i tehnička implementacija za generisanje svih vrsta izvještaja za agente, admine i tehničare | Srednje  | Srednje  |  Srednje| | Developeri, Backend developeri | Identifikovan
 | R-10 | Spam i korištenje neprimjerenog jezika | Namjerno/nenamjerno slanje većeg broja tiketa i korištenje neprimjerenog jezika tokom pisanja tiketa | Loša tehnička implementacija za filtriranje neprimjerenih riječi i za validaciju poruke u tiketu. Loša tehnička implementacija za spriječavanje spama sa tiketima | Srednje  | Srednje  | Srednja  | | Developeri (Backend, Frontend) | Identifikovan 
-| R-11 |  | | |  |  |  | y|  | 
-| R-12 |  | | |  |  |  | |  | 
----
-### Legenda i smjernice:
-* **Vjerovatnoća:** (Niska, Srednja, Visoka)
-* **Uticaj:** (Nizak, Srednji, Visok)
-* **Prioritet rizika:** Obično se računa kao kombinacija (ili proizvod) Vjerovatnoće i Uticaja (npr. Nizak, Srednji, Visok, Kritičan).
-* **Status:** (Identifikovan, Aktivan, Ublažen, Zatvoren)
+| R-11 | Neučinkovitost FAQ Segmenta | Isti ili veći broj tiketa nakon implementiranja FAQ Segmenta u sistema | Pitanja i odgovori koji su izabrani prethodno za FAQ Segment su bespotrebna i besmislena. Loša frontend implementacija FAQ segmenta (neintuitivno, loš dizajn, nepregledno i nevidljivo)| Nisko | Nisko  | Nisko | | Developeri, Frontend developeri| Identifikovan 
+| R-12 | Gubitak integriteta podataka | Istovremeno ažuriranje istog tiketa od strane dva agenta gdje dolazi do gubitka informacija| Nedostatak mehanizma zaključavanja (locking) zapisa u bazi podataka. | Srednja | Srednje  | Srednje  |Implementacija optimističnog zaključavanja (optimistic locking) na nivou baze | Backend developeri, Administrator baze podataka | Identifikovan 
+| R-13 | Problemi sa interoperabilnošću|Sistem ne može povući podatke o korisničkim paketima iz postojećeg telekom sistema | Nepodudaranje formata podataka ili zastarjeli API eksternog sistema| Srednje | Visok  | Visok  | | Developeri | Identifikovan 
+| R-15 | Gubitak podataka | |  |  |   | |  |  
+| R-16 | Preopterećenje Sprinta 11| |  |  |   | |  |  
+| R-17 | | |  |  |   | |  |  
+
