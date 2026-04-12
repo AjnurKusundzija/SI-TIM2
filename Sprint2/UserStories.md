@@ -403,6 +403,7 @@ Sprint 7
 
 ### User Stories
 
+<a id="us-21"></a>
 #### **US-21:** Kao agent, želim da postavim interni prioritet tiketa, kako bih efikasno upravljao zadacima.
 
 **Acceptance Criteria:**
@@ -414,6 +415,7 @@ Sprint 7
 - Kada nema odabranog internog priroteta, tada sistem mora prikazati poruku da prioritet nije postavljen
 
 
+<a id="us-22"></a>
 #### **US-22:** Kao korisnik, želim da postavim prioritet svog problema, kako bih označio hitnost.
 
 **Acceptance Criteria:**
@@ -454,6 +456,7 @@ Sprint 7
 
 ### User Stories
 
+<a id="us-39"></a>
 #### **US-39:** Kao tehničar, želim da vidim osnovne informacije o tiketu, kako bih razumio problem.
 
 **Acceptance Criteria:**
@@ -463,6 +466,7 @@ Sprint 7
 - Sistem ne smije omogućiti pregled tiketa koji nisu dodijeljeni tehničaru
 
 
+<a id="us-40"></a>
 #### **US-40:** Kao tehničar, želim da vidim podatke o korisniku, kako bih imao kontekst.
 
 **Acceptance Criteria:**
@@ -546,6 +550,7 @@ Sprint 8
 
 ### User Stories
 
+<a id="us-31"></a>
 #### **US-31:** Kao korisnik, želim da pretražujem tikete, kako bih brzo pronašao željeni.
 
 **Acceptance Criteria:**
@@ -555,6 +560,7 @@ Sprint 8
 - Kada pretraga ne vrati rezultate, ako nema podudaranja, tada sistem mora prikazati poruku "Nema rezultata"
 
 
+<a id="us-32"></a>
 #### **US-32:** Kao korisnik, želim da filtriram tikete, kako bih lakše upravljao listom.
 
 **Acceptance Criteria:**
@@ -595,6 +601,7 @@ Sprint 8
 
 ### User Stories
 
+<a id="us-37"></a>
 #### **US-37:** Kao tehničar, želim da promijenim status tiketa, kako bih označio napredak.
 
 **Acceptance Criteria:**
@@ -604,6 +611,7 @@ Sprint 8
 - Sistem mora evidentirati promjenu stanja tiketa
 
 
+<a id="us-38"></a>
 #### **US-38:** Kao tehničar, želim da evidentiram promjene, kako bih pratio historiju.
 
 **Acceptance Criteria:**
@@ -806,6 +814,7 @@ Sprint 9
 
 ### User Stories
 
+<a id="us-33"></a>
 #### **US-33:** Kao administrator, želim da pregledam korisničke profile, kako bih imao uvid u podatke.
 
 **Acceptance Criteria:**
@@ -817,6 +826,7 @@ Sprint 9
 - Kada administrator vrši pretragu korisnika, ako nema podudaranja, tada sistem šalje poruku da korisnik nike pronađen
 
 
+<a id="us-34"></a>
 #### **US-34:** Kao administrator, želim da uređujem profile, kako bih održavao tačnost podataka.
 
 **Acceptance Criteria:**
@@ -860,6 +870,7 @@ Sprint 9
 
 ### User Stories
 
+<a id="us-23"></a>
 #### **US-23:** Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.
 
 **Acceptance Criteria:**
@@ -870,6 +881,7 @@ Sprint 9
 - Kada administrator izvrši pokušaj preraaspodjele agenata, ako dođe do greške ili nemogućnosti odabrane perraspodjele, sistme mora poslati poruku upozorenja
 
 
+<a id="us-24"></a>
 #### **US-24:** Kao administrator, želim da vidim pregled raspodjele timova, kako bih donio bolje odluke.
 
 **Acceptance Criteria:**
@@ -912,6 +924,7 @@ Sprint 10
 
 ### User Stories
 
+<a id="us-25"></a>
 #### **US-25:** Kao sistem, želim da automatski dodijelim tiket agentu, kako bi se ubrzalo rješavanje.
 
 **Acceptance Criteria:**
@@ -923,6 +936,7 @@ Sprint 10
 - Sistem mora prikazati poruku ukoliko nema definisanih pravila dodjele
 
 
+<a id="us-26"></a>
 #### **US-26:** Kao administrator, želim da definišem pravila dodjele, kako bih kontrolisao proces.
 
 **Acceptance Criteria:**
@@ -963,6 +977,7 @@ Sprint 10
 
 ### User Stories
 
+<a id="us-27"></a>
 #### **US-27:** Kao agent, želim da proslijedim tiket drugom agentu, kako bi problem bio riješen.
 
 **Acceptance Criteria:**
@@ -973,6 +988,7 @@ Sprint 10
 - Kada agent pokuša proslijediti tiket samom sebi, ako izvrši tu akciju, tada sistem mora spriječiti prosljeđivanje
 
 
+<a id="us-28"></a>
 #### **US-28:** Kao agent, želim da dodam komentar prilikom prosljeđivanja, kako bih objasnio situaciju.
 
 **Acceptance Criteria:**
@@ -1013,6 +1029,7 @@ Sprint 10
 
 ### User Stories
 
+<a id="us-29"></a>
 #### **US-29:** Kao agent, želim da vidim sve tikete, kako bih imao potpuni pregled.
 
 **Acceptance Criteria:**
@@ -1022,6 +1039,7 @@ Sprint 10
 - Kada administrator koristi sistem, ako pristupa tiketu, tada sistem ne smije ograničiti 
 
 
+<a id="us-30"></a>
 #### **US-30:** Kao agent, želim da vidim detalje svakog tiketa, kako bih imao detaljniji uvid.
 
 **Acceptance Criteria:**
@@ -1059,6 +1077,7 @@ Sprint 10
 
 ### User Stories
 
+<a id="us-35"></a>
 #### **US-35:** Kao tehničar, želim da vidim svoje tikete, kako bih znao na čemu radim.
 
 **Acceptance Criteria:**
@@ -1068,6 +1087,7 @@ Sprint 10
 - Kada tehničar nema dodijeljenih tiketa, ako otvori listu, tada sistem mora prikazati poruku o praznoj listi
 
 
+<a id="us-36"></a>
 #### **US-36:** Kao tehničar, želim da filtriram tikete, kako bih organizovao rad.
 
 **Acceptance Criteria:**

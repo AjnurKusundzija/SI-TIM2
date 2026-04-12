@@ -2,6 +2,7 @@
 
 
 
+<a id="uc-01"></a>
 # UC-01: Login korisnika
 ### Akter:
 Korisnik / Agent / Tehničar / Menadžment
@@ -32,6 +33,7 @@ Korisnik uspješno pristupa sistemu
 
 ---
 
+<a id="uc-02"></a>
 # UC-02: Upravljanje korisničkim profilom
 ### Akter: 
 Korisnik 
@@ -64,6 +66,7 @@ A5 : Korisnik odustaje od promjene → sistem ne donosi izmjene
 
 ---
 
+<a id="uc-03"></a>
 # UC-03: Pregled paketa
 ### Akter: 
 Korisnik 
@@ -87,6 +90,7 @@ Korisnik vidi informacije o paketima
 
 ---
 
+<a id="uc-04"></a>
 # UC-04: Kreiranje novog tiketa
 ### Akter:
 Korisnik
@@ -117,6 +121,7 @@ Tiket je uspješno kreiran
 
 ---
 
+<a id="uc-05"></a>
 # UC-05: Dodjela tiketa
 ### Akter:
 Sistem
@@ -143,6 +148,7 @@ Tiket je automatski dodijeljen dostupnom agentu ili označen kao nedodijeljen
 
 ---
 
+<a id="uc-06"></a>
 # UC-06 : Prosljeđivanje tiketa
 ### Akter:
 Agent 
@@ -169,6 +175,7 @@ Tiket je prosljeđen novom agentu koji prima notifikaciju i interni komentar
 
 ---
 
+<a id="uc-07"></a>
 # UC-07: Pregled vlastitih tiketa 
 ### Akter:
 Korisnik 
@@ -197,6 +204,7 @@ Korisnik ima pregled svih svojih tiketa
 
 ---
 
+<a id="uc-08"></a>
 # UC-08: Pregled dodijeljenih tiketa 
 ### Akter:
 Tehničar 
@@ -222,6 +230,7 @@ Tehničar ima prikaz dodijeljenih tiketa
 
 ---
 
+<a id="uc-09"></a>
 # UC-09: Upravljanje tiketima 
 ### Akter:
 Agent 
@@ -248,6 +257,7 @@ Tiket ažuriran
 
 ---
 
+<a id="uc-10"></a>
 # PROVJERITI ZA PORUKE UC-10. Komunikacija kroz tiket
 ### Akter:
 Korisnik / Agent / Tehničar
@@ -274,6 +284,7 @@ Poruka je evidentirana
 
 --- 
 
+<a id="uc-11"></a>
 # UC-11: Ažuriranje statusa tiketa
 ### Akter:
 Tehničar
@@ -301,6 +312,7 @@ Status tiketa je ažuriran, historija promjena je evidentirana, korisnik je obav
 
 ---
 
+<a id="uc-12"></a>
 # UC-12 : Zatvaranje tiketa -> vidjeti kako radi po novom sistemu
 Akter: Korisnik, Agent 
 Naziv use casea: Zatvaranje tiketa 
@@ -317,6 +329,7 @@ Ishod: Tiket zatvoren
 
 ---
 
+<a id="uc-13"></a>
 # UC-13: Ocjenjivanje tiketa
 # Akter: 
 Korisnik 
@@ -340,6 +353,7 @@ Korisnik ocjenjuje kvalitetu rješenja zatvorenog tiketa kao feedback o pruženo
 ---
 
 
+<a id="uc-14"></a>
 # UC-14: Pretraga tiketa
 ### Akter: 
 Korisnik, Agent 
@@ -361,6 +375,7 @@ A1 : Nema rezultata → sistem prikazuje poruku
 
 ---
 
+<a id="uc-15"></a>
 # UC-15 : Pregled i uređivanje korisničkih profila
 ### Akter :
 Administrator
@@ -388,6 +403,7 @@ Korisnički profil je ažuriran, promjena evidentirana
 
 ---
 
+<a id="uc-16"></a>
 # UC-16: Upravljanje timovima
 ###  Akter:
 Administrator 
@@ -409,6 +425,7 @@ Timovi su uspješno ažurirani
 
 ---
 
+<a id="uc-17"></a>
 # UC-17 : Generisanje izvještaja
 ### Akter:
 Menadžment
@@ -432,6 +449,7 @@ Izvještaj je generisan
 
 ---
 
+<a id="uc-18"></a>
 # UC-18: FAQ pregled
 ### Akter: 
 Korisnik 
@@ -453,6 +471,7 @@ Korisnik dobija informacije
 
 ---
 
+<a id="uc-19"></a>
 # UC-19: Odjava iz sistema
 ### Akter:
 Korisnik/Adminsitrator/Tehničar/Agent
