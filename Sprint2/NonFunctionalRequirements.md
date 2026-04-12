@@ -49,7 +49,7 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 | ID                  | Naziv zahtjeva                                         | Kategorija     | Prioritet | Status        |
 | :------------------ | :----------------------------------------------------- | :------------- | :-------: | :------------ |
 | [NFR-01](#nfr-01)   | Vrijeme odziva pri učitavanju stranica                 | Efikasnost     |     1     | Identifikovan |
-| [NFR-02](#nfr-02)   | Real-time ažuriranje statusa tiketa                    | Efikasnost     |     1     | Identifikovan |
+| [NFR-02](#nfr-02)   | Real-time komunikacija i ažuriranje statusa tiketa     | Efikasnost     |     1     | Identifikovan |
 | [NFR-03](#nfr-03)   | Propusnost – broj istovremenih korisnika               | Efikasnost     |     2     | Identifikovan |
 | [NFR-04](#nfr-04)   | Brzina kreiranja tiketa                                | Efikasnost     |     2     | Identifikovan |
 | [NFR-05](#nfr-05)   | Dostupnost sistema (uptime)                            | Pouzdanost     |     1     | Identifikovan |
@@ -86,10 +86,10 @@ Nefunkcionalni zahtjevi su organizovani u tri grupe prema Sommerville-u:
 
 #### NFR-02
 
-- **Naziv zahtjeva:** Stvarno (real-time) ažuriranje statusa tiketa
+- **Naziv zahtjeva:** Stvarna (real-time) komunikacija i ažuriranje statusa tiketa
 - **Kategorija:** Efikasnost (`EF`)
-- **Opis zahtjeva:** Svaka promjena statusa tiketa (npr. s "Zaprimljeno" na "U obradi") mora biti vidljiva svim aktivnim korisnicima koji prate taj tiket u roku od **1 sekunde** od trenutka promjene, bez potrebe za ručnim osvježavanjem stranice. Komunikacija se ostvaruje putem WebSocket protokola.
-- **Kako će se provjeravati:** Manuelno testiranje s dva aktivna korisnička naloga istovremeno otvorena na različitim preglednicima, mjerenjem kašnjenja promjene statusa. Automatizovani test simulira više istovremenih WebSocket konekcija.
+- **Opis zahtjeva:** Kada korisnik ili agent pošalje novu poruku unutar tiketa, poruka mora biti vidljiva drugoj strani u roku od **1 sekunde** od slanja, bez potrebe za ručnim osvježavanjem stranice. Također, svaka promjena statusa tiketa mora biti vidljiva svim aktivnim korisnicima koji prate taj tiket u roku od **1 sekunde** od trenutka promjene. Komunikacija i ažuriranje statusa ostvaruju se putem WebSocket protokola.
+- **Kako će se provjeravati:** Manuelno testiranje s dva aktivna korisnička naloga istovremeno otvorena na različitim preglednicima, mjerenjem kašnjenja prikaza nove poruke i promjene statusa. Automatizovani test simulira više istovremenih WebSocket konekcija i provjerava isporuku poruka i prikaz promjene statusa bez ručnog osvježavanja.
 - **Prioritet:** 1
 - **Napomena:** Sistem mora podržavati rad u realnom vremenu. Implementacija zahtijeva stabilnu WebSocket infrastrukturu.
 
