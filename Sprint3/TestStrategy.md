@@ -33,7 +33,7 @@ Telecom Customer Support System
 
 ## Nivoi testiranja
 
-Osnovni nivoi iz template-a su unit, integracijsko, sistemsko i prihvatno testiranje. Na osnovu definisanih nefunkcionalnih zahtjeva iz repozitorija, ova strategija dodatno uključuje sigurnosno i performansno testiranje jer su eksplicitno traženi kroz [NFR-01](../Sprint2/NonFunctionalRequirements.md#nfr-01), [NFR-03](../Sprint2/NonFunctionalRequirements.md#nfr-03), [NFR-04](../Sprint2/NonFunctionalRequirements.md#nfr-04), [NFR-27](../Sprint2/NonFunctionalRequirements.md#nfr-27), [NFR-28](../Sprint2/NonFunctionalRequirements.md#nfr-28), [NFR-35](../Sprint2/NonFunctionalRequirements.md#nfr-35), [NFR-36](../Sprint2/NonFunctionalRequirements.md#nfr-36), [NFR-37](../Sprint2/NonFunctionalRequirements.md#nfr-37) i [NFR-38](../Sprint2/NonFunctionalRequirements.md#nfr-38).
+Osnovni nivoi testiranja su unit, integracijsko, sistemsko i prihvatno testiranje. Na osnovu definisanih nefunkcionalnih zahtjeva iz repozitorija, ova strategija dodatno uključuje sigurnosno i performansno testiranje jer su eksplicitno traženi kroz [NFR-01](../Sprint2/NonFunctionalRequirements.md#nfr-01), [NFR-03](../Sprint2/NonFunctionalRequirements.md#nfr-03), [NFR-04](../Sprint2/NonFunctionalRequirements.md#nfr-04), [NFR-27](../Sprint2/NonFunctionalRequirements.md#nfr-27), [NFR-28](../Sprint2/NonFunctionalRequirements.md#nfr-28), [NFR-35](../Sprint2/NonFunctionalRequirements.md#nfr-35), [NFR-36](../Sprint2/NonFunctionalRequirements.md#nfr-36), [NFR-37](../Sprint2/NonFunctionalRequirements.md#nfr-37) i [NFR-38](../Sprint2/NonFunctionalRequirements.md#nfr-38).
 
 | Nivo testiranja | Fokus | Odgovorni | Izlazni kriterij |
 | --- | --- | --- | --- |
