@@ -14,22 +14,32 @@ Ovaj pristup osigurava jasnu razdvojenost odgovornosti (separation of concerns),
 
 Sistem podržava četiri korisničke uloge: **Klijent, Agent, Tehničar i Administrator**, pri čemu se pristup podacima i funkcionalnostima kontroliše putem RBAC mehanizma (Role-Based Access Control).
 
+<p align="center">
+  <img src="images/troslojna_arhitektura.png"><br>
+  <em>Slika 1: Prikaz troslojne arhitekture sistema</em>
+</p>
+
 ---
 
 ## 2. Glavne komponente sistema
 
 | Komponenta | Tip | Opis |
 |---|---|---|
-| Frontend SPA | Prezentacijski sloj | React aplikacija – korisnički interfejs za sve uloge |
-| Auth modul | Backend | Prijava, odjava, upravljanje sesijama i JWT tokenima |
-| Ticket modul | Backend | Kreiranje, pregled, ažuriranje i zatvaranje tiketa |
-| Notification servis | Backend / Real-time | WebSocket server za real-time obavještenja |
-| User Management | Backend | Upravljanje korisničkim profilima i ulogama |
-| Reporting modul | Backend | Generisanje izvještaja i agregatnih metrika |
-| Admin Dashboard | Frontend + Backend | Pregled ključnih metrika za administratora |
-| Baza podataka | Sloj podataka | Relaciona baza za čuvanje svih poslovnih podataka |
-| RBAC engine | Backend | Kontrola pristupa na osnovu korisničkih uloga |
-| Audit log servis | Backend | Evidentiranje svih promjena statusa i akcija korisnika |
+| [Frontend SPA](#31-frontend-spa-react) | Prezentacijski sloj | React aplikacija – korisnički interfejs za sve uloge |
+| [Auth modul](#32-auth-modul) | Backend | Prijava, odjava, upravljanje sesijama i JWT tokenima |
+| [Ticket modul](#33-ticket-modul) | Backend | Kreiranje, pregled, ažuriranje i zatvaranje tiketa |
+| [Notification servis](#34-notification-servis-websocket) | Backend / Real-time | WebSocket server za real-time obavještenja |
+| [User Management](#35-user-management) | Backend | Upravljanje korisničkim profilima i ulogama |
+| [Reporting modul](#36-reporting-modul) | Backend | Generisanje izvještaja i agregatnih metrika |
+| [Admin Dashboard](#37-admin-dashboard) | Frontend + Backend | Pregled ključnih metrika za administratora |
+| [Baza podataka](#38-relaciona-baza-podataka) | Sloj podataka | Relaciona baza za čuvanje svih poslovnih podataka |
+| [RBAC engine](#39-rbac-engine) | Backend | Kontrola pristupa na osnovu korisničkih uloga |
+| [Audit log servis](#310-audit-log-servis) | Backend | Evidentiranje svih promjena statusa i akcija korisnika |
+
+<p align="center">
+  <img src="images/glavne_komponente.png"><br>
+  <em>Slika 2: Pregled glavnih komponenti i modula sistema i njihove uloge u arhitekturi</em>
+</p>
 
 ---
 
@@ -87,6 +97,11 @@ Zapisuje sve relevantne poslovne akcije: promjene statusa tiketa, prosljeđivanj
 4. Ticket modul obrađuje zahtjev, upisuje podatke u bazu i vraća HTTP 201 odgovor za manje od 3 sekunde.
 5. Frontend prikazuje potvrdu s generisanim ID-om tiketa.
 
+<p align="center">
+  <img src="images/sekv_dijag_create.png"><br>
+  <em>Slika 3: Sekvencijalni dijagram koji prikazuje standardni REST tok za kreiranje i obradu tiketa putem HTTP zahtjeva, uključujući autentifikaciju i RBAC provjere</em>
+</p>
+
 ### 4.2 Real-time tok (WebSocket)
 
 1. Agent mijenja status tiketa putem REST API-ja.
@@ -94,12 +109,22 @@ Zapisuje sve relevantne poslovne akcije: promjene statusa tiketa, prosljeđivanj
 3. WebSocket server isporučuje notifikaciju klijentu u roku od 1 sekunde.
 4. Klijentska SPA ažurira UI bez potrebe za refreshom stranice.
 
+<p align="center">
+  <img src="images/sekv_dijag_status.png"><br>
+  <em>Slika 4: Sekvencijalni dijagram real-time komunikacije putem WebSocket-a pri promjeni statusa tiketa i slanju notifikacija klijentskoj strani aplikacije</em>
+</p>
+
 ### 4.3 Autentifikacijski tok
 
 1. Korisnik unosi email i lozinku, Frontend šalje `POST /auth/login`.
 2. Backend provjerava hash lozinke (bcrypt/Argon2); pri neuspjehu vraća generičku poruku.
 3. Pri uspjehu, backend izdaje JWT token koji Frontend čuva u memoriji ili HttpOnly kolačiću.
 4. Sve naredne sesije prenose JWT token u headeru; middleware ga verificira pri svakom zahtjevu.
+
+<p align="center">
+  <img src="images/sekv_dijag_login.png"><br>
+  <em>Slika 5: Sekvencijalni dijagram autentifikacijskog procesa korisnika, uključujući verifikaciju lozinke i izdavanje JWT tokena</em>
+</p>
 
 ### 4.4 Komunikacijski kanali
 
