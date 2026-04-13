@@ -6,26 +6,32 @@
 
 **Akter:** Korisnik / Agent / Tehničar / Menadžment
 
-**Naziv use casea:** Login u sistem
+**Naziv use casea:** Prijava u sistem (Login)
 
 **Kratak opis:**
-Korisnik se prijavljuje u sistem unosom email adrese i lozinke kako bi pristupio svom profilu i odgovarajućim funkcionalnostima sistema.
+Proces omogućava korisniku siguran pristup sistemu unosom e-mail adrese i lozinke, uz validaciju podataka i preusmjeravanje na odgovarajući interfejs u skladu s korisničkom ulogom
 
 **Preduslovi:**
 - Korisnik ima kreiran nalog u sistemu
 - Korisnik nije trenutno prijavljen
 
 **Glavni tok:**
-1. Korisnik unosi email adresu i lozinku
-2. Korisnik klikne na dugme "Login"
-3. Sistem validira unesene podatke
-4. Korisnik se uspješno prijavljuje
+1. Korinsik otvara formu za prijavu
+2. Korisnik unosi email adresu i lozinku
+3. Sistem validira format e-mail adrese
+4. Korisnik klikne na dugme "Login"
+5. Sistem validira unesene podatke
+6. Sistem preusmjerava korisnika na dashboard prema njegovoj ulozi
 
 **Alternativni tokovi:**
-- A1: Polja prazna → sistem traži unos
-- A2: Pogrešni podaci → poruka o grešci
-- A3: Nalog ne postoji → ponuda registracije
-- A4: Sistem nedostupan → login nije moguć
+- A1: 
+ Ako korisnik ne unese e-mail ili lozinku, sistem prikazuje poruku:
+ > "Sva polja su obavezna."
+- A2: Ako su uneseni pogrešni podaci, sistem priakzuje poruka o grešci
+> "Pogrešan e-mail ili lozinka."
+- A3: Ako nalog ne postoji, korinsiku se nudi mogučnost registracije
+- A4: Ukoliko je sistem nedostupan prikazuje se poruka :
+> "Trenutno nije moguće izvršiti prijavu. Pokušajte kasnije."
 
 **Ishod:** Korisnik pristupa sistemu
 
@@ -38,26 +44,33 @@ Korisnik se prijavljuje u sistem unosom email adrese i lozinke kako bi pristupio
 **Naziv use casea:** Izmjena korisničkih podataka
 
 **Kratak opis:**
-Korisnik mijenja svoju email adresu ili lozinku kako bi imao tačne kontakt informacije u sistemu.
+Korisnik mijenja svoju email adresu ili lozinku kako bi imao tačne kontakt informacije u sistemu
 
 **Preduslovi:**
 - Korisnik je prijavljen u sistem
 
 **Glavni tok:**
-1. Korisnik otvara profil
+1. Korisnik otvara sekciju "Profil"
 2. Korisnik pristupa sekciji za upravljanje profilom
-3. Korisnik odabire opciju za promjenu podataka
+3. Korisnik odabire opciju za promjenu podataka "Uredi profil"
 4. Korisnik unosi trenutne podatke za validaciju
 5. Korisnik unosi nove podatke
 6. Korisnik potvrđuje izmjene
-7. Sistem ažurira podatke
+7. Sistem validira unese podatke
+8. Sistem ažurira podatke
 
 **Alternativni tokovi:**
-- A1: Nevalidan email → odbijanje
-- A2: Pogrešna lozinka → odbijanje
-- A3: Isti podaci → greška
-- A4: Nevalidna lozinka → odbijanje
-- A5: Odustajanje → bez izmjene
+- A1: Nevalidan format e-maila
+> Ukoliko korisnik unese nevalidan email sistem odbija unos i zahtijeva ispravku 
+- A2: Neispravna trenutna lozinka
+> Ako korisnik unose neispravnu trenutnu lozinku sistem odbija unos i zahtjeva ispravu ; korisniku prikazuje poruku :
+> "Netačna lozinka!" 
+- A3: Unos identičnih podataka
+> Sistem ne vrši izmjene jer nema promjena, korisniku prikazuje poruku : "Nova lozinka se mora razlikovati od prethodne!"
+- A4: Nevalidna lozinka 
+> Sistem ne prihvata novu lozinku dok ne zadovolji kriterije 
+- A5: Odustajanje 
+> Korisnik napušta stranicu bez spremanja izmjena
 
 **Ishod:** Podaci uspješno ažurirani u sistemu
 
@@ -84,10 +97,14 @@ Korisnik pregledava listu svojih aktivnih paketa i pretplata kako bi imao pregle
 5. Sistem prikazuje detalje o odabranom paketu
 
 **Alternativni tokovi:**
-- A1: Nema paketa → poruka
-- A2: Greška učitavanja → pokušaj ponovo
+- A1: Nema aktivnih paketa 
+> Sistem prikazuje prazno stanje bez liste paketa
+- A2: Greška pri dohvatanju paketa
+> Sistem ne učitava listu paketa i prikazuje korisniku poruku : "Greška pri učitavanju!"
+- A3: Paket više nije dostupan
+> Sistem ne može prikazatu detalje i vraća korisnika na listu
 
-**Ishod:** Korisnik vidi informacije o paketima
+**Ishod:** Korisnik ima pregled svojih paketa
 
 ---
 
@@ -98,24 +115,29 @@ Korisnik pregledava listu svojih aktivnih paketa i pretplata kako bi imao pregle
 **Naziv use casea:** Kreiranje novog tiketa
 
 **Kratak opis:**
-Korisnik kreira novi tiket unosom opisa problema, tipa i prioriteta kako bi prijavio poteškoću tehničkoj podršci.
+Korisnik kreira novi tiket unosom opisa problema, tipa i prioriteta kako bi prijavio poteškoću tehničkoj podršci
 
 **Preduslovi:**
 - Korisnik je prijavljen
 
 **Glavni tok:**
-1. Korisnik otvara formu za kreiranje tiketa
-2. Korisnik unosi podatke ili bira iz predefinisane liste (naslov, opis, tip, prioritet)
-3. Korisnik klikne na dugme "Pošalji"
-4. Sistem validira podatke
-5. Sistem kreira tiket i dodjeljuje ID
-6. Sistem prikazuje potvrdu o uspješnom kreiranju tiketa
+1. Korisnik otvara sekciju ""Kreiraj tiket"
+2. Sistem prikazuje formu ta unos podataka
+3. Korisnik unosi podatke ili bira iz predefinisane liste (naslov, opis, tip, prioritet)
+4. Korisnik klikne na dugme "Pošalji"
+5. Sistem validira podatke
+6. Sistem kreira tiket sa statusom "OTVOREN" i dodjeljuje ID
+7. Sistem prikazuje potvrdu o uspješnom kreiranju tiketa
 
 **Alternativni tokovi:**
-- A1: Nepotpuni podaci → ispravka
-- A2: Nevalidan unos → odbijanje
-- A3: Odustajanje → zatvaranje
-- A4: Greška sistema → tiket nije kreiran
+- A1: Nepotpuni podaci 
+> Ukoliko obavezna polja nisu popunjena sistem priakzuje poruku : "Molimo popunite sva obavezna polja!"
+- A2: Nevalidan unos 
+> Ako opis sadrži nedozvoljene znakove ili je prekratak, sistem ne nastavlja sa kreiranjem tiketa
+- A3: Odustajanje 
+> Ako korisnik odustane prilikom procesa kreiranja tiketa sistem ne čuva unese podatke
+- A4: Greška sistema 
+> Ukoliko dođe do greške pri kreiranju tiketa sistem priakzuje poruu : "Došlo je do greške. Tiket nije kreiran."
 
 **Ishod:** Tiket je uspješno kreiran
 
@@ -123,12 +145,12 @@ Korisnik kreira novi tiket unosom opisa problema, tipa i prioriteta kako bi prij
 
 ## UC-5: Pregled vlastitih tiketa
 
-**Akter:** Korisnik
+**Akter:** Korisnik / Tehničar
 
 **Naziv use casea:** Pregled liste vlastitih tiketa
 
 **Kratak opis:**
-Korisnik pregledava listu svih svojih tiketa s mogućnošću uvida u detalje istih.
+Korisnik pregledava listu svih svojih tiketa s mogućnošću uvida u detalje istih
 
 **Preduslovi:**
 - Korisnik je prijavljen
@@ -143,36 +165,12 @@ Korisnik pregledava listu svih svojih tiketa s mogućnošću uvida u detalje ist
 6. Sistem prikazuje odabrani tiket s detaljnijim opisom
 
 **Alternativni tokovi:**
-- A1: Nema tiketa → poruka
-- A2: Greška → pokušaj ponovo
-- A3: Tiket ne postoji → greška
+- A1: Nema tiketa 
+> Lista ostaje prazna
+- A2: Nevažeći filter
+> Ukoliko korisnik primjeni filter koji ne vrijedi za postojeće tikete, tada prikaz liste tiketa se ne mijenja
 
 **Ishod:** Korisnik ima pregled svih svojih tiketa
-
----
-
-## UC-6: Pregled dodijeljenih tiketa
-
-**Akter:** Tehničar
-
-**Naziv use casea:** Pregled vlastitih tiketa
-
-**Kratak opis:**
-Tehničar pregledava listu tiketa koji su mu dodijeljeni kako bi mogao upravljati svojim zadacima.
-
-**Preduslovi:**
-- Tiketi dodijeljeni
-- Tehničar je prijavljen u sistem
-
-**Glavni tok:**
-1. Tehničar otvara listu
-2. Sistem prikazuje njegove tikete
-
-**Alternativni tokovi:**
-- A1: Nema tiketa → poruka
-- A2: Greška učitavanja → pokušaj ponovo
-
-**Ishod:** Tehničar ima pregled svojih dodijeljenih tiketa
 
 ---
 
@@ -189,16 +187,23 @@ Omogućava komunikaciju između korisnika i podrške.
 - Tiket postoji
 
 **Glavni tok:**
-1. Akter otvara tiket
-2. Piše poruku
-3. Klikne "Pošalji"
-4. Sistem sprema i prikazuje poruku
+1. Akter otvara tiket za detaljniji pregled
+2. Sistem prikazuje historiju poruka
+3. Akter unosi novu poruku u tekstualno polje
+4. Akter klikne na dugme "Pošalji"
+5. Sistem validira sadržaj poruke
+6. Sistem prikazuje novu poruku u thread-u
+7. Ostali učesnici razgovora dobijaju notifikaciju o novoj poruci
 
 **Alternativni tokovi:**
-- A1: Prazna poruka → odbijanje
-- A2: Preduga poruka → ograničenje
-- A3: Greška slanja → poruka nije sačuvana
-- A4: Tiket zatvoren → slanje nije moguće
+- A1: Prazna poruka 
+> Ukoliko poruka ima prazan sadržaj, sistem prikazuje notifikaciju : "Poruka ne može biti prazna!"
+- A2: Preduga poruka 
+> Ukoliko poruka prekorači maksimalan broj karaktera dozovljen, prikazuje se notifikacija : "Prekoračen maksimalan broj karaktera."
+- A3: Greška pri slanju 
+> Sistem ne ažurira thread komunikacije, i šalje korisniku obavijest o neuspjelom slanju
+- A4: Tiket zatvoren
+> Ukoliko je tiket označen sa statusom "ZATVOREN" komunikacije je onemogućena
 
 **Ishod:** Poruka je evidentirana
 
@@ -215,19 +220,24 @@ Agent vidi sve tikete u sistemu.
 
 **Preduslovi:**
 - Agent je prijavljen
+- Sistem sadrži tikete
 
 **Glavni tok:**
-1. Agent otvara listu tiketa
-2. Sistem prikazuje sve tikete
-3. Agent bira tiket
-4. Mijenja status ili prioritet
-5. Sistem sprema izmjene
+1. Agent otvara sekciju "Tiketi"
+2. Sistem prikazuje listu svih tiketa
+3. Agent primjenjuje filter
+4. Sistem prikazje sortiranu listu tiketa prema odabranom tiketu
+5. Agwnt mijwnja status ili prioritet
+6. Sistem validira izmjene
+7. Sistem sprema izmjene
 
 **Alternativni tokovi:**
-- A1: Nema tiketa → poruka
-- A2: Greška učitavanja → pokušaj ponovo
-- A3: Nevažeći unos → odbijanje
-- A4: Nema prava → zabrana
+- A1: Nema tiketa 
+> Sistem prikazuje praznu listu
+- A3: Nevažeće izmjene
+> Sistem odbija unos i prikazuje upozorenje agentu
+- A4: Nedostatak privilegija
+> Sistem blokira akciju
 
 **Ishod:** Agent ima pregled svih tiketa
 
@@ -240,7 +250,7 @@ Agent vidi sve tikete u sistemu.
 **Naziv use casea:** Automatska dodjela tiketa
 
 **Kratak opis:**
-Sistem automatski dodjeljuje novokreirani tiket odgovarajućem dostupnom agentu prema predefinisanim pravilima.
+Sistem automatski dodjeljuje novokreirani tiket odgovarajućem dostupnom agentu prema predefinisanim pravilima
 
 **Preduslovi:**
 - Tiket postoji
@@ -248,15 +258,18 @@ Sistem automatski dodjeljuje novokreirani tiket odgovarajućem dostupnom agentu 
 - Postoji dostupan agent
 
 **Glavni tok:**
-1. Korisnik uspješno kreira novi tiket
+1. Sistem detektuje novokreirani tiket
 2. Sistem primjenjuje predefinisana pravila dodjele
-3. Sistem pronalazi dostupnog agenta
+3. Sistem pronalazi odgovarajućeg agenta
 4. Sistem dodjeljuje tiket agentu
-5. Agent prima notifikaciju o dodjeli
+5. SIstem evidetnira dodjelu
+6. Agent prima notifikaciju o dodjeli
 
 **Alternativni tokovi:**
-- A1: Nema agenta → nedodijeljen
-- A2: Greška → nije dodijeljen
+- A1: Nema dostupnih agenata
+> Ukoliko u trenutku kreiranja tiketa nema dostupnih agenata tiket ostaje nedidjeljen i tako označen u sistemu
+- A2: Neuspješna evaluacija pravila
+> Sistem koristi fallback strategiju (npr. random dodjela)
 
 **Ishod:** Tiket je automatski dodijeljen dostupnom agentu ili označen kao nedodijeljen
 
@@ -266,23 +279,26 @@ Sistem automatski dodjeljuje novokreirani tiket odgovarajućem dostupnom agentu 
 
 **Akter:** Tehničar
 
-**Naziv use casea:** Promjena statusa
+**Naziv use casea:** Promjena statusa tiketa
 
 **Kratak opis:**
-Tehničar mijenja status tiketa tokom rada.
+Proces omogućava tehničaru da ažurira status tiketa tokom njegovog životnog ciklusa
 
 **Preduslovi:**
 - Tiket je dodijeljen tehničaru
 
 **Glavni tok:**
 1. Tehničar otvara tiket
-2. Mijenja status
-3. Sistem sprema promjenu
+2. Sistem prikazuje detalje tiketa, uključujući trenutni status
+3. Tehničar bira novi status
+4. Sistem validira promjenu
+5. Sistem sprema novi status
 
 **Alternativni tokovi:**
-- A1: Nevalidan status → greška
-- A2: Tiket zatvoren → zabrana
-- A3: Nema pristupa → greška
+- A1: Neispravan redoslijed statusa
+> Ukoliko dođe do ilegalnog redoslijeda statusa (npr. zatvoren → otvoren) sistem blokira promjenu
+- A2: Tiket nije dodijeljen tehničaru
+> Sistem ne dozvoljava izmjene
 
 **Ishod:** Status tiketa je ažuriran
 
@@ -292,22 +308,28 @@ Tehničar mijenja status tiketa tokom rada.
 
 **Akter:** Menadžment
 
-**Naziv use casea:** Izvještaji
+**Naziv use casea:** Generisanje izvještaja
 
 **Kratak opis:**
-Menadžment generiše statističke izvještaje.
+Menadžment generiše statističke izvještaje o radu sistema
 
 **Preduslovi:**
 - Menadžer je prijavljen
 
 **Glavni tok:**
-1. Menadžer bira tip izvještaja
-2. Sistem obrađuje podatke
-3. Prikazuje rezultate
+1. Menadžer otvara sekciju "Izvještaji"
+2. Menadžer bira tip izvještaja
+3. Sistem obrađuje podatke
+4. Sistem generiše izvještaj
+5. Sistem prikazuje rezultate
 
 **Alternativni tokovi:**
-- A1: Nema podataka → poruka
-- A2: Greška → neuspjeh
+- A1: Nema podataka 
+> Sistem prikazuje poruku : "Nema aktuelnih podataka za izvještaj."
+- A2: Greška obrade
+> Izvještaj nije generisan
+- A3: Prevelik skup podataka
+> Sistem ograničava ili parcijalno prikazuje rezultate
 
 **Ishod:** Izvještaj je generisan
 
