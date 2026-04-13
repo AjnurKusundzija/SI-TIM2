@@ -34,7 +34,7 @@ Sistem podržava četiri korisničke uloge: **Klijent, Agent, Tehničar i Admini
 | [Admin Dashboard](#37-admin-dashboard) | Frontend + Backend | Pregled ključnih metrika za administratora |
 | [Baza podataka](#38-relaciona-baza-podataka) | Sloj podataka | Relaciona baza za čuvanje svih poslovnih podataka |
 | [RBAC engine](#39-rbac-engine) | Backend | Kontrola pristupa na osnovu korisničkih uloga |
-| [Audit log servis](#310-audit-log-servis) | Backend | Evidentiranje svih promjena statusa i akcija korisnika |
+| [Audit log servis](#310-audit-log-servis) | Backend | Evidentiranje relevantnih sistemskih i korisničkih aktivnosti |
 
 <p align="center">
   <img src="images/glavne_komponente.png"><br>
@@ -90,7 +90,25 @@ Kontrola pristupa bazirana na ulogama: Klijent, Agent, Tehničar, Administrator.
 
 ### 3.10 Audit log servis
 
-Zapisuje sve relevantne poslovne akcije: promjene statusa tiketa, prosljeđivanja, zatvaranja, promjene prioriteta. Svaki log zapis sadrži timestamp, ID korisnika koji je izvršio akciju i opis promjene. Audit log nije dostupan klijentima ni tehničarima.
+
+Zadužen za evidenciju svih relevantnih sistemskih i poslovnih događaja radi sigurnosti, praćenja aktivnosti i analize sistema.
+
+Audit log obuhvata:
+- promjene nad tiketima (kreiranje, ažuriranje, zatvaranje)
+- komunikaciju unutar tiketa
+- prosljeđivanje tiketa između agenata i tehničara
+- autentifikacijske događaje (uspješan i neuspješan login, logout)
+- administrativne akcije (premještanje agenata između timova)
+- ostale kritične akcije koje utiču na poslovnu logiku sistema
+
+Svaki zapis sadrži:
+- timestamp
+- ID korisnika
+- tip događaja
+- opis akcije
+- referencu na entitet (id entiteta)
+
+Audit log nije dostupan klijentima ni tehničarima, već isključivo administratorima.
 
 ---
 
