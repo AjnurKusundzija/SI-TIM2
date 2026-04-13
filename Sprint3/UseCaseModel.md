@@ -27,9 +27,9 @@ Akter pristupa sistemu unosom e-mail adrese i lozinke uz validaciju podataka
 - A1: Prazna polja
  > Ako akter ne unese e-mail ili lozinku, sistem prikazuje poruku: "Sva polja su obavezna."
 - A2: Pogrešni podaci
-> Ako su uneseni pogrešni podaci, sistem priakzuje poruka o grešci "Pogrešan e-mail ili lozinka."
+> Ako su uneseni pogrešni podaci, sistem priakzuje poruka o grešci: "Pogrešan e-mail ili lozinka."
 - A3: Sistem nedostupan
-> Ukoliko je sistem nedostupan prikazuje se poruka :"Trenutno nije moguće izvršiti prijavu. Pokušajte kasnije."
+> Ukoliko je sistem nedostupan prikazuje se poruka: "Trenutno nije moguće izvršiti prijavu. Pokušajte kasnije."
 
 **Ishod:** Korisnik pristupa sistemu
 
@@ -433,7 +433,7 @@ Agent vidi sve tikete u sistemu.
 2. Sistem prikazuje listu svih tiketa
 3. Agent primjenjuje filter
 4. Sistem prikazje sortiranu listu tiketa prema odabranom tiketu
-5. Agwnt mijwnja status ili prioritet
+5. Agwnt mijenja status ili prioritet
 6. Sistem validira izmjene
 7. Sistem sprema izmjene
 
