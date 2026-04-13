@@ -2,42 +2,40 @@
 
 ---
 
-## UC-1: Login korisnika
+## UC-01: Login korisnika
 
-**Akter:** Korisnik / Agent / Tehničar / Menadžment
+**Akter:** Korisnik, Agent, Tehničar, Menadžment
 
 **Naziv use casea:** Prijava u sistem (Login)
 
 **Kratak opis:**
-Proces omogućava korisniku siguran pristup sistemu unosom e-mail adrese i lozinke, uz validaciju podataka i preusmjeravanje na odgovarajući interfejs u skladu s korisničkom ulogom
+Akter pristupa sistemu unosom e-mail adrese i lozinke uz validaciju podataka
 
 **Preduslovi:**
-- Korisnik ima kreiran nalog u sistemu
-- Korisnik nije trenutno prijavljen
+- Akter ima kreiran nalog u sistemu
+- Akter nije trenutno prijavljen
 
 **Glavni tok:**
-1. Korinsik otvara formu za prijavu
-2. Korisnik unosi email adresu i lozinku
+1. Akter otvara formu za prijavu
+2. Akter unosi email adresu i lozinku
 3. Sistem validira format e-mail adrese
-4. Korisnik klikne na dugme "Login"
+4. Akter klikne na dugme "Login"
 5. Sistem validira unesene podatke
 6. Sistem preusmjerava korisnika na dashboard prema njegovoj ulozi
 
 **Alternativni tokovi:**
-- A1: 
- Ako korisnik ne unese e-mail ili lozinku, sistem prikazuje poruku:
- > "Sva polja su obavezna."
-- A2: Ako su uneseni pogrešni podaci, sistem priakzuje poruka o grešci
-> "Pogrešan e-mail ili lozinka."
-- A3: Ako nalog ne postoji, korinsiku se nudi mogučnost registracije
-- A4: Ukoliko je sistem nedostupan prikazuje se poruka :
-> "Trenutno nije moguće izvršiti prijavu. Pokušajte kasnije."
+- A1: Prazna polja
+ > Ako akter ne unese e-mail ili lozinku, sistem prikazuje poruku: "Sva polja su obavezna."
+- A2: Pogrešni podaci
+> Ako su uneseni pogrešni podaci, sistem priakzuje poruka o grešci "Pogrešan e-mail ili lozinka."
+- A3: Sistem nedostupan
+> Ukoliko je sistem nedostupan prikazuje se poruka :"Trenutno nije moguće izvršiti prijavu. Pokušajte kasnije."
 
 **Ishod:** Korisnik pristupa sistemu
 
 ---
 
-## UC-2: Upravljanje korisničkim profilom
+## UC-02: Upravljanje korisničkim profilom
 
 **Akter:** Korisnik
 
@@ -76,7 +74,7 @@ Korisnik mijenja svoju email adresu ili lozinku kako bi imao tačne kontakt info
 
 ---
 
-## UC-3: Pregled paketa
+## UC-03: Pregled paketa
 
 **Akter:** Korisnik
 
@@ -108,7 +106,38 @@ Korisnik pregledava listu svojih aktivnih paketa i pretplata kako bi imao pregle
 
 ---
 
-## UC-4: Kreiranje novog tiketa
+## UC-04: Pregled vlastitih tiketa
+
+**Akter:** Korisnik, Tehničar
+
+**Naziv use casea:** Pregled liste vlastitih tiketa
+
+**Kratak opis:**
+Korisnik pregledava listu svih svojih tiketa s mogućnošću uvida u detalje istih
+
+**Preduslovi:**
+- Akter je prijavljen
+- Akter ima kreirane tikete
+
+**Glavni tok:**
+1. Akter otvara sekciju "Moji tiketi"
+2. Sistem prikazuje listu tiketa sa osnovnim informacijama
+3. Akter odabire filtere (prioritet, datum, status)
+4. Sistem prikazuje filtrirane rezultate
+5. Akter bira tiket za detaljnije informacije
+6. Sistem prikazuje odabrani tiket s detaljnijim opisom
+
+**Alternativni tokovi:**
+- A1: Nema tiketa 
+> Lista ostaje prazna
+- A2: Nevažeći filter
+> Ukoliko akter primjeni filter koji ne vrijedi za postojeće tikete, tada prikaz liste tiketa se ne mijenja
+
+**Ishod:** Korisnik ima pregled svih svojih tiketa
+
+---
+
+## UC-05: Kreiranje novog tiketa
 
 **Akter:** Korisnik
 
@@ -143,40 +172,41 @@ Korisnik kreira novi tiket unosom opisa problema, tipa i prioriteta kako bi prij
 
 ---
 
-## UC-5: Pregled vlastitih tiketa
+## UC-06: Dodjela tiketa
 
-**Akter:** Korisnik / Tehničar
+**Akter:** Sistem
 
-**Naziv use casea:** Pregled liste vlastitih tiketa
+**Naziv use casea:** Automatska dodjela tiketa
 
 **Kratak opis:**
-Korisnik pregledava listu svih svojih tiketa s mogućnošću uvida u detalje istih
+Sistem automatski dodjeljuje novokreirani tiket odgovarajućem dostupnom agentu prema predefinisanim pravilima
 
 **Preduslovi:**
-- Korisnik je prijavljen
-- Korisnik ima kreirane tikete
+- Tiket postoji
+- Postoje definisana pravila dodjele
+- Postoji dostupan agent
 
 **Glavni tok:**
-1. Korisnik otvara sekciju "Moji tiketi"
-2. Sistem prikazuje listu tiketa sa osnovnim informacijama
-3. Korisnik odabire filtere (prioritet, datum, status)
-4. Sistem prikazuje filtrirane rezultate
-5. Korisnik bira tiket za detaljnije informacije
-6. Sistem prikazuje odabrani tiket s detaljnijim opisom
+1. Sistem detektuje novokreirani tiket
+2. Sistem primjenjuje predefinisana pravila dodjele
+3. Sistem pronalazi odgovarajućeg agenta
+4. Sistem dodjeljuje tiket agentu
+5. SIstem evidetnira dodjelu
+6. Agent prima notifikaciju o dodjeli
 
 **Alternativni tokovi:**
-- A1: Nema tiketa 
-> Lista ostaje prazna
-- A2: Nevažeći filter
-> Ukoliko korisnik primjeni filter koji ne vrijedi za postojeće tikete, tada prikaz liste tiketa se ne mijenja
+- A1: Nema dostupnih agenata
+> Ukoliko u trenutku kreiranja tiketa nema dostupnih agenata tiket ostaje nedidjeljen i tako označen u sistemu
+- A2: Neuspješna evaluacija pravila
+> Sistem koristi fallback strategiju (npr. random dodjela)
 
-**Ishod:** Korisnik ima pregled svih svojih tiketa
+**Ishod:** Tiket je automatski dodijeljen dostupnom agentu ili označen kao nedodijeljen
 
 ---
 
-## UC-7: Komunikacija kroz tiket
+## UC-07: Komunikacija kroz tiket
 
-**Akter:** Korisnik / Agent / Tehničar
+**Akter:** Korisnik, Agent, Tehničar
 
 **Naziv use casea:** Razmjena poruka
 
@@ -209,7 +239,183 @@ Omogućava komunikaciju između korisnika i podrške.
 
 ---
 
-## UC-8: Pregled i upravljanje svim tiketima
+## UC-08: Ažuriranje statusa tiketa
+
+**Akter:** Tehničar
+
+**Naziv use casea:** Promjena statusa tiketa
+
+**Kratak opis:**
+Proces omogućava tehničaru da ažurira status tiketa tokom njegovog životnog ciklusa
+
+**Preduslovi:**
+- Tiket je dodijeljen tehničaru
+
+**Glavni tok:**
+1. Tehničar otvara tiket
+2. Sistem prikazuje detalje tiketa, uključujući trenutni status
+3. Tehničar bira novi status
+4. Sistem validira promjenu
+5. Sistem sprema novi status
+
+**Alternativni tokovi:**
+- A1: Neispravan redoslijed statusa
+> Ukoliko dođe do ilegalnog redoslijeda statusa (npr. zatvoren → otvoren) sistem blokira promjenu
+- A2: Tiket nije dodijeljen tehničaru
+> Sistem ne dozvoljava izmjene
+
+**Ishod:** Status tiketa je ažuriran
+
+---
+
+## UC-09: Zatvaranje tiketa
+
+**Akter:** Korisnik, Agent
+
+**Naziv use casea:** Zatvaranje tiketa
+
+**Kratak opis:**
+Tiket se zatvara nakon rješenja.
+
+**Preduslovi:**
+- Tiket riješen
+
+**Glavni tok:**
+1. Agent označava tiket kao riješen
+2. Sistem obavještava korisnika
+3. Korisnik pregledava rješenje
+4. Korisnik potvrđuje rješenje
+5. Sistem mijenja status u "ZATVOREN"
+
+**Alternativni tokovi:**
+- A1: Korisnik odbija rješenje 
+> Tiket se vraća u status "otvoren"
+- A2: Nema odgovora od korisnika
+> Sistem automatski zatvara tiket nakon definisanog vremena
+- A4: Greška sistema 
+> Status tiketa nije promijenjen
+
+**Ishod:** Tiket zatvoren
+
+---
+
+## UC-10: Ocjenjivanje tiketa
+
+**Akter:** Korisnik
+
+**Naziv use casea:** Ocjena usluge
+
+**Kratak opis:**
+Korisnik daje feedback na kvalitet rješavanja tiketa
+
+**Preduslovi:**
+- Tiket ima status "ZATVOREN"
+
+**Glavni tok:**
+1. Sistem prikazuje opciju ocjenjivanja
+2. Korisnik bira ocjenu
+3. Sistem sprema ocjenu
+
+**Alternativni tokovi:**
+- A1: Korisnik ne unese ocjenu 
+> Proces se završava bez unosa
+
+**Ishod:** Ocjena evidentirana
+
+---
+
+## UC-11: FAQ pregled
+
+**Akter:** Korisnik
+
+**Naziv use casea:** Pregled FAQ
+
+**Kratak opis:**
+Korisnik vidi često postavljena pitanja.
+
+**Preduslovi:**
+- FAQ postoji
+
+**Glavni tok:**
+1. Korisnik otvara sekciju "FAQ"
+2. Sistem dohvaća listu pitanja i odgovora
+3. Sistem prikazuje FAQ listu
+
+**Alternativni tokovi:**
+- A1: FNema FAQ sadržaja
+> Sistem prikazuje prazno stanje uz poruku: "Trenutno nema dostupnih pitanja."
+- A2: Greška učitavanja 
+> Sistem ne prikazuje sadržaj i omogućava ponovno učitavanje
+
+**Ishod:** Korisnik dobija relevantne informacije
+
+---
+
+## UC-12: Pretraga tiketa
+
+**Akter:** Korisnik, Agent
+
+**Naziv use casea:** Pretraga tiketa
+
+**Kratak opis:**
+Akter vrši pretragu tiketa prema različitim kriterijima
+
+**Preduslovi:**
+- Postoje tiketi
+
+**Glavni tok:**
+1. Akter unosi kriterij pretrage (ID, ključna riječ, filteri)
+2. Pokreće pretragu klikom na "Pretraži"
+3. Sistem pretražuje bazu podataka
+4. Sistem prikazuje rezultate
+
+**Alternativni tokovi:**
+- A1: Nema rezultata 
+> Sistem prikazuje poruku: "Nema pronađenih tiketa."
+- A2: Nevalidan unos 
+> Sistem ne pokreće pretragu
+- A3: Greška pretrage 
+> Sistem ne vraća rezultate i omogućava ponovni pokušaj
+- A4: Nedozvoljen pristup rezultatima
+> Sistem filtrira rezultate prema pravima pristupa
+
+**Ishod:** Pronađeni odgovarajući tiketi
+
+---
+
+## UC-13: Prosljeđivanje tiketa
+
+**Akter:** Agent
+
+**Naziv use casea:** Prosljeđivanje tiketa
+
+**Kratak opis:**
+Agent prosljeđuje tiket drugom agentu
+
+**Preduslovi:**
+- Tiket postoji i nije zatvoren
+- Agent ima pristup tiketu
+
+**Glavni tok:**
+1. Agent otvara tiket
+2. Bira opciju "Proslijedi"
+3. Sistem prikazuje listu dostupnih agenata/timova
+4. Agent bira novog vlasnika tiketa
+5. Agent potvrđuje akciju
+6. Sistem mijenja dodjelu tiketa
+7. Novi agent dobija notifikaciju
+
+**Alternativni tokovi:**
+- A1: Prosljeđivanje samom sebi 
+> Sistem ignoriše akciju ili je blokira, i prikazuje poruku :  "Zabranjena samododjela!"
+- A2: Greška sistema
+> Dodjela se ne mijenja
+
+**Ishod:** Tiket je dodijeljen novom agentu
+
+---
+
+## UC-14: Pregled i upravljanje svim tiketima
 
 **Akter:** Agent
 
@@ -243,68 +449,78 @@ Agent vidi sve tikete u sistemu.
 
 ---
 
-## UC-9: Dodjela tiketa
+## UC-15: Upravljanje timovima
 
-**Akter:** Sistem
+**Akter:** Administrator
 
-**Naziv use casea:** Automatska dodjela tiketa
+**Naziv use casea:** Upravljanje timovima agenata
 
 **Kratak opis:**
-Sistem automatski dodjeljuje novokreirani tiket odgovarajućem dostupnom agentu prema predefinisanim pravilima
+Admin vrši kreiranje i organizaciju timova agenata radi efikasnije strukture rada
 
 **Preduslovi:**
-- Tiket postoji
-- Postoje definisana pravila dodjele
-- Postoji dostupan agent
+- Postoje agenti
 
 **Glavni tok:**
-1. Sistem detektuje novokreirani tiket
-2. Sistem primjenjuje predefinisana pravila dodjele
-3. Sistem pronalazi odgovarajućeg agenta
-4. Sistem dodjeljuje tiket agentu
-5. SIstem evidetnira dodjelu
-6. Agent prima notifikaciju o dodjeli
+1. Administrator otvara sekciju "Timovi"
+2. Sistem prikazuje postojeće timove
+3. Administrator bira tim ili kreira novi
+4. Dodaje ili uklanja agente iz tima
+5. Administrator potvrđuje izmjene
+6. Sistem validira promjene
+7. Sistem sprema konfiguraciju timova
 
 **Alternativni tokovi:**
-- A1: Nema dostupnih agenata
-> Ukoliko u trenutku kreiranja tiketa nema dostupnih agenata tiket ostaje nedidjeljen i tako označen u sistemu
-- A2: Neuspješna evaluacija pravila
-> Sistem koristi fallback strategiju (npr. random dodjela)
+- A1: Agent već pripada timu 
+> Sistem ne dodaje agenta ponovo i šalje upozorenje : "Agent je već dodijeljen postojećem timu"
+- A2: Tim ne postoji 
+> Ukoliko administrator pokuša dodijeliti agenta nepostojećem timu sistem ne mijenja pripadnost agenta i šalje upozorenje "Tim ne postoji!"
+- A3: Greška spremanja 
+> Izmjene nisu sačuvane
+- A4: Prazan tim
+> Sistem dozvoljava ali označava tim kao neaktivan
 
-**Ishod:** Tiket je automatski dodijeljen dostupnom agentu ili označen kao nedodijeljen
+**Ishod:** Timovi ažurirani
 
 ---
 
-## UC-10: Ažuriranje statusa tiketa
+## UC-16: Upravljanje korisnicima 
 
-**Akter:** Tehničar
+**Akter:** Administrator
 
-**Naziv use casea:** Promjena statusa tiketa
+**Naziv use casea:** Upravljanje korisnicima 
 
 **Kratak opis:**
-Proces omogućava tehničaru da ažurira status tiketa tokom njegovog životnog ciklusa
+Proces omogućava administratoru upravljanje korisnicima sistema — kreiranje, izmjenu, deaktivaciju naloga i dodjelu u timove
 
 **Preduslovi:**
-- Tiket je dodijeljen tehničaru
+- Admin prijavljen
 
 **Glavni tok:**
-1. Tehničar otvara tiket
-2. Sistem prikazuje detalje tiketa, uključujući trenutni status
-3. Tehničar bira novi status
-4. Sistem validira promjenu
-5. Sistem sprema novi status
+1. dministrator otvara sekciju "Korisnici"
+2. Sistem prikazuje listu svih korisnika
+3. Administrator bira korisnika ili opciju "Novi korisnik"
+4. Administrator unosi ili mijenja podatke
+5. Administrator dodjeljuje ulogu i tim
+6. Klikne na "Sačuvaj"
+7. Sistem validira podatke
+8. Sistem sprema izmjene u bazu
 
 **Alternativni tokovi:**
-- A1: Neispravan redoslijed statusa
-> Ukoliko dođe do ilegalnog redoslijeda statusa (npr. zatvoren → otvoren) sistem blokira promjenu
-- A2: Tiket nije dodijeljen tehničaru
-> Sistem ne dozvoljava izmjene
+- A1: Nevalidni podaci 
+> Sistem ne dozvoljava spremanje i označava problematična polja
+- A2: Korisnik ne postoji 
+> Ukoliko administrator pokuašava manipulirati podacima korisnika koji ne postoji sistem prekida akciju i vraća na listu
+- A3: Nedostatak privilegija
+> Sistem blokira pristup funkcionalnosti
+A4: Duplikat e-mail adrese
+> Sistem odbija unos uz poruku: "Korisnik sa ovom e-mail adresom već postoji."
 
-**Ishod:** Status tiketa je ažuriran
+**Ishod:** Podaci ažurirani
 
 ---
 
-## UC-11: Generisanje izvještaja
+## UC-17: Generisanje izvještaja
 
 **Akter:** Menadžment
 
@@ -334,185 +550,3 @@ Menadžment generiše statističke izvještaje o radu sistema
 **Ishod:** Izvještaj je generisan
 
 ---
-
-## UC-12: Zatvaranje tiketa
-
-**Akter:** Korisnik, Agent
-
-**Naziv use casea:** Zatvaranje tiketa
-
-**Kratak opis:**
-Tiket se zatvara nakon rješenja.
-
-**Preduslovi:**
-- Tiket riješen
-
-**Glavni tok:**
-1. Agent inicira zatvaranje
-2. Korisnik prihvata
-3. Sistem zatvara tiket
-
-**Alternativni tokovi:**
-- A1: Korisnik odbija rješenje → tiket ostaje otvoren
-- A2: Nema odgovora → automatsko zatvaranje
-- A3: Tiket nije riješen → zatvaranje nije dozvoljeno
-- A4: Greška sistema → status nije promijenjen
-
-**Ishod:** Tiket zatvoren
-
----
-
-## UC-13: Ocjenjivanje tiketa
-
-**Akter:** Korisnik
-
-**Naziv use casea:** Ocjena usluge
-
-**Kratak opis:**
-Korisnik daje feedback.
-
-**Preduslovi:**
-- Tiket zatvoren
-
-**Glavni tok:**
-1. Korisnik bira ocjenu
-2. Šalje ocjenu
-3. Sistem sprema podatke
-
-**Alternativni tokovi:**
-- A1: Korisnik ne unese ocjenu → preskakanje
-- A2: Nevalidna ocjena → odbijanje
-- A3: Greška spremanja → ocjena nije sačuvana
-
-**Ishod:** Ocjena evidentirana
-
----
-
-## UC-14: Upravljanje korisnicima i timovima
-
-**Akter:** Administrator
-
-**Naziv use casea:** Upravljanje korisnicima
-
-**Kratak opis:**
-Admin upravlja korisnicima i timovima.
-
-**Preduslovi:**
-- Admin prijavljen
-
-**Glavni tok:**
-1. Admin pregleda korisnike
-2. Mijenja podatke ili tim
-3. Sistem sprema promjene
-
-**Alternativni tokovi:**
-- A1: Nevalidni podaci → odbijanje
-- A2: Korisnik ne postoji → greška
-- A3: Nema prava → zabrana
-- A4: Greška spremanja → izmjene nisu sačuvane
-
-**Ishod:** Podaci ažurirani
-
----
-
-## UC-15: FAQ pregled
-
-**Akter:** Korisnik
-
-**Naziv use casea:** Pregled FAQ
-
-**Kratak opis:**
-Korisnik vidi često postavljena pitanja.
-
-**Preduslovi:**
-- FAQ postoji
-
-**Glavni tok:**
-1. Korisnik otvara FAQ
-2. Sistem prikazuje pitanja i odgovore
-
-**Alternativni tokovi:**
-- A1: FAQ ne postoji → poruka
-- A2: Nema rezultata → poruka
-- A3: Greška učitavanja → pokušaj ponovo
-
-**Ishod:** Korisnik dobija informacije
-
----
-
-## UC-16: Prosljeđivanje tiketa
-
-**Akter:** Agent
-
-**Naziv use casea:** Prosljeđivanje tiketa
-
-**Kratak opis:**
-Agent prosljeđuje tiket drugom agentu.
-
-**Preduslovi:**
-- Tiket otvoren
-
-**Glavni tok:**
-1. Agent bira opciju prosljeđivanja
-2. Odabire drugog agenta
-3. (Opcionalno) dodaje komentar
-4. Sistem dodjeljuje tiket novom agentu
-
-**Alternativni tokovi:**
-- A1: Tiket zatvoren → zabrana
-- A2: Nevažeći agent → greška
-- A3: Prosljeđivanje samom sebi → odbijanje
-- A4: Greška sistema → tiket nije proslijeđen
-
----
-
-## UC-17: Upravljanje timovima
-
-**Akter:** Administrator
-
-**Naziv use casea:** Upravljanje timovima agenata
-
-**Kratak opis:**
-Admin raspoređuje agente u timove.
-
-**Preduslovi:**
-- Postoje agenti
-
-**Glavni tok:**
-1. Admin bira agenta
-2. Dodjeljuje ga timu
-3. Sistem sprema promjenu
-
-**Alternativni tokovi:**
-- A1: Agent već u timu → upozorenje
-- A2: Tim ne postoji → greška
-- A3: Greška spremanja → izmjene nisu sačuvane
-
-**Ishod:** Timovi ažurirani
-
----
-
-## UC-18: Pretraga tiketa
-
-**Akter:** Korisnik, Agent
-
-**Naziv use casea:** Pretraga tiketa
-
-**Kratak opis:**
-Omogućava pronalazak tiketa po ID-u.
-
-**Preduslovi:**
-- Postoje tiketi
-
-**Glavni tok:**
-1. Akter unosi pojam za pretragu
-2. Pokreće pretragu
-3. Sistem prikazuje rezultate
-
-**Alternativni tokovi:**
-- A1: Nema rezultata → poruka
-- A2: Nevalidan unos → odbijanje
-- A3: Greška pretrage → pokušaj ponovo
-- A4: Nedozvoljen pristup → ograničen prikaz
-
-**Ishod:** Pronađeni odgovarajući tiketi
