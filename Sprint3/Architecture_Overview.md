@@ -57,9 +57,16 @@ Zadužen za autentifikaciju korisnika putem emaila i lozinke. Lozinke se čuvaju
 
 Centralna poslovna logika sistema. Klijenti kreiraju tikete s opisom problema, tipom kvara i prioritetom. Agenti upravljaju tiketima: mijenjaju status, postavljaju interni prioritet, prosljeđuju tiket drugom agentu ili tehničaru, te komunikaciju s klijentom vode unutar samog tiketa. Svaka promjena statusa zapisuje se u audit log.
 
+Ticket modul upravlja i porukama unutar tiketa. Sve poruke se trajno pohranjuju u bazu i distribuiraju putem WebSocket servisa svim relevantnim korisnicima.
+
 ### 3.4 Notification servis (WebSocket)
 
-Real-time komponenta sistema bazirana na WebSocket protokolu. Osigurava da klijent vidi promjenu statusa tiketa u roku od 1 sekunde bez potrebe za ručnim osvježavanjem stranice. U slučaju prekida veze, sistem pokušava reconnect za manje od 3 sekunde, s maksimalno 5 pokušaja. Notifikacija o prekidu stiže za manje od 1 sekunde.
+Real-time komponenta sistema bazirana na WebSocket protokolu. 
+Omogućava trenutno ažuriranje statusa tiketa (u roku od 1 sekunde), kao i real-time komunikaciju (chat) između klijenta, agenata i tehničara unutar tiketa, bez potrebe za ručnim osvježavanjem stranice.
+
+Servis podržava dvosmjernu komunikaciju između klijenta i servera, pri čemu backend može slati događaje, a klijent slati poruke putem iste WebSocket veze.
+
+U slučaju prekida veze, sistem automatski pokušava ponovno uspostavljanje konekcije u roku kraćem od 3 sekunde, s maksimalno 5 pokušaja, dok se notifikacija o prekidu isporučuje za manje od 1 sekunde.
 
 ### 3.5 User Management
 
@@ -131,7 +138,7 @@ Zapisuje sve relevantne poslovne akcije: promjene statusa tiketa, prosljeđivanj
 | Komunikacijski kanal | Namjena | Protokol |
 |---|---|---|
 | Frontend ↔ Backend | CRUD operacije, autentifikacija, izvještaji | HTTPS / REST API |
-| Backend → Frontend (push) | Real-time notifikacije, ažuriranja statusa | WebSocket (WSS) |
+| Backend ↔ Frontend (real-time) | Notifikacije, status update, chat komunikacija | WebSocket (WSS) |
 | Backend ↔ Baza | Čitanje i pisanje poslovnih podataka | SQL (TCP) |
 | Backend ↔ Audit log | Evidentiranje akcija | Interni servisni poziv |
 
