@@ -36,10 +36,22 @@ Osnovni nivoi testiranja su unit, integracijsko, sistemsko i prihvatno testiranj
 | Unit testiranje | Provjera pojedinačnih funkcija i komponenti korisničkog i serverskog dijela: prijava, provjera lozinke, pravila pristupa po ulogama, promjene statusa tiketa, provjera unosa, logika filtera i pretrage, te računanje podataka za izvještaje | Dev tim | Minimalno 60% pokrivenosti ključne poslovne logike ([NFR-25](../Sprint2/NonFunctionalRequirements.md#nfr-25)); svi unit testovi prolaze kroz CI ([NFR-26](../Sprint2/NonFunctionalRequirements.md#nfr-26)) |
 | Integracijsko testiranje | Provjera saradnje glavnih dijelova sistema: API i baza, WebSocket i klijent, prijava i prava pristupa, sloj za rad s bazom nad PostgreSQL/MySQL ([NFR-14](../Sprint2/NonFunctionalRequirements.md#nfr-14)), te razmjena podataka između korisničkog i serverskog dijela | Dev + QA | Kritične integracije rade bez blokera; podaci su usklađeni kroz API i korisnički interfejs; WebSocket sinhronizacija je stabilna |
 | Sistemsko testiranje | Cjeloviti tokovi po ulogama (Klijent, Agent, Tehničar, Administrator): prijava, kreiranje i obrada tiketa, komunikacija, izvještavanje, zatvaranje i zapis aktivnosti | QA tim | Ključni poslovni tokovi prolaze bez blokera; nema regresija u prioritetnim procesima |
-| UI testiranje | Provjera React korisničkog portala kroz ključne tokove: kreiranje tiketa, promjene statusa tiketa, live chat prozor i tehničarska kontrolna tabla; obuhvata validacije formi, responzivni prikaz, WebSocket indikatore statusa, prikaz real-time ažuriranja tiketa i vidljivost elemenata po ulozi (Agent, Korisnik, Tehničar) | QA tim + Dev | Ulazni kriteriji: stabilan build, dostupno testno okruženje i testni nalozi po ulogama. Izlazni kriterij: svi kritični UI tokovi prolaze bez blokera na podržanim browser-ima i rezolucijama; nema kritičnih regresija u prikazu i ažuriranju podataka |
+| UI testiranje | Provjera React korisničkog portala kroz ključne tokove: kreiranje tiketa, promjene statusa tiketa, live chat prozor i tehničarska kontrolna tabla; obuhvata validacije formi, responzivni prikaz, WebSocket indikatore statusa, prikaz real-time ažuriranja tiketa i vidljivost elemenata po ulozi (Agent, Korisnik, Tehničar) | QA tim + Dev | Ulazni kriteriji: stabilan build, dostupno testno okruženje i testni nalozi po ulogama. Izlazni kriterij: svi kritični UI tokovi prolaze bez blokera na podržanim browser-ima i rezolucijama; Playwright regresioni testovi potvrđuju da postojeći tokovi nisu pokvareni |
 | Sigurnosno testiranje | Provjera zaštite podataka i pristupa: HTTPS/TLS, pravila pristupa po ulogama, prikaz samo potrebnih podataka po ulozi, sigurno čuvanje lozinki, anonimizacija i GDPR usklađenost ([NFR-27](../Sprint2/NonFunctionalRequirements.md#nfr-27), [NFR-28](../Sprint2/NonFunctionalRequirements.md#nfr-28), [NFR-35](../Sprint2/NonFunctionalRequirements.md#nfr-35), [NFR-36](../Sprint2/NonFunctionalRequirements.md#nfr-36), [NFR-37](../Sprint2/NonFunctionalRequirements.md#nfr-37), [NFR-38](../Sprint2/NonFunctionalRequirements.md#nfr-38)) | QA + Dev + Product Owner | Nema kritičnih sigurnosnih propusta; neovlašten pristup je blokiran; osjetljivi podaci nisu izloženi |
-| Performansno testiranje | Mjerenje brzine odziva i stabilnosti pod opterećenjem: učitavanje ključnih stranica, kreiranje tiketa i rad sa 50 i 100 istovremenih korisnika ([NFR-01](../Sprint2/NonFunctionalRequirements.md#nfr-01), [NFR-03](../Sprint2/NonFunctionalRequirements.md#nfr-03), [NFR-04](../Sprint2/NonFunctionalRequirements.md#nfr-04)) | QA + DevOps/Dev | Odziv i pad performansi su unutar definisanih granica; nema neprihvatljivog rasta broja grešaka |
+| Performansno testiranje | Mjerenje brzine odziva i stabilnosti pod opterećenjem: učitavanje ključnih stranica, kreiranje tiketa i rad sa 50 i 100 istovremenih korisnika ([NFR-01](../Sprint2/NonFunctionalRequirements.md#nfr-01), [NFR-03](../Sprint2/NonFunctionalRequirements.md#nfr-03), [NFR-04](../Sprint2/NonFunctionalRequirements.md#nfr-04)) | QA + DevOps/Dev | Odziv i pad performansi su unutar definisanih granica; u stress test scenarijima se prati granica na kojoj backend više ne odgovara očekivano |
 | Testiranje prihvatljivosti | Potvrda da isporuka zadovoljava acceptance kriterije prioritetnih korisničkih priča i dogovoreni MVP opseg; provjera upotrebljivosti i pristupačnosti ([NFR-09](../Sprint2/NonFunctionalRequirements.md#nfr-09), [NFR-12](../Sprint2/NonFunctionalRequirements.md#nfr-12)) | Product Owner + predstavnici BH Telekoma + QA | Acceptance kriteriji za sprint su potvrđeni; nema otvorenih blokera za isporuku |
+
+## Dodatni nivoi testiranja
+
+Pored nivoa testiranja, ova strategija koristi i konkretne metode koje pomažu da se sistem provjeri na praktičan način. Metode su odabrane tako da odgovaraju .NET backendu, React frontendu i real-time komunikaciji u sistemu.
+
+| Metoda | Namjena | Alat / pristup | Kada se koristi |
+| --- | --- | --- | --- |
+| Smoke testiranje | Brza provjera da li osnovni tokovi sistema rade | Ručna ili automatizovana provjera prijave, otvaranja glavnih stranica i kreiranja tiketa | Na početku svakog testiranja, nakon nove verzije i prije dubljih provjera |
+| Regression testiranje | Ponovna provjera da postojeće funkcionalnosti nisu pokvarene novim izmjenama | Playwright testovi za ključne UI tokove i osnovne e2e scenarije | Nakon svake veće izmjene koda i prije završne isporuke sprinta |
+| Stress testiranje | Provjera kako backend reaguje kada opterećenje pređe očekivani nivo | NBench za .NET servise i dodatno opterećenje ključnih poslovnih operacija | Kada se želi vidjeti granica izdržljivosti sistema i ponašanje pod većim pritiskom |
+| A/B testiranje | Usporedba dvije varijante interfejsa ili toka korištenja | Dvije varijante UI-a uz praćenje ponašanja korisnika | Samo ako postoji dovoljno ispitanika ili korisničkog saobraćaja i ako se želi procijeniti bolja UX varijanta |
+
 
 ## Šta se testira u kojem nivou
 
@@ -95,9 +107,9 @@ Ova sekcija prikazuje kako se acceptance kriteriji mapiraju na nivoe testiranja 
 
 U ovoj sekciji se ne unose unaprijed napisani test case-ovi. Evidentiraju se rezultati izvršenih test aktivnosti po AC kriterijima i nivoima testiranja. Tabela se popunjava nakon izvršenja test aktivnosti; nije potrebno da unaprijed bude ispunjena.
 
-| Datum | Referenca (US/NFR/PB) | AC fokus | Nivo testiranja | Vrsta dokaza | Rezultat | ID defekta | Napomena |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| DD-MM-YYYY | npr. US-8, NFR-04 | npr. tiket se kreira i potvrda stiže u vremenskom okviru | Unit/Integracijsko/Sistemsko/UI/Sigurnosno/Performansno/Prihvatno | CI log, API log, UI test report (Playwright/Cypress), zapis kompletnog toka, izvještaj testiranja opterećenja, UAT zapisnik | PASS/FAIL/BLOCKED | BUG-DD-MM-YYYY-XXX ili N/A | Sprint, okruženje, dodatni kontekst |
+| Datum | Referenca (US/NFR/PB) | AC fokus | Nivo testiranja | Metoda | Vrsta dokaza | Rezultat | ID defekta | Napomena |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| DD-MM-YYYY | npr. US-8, NFR-04 | npr. tiket se kreira i potvrda stiže u vremenskom okviru | Unit/Integracijsko/Sistemsko/UI/Sigurnosno/Performansno/Prihvatno | Smoke/Regression/Stress/A/B/Exploratory | CI log, API log, Playwright report, NBench rezultat, UI test report, zapis kompletnog toka, izvještaj testiranja opterećenja, UAT zapisnik | PASS/FAIL/BLOCKED | BUG-DD-MM-YYYY-XXX ili N/A | Sprint, okruženje, dodatni kontekst |
 
 
 
@@ -108,6 +120,8 @@ Notacija defekata je definisana u formatu BUG-[DD-MM-YYYY]-[sekvenca]. Primjer z
 Za procjenu ozbiljnosti koristi se jedinstvena severity skala od S1 do S5, gdje je S1 bloker, S2 kritičan, S3 visok, S4 srednji i S5 nizak nivo uticaja.
 
 Svaki defekt se evidentira kroz GitHub Issues i obavezno dobija odgovarajuće oznake bug, severity:S1 do severity:S5 i sprint:X, kako bi praćenje i prioritizacija bili jasni cijelom timu.
+
+Napomena: A/B testiranje koristi se samo kada postoji dovoljno validnih podataka za poređenje dvije varijante. Ako nema dovoljno korisnika ili testnog saobraćaja, tada se oslanjamo na UI, regresiono i prihvatno testiranje.
 
 ## Glavni rizici kvaliteta
 
@@ -124,10 +138,11 @@ Svaki defekt se evidentira kroz GitHub Issues i obavezno dobija odgovarajuće oz
 | **R-09: Nema realnih produkcionih podataka za testiranje** — Razvoj se radi na testnim i simuliranim podacima (Product Vision - ograničenja). Zbog toga procjena opterećenja i ponašanja u produkciji može biti manje tačna, posebno za testove opterećenja [NFR-01](../Sprint2/NonFunctionalRequirements.md#nfr-01) i [NFR-03](../Sprint2/NonFunctionalRequirements.md#nfr-03). | Srednji | Visoka | Pripremiti realistične testne scenarije za maksimalno opterećenje, npr. masovni kvar u mreži; prilagoditi k6 testove za više volumena; pokušati dobiti anonimiziran uzorak produkcionih podataka od BH Telekoma; dokumentovati pretpostavke i ponovo ih provjeriti pri Go-Live fazi |
 | **R-10: Nepotpuna evidencija aktivnosti i promjena** — Sistem mora zapisivati sve ključne akcije (kreiranje, promjena statusa, dodjela, zatvaranje, izmjena korisničkih podataka) zbog revizije ([NFR-30](../Sprint2/NonFunctionalRequirements.md#nfr-30), [NFR-31](../Sprint2/NonFunctionalRequirements.md#nfr-31)). Ako dnevnik aktivnosti nije potpun, poslije je teško rekonstruisati šta se desilo i mogu nastati pravni problemi za BH Telecom. | Srednji | Niska | Provjeravati dnevnik aktivnosti nakon svakog kritičnog toka, potvrditi da svaki zapis sadrži ko-šta-kada i osigurati da izmjena tih zapisa nije dozvoljena |
 | **R-11: Slaba pokrivenost unit testovima i rast tehničkog duga** — [NFR-25](../Sprint2/NonFunctionalRequirements.md#nfr-25) traži najmanje 60% pokrivenosti testovima. Ako padnemo ispod tog praga, raste rizik od regresija | Srednji | Srednja | Pokriće mora biti obavezan artefakt u CI procesu; blokirati PR merge ako pokriće padne ispod 60%; fokus držati na kritičnim modulima (prijava, prava pristupa, stanje tiketa, automatska dodjela) |
+| **R-12: A/B testiranje bez dovoljno uzorka** — Ako se upoređuju dvije varijante interfejsa bez dovoljno korisnika ili bez jasnog načina mjerenja, rezultati mogu biti pogrešni i neupotrebljivi za odluku o dizajnu. | Srednji | Niska | A/B koristiti samo za manje UX izmjene i uz jednostavne metrike; ako nema dovoljno uzorka, osloniti se na usability i regresiono testiranje |
 
 ## Planovi za ublažavanje rizika
 
-Plan ublažavanja rizika zasniva se na redovnom testiranju ključnih tokova sistema, posebno UI scenarija, WebSocket komunikacije i testova opterećenja. Tim u svakom sprintu prati sigurnost i kvalitet kroz provjere pristupa po ulogama, TLS/šifre/anonimizaciju, evidenciju aktivnosti i minimalnu pokrivenost testovima kroz CI. Dodatno, ključni e2e tokovi se izvršavaju na više browsera, a rezultati se koriste za brzo otkrivanje regresija prije isporuke. Organizacijski, promjene zahtjeva se vode kroz jasan Change Request proces i redovne sprint review provjere sa Product Ownerom i BH Telecom predstavnicima.
+Plan ublažavanja rizika zasniva se na redovnom testiranju ključnih tokova sistema, posebno UI scenarija, WebSocket komunikacije i testova opterećenja. Prije detaljnijeg testiranja radi se smoke provjera, a nakon izmjena se ponavlja regression testiranje kroz Playwright da se brzo uhvate greške. Tim u svakom sprintu prati sigurnost i kvalitet kroz provjere pristupa po ulogama, TLS/šifre/anonimizaciju, evidenciju aktivnosti i minimalnu pokrivenost testovima kroz CI. Dodatno, ključni e2e tokovi se izvršavaju na više browsera, a rezultati se koriste za brzo otkrivanje regresija prije isporuke. Stress provjere se koriste kada treba vidjeti kako backend podnosi veće opterećenje. Organizacijski, promjene zahtjeva se vode kroz jasan Change Request proces i redovne sprint review provjere sa Product Ownerom i BH Telecom predstavnicima.
 
 
 
