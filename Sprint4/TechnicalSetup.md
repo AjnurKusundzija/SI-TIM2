@@ -135,15 +135,57 @@ hotfix/database-connection-pool
 
 ### Pravila Toka Rada sa Granama
 
-1. **Razvoj Funkcionalnosti**
-   ```bash
-   git checkout develop
-   git pull origin develop
-   git checkout -b feature/naziv-funkcionalnosti
-   # ... rad na funkcionalnosti
-   git push origin feature/naziv-funkcionalnosti
-   # Kreiraj Pull Request na GitHubu
-   ```
+#### Rad na Novoj Funkcionalnosti
+```bash
+# Kreiranje nove feature grane iz develop
+git flow feature start naziv-funkcionalnosti
+
+# Rad na funkcionalnosti, commitanje izmjena
+git add .
+git commit -m "feat: opis izmjene"
+
+# Push na remote i otvaranje Pull Requesta na GitHubu
+git push origin feature/naziv-funkcionalnosti
+# NE koristiti "git flow feature finish" — umjesto toga otvori PR na GitHubu
+```
+
+#### Release
+```bash
+# Kreiranje release grane iz main
+git flow release start v1.0.0
+
+# Ažuriranje verzija, CHANGELOG-a i sl.
+git commit -m "chore: bump version to v1.0.0"
+
+# Push i otvaranje PR-a prema main
+git push origin release/v1.0.0
+```
+
+#### Hotfix
+```bash
+# Kreiranje hotfix grane direktno iz main
+git flow hotfix start naziv-ispravke
+
+# Ispravka greške
+git add .
+git commit -m "fix: opis ispravke"
+
+# Push i otvaranje PR-a prema main
+git push origin hotfix/naziv-ispravke
+```
+
+#### Svakodnevni Tok Rada
+```bash
+# Uvijek prije početka rada ažuriraj lokalnu granu
+git checkout develop
+git pull origin develop
+
+# Provjeri na kojoj si grani
+git branch
+
+# Provjeri status izmjena
+git status
+```
 
 2. **Proces Pull Requesta**
    - Svi testovi prolaze (lokalno + CI/CD)
@@ -161,17 +203,6 @@ hotfix/database-connection-pool
    git add .
    git rebase --continue
    git push origin feature/naziv-funkcionalnosti -f
-   ```
-
-4. **Proces Releasea**
-   ```bash
-   git checkout -b release/v1.0.0 develop
-   # Ažuriraj brojeve verzija, CHANGELOG
-   git commit -m "Verzija 1.0.0"
-   git push origin release/v1.0.0
-   # Kreiraj PR prema main
-   # Spoji u main sa tagom: git tag v1.0.0
-   # Spoji nazad u develop
    ```
 
 ### Pravila Zaštite Grana (GitHub Postavke)
