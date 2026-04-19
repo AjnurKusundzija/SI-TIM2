@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "TelecomCustomerSupportSystem.Application/1.0.0": {
+        "dependencies": {
+          "TelecomCustomerSupportSystem.Domain": "1.0.0"
+        },
+        "runtime": {
+          "TelecomCustomerSupportSystem.Application.dll": {}
+        }
+      },
+      "TelecomCustomerSupportSystem.Domain/1.0.0": {
+        "runtime": {
+          "TelecomCustomerSupportSystem.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TelecomCustomerSupportSystem.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TelecomCustomerSupportSystem.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

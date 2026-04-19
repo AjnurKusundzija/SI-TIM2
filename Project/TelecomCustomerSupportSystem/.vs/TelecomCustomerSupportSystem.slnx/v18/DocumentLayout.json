@@ -1,0 +1,224 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8AA0EDF8-0929-06EE-9FA5-76B817054A05}|backend\\TelecomCustomerSupportSystem.API\\TelecomCustomerSupportSystem.API.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8AA0EDF8-0929-06EE-9FA5-76B817054A05}|backend\\TelecomCustomerSupportSystem.API\\TelecomCustomerSupportSystem.API.csproj|solutionrelative:backend\\telecomcustomersupportsystem.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A25A6E7-88F6-7B98-E3DC-0F0D5E7C8708}|backend\\TelecomCustomerSupportSystem.Application\\TelecomCustomerSupportSystem.Application.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.application\\dtos\\auth\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A25A6E7-88F6-7B98-E3DC-0F0D5E7C8708}|backend\\TelecomCustomerSupportSystem.Application\\TelecomCustomerSupportSystem.Application.csproj|solutionrelative:backend\\telecomcustomersupportsystem.application\\dtos\\auth\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4B9EAF5-A5AB-95C5-9D96-CC77A84ACC76}|backend\\TelecomCustomerSupportSystem.Infrastructure\\TelecomCustomerSupportSystem.Infrastructure.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.infrastructure\\realtime\\notificationhubservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4B9EAF5-A5AB-95C5-9D96-CC77A84ACC76}|backend\\TelecomCustomerSupportSystem.Infrastructure\\TelecomCustomerSupportSystem.Infrastructure.csproj|solutionrelative:backend\\telecomcustomersupportsystem.infrastructure\\realtime\\notificationhubservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4B9EAF5-A5AB-95C5-9D96-CC77A84ACC76}|backend\\TelecomCustomerSupportSystem.Infrastructure\\TelecomCustomerSupportSystem.Infrastructure.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.infrastructure\\persistence\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4B9EAF5-A5AB-95C5-9D96-CC77A84ACC76}|backend\\TelecomCustomerSupportSystem.Infrastructure\\TelecomCustomerSupportSystem.Infrastructure.csproj|solutionrelative:backend\\telecomcustomersupportsystem.infrastructure\\persistence\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4B9EAF5-A5AB-95C5-9D96-CC77A84ACC76}|backend\\TelecomCustomerSupportSystem.Infrastructure\\TelecomCustomerSupportSystem.Infrastructure.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.infrastructure\\configurations\\dodjelatiketaconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4B9EAF5-A5AB-95C5-9D96-CC77A84ACC76}|backend\\TelecomCustomerSupportSystem.Infrastructure\\TelecomCustomerSupportSystem.Infrastructure.csproj|solutionrelative:backend\\telecomcustomersupportsystem.infrastructure\\configurations\\dodjelatiketaconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.domain\\enums\\statusnaloga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|solutionrelative:backend\\telecomcustomersupportsystem.domain\\enums\\statusnaloga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.domain\\enums\\prioritet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|solutionrelative:backend\\telecomcustomersupportsystem.domain\\enums\\prioritet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.domain\\enums\\kategorijaproblema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|solutionrelative:backend\\telecomcustomersupportsystem.domain\\enums\\kategorijaproblema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.domain\\entities\\karakteristikapaketa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|solutionrelative:backend\\telecomcustomersupportsystem.domain\\entities\\karakteristikapaketa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.domain\\entities\\izvjestaj.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|solutionrelative:backend\\telecomcustomersupportsystem.domain\\entities\\izvjestaj.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.domain\\entities\\dodjelatiketa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E62B794B-4F6B-A7CF-9089-2CEE96468668}|backend\\TelecomCustomerSupportSystem.Domain\\TelecomCustomerSupportSystem.Domain.csproj|solutionrelative:backend\\telecomcustomersupportsystem.domain\\entities\\dodjelatiketa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A25A6E7-88F6-7B98-E3DC-0F0D5E7C8708}|backend\\TelecomCustomerSupportSystem.Application\\TelecomCustomerSupportSystem.Application.csproj|c:\\users\\ajnur\\desktop\\new folder\\telecomcustomersupportsystem\\backend\\telecomcustomersupportsystem.application\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A25A6E7-88F6-7B98-E3DC-0F0D5E7C8708}|backend\\TelecomCustomerSupportSystem.Application\\TelecomCustomerSupportSystem.Application.csproj|solutionrelative:backend\\telecomcustomersupportsystem.application\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.API\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:41:04.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LoginRequestDto.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Application\\DTOs\\Auth\\LoginRequestDto.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Application\\DTOs\\Auth\\LoginRequestDto.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Application\\DTOs\\Auth\\LoginRequestDto.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Application\\DTOs\\Auth\\LoginRequestDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:55.508Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "NotificationHubService.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Infrastructure\\RealTime\\NotificationHubService.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Infrastructure\\RealTime\\NotificationHubService.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Infrastructure\\RealTime\\NotificationHubService.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Infrastructure\\RealTime\\NotificationHubService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:41.499Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Infrastructure\\Persistence\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Infrastructure\\Persistence\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Infrastructure\\Persistence\\ApplicationDbContext.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Infrastructure\\Persistence\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:36.38Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DodjelaTiketaConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Infrastructure\\Configurations\\DodjelaTiketaConfiguration.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Infrastructure\\Configurations\\DodjelaTiketaConfiguration.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Infrastructure\\Configurations\\DodjelaTiketaConfiguration.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Infrastructure\\Configurations\\DodjelaTiketaConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:30.879Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "StatusNaloga.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Enums\\StatusNaloga.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Domain\\Enums\\StatusNaloga.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Enums\\StatusNaloga.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Domain\\Enums\\StatusNaloga.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:22.731Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Prioritet.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Enums\\Prioritet.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Domain\\Enums\\Prioritet.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Enums\\Prioritet.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Domain\\Enums\\Prioritet.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:22.025Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "KategorijaProblema.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Enums\\KategorijaProblema.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Domain\\Enums\\KategorijaProblema.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Enums\\KategorijaProblema.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Domain\\Enums\\KategorijaProblema.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:21.225Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "KarakteristikaPaketa.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Entities\\KarakteristikaPaketa.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Domain\\Entities\\KarakteristikaPaketa.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Entities\\KarakteristikaPaketa.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Domain\\Entities\\KarakteristikaPaketa.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:18.841Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Izvjestaj.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Entities\\Izvjestaj.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Domain\\Entities\\Izvjestaj.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Entities\\Izvjestaj.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Domain\\Entities\\Izvjestaj.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:17.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DodjelaTiketa.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Entities\\DodjelaTiketa.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Domain\\Entities\\DodjelaTiketa.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Domain\\Entities\\DodjelaTiketa.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Domain\\Entities\\DodjelaTiketa.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:16.753Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Application\\Interfaces\\IAuthService.cs",
+              "RelativeDocumentMoniker": "backend\\TelecomCustomerSupportSystem.Application\\Interfaces\\IAuthService.cs",
+              "ToolTip": "C:\\Users\\Ajnur\\Desktop\\New folder\\TelecomCustomerSupportSystem\\backend\\TelecomCustomerSupportSystem.Application\\Interfaces\\IAuthService.cs",
+              "RelativeToolTip": "backend\\TelecomCustomerSupportSystem.Application\\Interfaces\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-19T11:40:09.834Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

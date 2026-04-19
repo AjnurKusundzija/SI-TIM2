@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/TelecomCustomerSupportSystem.API/TelecomCustomerSupportSystem.API.csproj" />
+    <Project Path="backend/TelecomCustomerSupportSystem.Application/TelecomCustomerSupportSystem.Application.csproj" />
+    <Project Path="backend/TelecomCustomerSupportSystem.Domain/TelecomCustomerSupportSystem.Domain.csproj" />
+    <Project Path="backend/TelecomCustomerSupportSystem.Infrastructure/TelecomCustomerSupportSystem.Infrastructure.csproj" />
+  </Folder>
+</Solution>
