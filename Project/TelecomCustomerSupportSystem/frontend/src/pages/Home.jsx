@@ -1,12 +1,15 @@
 import { useEffect } from "react"
+import { io } from "socket.io-client"
 
 export default function Home() {
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:5000/ws")
+    const socket = io("http://localhost:3001")
 
-    ws.onopen = () => console.log("WS povezan")
-    ws.onmessage = (msg) => console.log("WS poruka:", msg.data)
+    socket.on("connect", () => console.log("Socket.io povezan:", socket.id))
+    socket.on("notification", (data) => console.log("Notifikacija:", data))
+
+    return () => socket.disconnect()
   }, [])
 
   return <h1>Frontend radi ✅</h1>

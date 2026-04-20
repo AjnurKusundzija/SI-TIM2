@@ -54,21 +54,6 @@ builder.Services.AddAuthentication(options =>
     };
 
     // SignalR token validation
-    options.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
-        {
-            var accessToken = context.Request.Query["access_token"];
-            var path = context.HttpContext.Request.Path;
-            
-            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
-            {
-                context.Token = accessToken;
-            }
-            
-            return Task.CompletedTask;
-        }
-    };
 });
 
 // Add CORS configuration (NFR-35 & security)
@@ -80,12 +65,9 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(allowedOrigins!)
               .AllowAnyMethod()
               .AllowAnyHeader()
-              .AllowCredentials(); // Required for SignalR
+              .AllowCredentials(); // Required for Socket.io
     });
 });
-
-// Add SignalR for real-time communication (NFR-02)
-builder.Services.AddSignalR();
 
 // Add Authorization
 builder.Services.AddAuthorization();
@@ -124,9 +106,6 @@ app.UseAuthorization();
 // Map controllers
 app.MapControllers();
 
-// Map SignalR hubs (for real-time notifications)
-app.MapHub<NotificationHub>("/hubs/notifications");
-
 // Health check endpoint
 app.MapGet("/health", () => Results.Ok("Healthy"));
 
@@ -151,14 +130,3 @@ finally
     await Log.CloseAndFlushAsync();
 }
 
-/// <summary>
-/// SignalR Hub for real-time notifications (placeholder - implement in separate file)
-/// </summary>
-public class NotificationHub : Microsoft.AspNetCore.SignalR.Hub
-{
-    public override async Task OnConnectedAsync()
-    {
-        await base.OnConnectedAsync();
-        // Real-time notification implementation to follow
-    }
-}

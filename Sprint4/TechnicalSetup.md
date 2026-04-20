@@ -24,7 +24,7 @@
 | **Vite** | 8.0.4+ | Build Alat | Brzi development i produkcijski buildovi |
 | **React Router** | 7.14.1 | Navigacija | Client-side routing |
 | **Axios** | 1.6.0+ | HTTP Klijent | API komunikacija |
-| **Socket.io Client** | 4.7.0+ | WebSocket Klijent | Real-time notifikacije |
+| **@microsoft/signalr** | 8.0.0+ | WebSocket Klijent | Real-time notifikacije putem SignalR |
 | **TailwindCSS** | 4.0.0+ | Stilizacija | Utility-first CSS framework |
 | **React Hook Form** | 7.50.0+ | Upravljanje Formama | Lagano upravljanje formama |
 | **date-fns** | 3.0.0+ | Datum Utiliti | Obrada datuma uz podršku za vremenske zone |
