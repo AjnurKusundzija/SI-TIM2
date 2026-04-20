@@ -1,4 +1,4 @@
-namespace TelecomCustomerSupportSystem.Domain.Entities;
+namespace TelecomCustomerSupportSystem.Application.Entities;
 
 public class Ocjena
 {

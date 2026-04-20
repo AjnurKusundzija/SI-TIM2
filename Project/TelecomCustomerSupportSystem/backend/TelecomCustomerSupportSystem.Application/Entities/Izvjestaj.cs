@@ -1,6 +1,6 @@
-using TelecomCustomerSupportSystem.Domain.Enums;
+using TelecomCustomerSupportSystem.Application.Enums;
 
-namespace TelecomCustomerSupportSystem.Domain.Entities;
+namespace TelecomCustomerSupportSystem.Application.Entities;
 
 public class Izvjestaj
 {

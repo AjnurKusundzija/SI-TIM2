@@ -1,4 +1,4 @@
-using TelecomCustomerSupportSystem.Domain.Enums;
+using TelecomCustomerSupportSystem.Application.Enums;
 
 namespace TelecomCustomerSupportSystem.Application.DTOs.Reports;
 

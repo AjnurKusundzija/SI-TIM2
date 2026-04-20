@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TelecomCustomerSupportSystem.Domain.Entities;
+using TelecomCustomerSupportSystem.Application.Entities;
 
 namespace TelecomCustomerSupportSystem.Infrastructure.Persistence;
 

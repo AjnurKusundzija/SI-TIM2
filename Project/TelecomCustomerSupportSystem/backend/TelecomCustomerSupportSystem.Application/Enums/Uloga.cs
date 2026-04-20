@@ -1,4 +1,4 @@
-namespace TelecomCustomerSupportSystem.Domain.Enums;
+namespace TelecomCustomerSupportSystem.Application.Enums;
 
 public enum Uloga
 {
