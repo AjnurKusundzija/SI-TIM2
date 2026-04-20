@@ -21,12 +21,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add Entity Framework Core with SQL Server
+// Add Entity Framework Core with MySQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString, sqlOptions =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), mySqlOptions =>
     {
-        sqlOptions.EnableRetryOnFailure(maxRetryCount: 5);
+        mySqlOptions.EnableRetryOnFailure(maxRetryCount: 5);
     }));
 
 // Add JWT Authentication

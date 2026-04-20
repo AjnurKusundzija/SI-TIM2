@@ -10,7 +10,7 @@
 | **.NET** | 10.0 | Runtime i Framework | Višeplatformski, visoke performanse |
 | **ASP.NET Core** | 10.0 | Web API Framework | RESTful API server |
 | **Entity Framework Core** | 10.0.0 | ORM i Pristup Podacima | Sloj apstrakcije baze podataka |
-| **SQL Server Express** | 2019+ | Relaciona Baza Podataka | Primarno skladište podataka (moguće prebaciti na PostgreSQL) |
+| **MySQL** | 8.0+ | Relaciona Baza Podataka | Primarno skladište podataka |
 | **SignalR** | 10.0.0 | Real-time Komunikacija | WebSocket podrška za notifikacije |
 | **JWT (System.IdentityModel.Tokens.Jwt)** | 7.4.0 | Autentifikacija | Sigurna autentifikacija bazirana na tokenima |
 | **BCrypt.Net-Next** | 4.0.3 | Hashiranje Lozinki | Sigurno čuvanje lozinki |
@@ -40,9 +40,8 @@
 | **Git** | 2.40+ | Verzionisanje Koda | Upravljanje izvornim kodom |
 
 ### Verzije Baze Podataka
-- **SQL Server Express:** 2019 Community Edition (besplatna verzija za razvoj)
-- **Alternativa:** PostgreSQL 15+ (za produkcijski deployment)
-- **Lokalni Razvoj:** Koristi Docker kontejner sa SQL Server Express
+- **MySQL:** 8.0+ Community Edition (besplatna verzija za razvoj i produkciju)
+- **Lokalni Razvoj:** Koristi Docker kontejner sa MySQL 8.0
 
 ---
 
@@ -217,12 +216,12 @@ git status
 
 ## 4. Arhitektura Baze Podataka
 
-### SQL Server + Entity Framework Core
+### MySQL + Entity Framework Core (Pomelo)
 
-- Odlična integracija sa .NET/EF Core
+- Odlična integracija sa .NET/EF Core putem Pomelo providera
 - ACID usklađenost za konzistentnost tiketa
-- Express Edition besplatna za razvoj
-- Laka migracija na produkcijski SQL Server/Azure
+- Community Edition besplatna za razvoj i produkciju
+- Široka podrška za hosting i cloud platforme
 
 #### Postavljanje Baze Podataka
 
@@ -232,12 +231,12 @@ git status
 docker-compose up -d
 
 # Connection string u appsettings.Development.json:
-"DefaultConnection": "Server=localhost,1433;Database=TelecomDB;User Id=sa;Password=YourPassword123!;TrustServerCertificate=true;Encrypt=false;"
+"DefaultConnection": "Server=localhost;Port=3306;Database=TelecomDB;User=root;Password=YourPassword123!;"
 ```
 
-**Produkcija (SQL Server na VM-u ili Azure SQL)**
+**Produkcija (MySQL na VM-u)**
 ```
-"DefaultConnection": "Server=tcp:yourserver.database.windows.net,1433;Initial Catalog=TelecomDB;Persist Security Info=False;User ID=admin;Password=***;Encrypt=True;Connection Timeout=30;"
+"DefaultConnection": "Server=yourserver.example.com;Port=3306;Database=TelecomDB;User=admin;Password=***;"
 ```
 
 **Entity Framework Migracije**
@@ -284,8 +283,8 @@ dotnet ef database update -- --environment Production
                           │
             ┌─────────────▼──────────────┐
             │   Dijeljeni Server Baze    │
-            │   (SQL Server / Azure SQL) │
-            │      Port: 1433 (TLS)      │
+            │         (MySQL 8.0)        │
+            │      Port: 3306 (TLS)      │
             └────────────────────────────┘
 ```
 
@@ -294,20 +293,20 @@ dotnet ef database update -- --environment Production
 
 #### Opcija 1: Docker + Virtuelna Mašina
 - **Backend:** Docker kontejner na Linux VM-u
-- **Frontend:** Statički hosting na CDN-u (Azure Blob Storage / AWS S3) ili isti server putem nginx-a
-- **Baza Podataka:** SQL Server na zasebnom VM-u (razdvajanje odgovornosti)
-- **Load Balancing:** Azure Load Balancer / nginx reverse proxy
+- **Frontend:** Statički hosting na CDN-u ili isti server putem nginx-a
+- **Baza Podataka:** MySQL 8.0 na zasebnom VM-u (razdvajanje odgovornosti)
+- **Load Balancing:** nginx reverse proxy
 
-#### Opcija 2: Azure App Service
-- **Backend:** Azure App Service (upravljani PaaS)
-- **Frontend:** Azure Static Web Apps ili App Service
-- **Baza Podataka:** Azure SQL Database
-- **SSL/TLS:** Auto-upravljano od strane Azurea
+#### Opcija 2: Cloud PaaS
+- **Backend:** Upravljani app service
+- **Frontend:** Statički web hosting
+- **Baza Podataka:** Upravljani MySQL servis (npr. AWS RDS for MySQL, Azure Database for MySQL)
+- **SSL/TLS:** Auto-upravljano od strane cloud provajdera
 
 #### Opcija 3: Kubernetes
 - **Backend:** Kubernetes deployment sa 3+ replika
 - **Frontend:** Kubernetes servis sa ingressom
-- **Baza Podataka:** Upravljani servis baze podataka (Azure Database for SQL Server)
+- **Baza Podataka:** Upravljani MySQL servis (npr. Azure Database for MySQL)
 
 ### NFR-05: Arhitektura za 99.5% Dostupnosti
 
@@ -320,7 +319,7 @@ dotnet ef database update -- --environment Production
    - Auto-rollback pri neuspješnom deploymentu
 
 2. **Nivo Baze Podataka (cilj 99.99%)**
-   - Always-On Availability Group (SQL Server) ILI Failover replike
+   - MySQL Group Replication ILI read replike za failover
    - Automatske sigurnosne kopije (svaki sat, čuvanje 30 dana)
    - RTO: 5 minuta
    - RPO: 5 minuta
@@ -332,7 +331,7 @@ dotnet ef database update -- --environment Production
 
 4. **Monitoring i Alerting**
    - Application Insights za monitoring backenda
-   - Monitoring baze podataka putem SQL Server agenta
+   - Monitoring baze podataka putem MySQL Performance Schema / Prometheus MySQL Exporter
    - Alert na: visok CPU, memoriju, veličinu baze, greške konekcije
    - Alert na svaki pad poda
    - Automatsko praćenje incidenata u GitHub Issues
@@ -407,7 +406,7 @@ dotnet ef database update -- --environment Production
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=TelecomDB_Dev;User Id=sa;Password=DevPassword123!;"
+    "DefaultConnection": "Server=localhost;Port=3306;Database=TelecomDB_Dev;User=root;Password=DevPassword123!;"
   },
   "Logging": {
     "LogLevel": {
