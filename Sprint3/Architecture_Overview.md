@@ -2,7 +2,7 @@
 
 ## 1. Arhitektonski pristup
 
-Sistem korisničke podrške telekomunikacijske kompanije gradi se kao web aplikacija sa jasno odvojenim frontend i backend slojevima, oslanjajući se na modernu klijent-server arhitekturu s komponentama koje komuniciraju putem REST API-ja i WebSocket protokola.
+Sistem korisničke podrške telekomunikacijske kompanije gradi se kao web aplikacija sa jasno odvojenim frontend i backend slojevima čije komponente komuniciraju putem REST API-ja i WebSocket protokola.
 
 Odabrani pristup je **troslojna (three-tier) arhitektura**:
 
