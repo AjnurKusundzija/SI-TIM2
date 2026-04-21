@@ -4,7 +4,7 @@
 
 ## UC-01: Login korisnika
 
-**Akter:** Korisnik, Agent, Tehničar, Menadžment
+**Akter:** Klijent, Agent, Tehničar, Menadžment
 
 **Naziv use casea:** Prijava u sistem (Login)
 
@@ -21,7 +21,7 @@ Akter pristupa sistemu unosom e-mail adrese i lozinke uz validaciju podataka
 3. Sistem validira format e-mail adrese
 4. Akter klikne na dugme "Login"
 5. Sistem validira unesene podatke
-6. Sistem preusmjerava korisnika na dashboard prema njegovoj ulozi
+6. Sistem preusmjerava Aktera na dashboard prema njegovoj ulozi
 
 **Alternativni tokovi:**
 - A1: Prazna polja
@@ -37,38 +37,38 @@ Akter pristupa sistemu unosom e-mail adrese i lozinke uz validaciju podataka
 
 ## UC-02: Upravljanje korisničkim profilom
 
-**Akter:** Korisnik
+**Akter:** Klijent, Agent, Tehničar, Administrator
 
 **Naziv use casea:** Izmjena korisničkih podataka
 
 **Kratak opis:**
-Korisnik mijenja svoju email adresu ili lozinku kako bi imao tačne kontakt informacije u sistemu
+Akter mijenja svoju email adresu ili lozinku kako bi imao tačne kontakt informacije u sistemu
 
 **Preduslovi:**
-- Korisnik je prijavljen u sistem
+- Akter je prijavljen u sistem
 
 **Glavni tok:**
-1. Korisnik otvara sekciju "Profil"
-2. Korisnik pristupa sekciji za upravljanje profilom
-3. Korisnik odabire opciju za promjenu podataka "Uredi profil"
-4. Korisnik unosi trenutne podatke za validaciju
-5. Korisnik unosi nove podatke
-6. Korisnik potvrđuje izmjene
+1. Akter otvara sekciju "Profil"
+2. Akter pristupa sekciji za upravljanje profilom
+3. Akter odabire opciju za promjenu podataka "Uredi profil"
+4. Akter unosi trenutne podatke za validaciju
+5. Akter unosi nove podatke
+6. Akter potvrđuje izmjene
 7. Sistem validira unese podatke
 8. Sistem ažurira podatke
 
 **Alternativni tokovi:**
 - A1: Nevalidan format e-maila
-> Ukoliko korisnik unese nevalidan email sistem odbija unos i zahtijeva ispravku 
+> Ukoliko Akter unese nevalidan email sistem odbija unos i zahtijeva ispravku 
 - A2: Neispravna trenutna lozinka
-> Ako korisnik unose neispravnu trenutnu lozinku sistem odbija unos i zahtjeva ispravu ; korisniku prikazuje poruku :
+> Ako Akter unose neispravnu trenutnu lozinku sistem odbija unos i zahtjeva ispravu ; Akteru prikazuje poruku :
 > "Netačna lozinka!" 
 - A3: Unos identičnih podataka
-> Sistem ne vrši izmjene jer nema promjena, korisniku prikazuje poruku : "Nova lozinka se mora razlikovati od prethodne!"
+> Sistem ne vrši izmjene jer nema promjena, Akteru prikazuje poruku : "Nova lozinka se mora razlikovati od prethodne!"
 - A4: Nevalidna lozinka 
 > Sistem ne prihvata novu lozinku dok ne zadovolji kriterije 
 - A5: Odustajanje 
-> Korisnik napušta stranicu bez spremanja izmjena
+> Akter napušta stranicu bez spremanja izmjena
 
 **Ishod:** Podaci uspješno ažurirani u sistemu
 
@@ -76,44 +76,44 @@ Korisnik mijenja svoju email adresu ili lozinku kako bi imao tačne kontakt info
 
 ## UC-03: Pregled paketa
 
-**Akter:** Korisnik
+**Akter:** Klijent
 
 **Naziv use casea:** Pregled paketa i pretplata
 
 **Kratak opis:**
-Korisnik pregledava listu svojih aktivnih paketa i pretplata kako bi imao pregled usluga koje koristi.
+Klijent pregledava listu svojih aktivnih paketa i pretplata kako bi imao pregled usluga koje koristi.
 
 **Preduslovi:**
-- Korisnik je prijavljen
-- Korisnik ima aktivne pakete u sistemu
+- Klijent je prijavljen
+- Klijent ima aktivne pakete u sistemu
 
 **Glavni tok:**
-1. Korisnik otvara sekciju "Paketi"
+1. Klijent otvara sekciju "Paketi"
 2. Sistem prikazuje listu svih aktivnih paketa i pretplata
-3. Korisnik pregleda pakete
-4. Korisnik bira specifičan paket
+3. Klijent pregleda pakete
+4. Klijent bira specifičan paket
 5. Sistem prikazuje detalje o odabranom paketu
 
 **Alternativni tokovi:**
 - A1: Nema aktivnih paketa 
 > Sistem prikazuje prazno stanje bez liste paketa
 - A2: Greška pri dohvatanju paketa
-> Sistem ne učitava listu paketa i prikazuje korisniku poruku : "Greška pri učitavanju!"
+> Sistem ne učitava listu paketa i prikazuje klijentu poruku : "Greška pri učitavanju!"
 - A3: Paket više nije dostupan
-> Sistem ne može prikazatu detalje i vraća korisnika na listu
+> Sistem ne može prikazatu detalje i vraća klijenta na listu
 
-**Ishod:** Korisnik ima pregled svojih paketa
+**Ishod:** Klijent ima pregled svojih paketa
 
 ---
 
 ## UC-04: Pregled vlastitih tiketa
 
-**Akter:** Korisnik, Tehničar
+**Akter:** Klijent, Tehničar
 
 **Naziv use casea:** Pregled liste vlastitih tiketa
 
 **Kratak opis:**
-Korisnik pregledava listu svih svojih tiketa s mogućnošću uvida u detalje istih
+Akter pregledava listu svih svojih tiketa s mogućnošću uvida u detalje istih
 
 **Preduslovi:**
 - Akter je prijavljen
@@ -139,21 +139,21 @@ Korisnik pregledava listu svih svojih tiketa s mogućnošću uvida u detalje ist
 
 ## UC-05: Kreiranje novog tiketa
 
-**Akter:** Korisnik
+**Akter:** Klijent
 
 **Naziv use casea:** Kreiranje novog tiketa
 
 **Kratak opis:**
-Korisnik kreira novi tiket unosom opisa problema, tipa i prioriteta kako bi prijavio poteškoću tehničkoj podršci
+Klijent kreira novi tiket unosom opisa problema, tipa i prioriteta kako bi prijavio poteškoću tehničkoj podršci
 
 **Preduslovi:**
-- Korisnik je prijavljen
+- Klijent je prijavljen
 
 **Glavni tok:**
-1. Korisnik otvara sekciju ""Kreiraj tiket"
+1. Klijent otvara sekciju ""Kreiraj tiket"
 2. Sistem prikazuje formu ta unos podataka
-3. Korisnik unosi podatke ili bira iz predefinisane liste (naslov, opis, tip, prioritet)
-4. Korisnik klikne na dugme "Pošalji"
+3. Klijent unosi podatke ili bira iz predefinisane liste (naslov, opis, tip, prioritet)
+4. Klijent klikne na dugme "Pošalji"
 5. Sistem validira podatke
 6. Sistem kreira tiket sa statusom "OTVOREN" i dodjeljuje ID
 7. Sistem prikazuje potvrdu o uspješnom kreiranju tiketa
@@ -164,9 +164,9 @@ Korisnik kreira novi tiket unosom opisa problema, tipa i prioriteta kako bi prij
 - A2: Nevalidan unos 
 > Ako opis sadrži nedozvoljene znakove ili je prekratak, sistem ne nastavlja sa kreiranjem tiketa
 - A3: Odustajanje 
-> Ako korisnik odustane prilikom procesa kreiranja tiketa sistem ne čuva unese podatke
+> Ako klijent odustane prilikom procesa kreiranja tiketa sistem ne čuva unese podatke
 - A4: Greška sistema 
-> Ukoliko dođe do greške pri kreiranju tiketa sistem priakzuje poruu : "Došlo je do greške. Tiket nije kreiran."
+> Ukoliko dođe do greške pri kreiranju tiketa sistem priakzuje poruku : "Došlo je do greške. Tiket nije kreiran."
 
 **Ishod:** Tiket je uspješno kreiran
 
@@ -206,12 +206,12 @@ Sistem automatski dodjeljuje novokreirani tiket odgovarajućem dostupnom agentu 
 
 ## UC-07: Komunikacija kroz tiket
 
-**Akter:** Korisnik, Agent, Tehničar
+**Akter:** Klijent, Agent, Tehničar
 
 **Naziv use casea:** Razmjena poruka
 
 **Kratak opis:**
-Omogućava komunikaciju između korisnika i podrške.
+Omogućava komunikaciju između klijenta i podrške.
 
 **Preduslovi:**
 - Tiket postoji
@@ -231,7 +231,7 @@ Omogućava komunikaciju između korisnika i podrške.
 - A2: Preduga poruka 
 > Ukoliko poruka prekorači maksimalan broj karaktera dozovljen, prikazuje se notifikacija : "Prekoračen maksimalan broj karaktera."
 - A3: Greška pri slanju 
-> Sistem ne ažurira thread komunikacije, i šalje korisniku obavijest o neuspjelom slanju
+> Sistem ne ažurira thread komunikacije, i šalje akteru obavijest o neuspjelom slanju
 - A4: Tiket zatvoren
 > Ukoliko je tiket označen sa statusom "ZATVOREN" komunikacije je onemogućena
 
@@ -270,7 +270,7 @@ Proces omogućava tehničaru da ažurira status tiketa tokom njegovog životnog 
 
 ## UC-09: Zatvaranje tiketa
 
-**Akter:** Korisnik, Agent
+**Akter:** Klijent, Agent
 
 **Naziv use casea:** Zatvaranje tiketa
 
@@ -282,15 +282,15 @@ Tiket se zatvara nakon rješenja.
 
 **Glavni tok:**
 1. Agent označava tiket kao riješen
-2. Sistem obavještava korisnika
-3. Korisnik pregledava rješenje
-4. Korisnik potvrđuje rješenje
+2. Sistem obavještava klijenta
+3. Klijent pregledava rješenje
+4. Klijent potvrđuje rješenje
 5. Sistem mijenja status u "ZATVOREN"
 
 **Alternativni tokovi:**
-- A1: Korisnik odbija rješenje 
+- A1: Klijent odbija rješenje 
 > Tiket se vraća u status "otvoren"
-- A2: Nema odgovora od korisnika
+- A2: Nema odgovora od klijenta
 > Sistem automatski zatvara tiket nakon definisanog vremena
 - A4: Greška sistema 
 > Status tiketa nije promijenjen
@@ -301,23 +301,23 @@ Tiket se zatvara nakon rješenja.
 
 ## UC-10: Ocjenjivanje tiketa
 
-**Akter:** Korisnik
+**Akter:** Klijent
 
 **Naziv use casea:** Ocjena usluge
 
 **Kratak opis:**
-Korisnik daje feedback na kvalitet rješavanja tiketa
+Klijent daje feedback na kvalitet rješavanja tiketa
 
 **Preduslovi:**
 - Tiket ima status "ZATVOREN"
 
 **Glavni tok:**
 1. Sistem prikazuje opciju ocjenjivanja
-2. Korisnik bira ocjenu
+2. Klijent bira ocjenu
 3. Sistem sprema ocjenu
 
 **Alternativni tokovi:**
-- A1: Korisnik ne unese ocjenu 
+- A1: Klijent ne unese ocjenu 
 > Proces se završava bez unosa
 
 **Ishod:** Ocjena evidentirana
@@ -326,34 +326,34 @@ Korisnik daje feedback na kvalitet rješavanja tiketa
 
 ## UC-11: FAQ pregled
 
-**Akter:** Korisnik
+**Akter:** Klijent
 
 **Naziv use casea:** Pregled FAQ
 
 **Kratak opis:**
-Korisnik vidi često postavljena pitanja.
+Klijent vidi često postavljena pitanja.
 
 **Preduslovi:**
 - FAQ postoji
 
 **Glavni tok:**
-1. Korisnik otvara sekciju "FAQ"
+1. Klijent otvara sekciju "FAQ"
 2. Sistem dohvaća listu pitanja i odgovora
 3. Sistem prikazuje FAQ listu
 
 **Alternativni tokovi:**
-- A1: FNema FAQ sadržaja
+- A1: Nema FAQ sadržaja
 > Sistem prikazuje prazno stanje uz poruku: "Trenutno nema dostupnih pitanja."
 - A2: Greška učitavanja 
 > Sistem ne prikazuje sadržaj i omogućava ponovno učitavanje
 
-**Ishod:** Korisnik dobija relevantne informacije
+**Ishod:** Klijent dobija relevantne informacije
 
 ---
 
 ## UC-12: Pretraga tiketa
 
-**Akter:** Korisnik, Agent
+**Akter:** Klijent, Agent
 
 **Naziv use casea:** Pretraga tiketa
 
@@ -522,7 +522,7 @@ A4: Duplikat e-mail adrese
 
 ## UC-17: Generisanje izvještaja
 
-**Akter:** Menadžment
+**Akter:** Administrator
 
 **Naziv use casea:** Generisanje izvještaja
 
