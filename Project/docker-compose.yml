@@ -1,21 +1,16 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: telecom-db-dev
     environment:
-      MYSQL_ROOT_PASSWORD: "YourPassword123!"
-      MYSQL_DATABASE: TelecomDB
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrongPassword123!"
     ports:
-      - "3306:3306"
+      - "1433:1433"
     volumes:
-      - telecom-db-data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pYourPassword123!"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - telecom-db-data:/var/opt/mssql
     restart: unless-stopped
 
 volumes:
