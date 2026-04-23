@@ -1,8 +1,12 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TelecomSupportSystem.DAL;
+using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 using TelecomSupportSystem.BLL.Services.Interfaces;
@@ -17,8 +21,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// JWT authentication
-var jwtKey = builder.Configuration["Jwt:Key"]!;
+// JWT_KEY: env var (production/CI) takes priority; User Secrets / IConfiguration used in development
+if (Environment.GetEnvironmentVariable("JWT_KEY") is null)
+{
+    var fromConfig = builder.Configuration["JWT_KEY"];
+    if (fromConfig is not null)
+        Environment.SetEnvironmentVariable("JWT_KEY", fromConfig);
+}
+
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY")
+    ?? throw new InvalidOperationException("JWT_KEY is not set. Use 'dotnet user-secrets set' locally or an environment variable in production.");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -44,8 +56,21 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("login", o =>
+    {
+        o.PermitLimit = 5;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueLimit = 0;
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+    options.RejectionStatusCode = 429;
+});
+
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
@@ -70,8 +95,59 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Seed test users in Development if Users table is empty
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    if (!db.Users.Any())
+    {
+        db.Users.AddRange(
+            new User
+            {
+                FirstName = "Admin",
+                LastName = "User",
+                Email = "admin@test.com",
+                Username = "admin",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+                Phone = "",
+                Address = "",
+                Role = Role.ADMINISTRATOR,
+                AccountStatus = AccountStatus.ACTIVE
+            },
+            new User
+            {
+                FirstName = "Agent",
+                LastName = "User",
+                Email = "agent@test.com",
+                Username = "agent",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"),
+                Phone = "",
+                Address = "",
+                Role = Role.AGENT,
+                AccountStatus = AccountStatus.ACTIVE
+            },
+            new User
+            {
+                FirstName = "Client",
+                LastName = "User",
+                Email = "client@test.com",
+                Username = "client",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Client123!"),
+                Phone = "",
+                Address = "",
+                Role = Role.CLIENT,
+                AccountStatus = AccountStatus.ACTIVE
+            }
+        );
+        db.SaveChanges();
+    }
+}
+
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

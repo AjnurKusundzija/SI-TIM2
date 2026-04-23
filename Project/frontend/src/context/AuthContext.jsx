@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
+import PropTypes from 'prop-types'
 import { login as loginService, logout as logoutService, getUser } from '../services/authService'
 
 const AuthContext = createContext(null)
@@ -17,16 +18,22 @@ export function AuthProvider({ children }) {
     })
   }
 
-  function logout() {
-    logoutService()
+  async function logout() {
+    await logoutService()
     setUser(null)
   }
 
+  const value = useMemo(() => ({ user, login, logout }), [user])
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )
+}
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 }
 
 export function useAuth() {

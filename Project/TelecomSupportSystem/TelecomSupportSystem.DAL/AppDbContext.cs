@@ -22,6 +22,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<Report> Reports => Set<Report>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -191,6 +192,34 @@ public class ApplicationDbContext : DbContext
             entity.HasIndex(e => e.ActionDate);
             entity.HasIndex(e => e.UserId);
             entity.HasIndex(e => e.Table);
+        });
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.RefreshTokenId);
+
+            entity.Property(e => e.Token).IsRequired().HasMaxLength(512);
+            entity.Property(e => e.ExpiresAt).IsRequired();
+            entity.Property(e => e.CreatedAt).IsRequired();
+
+            entity.HasIndex(e => e.Token).IsUnique();
+            entity.HasIndex(e => e.UserId);
+
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<TicketUser>(entity =>
+        {
+            entity.HasKey(e => e.AssignmentId);
+
+            entity.Property(e => e.AssignmentDate).IsRequired();
+            entity.Property(e => e.Note).HasMaxLength(500);
+
+            entity.HasIndex(e => e.TicketId);
+            entity.HasIndex(e => e.UserId);
         });
     }
 }

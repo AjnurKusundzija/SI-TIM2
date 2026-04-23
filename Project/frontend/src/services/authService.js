@@ -3,7 +3,8 @@ import api from './api'
 export async function login(email, password) {
   const response = await api.post('/auth/login', { email, password })
   const data = response.data
-  sessionStorage.setItem('token', data.token)
+  sessionStorage.setItem('accessToken', data.accessToken)
+  sessionStorage.setItem('refreshToken', data.refreshToken)
   sessionStorage.setItem('user', JSON.stringify({
     userId: data.userId,
     firstName: data.firstName,
@@ -14,9 +15,16 @@ export async function login(email, password) {
   return data
 }
 
-export function logout() {
-  sessionStorage.removeItem('token')
-  sessionStorage.removeItem('user')
+export async function logout() {
+  const refreshToken = sessionStorage.getItem('refreshToken')
+  if (refreshToken) {
+    try {
+      await api.post('/auth/logout', { refreshToken })
+    } catch {
+      // token already expired/revoked — still clear session
+    }
+  }
+  sessionStorage.clear()
 }
 
 export function getUser() {
@@ -25,5 +33,5 @@ export function getUser() {
 }
 
 export function isAuthenticated() {
-  return !!sessionStorage.getItem('token')
+  return !!sessionStorage.getItem('accessToken')
 }
