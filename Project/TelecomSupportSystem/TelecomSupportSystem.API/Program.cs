@@ -31,6 +31,7 @@ if (Environment.GetEnvironmentVariable("JWT_KEY") is null)
 
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY")
     ?? throw new InvalidOperationException("JWT_KEY is not set. Use 'dotnet user-secrets set' locally or an environment variable in production.");
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -95,11 +96,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Seed test users in Development if Users table is empty
+// Seed test users in Development
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    // DODANO: Kreira bazu i tabele ako ne postoje
+    db.Database.EnsureCreated();
 
     if (!db.Users.Any())
     {

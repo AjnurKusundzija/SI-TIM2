@@ -1,5 +1,3 @@
-version: '2'
-
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -10,6 +8,8 @@ services:
       MSSQL_ALLOW_RUNNING_AS_ROOT: "1"
     ports:
       - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
     restart: unless-stopped
 
   api:
@@ -38,11 +38,5 @@ services:
       - api
     restart: unless-stopped
 
-  sonarqube:
-    image: sonarqube:community
-    container_name: sonarqube
-    ports:
-      - "9000:9000"
-    environment:
-      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
-    restart: unless-stopped
+volumes:
+  sqlserver-data:
