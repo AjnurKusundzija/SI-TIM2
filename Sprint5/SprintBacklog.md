@@ -1,0 +1,26 @@
+# Sprint Backlog – Sprint 5
+
+Sprint backlog treba biti realan i povezan sa sprint ciljem.
+
+## Veza sa sprint ciljem
+
+Planirane stavke u ovom sprint backlogu direktno podrzavaju sprint cilj: pocetak AI-enabled faze, isporuku prvog funkcionalnog inkrementa i uspostavu pratece dokumentacije.
+
+---
+
+## Stavke sprint backloga
+
+| ID | Naziv zadatka ili storyja | Odgovorna osoba ili osobe | Status | Napomena |
+|---|---|---|---|---|
+| SB-01 | PB-17 AI Usage Log | Ajnur Kusundzija | Done | Dokument kreiran i evidentiran prvi usage zapis |
+| SB-02 | PB-18 Decision Log | Ajnur Kusundzija | Done | Decision log uspostavljen i spreman za dalje odluke |
+| SB-03 | PB-19 Login korisnika (US-1, US-2, US-3) | Uma, Hana, Lamija | In Progress | Prijava, validacija unosa i kontrola pristupa |
+| SB-04 | Unit testovi za autentifikaciju | Lejan, Uma | To Do | Pokriti osnovne i negativne auth scenarije |
+| SB-05 | Kreiranje tiketa (US-8, US-9, US-10) i FAQ (US-56) | Hana, Lamija | To Do | Forma, validacija obaveznih polja, osnovni FAQ sadrzaj |
+| SB-06 | Pregled vlastitih tiketa (US-11, US-12, US-13) | Eldar, Merisa | To Do | Lista tiketa sa osnovnim filtriranjem |
+| SB-07 | Detaljan prikaz tiketa (US-14, US-15) | Dzelo | To Do | Prikaz detalja tiketa i historije komunikacije |
+| SB-08 | Koordinacija sprint dokumentacije i artefakata | Ajnur Kusundzija | In Progress | Uskladjivanje Sprint Goal, Sprint Backlog, AI Usage Log i Decision Log |
+
+---
+
+Napomena: Ovaj Sprint Backlog je zivi dokument i azurira se kroz sprint.

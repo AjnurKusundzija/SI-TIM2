@@ -6,17 +6,11 @@ services:
     container_name: telecom-db-dev
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "YourPassword123!"
-      MSSQL_PID: "Express"
+      SA_PASSWORD: "YourStrongPassword123!"
     ports:
       - "1433:1433"
     volumes:
       - telecom-db-data:/var/opt/mssql
-    healthcheck:
-      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourPassword123!", "-Q", "SELECT 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     restart: unless-stopped
 
 volumes:

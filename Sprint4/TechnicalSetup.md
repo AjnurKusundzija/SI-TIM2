@@ -10,11 +10,8 @@
 | **.NET** | 10.0 | Runtime i Framework | Višeplatformski, visoke performanse |
 | **ASP.NET Core** | 10.0 | Web API Framework | RESTful API server |
 | **Entity Framework Core** | 10.0.0 | ORM i Pristup Podacima | Sloj apstrakcije baze podataka |
-| **SQL Server Express** | 2019+ | Relaciona Baza Podataka | Primarno skladište podataka (moguće prebaciti na PostgreSQL) |
+| **MySQL Server** | 8.0+ | Relaciona Baza Podataka | Primarno skladište podataka |
 | **SignalR** | 10.0.0 | Real-time Komunikacija | WebSocket podrška za notifikacije |
-| **JWT (System.IdentityModel.Tokens.Jwt)** | 7.4.0 | Autentifikacija | Sigurna autentifikacija bazirana na tokenima |
-| **BCrypt.Net-Next** | 4.0.3 | Hashiranje Lozinki | Sigurno čuvanje lozinki |
-| **Serilog** | 4.0.0 | Logovanje | Strukturirano logovanje |
 | **Swagger/OpenAPI** | 10.1.7 | API Dokumentacija | Auto-generisana API dokumentacija |
 
 ### Frontend
@@ -23,11 +20,8 @@
 | **React** | 19.2.4 | UI Framework | Moderni komponentni UI |
 | **Vite** | 8.0.4+ | Build Alat | Brzi development i produkcijski buildovi |
 | **React Router** | 7.14.1 | Navigacija | Client-side routing |
-| **Axios** | 1.6.0+ | HTTP Klijent | API komunikacija |
-| **Socket.io Client** | 4.7.0+ | WebSocket Klijent | Real-time notifikacije |
+| **@microsoft/signalr** | 8.0.0+ | WebSocket Klijent | Real-time notifikacije putem SignalR |
 | **TailwindCSS** | 4.0.0+ | Stilizacija | Utility-first CSS framework |
-| **React Hook Form** | 7.50.0+ | Upravljanje Formama | Lagano upravljanje formama |
-| **date-fns** | 3.0.0+ | Datum Utiliti | Obrada datuma uz podršku za vremenske zone |
 | **Zustand** | 4.4.0+ | Upravljanje Stanjem | Jednostavno za korištenje |
 
 ### DevOps i Infrastruktura
@@ -39,44 +33,6 @@
 | **GitHub Secrets** | N/A | Upravljanje Okruženjem | Sigurno čuvanje kredencijala |
 | **Git** | 2.40+ | Verzionisanje Koda | Upravljanje izvornim kodom |
 
-### Verzije Baze Podataka
-- **SQL Server Express:** 2019 Community Edition (besplatna verzija za razvoj)
-- **Alternativa:** PostgreSQL 15+ (za produkcijski deployment)
-- **Lokalni Razvoj:** Koristi Docker kontejner sa SQL Server Express
-
----
-
-## 2. Postavljanje Razvojnog Okruženja
-
-### Preduvjeti
-```bash
-dotnet --version  # Treba biti 10.0.0+
-
-node --version    # Treba biti 18.0+
-npm --version     # Treba biti 9.0+
-
-docker --version  # Treba biti 18.0+
-
-git --version     # Treba biti 2.40+
-```
-
-### Inicijalno Postavljanje
-```bash
-git clone https://github.com/AjnurKusundzija/SI-TIM2.git
-cd SI-TIM2/Project/TelecomCustomerSupportSystem
-
-cd backend
-dotnet restore
-
-cd ../frontend
-npm install
-
-cd ../..
-docker-compose up -d 
-
-cd backend
-dotnet ef database update
-```
 
 ---
 
@@ -89,8 +45,7 @@ dotnet ef database update
   - Sadrži samo kod spreman za release
   - Zaštićena: zahtijeva PR review + prolaz testova
   - Svaki commit označen verzijom (v1.0.0, v1.0.1, itd.)
-  - Auto-deploy na produkciju
-  - Direktni pushovi nisu dozvoljeni
+  - Direktni/force pushovi nisu dozvoljeni
 
 - **`develop`** (integracija)
   - Paralelna kopija `main`-a koja služi kao integracijska grana
@@ -98,7 +53,6 @@ dotnet ef database update
   - Integracijska grana za završene funkcionalnosti
   - Zaštićena: zahtijeva PR review + prolaz testova
   - Osnova za sve feature/bugfix grane
-  - Auto-deploy na staging
 
 #### Pomoćne Grane
 
@@ -135,101 +89,59 @@ hotfix/database-connection-pool
 
 ### Pravila Toka Rada sa Granama
 
-1. **Razvoj Funkcionalnosti**
-   ```bash
-   git checkout develop
-   git pull origin develop
-   git checkout -b feature/naziv-funkcionalnosti
-   # ... rad na funkcionalnosti
-   git push origin feature/naziv-funkcionalnosti
-   # Kreiraj Pull Request na GitHubu
-   ```
+#### Rad na Novoj Funkcionalnosti
+```bash
+# Kreiranje nove feature grane iz develop
+git flow feature start naziv-funkcionalnosti
 
-2. **Proces Pull Requesta**
-   - Svi testovi prolaze (lokalno + CI/CD)
+# Rad na funkcionalnosti, commitanje izmjena
+git add .
+git commit -m "feat: opis izmjene"
+
+# Push na remote i otvaranje Pull Requesta na GitHubu
+git push origin feature/naziv-funkcionalnosti
+# NE koristiti "git flow feature finish" — umjesto toga otvori PR na GitHubu
+```
+
+#### Release
+```bash
+# Kreiranje release grane iz main
+git flow release start v1.0.0
+
+# Ažuriranje verzija, CHANGELOG-a i sl.
+git commit -m "chore: bump version to v1.0.0"
+
+# Push i otvaranje PR-a prema main
+git push origin release/v1.0.0
+```
+
+#### Hotfix
+```bash
+# Kreiranje hotfix grane direktno iz main
+git flow hotfix start naziv-ispravke
+
+# Ispravka greške
+git add .
+git commit -m "fix: opis ispravke"
+
+# Push i otvaranje PR-a prema main
+git push origin hotfix/naziv-ispravke
+```
+
+ **Proces Pull Requesta**
+   - Svi testovi prolaze (lokalno + CI/CD???)
    - Code review od strane 1+ člana tima
    - Nema konflikata sa develop granom
    - Prati Definition of Done
    - Komentari riješeni
    - Spajanje putem "Create a merge commit"
 
-3. **Rješavanje Konflikata**
-   ```bash
-   git fetch origin
-   git rebase origin/develop
-   # Popravi konflikte u IDE-u
-   git add .
-   git rebase --continue
-   git push origin feature/naziv-funkcionalnosti -f
-   ```
-
-4. **Proces Releasea**
-   ```bash
-   git checkout -b release/v1.0.0 develop
-   # Ažuriraj brojeve verzija, CHANGELOG
-   git commit -m "Verzija 1.0.0"
-   git push origin release/v1.0.0
-   # Kreiraj PR prema main
-   # Spoji u main sa tagom: git tag v1.0.0
-   # Spoji nazad u develop
-   ```
 
 ### Pravila Zaštite Grana (GitHub Postavke)
 - Zahtijevaj pull request review prije spajanja (minimum 1 reviewer)
 - Zahtijevaj prolaz status provjera (CI/CD pipeline)
 - Zahtijevaj da grane budu ažurne prije spajanja
 - Zahtijevaj da code conversation budu riješeni prije spajanja
-- Odbaci stare pull request approvals kada se pushaju novi commiti
-- Ograniči ko može pushati na main/develop (samo administratori)
-
----
-
-## 4. Arhitektura Baze Podataka
-
-### SQL Server + Entity Framework Core
-
-- Odlična integracija sa .NET/EF Core
-- ACID usklađenost za konzistentnost tiketa
-- Express Edition besplatna za razvoj
-- Laka migracija na produkcijski SQL Server/Azure
-
-#### Postavljanje Baze Podataka
-
-**Lokalni Razvoj (Docker)**
-```bash
-# U korijenu projekta, docker-compose.yml:
-docker-compose up -d
-
-# Connection string u appsettings.Development.json:
-"DefaultConnection": "Server=localhost,1433;Database=TelecomDB;User Id=sa;Password=YourPassword123!;TrustServerCertificate=true;Encrypt=false;"
-```
-
-**Produkcija (SQL Server na VM-u ili Azure SQL)**
-```
-"DefaultConnection": "Server=tcp:yourserver.database.windows.net,1433;Initial Catalog=TelecomDB;Persist Security Info=False;User ID=admin;Password=***;Encrypt=True;Connection Timeout=30;"
-```
-
-**Entity Framework Migracije**
-```bash
-dotnet ef migrations add InitialCreate
-
-dotnet ef database update
-
-# Za produkciju, koristi:
-dotnet ef database update -- --environment Production
-```
-
-#### Strategija Perzistencije Podataka
-- Svi korisnički podaci čuvaju se u relacionoj bazi podataka
-- Dostupna anonimizacija podataka usklađena sa GDPR-om
-- Audit logovi za sve operacije (posebna tabela za performanse)
-- Automatske sigurnosne kopije konfigurisane (dnevno za produkciju)
-
-#### Skalabilnost i Performanse
-- Connection pooling: Min 5, Max 100 konekcija
-- Optimizacija upita: Indeksirano po stranim ključevima, statusu, datumima
-- Caching sloj: Redis za često pristupane podatke (buduće poboljšanje)
-- Database replike za read skaliranje (produkcija)
 
 ---
 
@@ -240,8 +152,8 @@ dotnet ef database update -- --environment Production
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    LOAD BALANCER                        │
-│                  (Azure LB / nginx)                      │
-└────────────────┬──────────────────┬────────────────────┘
+│                  (Azure LB / nginx)                     │
+└────────────────┬──────────────────┬──────────────────── ┘
                  │                  │
         ┌────────▼─────┐   ┌───────▼──────┐
         │  Web Server 1 │   │ Web Server 2  │
@@ -253,8 +165,8 @@ dotnet ef database update -- --environment Production
                           │
             ┌─────────────▼──────────────┐
             │   Dijeljeni Server Baze    │
-            │   (SQL Server / Azure SQL) │
-            │      Port: 1433 (TLS)      │
+            │         (MySQL 8.0)        │
+            │      Port: 3306 (TLS)      │
             └────────────────────────────┘
 ```
 
@@ -263,50 +175,20 @@ dotnet ef database update -- --environment Production
 
 #### Opcija 1: Docker + Virtuelna Mašina
 - **Backend:** Docker kontejner na Linux VM-u
-- **Frontend:** Statički hosting na CDN-u (Azure Blob Storage / AWS S3) ili isti server putem nginx-a
-- **Baza Podataka:** SQL Server na zasebnom VM-u (razdvajanje odgovornosti)
-- **Load Balancing:** Azure Load Balancer / nginx reverse proxy
+- **Frontend:** Statički hosting na CDN-u ili isti server putem nginx-a
+- **Baza Podataka:** MySQL 8.0 na zasebnom VM-u (razdvajanje odgovornosti)
+- **Load Balancing:** nginx reverse proxy
 
-#### Opcija 2: Azure App Service
-- **Backend:** Azure App Service (upravljani PaaS)
-- **Frontend:** Azure Static Web Apps ili App Service
-- **Baza Podataka:** Azure SQL Database
-- **SSL/TLS:** Auto-upravljano od strane Azurea
+#### Opcija 2: Cloud PaaS
+- **Backend:** Upravljani app service
+- **Frontend:** Statički web hosting
+- **Baza Podataka:** Upravljani MySQL servis (npr. AWS RDS for MySQL, Azure Database for MySQL)
+- **SSL/TLS:** Auto-upravljano od strane cloud provajdera
 
 #### Opcija 3: Kubernetes
 - **Backend:** Kubernetes deployment sa 3+ replika
 - **Frontend:** Kubernetes servis sa ingressom
-- **Baza Podataka:** Upravljani servis baze podataka (Azure Database for SQL Server)
-
-### NFR-05: Arhitektura za 99.5% Dostupnosti
-
-**Komponente za Visoku Dostupnost:**
-
-1. **Aplikacijski Nivo (cilj 99.99%)**
-   - 3+ Docker kontejner replike (load balanced)
-   - Auto-restart pri grešci
-   - Health checks svakih 30 sekundi
-   - Auto-rollback pri neuspješnom deploymentu
-
-2. **Nivo Baze Podataka (cilj 99.99%)**
-   - Always-On Availability Group (SQL Server) ILI Failover replike
-   - Automatske sigurnosne kopije (svaki sat, čuvanje 30 dana)
-   - RTO: 5 minuta
-   - RPO: 5 minuta
-
-3. **Mrežni Nivo (cilj 99.99%)**
-   - Load balancer sa health probama
-   - CDN za statičke resurse (geo-distribuirano)
-   - DDoS zaštita omogućena
-
-4. **Monitoring i Alerting**
-   - Application Insights za monitoring backenda
-   - Monitoring baze podataka putem SQL Server agenta
-   - Alert na: visok CPU, memoriju, veličinu baze, greške konekcije
-   - Alert na svaki pad poda
-   - Automatsko praćenje incidenata u GitHub Issues
-
-**Budžet Nedostupnosti (99.5%):** 3.6 sati godišnje = ~18 minuta mjesečno
+- **Baza Podataka:** Upravljani MySQL servis (npr. Azure Database for MySQL)
 
 ---
 
@@ -341,104 +223,18 @@ dotnet ef database update -- --environment Production
 
 ---
 
-## 7. Sigurnosna Lista Provjere
-
-### Autentifikacija i Autorizacija
-- JWT tokeni sa istekom od 15 minuta
-- Refresh tokeni sa istekom od 7 dana
-- Hashiranje lozinki sa bcryptom
-- Rate limiting na login endpointu
-- RBAC (Role-Based Access Control) na svim endpointima
-- CORS konfigurisan
-
-### Zaštita Podataka
-- Sva komunikacija putem HTTPS/TLS 1.2+
-- Enkripcija baze podataka u mirovanju
-- Osjetljiva polja enkriptovana u bazi
-- Anonimizacija PII podataka pri brisanju
-- Audit logovi nepromjenjivi 
-
-### API Sigurnost
-- Validacija unosa na svim endpointima
-- Prevencija SQL injekcije
-- Prevencija XSS-a (CSP headeri)
-- CSRF zaštita na operacijama koje mijenjaju stanje
-- Rate limiting
-- API key autentifikacija za integracije trećih strana (buduće)
-
----
-
 ## 8. Upravljanje Konfiguracijom
 
 ### Postavke Specifične za Okruženje
 
 **Razvoj (appsettings.Development.json)**
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=TelecomDB_Dev;User Id=sa;Password=DevPassword123!;"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Debug"
-    }
-  },
-  "Jwt": {
-    "SecretKey": "your-dev-secret-key-min-32-chars",
-    "Issuer": "http://localhost:5000",
-    "Audience": "http://localhost:3000",
-    "ExpirationMinutes": 15
-  }
-}
-```
-
 **Produkcija (appsettings.Production.json)**
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "***enkriptovano u Azure Key Vault***"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Warning"
-    }
-  },
-  "Jwt": {
-    "SecretKey": "***iz Azure Key Vault***",
-    "ExpirationMinutes": 15
-  }
-}
-```
+
 
 ### Upravljanje Tajnama
 - Razvoj: Lokalne user secrets (`dotnet user-secrets set`)
 - Produkcija: Azure Key Vault
 - CI/CD: GitHub Secrets
-
----
-
-## 9. Monitoring i Logovanje
-
-### Strategija Logovanja
-- Strukturirano logovanje sa Serilogom
-- Nivoi loga: Debug, Information, Warning, Error, Fatal
-- Svi API zahtjevi logovani (metoda, putanja, statusni kod, trajanje)
-- Sve operacije baze podataka logovane
-- Audit trail za poslovne operacije (kreiranje tiketa, promjena statusa, dodjele)
-
-### Monitoring Dashboardi
-- Application Insights dashboard (prosječno vrijeme odgovora, stopa grešaka, trajanje zavisnosti)
-- Monitor performansi baze podataka (spori upiti, status connection poola)
-- Monitor infrastrukture (CPU, memorija, disk, mreža)
-- Monitor dostupnosti (ping vanjskog health endpointa svakih 1 min)
-
-### Pravila Alertinga
-- CPU > 80% tokom 5 minuta → Alert
-- Memorija > 90% → Hitni alert
-- Odgovor baze podataka > 1s → Alert
-- Stopa grešaka > 1% → Alert
-- Health check pada → Hitni alert
-- Neuspješan deployment → Hitni alert
 
 ---
 
