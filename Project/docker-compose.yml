@@ -4,7 +4,7 @@ services:
     container_name: telecom-db-dev
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "YourStrongPassword123!"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
       MSSQL_ALLOW_RUNNING_AS_ROOT: "1"
     ports:
       - "1433:1433"
@@ -23,7 +23,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - JWT_KEY=${JWT_KEY}
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=TelecomSupportDb;User Id=sa;Password=YourStrongPassword123!;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
     depends_on:
       - sqlserver
     restart: unless-stopped

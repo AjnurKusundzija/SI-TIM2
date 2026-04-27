@@ -51,7 +51,7 @@ jobs:
           cache-dependency-path: Project/frontend/package-lock.json
 
       - name: Install
-        run: npm ci
+        run: npm install
 
       - name: Lint
         run: npx eslint src/
