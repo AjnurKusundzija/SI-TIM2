@@ -12,6 +12,8 @@ using TelecomSupportSystem.DAL.Repositories.Interfaces;
 using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.BLL.Services;
 
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -21,6 +23,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+/*
 // JWT_KEY: env var (production/CI) takes priority; User Secrets / IConfiguration used in development
 if (Environment.GetEnvironmentVariable("JWT_KEY") is null)
 {
@@ -31,7 +34,14 @@ if (Environment.GetEnvironmentVariable("JWT_KEY") is null)
 
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY")
     ?? throw new InvalidOperationException("JWT_KEY is not set. Use 'dotnet user-secrets set' locally or an environment variable in production.");
+*/
+/*
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT key is missing in configuration.");
+*/
 
+var jwtKey = builder.Configuration["JWT_KEY"]
+    ?? throw new InvalidOperationException("JWT_KEY is missing");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -47,10 +57,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+//for REACT frontent port: 5173
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(
+            "http://localhost:5173", //React frontedn
+            "http://localhost:5122",
+            "https://localhost:7148"//Swagger UI
+            )
               .AllowAnyMethod()
               .AllowAnyHeader());
 });
@@ -105,6 +120,7 @@ if (app.Environment.IsDevelopment())
     // DODANO: Kreira bazu i tabele ako ne postoje
     db.Database.EnsureCreated();
 
+    // add users if not existant
     if (!db.Users.Any())
     {
         db.Users.AddRange(
