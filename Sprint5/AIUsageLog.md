@@ -35,6 +35,22 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Rizici, problemi ili greske koje su uocene | Rizik od preopstih odgovora i mogucih netacnih formulacija; sve AI prijedloge je bilo potrebno rucno validirati prije usvajanja. |
 | Ko je koristio alat | Ajnur Kušundžija |
 
+## Unos #2
+
+| Polje | Detalji |
+|---|---|
+| Datum | 23.04.2026 |
+| Sprint broj | Sprint 5 |
+| Alat koji je koristen | Claude Sonnet 4.6 |
+| Svrha koristenja | Pomoc pri implementaciji PB-19 (Login korisnika) |
+| Kratak opis zadatka ili upita | Koristen AI za implementaciju login funkcionalnosti: JWT autentifikacija na backendu (AuthController, AuthService, refresh tokeni, rate limiting, seed korisnika) i frontend login stranica (Login.jsx, AuthContext.jsx, ProtectedRoute.jsx, api.js sa Axios interceptorom, authService.js). |
+| Sta je AI predlozio ili generisao | Kod za AuthService (JWT generacija, BCrypt provjera, refresh token logika), AuthController, frontend Login.jsx stranicu sa React Hook Form, AuthContext sa useAuth(), ProtectedRoute komponentu, Axios instancu sa JWT interceptorom, rate limiting u Program.cs., dodatno ci.yml |
+| Sta je tim prihvatio | Vecinu predlozene implementacije: strukturu AuthService-a, JWT claims (NameIdentifier, Email, Role, GivenName, Surname), refresh token mehanizam, frontend AuthContext i ProtectedRoute, te Axios interceptor logiku. |
+| Sta je tim izmijenio | Prilagodili smo nazive entiteta i DTO-ova projektu, podesili connection string, Docker Compose konfiguraciju, i ci.yml. Takodjer za JWT key, umjesto _configuration["Jwt:Key"]!, koristimo Environment.GetEnvironmentVariable("JWT_KEY") i .env zbog prevencije curenja informacija putem appsettings.json |
+| Sta je tim odbacio | Prijedloge za error poruke koji bi mogli otkriti da li email ili lozinka nisu ispravni (zahtjev US-3), i neke generalizovane pristupe koji nisu odgovarali 3-slojnoj arhitekturi projekta. JWT key |
+| Rizici, problemi ili greske koje su uocene | AI je inicijalno predlozio direktno ubacivanje DbContext-a u servis sto je krsilo arhitekturna pravila – ispravljeno kroz repository pattern. Takodjer, JWT key je prebacen u .env zbog sigurnosti informacija. |
+| Ko je koristio alat | Uma Mahmutovic |
+
 ---
 
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
