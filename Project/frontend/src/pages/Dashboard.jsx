@@ -40,7 +40,7 @@ export default function Dashboard() {
       
       <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
         {/* DODAN LINK DO TIKETA */}
-        <Link to="/moji-tiketi">
+        <Link to="/mytickets">
           <button style={{ padding: '8px 16px', cursor: 'pointer' }}>
             Moji tiketi
           </button>
@@ -48,7 +48,7 @@ export default function Dashboard() {
 
         <button 
           onClick={handleLogout} 
-          style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#fff', border: '1px solid #ccc' }}
+          style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#fff', border: '1px solid #ccc', color: '#111827' }}
         >
           Logout
         </button>
