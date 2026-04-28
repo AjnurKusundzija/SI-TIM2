@@ -94,8 +94,8 @@ namespace TelecomSupportSystem.BLL.Services
 
         private string GenerateAccessToken(User user)
         {
-            var jwtKey = _configuration["JWT_KEY"]
-                ?? throw new InvalidOperationException("JWT_KEY is missing from configuration providers.");
+            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY")
+                ?? throw new InvalidOperationException("JWT_KEY environment variable is not set.");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
