@@ -2,4 +2,5 @@
   <Project Path="TelecomSupportSystem.API/TelecomSupportSystem.API.csproj" />
   <Project Path="TelecomSupportSystem.BLL/TelecomSupportSystem.BLL.csproj" />
   <Project Path="TelecomSupportSystem.DAL/TelecomSupportSystem.DAL.csproj" />
+  <Project Path="TelecomSupportSystem.Tests/TelecomSupportSystem.Tests.csproj" />
 </Solution>

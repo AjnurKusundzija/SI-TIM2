@@ -11,11 +11,17 @@ export default defineConfig({
     proxy: {
       '/api': {
         // Point to "https" backend endpoint
-        target: 'https://localhost:7148', 
+        target: 'https://localhost:7148',
         changeOrigin: true,
         // IMPORTANT: Tells Vite to accept the local .NET self-signed certificate
-        secure: false, 
+        secure: false,
       },
     },
+  },
+  ...(process.env.VITEST && { esbuild: { jsx: 'automatic' } }),
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test/setup.js'],
   },
 })
