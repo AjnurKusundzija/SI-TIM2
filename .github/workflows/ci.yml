@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, 'feature/**', 'bugfix/**', 'hotfix/**', 'release/**']
   pull_request:
     branches: [main, develop]
 
@@ -57,7 +57,7 @@ jobs:
         run: npx eslint src/
 
       - name: Test
-        run: npm test -- --run --passWithNoTests
+        run: npm test -- --run
 
       - name: Build
         run: npm run build

@@ -37,4 +37,24 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 ---
 
+---
+
+## Unos #2
+
+| Polje | Detalji |
+|---|---|
+| Datum | 28.04.2026 |
+| Sprint broj | Sprint 5 |
+| Alat koji je koristen | Claude Code (claude-sonnet-4-6) |
+| Svrha koristenja | Generisanje unit testova za PB-19 (login) i ažuriranje TestStrategy i CI konfiguracije |
+| Kratak opis zadatka ili upita | Na osnovu postojećeg auth sistema (AuthService, AuthController, authService.js, AuthContext, Login, ProtectedRoute), TestStrategy dokumenta i korisničkih priča US-1, US-2, US-3 — AI je trebao napisati unit testove koji pokrivaju sve acceptance kriterije za prijavu, odjavu i prikaz greške. Dodatno, trebalo je ažurirati TestStrategy s evidencijom rezultata i ispraviti CI da ne koristi `--passWithNoTests`. |
+| Sta je AI predlozio ili generisao | Backend xUnit test projekt (`TelecomSupportSystem.Tests`) s `AuthServiceTests` (19 testova) i `AuthControllerTests` (7 testova) koristeći Moq za mockiranje repozitorija i konfiguracije; frontend Vitest test fajlovi (`authService.test.js` — 12 testova, `AuthContext.test.jsx` — 3 testa, `ProtectedRoute.test.jsx` — 2 testa, `Login.test.jsx` — 4 testa) koristeći Testing Library; ažuriranje `TestStrategy.md` s redom evidencije; ažuriranje `.slnx` i `ci.yml` (uklanjanje `--passWithNoTests`, dodavanje `feature/**` trigera); rješenje za JSX transform konflikt između `@vitejs/plugin-react` v6 (OXC) i Vitest v1 (esbuild). |
+| Sta je tim prihvatio | Sve test fajlove i njihovu strukturu; podjelu testova po slojevima (service, controller, frontend servisi, context, komponente); CI izmjene; ažuriranje TestStrategy; `process.env.VITEST` uvjet za esbuild opciju u `vite.config.js`. |
+| Sta je tim izmijenio | Uklonjen zaseban `vitest.config.js` i konfiguracija je spojena u `vite.config.js`; ispravljen selektor u `Login.test.jsx` (`getByText(/sign in/i)` → `getByRole('button', { name: /sign in/i })`) jer je tekst "Sign in" bio prisutan na više mjesta u DOM-u; uklonjena pogrešna assertion koja je provjeravala da riječ "email" nije u dokumentu (label "Email" je uvijek prisutan u formi). |
+| Sta je tim odbacio | Ništa strukturalno — sve predložene izmjene su prihvaćene nakon provjere i lokalnog testiranja. |
+| Rizici, problemi ili greske koje su uocene | AI je u TestStrategy upisao netačne brojeve testova (14 umjesto 19 za AuthServiceTests, 10 umjesto 12 za authService.test.js, ukupno 40 umjesto 47) — uočeno i ispravljeno nakon provjere stvarnih rezultata. Kompatibilnost između `@vitejs/plugin-react` v6 i Vitest v1 zahtijevala je nestandardno rješenje (`process.env.VITEST` uvjet) zbog razlike između OXC (produkcijski build) i esbuild (test okruženje). Instaliran `jsdom` paket koji nije bio u `package.json`. |
+| Ko je koristio alat | Uman Mahmutović |
+
+---
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.

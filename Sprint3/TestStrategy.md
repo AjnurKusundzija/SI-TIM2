@@ -110,6 +110,7 @@ U ovoj sekciji se ne unose unaprijed napisani test case-ovi. Evidentiraju se rez
 | Datum | Referenca (US/NFR/PB) | AC fokus | Nivo testiranja | Metoda | Vrsta dokaza | Rezultat | ID defekta | Napomena |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | DD-MM-YYYY | npr. US-8, NFR-04 | npr. tiket se kreira i potvrda stiže u vremenskom okviru | Unit/Integracijsko/Sistemsko/UI/Sigurnosno/Performansno/Prihvatno | Smoke/Regression/Stress/A/B/Exploratory | CI log, API log, Playwright report, NBench rezultat, UI test report, zapis kompletnog toka, izvještaj testiranja opterećenja, UAT zapisnik | PASS/FAIL/BLOCKED | BUG-DD-MM-YYYY-XXX ili N/A | Sprint, okruženje, dodatni kontekst |
+| 28-04-2026 | US-1, US-2, US-3, PB-19 | Ispravna prijava/odjava za sve uloge; generička poruka greške bez otkrivanja detalja; zaštita neovlaštenog pristupa; gašenje sesije pri odjavi | Unit | Regression | xUnit CI log (`AuthServiceTests` — 19 testova; `AuthControllerTests` — 7 testova); Vitest CI log (`authService.test.js` — 12 testova; `AuthContext.test.jsx` — 3 testa; `ProtectedRoute.test.jsx` — 2 testa; `Login.test.jsx` — 4 testa); ukupno 47 unit testova | PASS | N/A | Sprint 5; lokalno okruženje; backend xUnit + Moq, frontend Vitest + Testing Library; pokrivenost: AuthService, AuthController, authService.js, AuthContext, ProtectedRoute, Login |
 
 
 
