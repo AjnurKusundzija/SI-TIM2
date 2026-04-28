@@ -3,11 +3,9 @@
 // BUGFIX 2: Ruta u App.jsx mora biti unutar <ProtectedRoute>
 
 import { useState, useEffect } from 'react'
-import { useAuth } from '../context/AuthContext'
 import { getMyTickets } from '../services/ticketService'
 
 export default function MyTickets() {
-  const { user } = useAuth()
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
