@@ -23,7 +23,7 @@ describe('Login page', () => {
 
   function fillForm(email = 'user@example.com', password = 'Password123!') {
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: email } })
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: password } })
+    fireEvent.change(screen.getByLabelText(/lozinka/i), { target: { value: password } })
   }
 
   // US-1: forma prikazuje polja za email i lozinku
@@ -31,7 +31,7 @@ describe('Login page', () => {
     render(<Login />)
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/lozinka/i)).toBeInTheDocument()
   })
 
   // US-1: uspješna prijava preusmjerava na /dashboard
@@ -40,7 +40,7 @@ describe('Login page', () => {
     render(<Login />)
 
     fillForm()
-    fireEvent.submit(screen.getByRole('button', { name: /sign in/i }).closest('form'))
+    fireEvent.submit(screen.getByRole('button', { name: /prijavi se/i }).closest('form'))
 
     await waitFor(() => {
       expect(mocks.navigate).toHaveBeenCalledWith('/dashboard')
@@ -53,11 +53,11 @@ describe('Login page', () => {
     render(<Login />)
 
     fillForm()
-    fireEvent.submit(screen.getByRole('button', { name: /sign in/i }).closest('form'))
+    fireEvent.submit(screen.getByRole('button', { name: /prijavi se/i }).closest('form'))
 
     await waitFor(() => {
       // US-3: generička poruka, ne otkriva koji je podatak pogrešan
-      expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument()
+      expect(screen.getByText(/nevažeći podaci/i)).toBeInTheDocument()
     })
   })
 
@@ -66,7 +66,7 @@ describe('Login page', () => {
     render(<Login />)
 
     // Submit bez popunjavanja polja
-    fireEvent.submit(screen.getByRole('button', { name: /sign in/i }).closest('form'))
+    fireEvent.submit(screen.getByRole('button', { name: /prijavi se/i }).closest('form'))
 
     await waitFor(() => {
       expect(mocks.login).not.toHaveBeenCalled()
