@@ -1,4 +1,5 @@
 ﻿using TelecomSupportSystem.BLL.DTOs;
+using TelecomSupportSystem.BLL.DTOs.Tickets;
 
 namespace TelecomSupportSystem.BLL.Services.Interfaces
 {

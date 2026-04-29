@@ -1,4 +1,5 @@
 ﻿using TelecomSupportSystem.BLL.DTOs;
+using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
