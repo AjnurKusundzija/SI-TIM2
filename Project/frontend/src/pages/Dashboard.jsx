@@ -46,6 +46,12 @@ export default function Dashboard() {
           </button>
         </Link>
 
+        <Link to="/create-ticket">
+          <button style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#10b981', color: '#fff', border: 'none' }}>
+            Kreiraj tiket
+          </button>
+        </Link>
+
         <button 
           onClick={handleLogout} 
           style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#fff', border: '1px solid #ccc', color: '#111827' }}

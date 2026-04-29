@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services.Interfaces;
  
 namespace TelecomSupportSystem.API.Controllers
@@ -24,12 +25,28 @@ namespace TelecomSupportSystem.API.Controllers
         public async Task<IActionResult> GetMyTickets()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
- 
+
             if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId))
                 return Unauthorized();
- 
+
             var tickets = await _ticketService.GetMyTicketsAsync(userId);
             return Ok(tickets);
+        }
+
+        // PB-22: POST /api/ticket
+        [HttpPost]
+        public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto createTicketDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var ticket = await _ticketService.CreateTicketAsync(createTicketDto, userId);
+            return CreatedAtAction(nameof(GetMyTickets), new { }, ticket);
         }
     }
 }
