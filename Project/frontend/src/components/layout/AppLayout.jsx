@@ -5,9 +5,9 @@ import Header from './Header';
 
 const pageTitles = {
   '/dashboard': 'Dashboard',
-  '/mytickets': 'My Tickets',
-  '/tickets': 'Tickets',
-  '/create-ticket': 'Create Ticket',
+  '/mytickets': 'Moji tiketi',
+  '/tickets': 'Tiketi',
+  '/create-ticket': 'Kreiraj tiket',
 };
 
 export default function AppLayout() {

@@ -13,20 +13,20 @@ import {
 const navConfig = {
   CLIENT: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/mytickets', label: 'My Tickets', icon: Ticket },
-    { to: '/create-ticket', label: 'Create Ticket', icon: PlusCircle },
+    { to: '/mytickets', label: 'Moji tiketi', icon: Ticket },
+    { to: '/create-ticket', label: 'Kreiraj tiket', icon: PlusCircle },
   ],
   AGENT: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/tickets', label: 'All Tickets', icon: Ticket },
+    { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
   ],
   TECHNICIAN: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/tickets', label: 'Assigned Tickets', icon: Ticket },
+    { to: '/tickets', label: 'Dodijeljeni tiketi', icon: Ticket },
   ],
   ADMINISTRATOR: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/tickets', label: 'All Tickets', icon: Ticket },
+    { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
   ],
 };
 
@@ -108,7 +108,7 @@ export default function Sidebar({ isOpen, onClose }) {
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-navy-300 hover:bg-navy-800 hover:text-white transition-colors w-full"
           >
             <LogOut size={18} />
-            Sign Out
+            Odjavi se
           </button>
         </div>
       </aside>

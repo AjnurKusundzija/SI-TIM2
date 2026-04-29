@@ -4,14 +4,14 @@ import { getMyTickets } from '../services/ticketService'
 import { Search, Plus, Ticket } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState'
 
-const PRIORITY_LABELS = { LOW: 'Low', MEDIUM: 'Medium', HIGH: 'High' }
-const STATUS_LABELS = { OPEN: 'Open', CLOSED: 'Closed', PENDING_CLOSE: 'Pending Close' }
+const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok' }
+const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', PENDING_CLOSE: 'Čeka zatvaranje' }
 const TYPE_LABELS = {
   INTERNET: 'Internet',
   TV: 'TV',
-  MOBILE_NETWORK: 'Mobile Network',
-  BILLING: 'Billing',
-  TECHNICAL_SUPPORT: 'Technical Support',
+  MOBILE_NETWORK: 'Mobilna mreža',
+  BILLING: 'Računi/Naplata',
+  TECHNICAL_SUPPORT: 'Tehnička podrška',
 }
 
 const STATUS_CLASSES = {
@@ -75,7 +75,7 @@ export default function MyTickets() {
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Search tickets..."
+            placeholder="Pretraži tikete..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none"
@@ -87,7 +87,7 @@ export default function MyTickets() {
             onChange={(e) => setFilters((f) => ({ ...f, priority: e.target.value }))}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
           >
-            <option value="">All Priorities</option>
+            <option value="">Svi prioriteti</option>
             {Object.entries(PRIORITY_LABELS).map(([val, label]) => (
               <option key={val} value={val}>{label}</option>
             ))}
@@ -98,7 +98,7 @@ export default function MyTickets() {
             onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
           >
-            <option value="">All Status</option>
+            <option value="">Svi statusi</option>
             {Object.entries(STATUS_LABELS).map(([val, label]) => (
               <option key={val} value={val}>{label}</option>
             ))}
@@ -109,7 +109,7 @@ export default function MyTickets() {
             onChange={(e) => setFilters((f) => ({ ...f, type: e.target.value }))}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
           >
-            <option value="">All Types</option>
+            <option value="">Svi tipovi</option>
             {Object.entries(TYPE_LABELS).map(([val, label]) => (
               <option key={val} value={val}>{label}</option>
             ))}
@@ -125,7 +125,7 @@ export default function MyTickets() {
           <Link to="/create-ticket">
             <button className="flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 text-white font-medium rounded-lg text-sm transition-colors whitespace-nowrap">
               <Plus size={16} />
-              New Ticket
+              Novi tiket
             </button>
           </Link>
         </div>
@@ -152,7 +152,7 @@ export default function MyTickets() {
             onClick={() => setFilters(EMPTY_FILTERS)}
             className="text-xs text-red-600 hover:text-red-800 font-medium"
           >
-            Clear all
+            Očisti sve
           </button>
         </div>
       )}
@@ -167,10 +167,10 @@ export default function MyTickets() {
       ) : filteredTickets.length === 0 ? (
         <EmptyState
           icon={Ticket}
-          title={tickets.length === 0 ? 'No tickets yet' : 'No tickets match your filters'}
-          description={tickets.length === 0 ? 'Create your first support ticket to get started.' : 'Try adjusting or clearing your filters.'}
+          title={tickets.length === 0 ? 'Još nema tiketa' : 'Nijedan tiket ne odgovara filterima'}
+          description={tickets.length === 0 ? 'Kreirajte vaš prvi tiket za podršku da biste započeli.' : 'Pokušajte prilagoditi ili očistiti filtere.'}
           action={tickets.length === 0 ? () => window.location.href = '/create-ticket' : undefined}
-          actionLabel={tickets.length === 0 ? 'Create Ticket' : undefined}
+          actionLabel={tickets.length === 0 ? 'Kreiraj tiket' : undefined}
         />
       ) : (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -179,11 +179,11 @@ export default function MyTickets() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Ticket</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tiket</th>
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Priority</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Type</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Created</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Prioritet</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tip</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Kreirano</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">

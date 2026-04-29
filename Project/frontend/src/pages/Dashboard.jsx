@@ -26,21 +26,21 @@ export default function Dashboard() {
   const { user } = useAuth()
 
   const clientCards = [
-    { icon: Ticket, label: 'My Tickets', description: 'View and track your support tickets', to: '/mytickets', color: 'bg-navy-600' },
-    { icon: PlusCircle, label: 'Create Ticket', description: 'Submit a new support request', to: '/create-ticket', color: 'bg-emerald-500' },
+    { icon: Ticket, label: 'Moji tiketi', description: 'Pregledajte i pratite vaše tikete za podršku', to: '/mytickets', color: 'bg-navy-600' },
+    { icon: PlusCircle, label: 'Kreiraj tiket', description: 'Podnesite novi zahtjev za podršku', to: '/create-ticket', color: 'bg-emerald-500' },
   ]
 
   const staffCards = [
-    { icon: Ticket, label: 'Tickets', description: 'View and manage support tickets', to: '/tickets', color: 'bg-navy-600' },
+    { icon: Ticket, label: 'Tiketi', description: 'Pregledajte i upravljajte tiketima za podršku', to: '/tickets', color: 'bg-navy-600' },
   ]
 
   const cards = user?.role === 'CLIENT' ? clientCards : staffCards
 
   const roleDescription = {
-    CLIENT: 'Here is an overview of your support account.',
-    AGENT: 'Here is your ticket queue and activity summary.',
-    TECHNICIAN: 'Here are your assigned tickets and tasks.',
-    ADMINISTRATOR: 'Here is your system-wide overview.',
+    CLIENT: 'Ovdje je pregled vašeg korisničkog računa za podršku.',
+    AGENT: 'Ovdje su vaši tiketi na čekanju i sažetak aktivnosti.',
+    TECHNICIAN: 'Ovdje su vaši dodijeljeni tiketi i zadaci.',
+    ADMINISTRATOR: 'Ovdje je vaš sistemski pregled.',
   }
 
   return (
@@ -48,17 +48,17 @@ export default function Dashboard() {
       {/* Welcome banner */}
       <div className="bg-gradient-to-r from-navy-800 to-navy-700 rounded-xl p-6 text-white">
         <h2 className="text-xl font-bold">
-          Welcome back, {user?.firstName}!
+          Dobrodošli nazad, {user?.firstName}!
         </h2>
         <p className="text-navy-200 text-sm mt-1">
-          {roleDescription[user?.role] || 'Welcome to TelecomSupport.'}
+          {roleDescription[user?.role] || 'Dobrodošli u TelecomSupport.'}
         </p>
       </div>
 
       {/* Quick action cards */}
       <div>
         <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-          Quick Actions
+          Brze akcije
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {cards.map((card) => (

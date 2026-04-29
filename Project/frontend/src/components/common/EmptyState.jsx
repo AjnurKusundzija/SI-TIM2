@@ -3,8 +3,8 @@ import { Inbox } from 'lucide-react';
 
 export default function EmptyState({
   icon: Icon = Inbox,
-  title = 'No data found',
-  description = 'There is nothing to display here yet.',
+  title = 'Nema podataka',
+  description = 'Trenutno nema ništa za prikaz.',
   action,
   actionLabel,
 }) {

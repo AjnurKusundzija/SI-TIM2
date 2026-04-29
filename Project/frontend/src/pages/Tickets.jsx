@@ -15,14 +15,14 @@ const PRIORITY_CLASSES = {
   LOW: 'bg-blue-100 text-blue-800',
 }
 
-const STATUS_LABELS = { OPEN: 'Open', CLOSED: 'Closed', PENDING_CLOSE: 'Pending Close' }
-const PRIORITY_LABELS = { LOW: 'Low', MEDIUM: 'Medium', HIGH: 'High' }
+const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', PENDING_CLOSE: 'Čeka zatvaranje' }
+const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok' }
 const TYPE_LABELS = {
   INTERNET: 'Internet',
   TV: 'TV',
-  MOBILE_NETWORK: 'Mobile Network',
-  BILLING: 'Billing',
-  TECHNICAL_SUPPORT: 'Technical Support',
+  MOBILE_NETWORK: 'Mobilna mreža',
+  BILLING: 'Računi/Naplata',
+  TECHNICAL_SUPPORT: 'Tehnička podrška',
 }
 
 export default function Tickets() {
@@ -62,7 +62,7 @@ export default function Tickets() {
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Search tickets..."
+            placeholder="Pretraži tikete..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none"
@@ -74,7 +74,7 @@ export default function Tickets() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
           >
-            <option value="ALL">All Status</option>
+            <option value="ALL">Svi statusi</option>
             {Object.entries(STATUS_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
           <select
@@ -82,7 +82,7 @@ export default function Tickets() {
             onChange={(e) => setTypeFilter(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
           >
-            <option value="ALL">All Types</option>
+            <option value="ALL">Svi tipovi</option>
             {Object.entries(TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
           <select
@@ -90,7 +90,7 @@ export default function Tickets() {
             onChange={(e) => setPriorityFilter(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
           >
-            <option value="ALL">All Priority</option>
+            <option value="ALL">Svi prioriteti</option>
             {Object.entries(PRIORITY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
         </div>
@@ -103,18 +103,18 @@ export default function Tickets() {
       ) : error ? (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
       ) : filtered.length === 0 ? (
-        <EmptyState icon={Ticket} title="No tickets found" description="No tickets match your current filters." />
+        <EmptyState icon={Ticket} title="Nema pronađenih tiketa" description="Nijedan tiket ne odgovara vašim filterima." />
       ) : (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Ticket</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tiket</th>
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Priority</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Type</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Created</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Prioritet</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tip</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Kreirano</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">

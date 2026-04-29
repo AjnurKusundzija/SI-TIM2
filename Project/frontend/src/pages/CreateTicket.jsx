@@ -6,15 +6,15 @@ import { CheckCircle } from 'lucide-react'
 const PROBLEM_CATEGORIES = [
   { value: 'INTERNET', label: 'Internet' },
   { value: 'TV', label: 'TV' },
-  { value: 'MOBILE_NETWORK', label: 'Mobile Network' },
-  { value: 'BILLING', label: 'Billing' },
-  { value: 'TECHNICAL_SUPPORT', label: 'Technical Support' },
+  { value: 'MOBILE_NETWORK', label: 'Mobilna mreža' },
+  { value: 'BILLING', label: 'Računi/Naplata' },
+  { value: 'TECHNICAL_SUPPORT', label: 'Tehnička podrška' },
 ]
 
 const PRIORITIES = [
-  { value: 'LOW', label: 'Low' },
-  { value: 'MEDIUM', label: 'Medium' },
-  { value: 'HIGH', label: 'High' },
+  { value: 'LOW', label: 'Nizak' },
+  { value: 'MEDIUM', label: 'Srednji' },
+  { value: 'HIGH', label: 'Visok' },
 ]
 
 export default function CreateTicket() {
@@ -31,10 +31,10 @@ export default function CreateTicket() {
 
   const validateForm = () => {
     const newErrors = {}
-    if (!formData.subject.trim()) newErrors.subject = 'Subject is required.'
-    if (!formData.type) newErrors.type = 'Problem type is required.'
-    if (!formData.description.trim()) newErrors.description = 'Description is required.'
-    if (!formData.priority) newErrors.priority = 'Priority is required.'
+    if (!formData.subject.trim()) newErrors.subject = 'Naslov je obavezan.'
+    if (!formData.type) newErrors.type = 'Tip problema je obavezan.'
+    if (!formData.description.trim()) newErrors.description = 'Opis je obavezan.'
+    if (!formData.priority) newErrors.priority = 'Prioritet je obavezan.'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -65,11 +65,11 @@ export default function CreateTicket() {
     } catch (err) {
       console.error(err)
       if (err.response?.status === 401) {
-        setError('Not authorized. Please sign in again.')
+        setError('Niste ovlašteni. Molimo prijavite se ponovo.')
       } else if (err.response?.status === 400) {
-        setError('Invalid data. Please check your input.')
+        setError('Nevažeći podaci. Molimo provjerite unos.')
       } else {
-        setError('Failed to create ticket. Please try again.')
+        setError('Nije uspjelo kreiranje tiketa. Molimo pokušajte ponovo.')
       }
     } finally {
       setLoading(false)
@@ -80,14 +80,14 @@ export default function CreateTicket() {
     <div className="max-w-2xl mx-auto">
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
         <div className="px-6 py-5 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900">Create New Ticket</h2>
-          <p className="text-sm text-gray-500 mt-1">Submit a new support request</p>
+          <h2 className="text-lg font-semibold text-gray-900">Kreiraj novi tiket</h2>
+          <p className="text-sm text-gray-500 mt-1">Podnesite novi zahtjev za podršku</p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div>
             <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
-              Subject <span className="text-red-500">*</span>
+              Naslov <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -95,7 +95,7 @@ export default function CreateTicket() {
               name="subject"
               value={formData.subject}
               onChange={handleChange}
-              placeholder="Brief description of the issue"
+              placeholder="Kratak opis problema"
               className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none transition-colors"
             />
             {errors.subject && <p className="mt-1 text-xs text-red-600">{errors.subject}</p>}
@@ -104,7 +104,7 @@ export default function CreateTicket() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
-                Problem Type <span className="text-red-500">*</span>
+                Tip problema <span className="text-red-500">*</span>
               </label>
               <select
                 id="type"
@@ -113,7 +113,7 @@ export default function CreateTicket() {
                 onChange={handleChange}
                 className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none"
               >
-                <option value="">Select type</option>
+                <option value="">Odaberi tip</option>
                 {PROBLEM_CATEGORIES.map((cat) => (
                   <option key={cat.value} value={cat.value}>{cat.label}</option>
                 ))}
@@ -123,7 +123,7 @@ export default function CreateTicket() {
 
             <div>
               <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
-                Priority <span className="text-red-500">*</span>
+                Prioritet <span className="text-red-500">*</span>
               </label>
               <select
                 id="priority"
@@ -132,7 +132,7 @@ export default function CreateTicket() {
                 onChange={handleChange}
                 className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none"
               >
-                <option value="">Select priority</option>
+                <option value="">Odaberi prioritet</option>
                 {PRIORITIES.map((pri) => (
                   <option key={pri.value} value={pri.value}>{pri.label}</option>
                 ))}
@@ -143,7 +143,7 @@ export default function CreateTicket() {
 
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-              Description <span className="text-red-500">*</span>
+              Opis <span className="text-red-500">*</span>
             </label>
             <textarea
               id="description"
@@ -151,7 +151,7 @@ export default function CreateTicket() {
               value={formData.description}
               onChange={handleChange}
               rows={6}
-              placeholder="Describe your issue in detail..."
+              placeholder="Detaljno opišite vaš problem..."
               className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none resize-none transition-colors"
             />
             {errors.description && <p className="mt-1 text-xs text-red-600">{errors.description}</p>}
@@ -166,7 +166,7 @@ export default function CreateTicket() {
           {success && (
             <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700 flex items-center gap-2">
               <CheckCircle size={16} />
-              Ticket created successfully!
+              Tiket je uspješno kreiran!
             </div>
           )}
 
@@ -181,14 +181,14 @@ export default function CreateTicket() {
               }}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
             >
-              Reset
+              Poništi
             </button>
             <button
               type="submit"
               disabled={loading}
               className="px-6 py-2 text-sm font-medium text-white bg-navy-700 hover:bg-navy-800 rounded-lg transition-colors disabled:opacity-50"
             >
-              {loading ? 'Creating...' : 'Create Ticket'}
+              {loading ? 'Kreiranje...' : 'Kreiraj tiket'}
             </button>
           </div>
         </form>
