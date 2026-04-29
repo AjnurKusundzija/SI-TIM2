@@ -12,7 +12,7 @@ using TelecomSupportSystem.DAL.Repositories.Interfaces;
 using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.BLL.Services;
 
-DotNetEnv.Env.Load();
+DotNetEnv.Env.Load("../../.env");
 
 var builder = WebApplication.CreateBuilder(args);
 

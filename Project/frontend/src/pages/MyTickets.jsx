@@ -3,6 +3,7 @@
 // BUGFIX 2: Ruta u App.jsx mora biti unutar <ProtectedRoute>
 
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { getMyTickets } from '../services/ticketService'
 
 export default function MyTickets() {
@@ -41,6 +42,9 @@ export default function MyTickets() {
         <div style={styles.header}>
           <h1 style={styles.title}>Moji tiketi</h1>
           <p style={styles.subtitle}>Pregled svih vaših prijavljenih zahtjeva</p>
+          <Link to="/create-ticket">
+            <button style={styles.createButton}>Kreiraj novi tiket</button>
+          </Link>
         </div>
 
         {loading ? (
@@ -99,6 +103,18 @@ const styles = {
     fontSize: '14px',
     color: '#6b7280',
     margin: 0,
+  },
+  createButton: {
+    marginTop: '16px',
+    padding: '10px 20px',
+    background: '#3b82f6',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '14px',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'background 0.2s',
   },
   list: {
     display: 'flex',

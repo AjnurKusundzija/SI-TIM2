@@ -6,6 +6,7 @@ import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
 import Tickets from "./pages/Tickets"
 import MyTickets from "./pages/MyTickets"
+import CreateTicket from "./pages/CreateTicket"
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
           } />
           <Route path="/tickets" element={
             <ProtectedRoute><Tickets /></ProtectedRoute>
+          } />
+          <Route path="/create-ticket" element={
+            <ProtectedRoute><CreateTicket /></ProtectedRoute>
           } />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -11,7 +11,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         // Point to "https" backend endpoint
-        target: 'https://localhost:7148',
+        target: 'http://localhost:7149',
         changeOrigin: true,
         // IMPORTANT: Tells Vite to accept the local .NET self-signed certificate
         secure: false,
