@@ -1,63 +1,70 @@
-/*import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { Ticket, PlusCircle, LayoutDashboard } from 'lucide-react'
 
-export default function Dashboard() {
-  const { user, logout } = useAuth()
+function QuickCard({ icon: Icon, label, description, to, color }) {
   const navigate = useNavigate()
-
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
-
   return (
-    <div style={{ padding: '40px' }}>
-      <h1>Dashboard</h1>
-      <p>Ulogovan kao: <strong>{user?.email}</strong> ({user?.role})</p>
-      <button onClick={handleLogout} style={{ marginTop: '16px', padding: '8px 16px', cursor: 'pointer' }}>
-        Logout
-      </button>
+    <div
+      onClick={() => navigate(to)}
+      className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow"
+    >
+      <div className="flex items-center gap-4">
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${color}`}>
+          <Icon size={22} className="text-white" />
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-900">{label}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+        </div>
+      </div>
     </div>
   )
-} */
-
-import { useNavigate, Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+}
 
 export default function Dashboard() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
+  const { user } = useAuth()
 
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
+  const clientCards = [
+    { icon: Ticket, label: 'My Tickets', description: 'View and track your support tickets', to: '/mytickets', color: 'bg-navy-600' },
+    { icon: PlusCircle, label: 'Create Ticket', description: 'Submit a new support request', to: '/create-ticket', color: 'bg-emerald-500' },
+  ]
+
+  const staffCards = [
+    { icon: Ticket, label: 'Tickets', description: 'View and manage support tickets', to: '/tickets', color: 'bg-navy-600' },
+  ]
+
+  const cards = user?.role === 'CLIENT' ? clientCards : staffCards
+
+  const roleDescription = {
+    CLIENT: 'Here is an overview of your support account.',
+    AGENT: 'Here is your ticket queue and activity summary.',
+    TECHNICIAN: 'Here are your assigned tickets and tasks.',
+    ADMINISTRATOR: 'Here is your system-wide overview.',
   }
 
   return (
-    <div style={{ padding: '40px' }}>
-      <h1>Dashboard</h1>
-      <p>Ulogovan kao: <strong>{user?.email}</strong> ({user?.role})</p>
-      
-      <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
-        {/* DODAN LINK DO TIKETA */}
-        <Link to="/mytickets">
-          <button style={{ padding: '8px 16px', cursor: 'pointer' }}>
-            Moji tiketi
-          </button>
-        </Link>
+    <div className="space-y-6">
+      {/* Welcome banner */}
+      <div className="bg-gradient-to-r from-navy-800 to-navy-700 rounded-xl p-6 text-white">
+        <h2 className="text-xl font-bold">
+          Welcome back, {user?.firstName}!
+        </h2>
+        <p className="text-navy-200 text-sm mt-1">
+          {roleDescription[user?.role] || 'Welcome to TelecomSupport.'}
+        </p>
+      </div>
 
-        <Link to="/create-ticket">
-          <button style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#10b981', color: '#fff', border: 'none' }}>
-            Kreiraj tiket
-          </button>
-        </Link>
-
-        <button 
-          onClick={handleLogout} 
-          style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#fff', border: '1px solid #ccc', color: '#111827' }}
-        >
-          Logout
-        </button>
+      {/* Quick action cards */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          Quick Actions
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {cards.map((card) => (
+            <QuickCard key={card.to} {...card} />
+          ))}
+        </div>
       </div>
     </div>
   )

@@ -164,6 +164,19 @@ if (app.Environment.IsDevelopment())
                 Address = "",
                 Role = Role.CLIENT,
                 AccountStatus = AccountStatus.ACTIVE
+            },
+            new User
+            {
+                FirstName = "Technician",
+                LastName = "User",
+                Email = "technician@test.com",
+                Username = "technician",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Technician123!"),
+                Phone = "",
+                Address = "",
+                Role = Role.TECHNICIAN,
+                AccountStatus = AccountStatus.ACTIVE,
+                AvailabilityStatus = AvailabilityStatus.AVAILABLE
             }
         );
         db.SaveChanges();

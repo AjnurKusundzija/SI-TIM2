@@ -1,40 +1,50 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { AuthProvider } from "./context/AuthContext"
-import ProtectedRoute from "./components/ProtectedRoute"
-import Home from "./pages/Home"
-import Login from "./pages/Login"
-import Dashboard from "./pages/Dashboard"
-import Tickets from "./pages/Tickets"
-import MyTickets from "./pages/MyTickets"
-import CreateTicket from "./pages/CreateTicket"
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import AppLayout from './components/layout/AppLayout'
+import ProtectedRoute from './components/layout/ProtectedRoute'
 
-function App() {
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import MyTickets from './pages/MyTickets'
+import Tickets from './pages/Tickets'
+import CreateTicket from './pages/CreateTicket'
+
+function AppRoutes() {
+  const { user } = useAuth()
+
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route
+        path="/login"
+        element={user ? <Navigate to="/dashboard" replace /> : <Login />}
+      />
 
-          {/* US-11: Zaštićena ruta — redirect na /login ako korisnik nije prijavljen */}
-          <Route path="/mytickets" element={
-            <ProtectedRoute><MyTickets /></ProtectedRoute>
-          } />
+      <Route
+        element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/mytickets" element={<MyTickets />} />
+        <Route path="/tickets" element={<Tickets />} />
+        <Route path="/create-ticket" element={<CreateTicket />} />
+      </Route>
 
-          <Route path="/dashboard" element={
-            <ProtectedRoute><Dashboard /></ProtectedRoute>
-          } />
-          <Route path="/tickets" element={
-            <ProtectedRoute><Tickets /></ProtectedRoute>
-          } />
-          <Route path="/create-ticket" element={
-            <ProtectedRoute><CreateTicket /></ProtectedRoute>
-          } />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />
+    </Routes>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </BrowserRouter>
+  )
+}
