@@ -168,6 +168,23 @@ if (app.Environment.IsDevelopment())
         );
         db.SaveChanges();
     }
+
+    if (!db.Tickets.Any())
+    {
+        var clientId = db.Users.First(u => u.Email == "client@test.com").UserId;
+        db.Tickets.AddRange(
+            new Ticket { Title = "Internet ne radi", Description = "Nemam internet konekciju od jutros.", CreatedDate = DateTime.UtcNow.AddDays(-3), Status = TicketStatus.OPEN, Priority = Priority.HIGH, ProblemCategory = ProblemCategory.INTERNET, CreatorId = clientId },
+            new Ticket { Title = "Spor internet", Description = "Brzina je puno manja od ugovorene.", CreatedDate = DateTime.UtcNow.AddDays(-5), Status = TicketStatus.OPEN, Priority = Priority.MEDIUM, ProblemCategory = ProblemCategory.INTERNET, CreatorId = clientId },
+            new Ticket { Title = "TV signal isčezava", Description = "Slika se gubi svakih par minuta.", CreatedDate = DateTime.UtcNow.AddDays(-7), Status = TicketStatus.CLOSED, ClosedDate = DateTime.UtcNow.AddDays(-2), Priority = Priority.LOW, ProblemCategory = ProblemCategory.TV, CreatorId = clientId },
+            new Ticket { Title = "Pogrešan iznos na računu", Description = "Naplaćena mi je usluga koju nisam naručio.", CreatedDate = DateTime.UtcNow.AddDays(-1), Status = TicketStatus.OPEN, Priority = Priority.HIGH, ProblemCategory = ProblemCategory.BILLING, CreatorId = clientId },
+            new Ticket { Title = "Mobilna mreža bez signala", Description = "Nema signala u mom kvartu već 2 dana.", CreatedDate = DateTime.UtcNow.AddDays(-2), Status = TicketStatus.OPEN, Priority = Priority.MEDIUM, ProblemCategory = ProblemCategory.MOBILE_NETWORK, CreatorId = clientId },
+            new Ticket { Title = "Ne mogu uputiti poziv", Description = "Pozivi ne prolaze, javlja se greška.", CreatedDate = DateTime.UtcNow.AddDays(-4), Status = TicketStatus.CLOSED, ClosedDate = DateTime.UtcNow.AddDays(-1), Priority = Priority.HIGH, ProblemCategory = ProblemCategory.MOBILE_NETWORK, CreatorId = clientId },
+            new Ticket { Title = "Tehnička podrška za ruter", Description = "Trebam pomoć sa konfiguracijom rutera.", CreatedDate = DateTime.UtcNow.AddDays(-6), Status = TicketStatus.CLOSED, ClosedDate = DateTime.UtcNow.AddDays(-3), Priority = Priority.LOW, ProblemCategory = ProblemCategory.TECHNICAL_SUPPORT, CreatorId = clientId },
+            new Ticket { Title = "TV aplikacija ne radi", Description = "Ne mogu pristupiti TV aplikaciji.", CreatedDate = DateTime.UtcNow.AddDays(-8), Status = TicketStatus.OPEN, Priority = Priority.MEDIUM, ProblemCategory = ProblemCategory.TV, CreatorId = clientId },
+            new Ticket { Title = "Prekid usluge bez obavijesti", Description = "Usluga je prekinuta bez ikakve najave.", CreatedDate = DateTime.UtcNow.AddDays(-9), Status = TicketStatus.CLOSED, ClosedDate = DateTime.UtcNow.AddDays(-5), Priority = Priority.HIGH, ProblemCategory = ProblemCategory.TECHNICAL_SUPPORT, CreatorId = clientId }
+        );
+        db.SaveChanges();
+    }
 }
 
 app.UseHttpsRedirection();
