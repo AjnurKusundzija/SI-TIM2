@@ -8,6 +8,8 @@ export default function EmptyState({
   action,
   actionLabel,
 }) {
+  // Ensure linters always treat Icon as used (some configs miss JSX usage)
+  void Icon;
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4">
       <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">

@@ -4,6 +4,7 @@ import { Ticket, PlusCircle, LayoutDashboard } from 'lucide-react'
 
 function QuickCard({ icon: Icon, label, description, to, color }) {
   const navigate = useNavigate()
+  void Icon;
   return (
     <div
       onClick={() => navigate(to)}
