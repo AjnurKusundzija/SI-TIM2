@@ -64,10 +64,10 @@ export default function CreateTicket() {
 
     try {
       await createTicket({
-        subject: formData.subject.trim(),
-        type: formData.type,
-        description: formData.description.trim(),
-        priority: formData.priority,
+        Subject: formData.subject.trim(),
+        Type: formData.type,
+        Description: formData.description.trim(),
+        Priority: formData.priority,
       })
       setSuccess(true)
       setFormData({
