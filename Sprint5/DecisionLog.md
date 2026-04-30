@@ -6,20 +6,19 @@ Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i pra
 
 ---
 
-
 ## Odluka #1
 
 | Polje | Detalji |
 |---|---|
 | **ID odluke** | ODL-1 |
-| **Datum** | DD.MM.YYYY |
-| **Kratak naziv odluke** | Naziv odluke |
-| **Opis problema ili pitanja** | Opis problema koji je zahtijevao donošenje odluke. |
-| **Razmatrane opcije** | 1. Opcija A – kratki opis  2. Opcija B – kratki opis  3. Opcija C – kratki opis |
-| **Odabrana opcija** | Opcija A |
-| **Razlog izbora** | Obrazloženje zašto je odabrana ova opcija u odnosu na ostale. |
-| **Posljedice odluke** | Opis posljedica koje ova odluka ima na projekat, arhitekturu ili tim. |
-| **Status odluke** | aktivna / izmijenjena / zamijenjena |
+| **Datum** | 26.04.2026 |
+| **Kratak naziv odluke** | Korištenje HTTPS protokola za komunikaciju između frontend i backend kontejnera |
+| **Opis problema ili pitanja** | Potrebno je definisati protokol za komunikaciju između kontejnera. Iako su unutar iste mreže, postavlja se pitanje da li koristiti HTTP ili HTTPS. |
+| **Razmatrane opcije** | 1. HTTP – jednostavnija konfiguracija, manji overhead. <br> 2. HTTPS – veća sigurnost, usklađenost sa produkcijom. |
+| **Odabrana opcija** | 2. HTTPS |
+| **Razlog izbora** | Primarni razlog je **lakši i sigurniji deployment**. Većina modernih cloud servisa i ingress kontrolera (poput Nginx ili Traefik-a) zahtijeva SSL/TLS za ispravno rukovanje sesijama i kolačićima. Korištenjem HTTPS-a u razvojnoj fazi eliminišemo "Mixed Content" greške i osiguravamo da se aplikacija ponaša identično u lokalnom i produkcijskom okruženju. |
+| **Posljedice odluke** | Potrebno je konfigurisati certifikate unutar Docker okruženja (self-signed) i ažurirati backend/frontend konfiguracije. |
+| **Status odluke** | aktivna |
 
 ---
 
