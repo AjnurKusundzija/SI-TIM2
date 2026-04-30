@@ -147,6 +147,38 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Rizici, problemi ili greške koje su uočene |  |
 | Ko je koristio alat | Eldar Hadžiselimović |
 
+## Unos #9
+
+| Polje | Detalji |
+|------|--------|
+| Datum | 29.04.2026 |
+| Sprint broj | Sprint 5 |
+| Alat koji je korišten | ChatGPT |
+| Svrha korištenja | Pomoć pri definisanju promptova i provjeri implementacije za PB-22 “Kreiranje novog tiketa”. |
+| Kratak opis zadatka ili upita | Korišten je AI za pripremu promptova za Claude/Copilot radi implementacije backend i frontend dijela feature-a za kreiranje novog tiketa, kao i za provjeru da li backend implementacija zadovoljava acceptance criteria. |
+| Šta je AI predložio ili generisao | AI je generisao backend prompt za implementaciju PB-22, dodatni prompt za provjeru repository patterna, validacije, autentifikacije, enum vrijednosti i persistence logike, te frontend prompt za implementaciju forme za kreiranje tiketa. Također je dao smjernice za provjeru backend implementacije prije pusha. |
+| Šta je tim prihvatio | Prihvaćeni su promptovi za backend i frontend implementaciju, kao i checklist za provjeru backend dijela prije pusha. |
+| Šta je tim izmijenio | Promptovi su prilagođeni stvarnom kontekstu projekta, tako da naglašavaju korištenje postojeće arhitekture, postojećih repozitorija, autentifikacije i validacije. |
+| Šta je tim odbacio | Odbačeni su nepotrebni prijedlozi koji nisu bili dio trenutnog scope-a, kao što su obavezno dodavanje novog repository-ja, unit testova i GET endpointa ako nisu potrebni za PB-22. |
+| Rizici, problemi ili greške koje su uočene | Uočena je potreba da se ručno provjeri da li postojeći repository zaista poziva SaveChangesAsync, da li Ticket postoji u DbContext-u, da li se userId uzima iz JWT tokena, te da li se enum vrijednosti validiraju bez prihvatanja nevalidnih/numeričkih vrijednosti. |
+| Ko je koristio alat | Hana Piralić |
+
+## Unos #10
+
+| Polje | Detalji |
+|------|--------|
+| Datum | 29.04.2026 |
+| Sprint broj | Sprint 5 |
+| Alat koji je korišten | GitHub Copilot |
+| Svrha korištenja | Pomoć pri implementaciji frontend dijela feature-a za kreiranje novog tiketa (PB-22). |
+| Kratak opis zadatka ili upita | Korišten je AI za generisanje i strukturiranje frontend komponente za formu za kreiranje tiketa, uključujući validaciju, API integraciju i UX ponašanje. |
+| Šta je AI predložio ili generisao | Generisana je struktura komponente za formu (input polja, dropdowni, textarea), validacija unosa (required, whitespace), integracija sa backend endpointom POST /api/ticket, te handling success i error odgovora. |
+| Šta je tim prihvatio | Prihvaćena je struktura forme, validacija unosa i način komunikacije sa backendom kroz postojeći API servis. |
+| Šta je tim izmijenio | Prijedlozi su prilagođeni postojećem frontend projektu (routing, styling, način poziva API-ja i upravljanje state-om). |
+| Šta je tim odbacio | Odbačeni su prijedlozi koji uvode nove biblioteke ili odstupaju od postojećeg načina implementacije u projektu. |
+| Rizici, problemi ili greške koje su uočene | Potencijalni rizici uključuju neusklađenost enum vrijednosti između frontend-a i backend-a, nepravilno rukovanje greškama sa servera i potrebu za testiranjem validacije prije slanja zahtjeva. |
+| Ko je koristio alat | Hana Piralić |
+
 
 
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
