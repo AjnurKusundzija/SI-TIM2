@@ -153,5 +153,37 @@ namespace TelecomSupportSystem.Tests.Tickets
             // Assert
             result.Should().BeOfType<UnauthorizedResult>();
         }
+
+        // ─── CreateTicket validacija (US-8, US-9, US-10) ─────────────────────────
+
+        // US-8/US-9/US-10: nevažeći model vraća 400 bez poziva servisu
+        [Fact]
+        public async Task CreateTicket_ShouldReturnBadRequest_WhenModelIsInvalid()
+        {
+            SetUser(1);
+            _controller.ModelState.AddModelError("Subject", "The Subject field is required.");
+
+            var result = await _controller.CreateTicket(new CreateTicketDto());
+
+            Assert.IsType<BadRequestObjectResult>(result);
+            _ticketServiceMock.Verify(s => s.CreateTicketAsync(It.IsAny<CreateTicketDto>(), It.IsAny<int>()), Times.Never);
+        }
+
+        // ─── GetMyTickets prazna lista (US-11, US-13) ─────────────────────────────
+
+        // US-11/US-13: korisnik bez tiketa dobija 200 s praznom kolekcijom
+        [Fact]
+        public async Task GetMyTickets_ShouldReturnOkWithEmptyList_WhenUserHasNoTickets()
+        {
+            SetUser(1);
+            _ticketServiceMock
+                .Setup(s => s.GetMyTicketsAsync(1))
+                .ReturnsAsync(new List<MyTicketDto>());
+
+            var result = await _controller.GetMyTickets();
+
+            var ok = Assert.IsType<OkObjectResult>(result);
+            Assert.Empty((IEnumerable<MyTicketDto>)ok.Value!);
+        }
     }
 }

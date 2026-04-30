@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Moq;
+using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services;
 using TelecomSupportSystem.DAL.Entities;
@@ -11,14 +12,44 @@ namespace TelecomSupportSystem.Tests.Tickets
 {
     public class TicketServiceTests
     {
-        private readonly Mock<ITicketRepository> _ticketRepositoryMock;
+        private readonly Mock<ITicketRepository> _ticketRepositoryMock = new();
         private readonly TicketService _ticketService;
 
         public TicketServiceTests()
         {
-            _ticketRepositoryMock = new Mock<ITicketRepository>();
             _ticketService = new TicketService(_ticketRepositoryMock.Object);
         }
+
+        // ─── Helpers ─────────────────────────────────────────────────────────────
+
+        private static Ticket MakeTicket(
+            int id = 1,
+            int creatorId = 1,
+            TicketStatus status = TicketStatus.OPEN,
+            Priority priority = Priority.LOW,
+            ProblemCategory category = ProblemCategory.INTERNET) => new()
+        {
+            TicketId = id,
+            Title = "Test tiket",
+            Description = "Opis",
+            CreatorId = creatorId,
+            Status = status,
+            Priority = priority,
+            ProblemCategory = category,
+            CreatedDate = DateTime.UtcNow
+        };
+
+        private static CreateTicketDto MakeCreateDto(
+            string subject = "Subject",
+            string description = "Description",
+            Priority priority = Priority.LOW,
+            ProblemCategory category = ProblemCategory.INTERNET) => new()
+        {
+            Subject = subject,
+            Description = description,
+            Priority = priority,
+            Type = category
+        };
 
         [Fact]
         public async Task GetMyTicketsAsync_ShouldReturnOnlyMappedTickets()
@@ -104,6 +135,85 @@ namespace TelecomSupportSystem.Tests.Tickets
                 t.Priority == createDto.Priority &&
                 t.ProblemCategory == createDto.Type
             )), Times.Once);
+        }
+
+        // ─── GetMyTicketsAsync prazna lista (US-11, US-13) ───────────────────────
+
+        // US-11/US-13: korisnik bez tiketa dobija praznu listu (poruka kada nema tiketa)
+        [Fact]
+        public async Task GetMyTicketsAsync_ShouldReturnEmptyList_WhenUserHasNoTickets()
+        {
+            _ticketRepositoryMock.Setup(r => r.GetByCreatorIdAsync(99)).ReturnsAsync(new List<Ticket>());
+
+            var result = await _ticketService.GetMyTicketsAsync(99);
+
+            Assert.Empty(result);
+        }
+
+        // ─── GetMyTicketsAsync mapiranje statusa (US-12) ──────────────────────────
+
+        // US-12: oba statusa se ispravno mapiraju u string za prikaz u interfejsu
+        [Theory]
+        [InlineData(TicketStatus.OPEN, "OPEN")]
+        [InlineData(TicketStatus.CLOSED, "CLOSED")]
+        public async Task GetMyTicketsAsync_ShouldMapStatusToString(TicketStatus status, string expected)
+        {
+            _ticketRepositoryMock
+                .Setup(r => r.GetByCreatorIdAsync(1))
+                .ReturnsAsync(new List<Ticket> { MakeTicket(status: status) });
+
+            var result = await _ticketService.GetMyTicketsAsync(1);
+
+            Assert.Equal(expected, result.Single().Status);
+        }
+
+        // ─── CreateTicketAsync poslovne vrijednosti (US-8, US-9) ─────────────────
+
+        // US-8: novi tiket uvijek dobija status OPEN pri kreiranju
+        [Fact]
+        public async Task CreateTicketAsync_ShouldAlwaysSetStatusToOpen()
+        {
+            _ticketRepositoryMock
+                .Setup(r => r.CreateAsync(It.IsAny<Ticket>()))
+                .ReturnsAsync((Ticket t) => t);
+
+            var result = await _ticketService.CreateTicketAsync(MakeCreateDto(), 1);
+
+            Assert.Equal(TicketStatus.OPEN.ToString(), result.Status);
+        }
+
+        // US-9: svi prioriteti se ispravno prenose i mapiraju u string
+        [Theory]
+        [InlineData(Priority.LOW)]
+        [InlineData(Priority.MEDIUM)]
+        [InlineData(Priority.HIGH)]
+        public async Task CreateTicketAsync_ShouldPreserveAllPriorities(Priority priority)
+        {
+            _ticketRepositoryMock
+                .Setup(r => r.CreateAsync(It.IsAny<Ticket>()))
+                .ReturnsAsync((Ticket t) => t);
+
+            var result = await _ticketService.CreateTicketAsync(MakeCreateDto(priority: priority), 1);
+
+            Assert.Equal(priority.ToString(), result.Priority);
+        }
+
+        // US-9: svi tipovi problema se ispravno prenose i mapiraju u string
+        [Theory]
+        [InlineData(ProblemCategory.INTERNET)]
+        [InlineData(ProblemCategory.TV)]
+        [InlineData(ProblemCategory.MOBILE_NETWORK)]
+        [InlineData(ProblemCategory.BILLING)]
+        [InlineData(ProblemCategory.TECHNICAL_SUPPORT)]
+        public async Task CreateTicketAsync_ShouldPreserveAllProblemCategories(ProblemCategory category)
+        {
+            _ticketRepositoryMock
+                .Setup(r => r.CreateAsync(It.IsAny<Ticket>()))
+                .ReturnsAsync((Ticket t) => t);
+
+            var result = await _ticketService.CreateTicketAsync(MakeCreateDto(category: category), 1);
+
+            Assert.Equal(category.ToString(), result.ProblemCategory);
         }
     }
 }
