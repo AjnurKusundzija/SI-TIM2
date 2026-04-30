@@ -137,14 +137,14 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 |---|---|
 | Datum | 29.04.2026. |
 | Sprint broj | Sprint 5 |
-| Alat koji je korišten | Claude Sonnet 4.6 |
-| Svrha korištenja |  |
-| Kratak opis zadatka ili upita | |
-| Šta je AI predložio ili generisao |  |
-| Šta je tim prihvatio ||
-| Šta je tim izmijenio ||
-| Šta je tim odbacio | |
-| Rizici, problemi ili greške koje su uočene |  |
+| Alat koji je korišten | Claude Sonnet 4.6 (Claude Code) |
+| Svrha korištenja | Pomoć pri postavljanju razvojnog okruženja, dijagnostici grešaka i implementaciji filtriranja tiketa (feature/filtriranje-ticketa) |
+| Kratak opis zadatka ili upita | Korišten AI za: (1) uklanjanje Docker permission greške, (2) dijagnostiku grešaka pri pokretanju backenda i frontenda (nedostajući NuGet paketi, pogrešni portovi u Vite proxy konfiguraciji, nedostajući using direktivi za DTO namespace-ove), (3) implementaciju filtriranja tiketa po prioritetu, statusu, vrsti i datumu na MyTickets stranici, te (4) dodavanje seed podataka za testiranje. |
+| Šta je AI predložio ili generisao | Dijagnozu i ispravke za: `libsimdjson.so.33` grešku (Node.js verzija nekompatibilna sa sistemskom bibliotekom), NETSDK1226 grešku (nedostajući `aspnet-targeting-pack`), pogrešan `.env` putanja u `Program.cs` (`../../.env` → `../.env`), port mismatch u `vite.config.js` (7149 → 5122), nedostajuće `using TelecomSupportSystem.BLL.DTOs.Tickets;` direktive u `ITicketService.cs`, `TicketService.cs` i `TicketController.cs`. Za filtriranje: kompletan rewrite `MyTickets.jsx` sa filter panelom (4 filtera: prioritet, status, vrsta, datum), aktivnim filter chipovima sa individualnim uklanjanjem, kombinovanim filterima putem `useMemo`, te dva odvojena empty state-a (bez tiketa vs. filteri ne odgovaraju). Seed podatke: 9 tiketa raznih prioriteta, statusa i kategorija u `Program.cs`. |
+| Šta je tim prihvatio | Sve dijagnostičke ispravke za razvojno okruženje, implementaciju filtriranja sa filter panelom i chip indikatorima aktivnih filtera, seed podatke za testiranje, te PR opis za pull request. |
+| Šta je tim izmijenio | Tim je naknadno proširio `MyTickets.jsx` sa Tailwind CSS stilovima, `lucide-react` ikonama, tabularnim prikazom tiketa i `EmptyState` komponentom umjesto inline stila koji je AI generisao. Dodan je i search filter po naslovu tiketa. |
+| Šta je tim odbacio | Inline style pristup koji je AI koristio u korist Tailwind CSS klasa koje su konzistentne sa ostatkom projekta. |
+| Rizici, problemi ili greške koje su uočene | Seed kod se ponavljao zbog čestih revertiranja `Program.cs` pri prelasku između grana — potrebno je pažljivije upravljanje granama. Vite proxy port je bio pogrešan (7149 umjesto 5122/7148) što je uzrokovalo da sve API greške budu prikazane kao "Invalid credentials" zbog generičkog catch bloka u `Login.jsx`. |
 | Ko je koristio alat | Eldar Hadžiselimović |
 
 ## Unos #9
