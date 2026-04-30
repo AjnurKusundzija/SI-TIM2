@@ -7,11 +7,11 @@ Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i pra
 ---
 
 
-## Odluka #1
+## Odluka #
 
 | Polje | Detalji |
 |---|---|
-| **ID odluke** | ODL-1 |
+| **ID odluke** | ODL-# |
 | **Datum** | DD.MM.YYYY |
 | **Kratak naziv odluke** | Naziv odluke |
 | **Opis problema ili pitanja** | Opis problema koji je zahtijevao donošenje odluke. |
@@ -23,11 +23,11 @@ Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i pra
 
 ---
 
-## Odluka #2
+## Odluka #1
 
 | Polje | Detalji |
 |---|---|
-| **ID odluke** | ODL-2 |
+| **ID odluke** | ODL-1 |
 | **Datum** | 27.04.2026 |
 | **Kratak naziv odluke** | Uskladjivanje Sprint 5 backloga sa PB-22 i PB-23 |
 | **Opis problema ili pitanja** | Sprint backlog je trebalo uskladiti sa trenutnim prioritetima tako da ukljuci PB-22 i PB-23, a da se iz sprint scope-a ukloni detaljan prikaz tiketa. |
