@@ -68,5 +68,54 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Ko je koristio alat | Uma Mahmutović |
 ---
 
+## Unos #4
+
+| Polje | Detalji |
+|---|---|
+| Datum | 30.04.2026 |
+| Sprint broj | Sprint 5 |
+| Alat koji je koristen | Manus AI |
+| Svrha koristenja | Pomoc pri doradi frontend detalja i implementaciji izmjene jezika |
+| Kratak opis zadatka ili upita | Koristen AI za prijedloge poboljsanja frontend prikaza, uskladjivanje UI detalja i implementaciju opcije za promjenu jezika u aplikaciji. |
+| Sta je AI predlozio ili generisao | Prijedloge za organizaciju frontend komponenti, tekstualne izmjene u korisnickom interfejsu, nacin prikaza opcije za odabir jezika i povezivanje izabranog jezika sa prikazanim tekstom u aplikaciji. |
+| Sta je tim prihvatio | Osnovni pristup za uredjivanje frontend detalja i koncept izmjene jezika kroz postojece frontend komponente. |
+| Sta je tim izmijenio | Prilagodjeni su nazivi, tekstovi i stilovi stvarnom izgledu aplikacije, kao i nacin integracije promjene jezika sa postojecim frontend kodom. |
+| Sta je tim odbacio | Genericke prijedloge koji nisu odgovarali postojecem dizajnu aplikacije ili bi uvodili nepotrebnu kompleksnost. |
+| Rizici, problemi ili greske koje su uocene | Rizik da AI predlozi nekonzistentne nazive ili tekstove u odnosu na ostatak aplikacije; sve izmjene su morale biti rucno provjerene kroz postojece UI tokove. |
+| Ko je koristio alat | Ajdin Dželo, Ajnur Kušundžija, Uma Mahmutović |
+
+
+## Unos #5
+
+| Polje | Detalji |
+|---|---|
+| Datum | 30.04.2026 |
+| Sprint broj | Sprint 5 |
+| Alat koji je koristen | Manus AI |
+| Svrha koristenja | Pomoc pri implementaciji filtriranja tiketa |
+| Kratak opis zadatka ili upita | Koristen AI za prijedlog nacina filtriranja tiketa na frontend strani, ukljucujuci filtriranje po relevantnim atributima tiketa i azuriranje prikazane liste nakon promjene filtera. |
+| Sta je AI predlozio ili generisao | Logiku za primjenu filtera nad listom tiketa, prijedlog UI kontrola za filtriranje i osnovni tok azuriranja rezultata filtriranja u korisnickom interfejsu. |
+| Sta je tim prihvatio | Koncept filtriranja tiketa kroz postojece stanje i komponente, uz prikaz samo tiketa koji odgovaraju odabranim kriterijima. |
+| Sta je tim izmijenio | Prilagodjena je implementacija stvarnim poljima tiketa, postojecim nazivima komponenti i nacinu dohvatanja podataka u projektu. |
+| Sta je tim odbacio | Prijedloge za dodatne filtere i kompleksnije pretrage koji nisu bili dio trenutnog opsega Sprinta 5. |
+| Rizici, problemi ili greske koje su uocene | Potencijalni rizik da filtriranje ne bude uskladjeno sa backend modelom podataka ili da ne pokrije sve kombinacije filtera; potrebno je rucno testiranje osnovnih i negativnih scenarija. |
+| Ko je koristio alat | Eldar Hadžiselimović |
+
+## Unos #6
+
+| Polje | Detalji |
+|---|---|
+| Datum | 30.04.2026 |
+| Sprint broj | Sprint 5 |
+| Alat koji je koristen | Manus AI |
+| Svrha koristenja | Pomoc pri implementaciji PB-22 (Kreiranje novog tiketa) |
+| Kratak opis zadatka ili upita | Koristen AI za prijedlog implementacije funkcionalnosti kreiranja novog tiketa na osnovu Sprint 5 backloga i korisnickih prica US-8, US-9 i US-10. |
+| Sta je AI predlozio ili generisao | Prijedlog forme za prijavu problema, polja za unos naslova i opisa tiketa, odabir tipa i prioriteta tiketa, validaciju obaveznih polja i tok spremanja novog tiketa. |
+| Sta je tim prihvatio | Osnovni tok kreiranja tiketa, strukturu forme i validaciju obaveznih podataka u skladu sa acceptance kriterijima za PB-22. |
+| Sta je tim izmijenio | Prilagodjeni su nazivi polja, poruke validacije i povezivanje forme sa postojecim frontend i backend dijelovima projekta. |
+| Sta je tim odbacio | Genericke prijedloge koji nisu bili vezani za trenutni sprint backlog, kao i dodatne opcije za tiket koje nisu bile dio opsega US-8, US-9 i US-10. |
+| Rizici, problemi ili greske koje su uocene | Rizik da AI predlozi polja ili tokove koji nisu uskladjeni sa postojecim modelom tiketa; implementacija je zahtijevala rucnu provjeru obaveznih polja, prioriteta, tipa tiketa i potvrde uspjesnog kreiranja. |
+| Ko je koristio alat | Hana Piralić, Lamija Maglić |
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
 
