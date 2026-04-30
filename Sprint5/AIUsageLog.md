@@ -181,5 +181,21 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 
 
+## Unos #11
+
+| Polje | Detalji |
+|---|---|
+| Datum | 30.04.2026 |
+| Sprint broj | Sprint 5 |
+| Alat koji je korišten | Claude Code (claude-sonnet-4-6) |
+| Svrha korištenja | Analiza pokrivenosti testovima prema TestStrategy dokumentu i pisanje nedostajućih unit testova za PB-22 (US-8, US-9, US-10) i PB-23 (US-11, US-12, US-13) na backendu i frontendu |
+| Kratak opis zadatka ili upita | AI je trebao: napisati backend unit testove i frontend unit testove. |
+| Šta je AI predložio ili generisao | backend unit testovi za `TicketControllerTests`, `TicketServiceTests` i `TicketRepositoryTests`, tri nova frontend test fajla: `ticketService.test.js` (5 testova), `CreateTicket.test.jsx` (11 testova: forma, validacija sva 4 polja, uspjeh, reset, greške), `MyTickets.test.jsx` (11 testova: prikaz, OPEN/CLOSED labele, prazno stanje, filtriranje po prioritetu/statusu/tipu, pretraga, "Očisti sve", greška API-a) |
+| Šta je tim prihvatio | Sve backend testove; sve tri frontend test datoteke. |
+| Šta je tim izmijenio | `MyTickets.test.jsx` je zahtijevao popravku nakon prvog pokretanja — AI je inicijalno koristio `getByText` koji baca grešku kada postoji više podudaranja jer jsdom renderuje i desktop tabelu i mobile kartice istovremeno (CSS media queries se ne primjenjuju); zamijenjeno sa `queryAllByText` pomoćnim funkcijama `present()`/`absent()`. |
+| Šta je tim odbacio | Odbačeni su prijedlozi koji uvode nove biblioteke ili odstupaju od postojećeg načina implementacije u projektu. |
+| Rizici, problemi ili greške koje su uočene | jsdom ne primjenjuje CSS media queries, pa komponente koje koriste responsive prikaz (desktop tabela + mobile kartice) renderuju oba prikaza istovremeno, što uzrokuje duplikate teksta i greške pri korištenju `getByText`. Rješenje: koristiti `queryAllByText` za provjeru prisustva i odsustva elemenata. |
+| Ko je koristio alat | Lejan Kozlić, Uma Mahmutović |
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
 
