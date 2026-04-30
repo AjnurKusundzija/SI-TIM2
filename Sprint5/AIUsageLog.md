@@ -117,5 +117,37 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Rizici, problemi ili greske koje su uocene | Rizik da AI predlozi polja ili tokove koji nisu uskladjeni sa postojecim modelom tiketa; implementacija je zahtijevala rucnu provjeru obaveznih polja, prioriteta, tipa tiketa i potvrde uspjesnog kreiranja. |
 | Ko je koristio alat | Hana Piralić, Lamija Maglić |
 
+## Unos 7
+| Polje | Detalji |
+|---|---|
+| Datum | 29.04.2026. |
+| Sprint broj | Sprint 5 |
+| Alat koji je korišten | Claude Sonnet 4.6 |
+| Svrha korištenja | Pomoć pri implementaciji PB-22 (Pregled vlastitih tiketa) |
+| Kratak opis zadatka ili upita | "Radim US-11 — pregled vlastitih tiketa. Imam Ticket.cs entitet, TicketService.cs je prazan, MojiTiketi.jsx već postoji na frontendu ali ima greške. Šta trebam prepraviti da zadovolji US-11?" |
+| Šta je AI predložio ili generisao | Identificirao sve komponente koje nedostaju i generisao: ITicketRepository s GetByCreatorIdAsync metodom, TicketRepository s EF Core upitom (WHERE CreatorId = userId), ITicketService interfejs, TicketService s mapiranjem na MyTicketDto, TicketController s GET /api/ticket/my-tickets endpointom koji userId čita isključivo iz JWT claims-a, te MyTicketDto smješten u DTOs/Tickets/. Dodatno, identifikovao dva buga u postojećem frontendu. |
+| Šta je tim prihvatio | Cijelu backend arhitekturu (ITicketRepository, TicketRepository, ITicketService, TicketService, TicketController), sigurnosni pristup gdje se userId čita iz JWT-a a ne iz parametra zahtjeva, ispravku ticket.ticketId na frontendu, te dodavanje ProtectedRoute na /mojitiketi rutu. |
+| Šta je tim izmijenio | MyTicketDto smješten u postojeći DTOs/Tickets/ folder umjesto lokacije koju je AI inicijalno predložio. Namespace usklađen sa konvencijom projekta. Uklonjena redundantna `const { user } = useAuth()` linija iz MojiTiketi.jsx jer api instanca već automatski dodaje JWT header putem interceptora. |
+| Šta je tim odbacio | Razmatrano je korištenje već postojećeg GetTicketDto umjesto kreiranja novog, ali odlučeno je da se napravi zaseban MyTicketDto radi jasnoće i razdvajanja odgovornosti. |
+| Rizici, problemi ili greške koje su uočene | Bez posebnih rizika. AI je generisao kompletan kod koji je tim pregledao i prilagodio konvencijama projekta. Konačna odluka o strukturi fajlova donijeta je od strane tima. |
+| Ko je koristio alat | Merisa Ogrić |
+
+## Unos 8
+| Polje | Detalji |
+|---|---|
+| Datum | 29.04.2026. |
+| Sprint broj | Sprint 5 |
+| Alat koji je korišten | Claude Sonnet 4.6 |
+| Svrha korištenja |  |
+| Kratak opis zadatka ili upita | |
+| Šta je AI predložio ili generisao |  |
+| Šta je tim prihvatio ||
+| Šta je tim izmijenio ||
+| Šta je tim odbacio | |
+| Rizici, problemi ili greške koje su uočene |  |
+| Ko je koristio alat | Eldar Hadžiselimović |
+
+
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
 
