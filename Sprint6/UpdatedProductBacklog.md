@@ -308,7 +308,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Veza sa sprintom ili release planom:** Sprint 9
 
 ---
 
@@ -320,7 +320,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 4
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Veza sa sprintom ili release planom:** Sprint 9
 
 ---
 
@@ -381,7 +381,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 5
 - **Procjena složenosti ili napora:** S
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Veza sa sprintom ili release planom:** Sprint 7
 
 ---
 
@@ -393,7 +393,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 7
+- **Veza sa sprintom ili release planom:** Sprint 6
 
 ---
 
@@ -454,7 +454,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 10
+- **Veza sa sprintom ili release planom:** Sprint 6
 
 ---
 
@@ -479,7 +479,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6-10
+- **Veza sa sprintom ili release planom:** Sprint 9
 
 ---
 
