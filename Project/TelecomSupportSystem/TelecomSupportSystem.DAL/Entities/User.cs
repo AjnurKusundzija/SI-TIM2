@@ -28,5 +28,6 @@ namespace TelecomSupportSystem.DAL.Entities
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public ICollection<SubscriptionPackage> Packages { get; set; } = new List<SubscriptionPackage>();
         public ICollection<TicketUser> TicketAssignments { get; set; } = new List<TicketUser>();
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

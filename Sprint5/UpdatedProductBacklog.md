@@ -40,7 +40,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-20](#pb-20) | Upravljanje korisničkim profilom         | Feature        |     2     |     M     | Backlog | Sprint 9 |
 | [PB-21](#pb-21) | Prikaz paketa i pretplata                | Feature        |     4     |     M     | Backlog | Sprint 9 |
 | [PB-22](#pb-22) | Kreiranje novog tiketa                  | Feature        |     1     |     M     | Backlog | Sprint 5 |
-| [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Backlog | Sprint 6 |
+| [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Backlog | Sprint 5 |
 | [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Backlog | Sprint 6 |
 | [PB-25](#pb-25) | Zatvaranje tiketa                       | Feature        |     1     |     L     | Backlog | Sprint 7 |
 | [PB-26](#pb-26) | Ocjenjivanje tiketa                     | Feature        |     5     |     S     | Backlog | Sprint 8 |
@@ -344,7 +344,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** S
 - **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 6
+- **Veza sa sprintom ili release planom:** Sprint 5
 
 ---
 
