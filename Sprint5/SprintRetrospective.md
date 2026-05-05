@@ -1,7 +1,5 @@
 # Sprint Retrospective – Sprint 5
 
-Retrospektiva je provedena putem anonimnog Google Forms upitnika. Ukupno je odgovorilo **8 članova tima**.
-
 ---
 
 ## Opće ocjene sprinta
