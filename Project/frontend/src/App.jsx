@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import MyTickets from './pages/MyTickets'
 import Tickets from './pages/Tickets'
+import TicketDetail from './pages/TicketDetail'
 import CreateTicket from './pages/CreateTicket'
 
 function AppRoutes() {
@@ -31,6 +32,7 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/mytickets" element={<MyTickets />} />
         <Route path="/tickets" element={<Tickets />} />
+        <Route path="/tickets/:id" element={<TicketDetail />} />
         <Route path="/create-ticket" element={<CreateTicket />} />
       </Route>
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
@@ -8,7 +8,7 @@ namespace TelecomSupportSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Svi endpointi zahtijevaju validan JWT
+    [Authorize]
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _ticketService;
@@ -19,8 +19,6 @@ namespace TelecomSupportSystem.API.Controllers
         }
 
         // US-11: GET /api/ticket/my-tickets
-        // Čita userId iz JWT claims-a — korisnik nikad ne može proslijediti
-        // tuđi ID, što garantuje AC: "Sistem ne smije prikazivati tikete drugih korisnika"
         [HttpGet("my-tickets")]
         public async Task<IActionResult> GetMyTickets()
         {
@@ -31,6 +29,40 @@ namespace TelecomSupportSystem.API.Controllers
 
             var tickets = await _ticketService.GetMyTicketsAsync(userId);
             return Ok(tickets);
+        }
+
+        // US-29: GET /api/ticket?page=1&pageSize=20
+        [HttpGet]
+        public async Task<IActionResult> GetAllTickets([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        {
+            var role = User.FindFirst(ClaimTypes.Role)?.Value
+                    ?? User.FindFirst("role")?.Value;
+
+            if (role != "AGENT" && role != "ADMINISTRATOR")
+                return Forbid();
+
+            if (page < 1) page = 1;
+            if (pageSize < 1 || pageSize > 100) pageSize = 20;
+
+            var result = await _ticketService.GetAllTicketsAsync(page, pageSize);
+            return Ok(result);
+        }
+
+        // US-30: GET /api/ticket/{id}
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetTicketDetail(int id)
+        {
+            var role = User.FindFirst(ClaimTypes.Role)?.Value
+                    ?? User.FindFirst("role")?.Value;
+
+            if (role != "AGENT" && role != "ADMINISTRATOR")
+                return Forbid();
+
+            var ticket = await _ticketService.GetTicketDetailAsync(id);
+            if (ticket is null)
+                return NotFound();
+
+            return Ok(ticket);
         }
 
         // PB-22: POST /api/ticket

@@ -1,7 +1,10 @@
-import { useState, useEffect, useMemo } from 'react'
-import { getMyTickets } from '../services/ticketService'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getAllTickets } from '../services/ticketService'
 import { Search, Ticket } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState'
+
+const PAGE_SIZE = 20
 
 const STATUS_CLASSES = {
   OPEN: 'bg-emerald-100 text-emerald-800',
@@ -26,20 +29,61 @@ const TYPE_LABELS = {
 }
 
 export default function Tickets() {
+  const navigate = useNavigate()
   const [tickets, setTickets] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [hasMore, setHasMore] = useState(true)
+  const [loadingInitial, setLoadingInitial] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('ALL')
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [priorityFilter, setPriorityFilter] = useState('ALL')
 
-  useEffect(() => {
-    getMyTickets()
-      .then(setTickets)
-      .catch((err) => { console.error(err); setError('Failed to load tickets.') })
-      .finally(() => setLoading(false))
+  const pageRef = useRef(1)
+  const sentinelRef = useRef(null)
+  const observerRef = useRef(null)
+
+  const loadMore = useCallback(() => {
+    setLoadingMore(true)
+    pageRef.current += 1
+    getAllTickets(pageRef.current, PAGE_SIZE)
+      .then((data) => {
+        setTickets((prev) => [...prev, ...data.data])
+        setHasMore(pageRef.current < data.totalPages)
+      })
+      .catch((err) => { console.error(err); setError('Greška pri učitavanju tiketa.') })
+      .finally(() => setLoadingMore(false))
   }, [])
+
+  // Initial load
+  useEffect(() => {
+    getAllTickets(1, PAGE_SIZE)
+      .then((data) => {
+        setTickets(data.data)
+        setHasMore(1 < data.totalPages)
+      })
+      .catch((err) => { console.error(err); setError('Greška pri učitavanju tiketa.') })
+      .finally(() => setLoadingInitial(false))
+  }, [])
+
+  // IntersectionObserver for infinite scroll
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect()
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore && !loadingInitial) {
+          loadMore()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sentinelRef.current) observerRef.current.observe(sentinelRef.current)
+
+    return () => observerRef.current?.disconnect()
+  }, [hasMore, loadingMore, loadingInitial, loadMore])
 
   const filtered = useMemo(() => {
     return tickets.filter((t) => {
@@ -48,7 +92,7 @@ export default function Tickets() {
       if (priorityFilter !== 'ALL' && t.priority !== priorityFilter) return false
       if (search) {
         const s = search.toLowerCase()
-        if (!t.title?.toLowerCase().includes(s) && !t.subject?.toLowerCase().includes(s)) return false
+        if (!t.title?.toLowerCase().includes(s) && !t.creatorName?.toLowerCase().includes(s)) return false
       }
       return true
     })
@@ -62,7 +106,7 @@ export default function Tickets() {
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Pretraži tikete..."
+            placeholder="Pretraži po naslovu ili klijentu..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none"
@@ -96,7 +140,7 @@ export default function Tickets() {
         </div>
       </div>
 
-      {loading ? (
+      {loadingInitial ? (
         <div className="flex justify-center py-16">
           <div className="w-8 h-8 border-2 border-navy-600 border-t-transparent rounded-full animate-spin" />
         </div>
@@ -105,66 +149,91 @@ export default function Tickets() {
       ) : filtered.length === 0 ? (
         <EmptyState icon={Ticket} title="Nema pronađenih tiketa" description="Nijedan tiket ne odgovara vašim filterima." />
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tiket</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Prioritet</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tip</th>
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Kreirano</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {filtered.map((t) => (
-                  <tr key={t.ticketId} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-3">
-                      <p className="text-sm font-medium text-gray-900 truncate max-w-xs">{t.title || t.subject}</p>
-                      <p className="text-xs text-gray-400">{t.ticketId}</p>
-                    </td>
-                    <td className="px-5 py-3">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[t.status] || 'bg-gray-100 text-gray-800'}`}>
-                        {STATUS_LABELS[t.status] ?? t.status}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[t.priority] || 'bg-gray-100 text-gray-800'}`}>
-                        {PRIORITY_LABELS[t.priority] ?? t.priority}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-sm text-gray-600">
-                      {TYPE_LABELS[t.problemCategory] ?? t.problemCategory}
-                    </td>
-                    <td className="px-5 py-3 text-sm text-gray-500 whitespace-nowrap">
-                      {t.createdDate ? new Date(t.createdDate).toLocaleDateString() : '—'}
-                    </td>
+        <>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-100 bg-gray-50">
+                    <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tiket</th>
+                    <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Klijent</th>
+                    <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Prioritet</th>
+                    <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tip</th>
+                    <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Kreirano</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {filtered.map((t) => (
+                    <tr
+                      key={t.ticketId}
+                      onClick={() => navigate(`/tickets/${t.ticketId}`)}
+                      className="hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      <td className="px-5 py-3">
+                        <p className="text-sm font-medium text-gray-900 truncate max-w-xs">{t.title}</p>
+                        <p className="text-xs text-gray-400">#{t.ticketId}</p>
+                      </td>
+                      <td className="px-5 py-3 text-sm text-gray-600">{t.creatorName}</td>
+                      <td className="px-5 py-3">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[t.status] || 'bg-gray-100 text-gray-800'}`}>
+                          {STATUS_LABELS[t.status] ?? t.status}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[t.priority] || 'bg-gray-100 text-gray-800'}`}>
+                          {PRIORITY_LABELS[t.priority] ?? t.priority}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-sm text-gray-600">
+                        {TYPE_LABELS[t.problemCategory] ?? t.problemCategory}
+                      </td>
+                      <td className="px-5 py-3 text-sm text-gray-500 whitespace-nowrap">
+                        {t.createdDate ? new Date(t.createdDate).toLocaleDateString('bs-BA') : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="md:hidden divide-y divide-gray-50">
+              {filtered.map((t) => (
+                <div
+                  key={t.ticketId}
+                  onClick={() => navigate(`/tickets/${t.ticketId}`)}
+                  className="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                >
+                  <p className="text-sm font-medium text-gray-900 truncate">{t.title}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{t.creatorName}</p>
+                  <div className="flex flex-wrap items-center gap-2 mt-2">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[t.status] || 'bg-gray-100 text-gray-800'}`}>
+                      {STATUS_LABELS[t.status] ?? t.status}
+                    </span>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[t.priority] || 'bg-gray-100 text-gray-800'}`}>
+                      {PRIORITY_LABELS[t.priority] ?? t.priority}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {t.createdDate ? new Date(t.createdDate).toLocaleDateString('bs-BA') : '—'}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="md:hidden divide-y divide-gray-50">
-            {filtered.map((t) => (
-              <div key={t.ticketId} className="px-4 py-3">
-                <p className="text-sm font-medium text-gray-900 truncate">{t.title || t.subject}</p>
-                <div className="flex flex-wrap items-center gap-2 mt-2">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[t.status] || 'bg-gray-100 text-gray-800'}`}>
-                    {STATUS_LABELS[t.status] ?? t.status}
-                  </span>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[t.priority] || 'bg-gray-100 text-gray-800'}`}>
-                    {PRIORITY_LABELS[t.priority] ?? t.priority}
-                  </span>
-                </div>
-                <p className="text-xs text-gray-400 mt-1">
-                  {t.createdDate ? new Date(t.createdDate).toLocaleDateString() : '—'}
-                </p>
-              </div>
-            ))}
+          {/* Infinite scroll sentinel */}
+          <div ref={sentinelRef} className="flex justify-center py-4">
+            {loadingMore && (
+              <div className="w-6 h-6 border-2 border-navy-600 border-t-transparent rounded-full animate-spin" />
+            )}
+            {!hasMore && tickets.length > 0 && (
+              <p className="text-xs text-gray-400">Svi tiketi su učitani</p>
+            )}
           </div>
-        </div>
+        </>
       )}
     </div>
   )

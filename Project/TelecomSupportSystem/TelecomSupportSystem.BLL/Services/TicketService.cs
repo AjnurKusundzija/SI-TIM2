@@ -34,6 +34,66 @@ namespace TelecomSupportSystem.BLL.Services
             });
         }
 
+        // US-29: Vraća stranicu svih tiketa sa imenom kreatora
+        public async Task<PagedResultDto<AllTicketsItemDto>> GetAllTicketsAsync(int page, int pageSize)
+        {
+            var (items, totalCount) = await _ticketRepository.GetAllPagedAsync(page, pageSize);
+
+            return new PagedResultDto<AllTicketsItemDto>
+            {
+                Data = items.Select(t => new AllTicketsItemDto
+                {
+                    TicketId        = t.TicketId,
+                    Title           = t.Title,
+                    Status          = t.Status.ToString(),
+                    Priority        = t.Priority.ToString(),
+                    ProblemCategory = t.ProblemCategory.ToString(),
+                    CreatedDate     = t.CreatedDate,
+                    ClosedDate      = t.ClosedDate,
+                    CreatorId       = t.CreatorId,
+                    CreatorName     = $"{t.Creator.FirstName} {t.Creator.LastName}",
+                }),
+                Page       = page,
+                PageSize   = pageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+            };
+        }
+
+        // US-30: Vraća detalje tiketa sa komentarima
+        public async Task<TicketDetailDto?> GetTicketDetailAsync(int ticketId)
+        {
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
+            if (ticket is null) return null;
+
+            return new TicketDetailDto
+            {
+                TicketId        = ticket.TicketId,
+                Title           = ticket.Title,
+                Description     = ticket.Description,
+                Status          = ticket.Status.ToString(),
+                Priority        = ticket.Priority.ToString(),
+                ProblemCategory = ticket.ProblemCategory.ToString(),
+                CreatedDate     = ticket.CreatedDate,
+                ClosedDate      = ticket.ClosedDate,
+                CreatorId       = ticket.CreatorId,
+                CreatorName     = $"{ticket.Creator.FirstName} {ticket.Creator.LastName}",
+                Comments        = ticket.Comments
+                    .OrderBy(c => c.DateTime)
+                    .Select(c => new CommentDto
+                    {
+                        CommentId  = c.CommentId,
+                        Content    = c.Content,
+                        DateTime   = c.DateTime,
+                        AuthorId   = c.AuthorId,
+                        AuthorName = $"{c.Author.FirstName} {c.Author.LastName}",
+                        AuthorRole = c.Author.Role.ToString(),
+                        IsInternal = c.IsInternal,
+                    })
+                    .ToList(),
+            };
+        }
+
         // PB-22: Kreira novi tiket
         public async Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId)
         {

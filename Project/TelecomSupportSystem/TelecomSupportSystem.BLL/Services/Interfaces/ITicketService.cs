@@ -10,5 +10,11 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
 
         // PB-22
         Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId);
+
+        // US-29: Svi tiketi sa paginacijom
+        Task<PagedResultDto<AllTicketsItemDto>> GetAllTicketsAsync(int page, int pageSize);
+
+        // US-30: Detalji tiketa
+        Task<TicketDetailDto?> GetTicketDetailAsync(int ticketId);
     }
 }

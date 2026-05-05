@@ -23,6 +23,32 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .ToListAsync();
         }
 
+        // US-29: Vraća stranicu tiketa sa ukupnim brojem za infinite scroll
+        public async Task<(IEnumerable<Ticket> Items, int TotalCount)> GetAllPagedAsync(int page, int pageSize)
+        {
+            var query = _context.Tickets
+                .Include(t => t.Creator)
+                .OrderByDescending(t => t.CreatedDate);
+
+            var totalCount = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
+
+        // US-30: Detalji tiketa s kreatorom i komentarima (uključujući autore komentara)
+        public async Task<Ticket?> GetByIdWithDetailsAsync(int ticketId)
+        {
+            return await _context.Tickets
+                .Include(t => t.Creator)
+                .Include(t => t.Comments)
+                    .ThenInclude(c => c.Author)
+                .FirstOrDefaultAsync(t => t.TicketId == ticketId);
+        }
+
         public async Task<Ticket?> GetByIdAsync(int ticketId)
         {
             return await _context.Tickets.FindAsync(ticketId);

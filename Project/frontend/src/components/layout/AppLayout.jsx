@@ -6,7 +6,7 @@ import Header from './Header';
 const pageTitles = {
   '/dashboard': 'Dashboard',
   '/mytickets': 'Moji tiketi',
-  '/tickets': 'Tiketi',
+  '/tickets': 'Svi tiketi',
   '/create-ticket': 'Kreiraj tiket',
 };
 
