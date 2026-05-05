@@ -9,11 +9,9 @@ export default function Faq() {
   const [error, setError] = useState(null)
   const [openFaqId, setOpenFaqId] = useState(null)
 
-  const loadFaqs = useCallback(async ({ resetState = true } = {}) => {
-    if (resetState) {
-      setLoading(true)
-      setError(null)
-    }
+  const loadFaqs = useCallback(async () => {
+    setLoading(true)
+    setError(null)
 
     try {
       const data = await getFaqs()
@@ -27,8 +25,30 @@ export default function Faq() {
   }, [])
 
   useEffect(() => {
-    loadFaqs({ resetState: false })
-  }, [loadFaqs])
+    let isMounted = true
+
+    getFaqs()
+      .then((data) => {
+        if (isMounted) {
+          setFaqs(data)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+        if (isMounted) {
+          setError('Nije moguće učitati često postavljana pitanja.')
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setLoading(false)
+        }
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const toggleFaq = (faqId) => {
     setOpenFaqId((current) => (current === faqId ? null : faqId))
