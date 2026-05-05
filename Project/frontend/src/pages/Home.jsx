@@ -76,14 +76,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="w-full max-w-4xl bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-navy-700/50 text-center shadow-2xl">
-          <h2 className="text-2xl font-bold text-white mb-6">Često postavljana pitanja</h2>
-          <div className="p-12 bg-navy-800/40 rounded-xl border border-navy-600/30">
-            <p className="text-navy-300 font-mono text-xl tracking-widest">Sprint6</p>
-            <p className="text-navy-400 text-sm mt-2">Provjerite kasnije za novosti</p>
-          </div>
-        </div>
       </main>
 
       {/* Footer */}

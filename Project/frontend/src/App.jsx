@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard'
 import MyTickets from './pages/MyTickets'
 import Tickets from './pages/Tickets'
 import CreateTicket from './pages/CreateTicket'
+import Faq from './pages/Faq'
 
 function AppRoutes() {
   const { user } = useAuth()
@@ -32,6 +33,7 @@ function AppRoutes() {
         <Route path="/mytickets" element={<MyTickets />} />
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/create-ticket" element={<CreateTicket />} />
+        <Route path="/faq" element={<Faq />} />
       </Route>
 
       <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />
