@@ -9,9 +9,11 @@ export default function Faq() {
   const [error, setError] = useState(null)
   const [openFaqId, setOpenFaqId] = useState(null)
 
-  const loadFaqs = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+  const loadFaqs = useCallback(async ({ resetState = true } = {}) => {
+    if (resetState) {
+      setLoading(true)
+      setError(null)
+    }
 
     try {
       const data = await getFaqs()
@@ -25,7 +27,7 @@ export default function Faq() {
   }, [])
 
   useEffect(() => {
-    loadFaqs()
+    loadFaqs({ resetState: false })
   }, [loadFaqs])
 
   const toggleFaq = (faqId) => {
