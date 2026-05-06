@@ -7,8 +7,11 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
         // US-11
         Task<IEnumerable<Ticket>> GetByCreatorIdAsync(int creatorId);
 
-        // Placeholderi za buduće US-ove (kreiranje, admin pregled, itd.)
         Task<Ticket?> GetByIdAsync(int ticketId);
+
+        // Dohvata tiket s Creator i Assignments.User za prikaz detalja i provjeru pristupa
+        Task<Ticket?> GetByIdWithDetailsAsync(int ticketId);
+
         Task<Ticket> CreateAsync(Ticket ticket);
     }
 }

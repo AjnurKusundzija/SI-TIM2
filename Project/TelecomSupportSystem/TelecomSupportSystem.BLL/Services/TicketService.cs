@@ -26,12 +26,52 @@ namespace TelecomSupportSystem.BLL.Services
             {
                 TicketId        = t.TicketId,
                 Title           = t.Title,
+                Description     = t.Description,
                 Status          = t.Status.ToString(),
                 Priority        = t.Priority.ToString(),
                 ProblemCategory = t.ProblemCategory.ToString(),
                 CreatedDate     = t.CreatedDate,
                 ClosedDate      = t.ClosedDate
             });
+        }
+
+        // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
+        public async Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role)
+        {
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
+
+            if (ticket is null)
+                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+
+            bool hasAccess = role switch
+            {
+                "ADMINISTRATOR" => true,
+                "CLIENT"        => ticket.CreatorId == userId,
+                "AGENT"         => ticket.Assignments.Any(a => a.UserId == userId),
+                "TECHNICIAN"    => ticket.Assignments.Any(a => a.UserId == userId),
+                _               => false,
+            };
+
+            if (!hasAccess)
+                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+
+            var agentAssignment = ticket.Assignments.FirstOrDefault();
+
+            return new TicketDetailDto
+            {
+                TicketId          = ticket.TicketId,
+                Title             = ticket.Title,
+                Description       = ticket.Description,
+                Status            = ticket.Status.ToString(),
+                Priority          = ticket.Priority.ToString(),
+                ProblemCategory   = ticket.ProblemCategory.ToString(),
+                CreatedDate       = ticket.CreatedDate,
+                ClosedDate        = ticket.ClosedDate,
+                ClientName        = $"{ticket.Creator.FirstName} {ticket.Creator.LastName}",
+                AssignedAgentName = agentAssignment is not null
+                    ? $"{agentAssignment.User.FirstName} {agentAssignment.User.LastName}"
+                    : string.Empty,
+            };
         }
 
         // PB-22: Kreira novi tiket

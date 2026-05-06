@@ -33,6 +33,32 @@ namespace TelecomSupportSystem.API.Controllers
             return Ok(tickets);
         }
 
+        // US-14, US-30: GET /api/ticket/{id}
+        // CLIENT vidi samo vlastite tikete, AGENT/TECHNICIAN samo dodijeljene, ADMINISTRATOR sve.
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetTicketById(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            try
+            {
+                var ticket = await _ticketService.GetTicketByIdAsync(id, userId, role);
+                return Ok(ticket);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
         // PB-22: POST /api/ticket
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto createTicketDto)
