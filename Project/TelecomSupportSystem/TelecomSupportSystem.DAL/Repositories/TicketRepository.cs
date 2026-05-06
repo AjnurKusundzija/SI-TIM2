@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
@@ -13,8 +13,6 @@ namespace TelecomSupportSystem.DAL.Repositories
             _context = context;
         }
 
-        // US-11: Vraća samo tikete čiji je CreatorId jednak proslijeđenom userId.
-        // WHERE klauzula garantuje da korisnik ne može vidjeti tuđe tikete.
         public async Task<IEnumerable<Ticket>> GetByCreatorIdAsync(int creatorId)
         {
             return await _context.Tickets
@@ -23,7 +21,7 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .ToListAsync();
         }
 
-        // US-29: Vraća stranicu tiketa sa ukupnim brojem za infinite scroll
+        // US-29
         public async Task<(IEnumerable<Ticket> Items, int TotalCount)> GetAllPagedAsync(int page, int pageSize)
         {
             var query = _context.Tickets
@@ -37,16 +35,6 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .ToListAsync();
 
             return (items, totalCount);
-        }
-
-        // US-30: Detalji tiketa s kreatorom i komentarima (uključujući autore komentara)
-        public async Task<Ticket?> GetByIdWithDetailsAsync(int ticketId)
-        {
-            return await _context.Tickets
-                .Include(t => t.Creator)
-                .Include(t => t.Comments)
-                    .ThenInclude(c => c.Author)
-                .FirstOrDefaultAsync(t => t.TicketId == ticketId);
         }
 
         public async Task<Ticket?> GetByIdAsync(int ticketId)
