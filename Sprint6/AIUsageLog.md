@@ -197,4 +197,36 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Rizici, problemi ili greške koje su uočene | jsdom ne primjenjuje CSS media queries, pa komponente koje koriste responsive prikaz (desktop tabela + mobile kartice) renderuju oba prikaza istovremeno, što uzrokuje duplikate teksta i greške pri korištenju `getByText`. Rješenje: koristiti `queryAllByText` za provjeru prisustva i odsustva elemenata. |
 | Ko je koristio alat | Lejan Kozlić, Uma Mahmutović |
 
+## Unos #12
+
+| Polje | Detalji |
+|---|---|
+| Datum | 05.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | ChatGPT (GPT-5.5) |
+| Svrha korištenja | Pomoć pri implementaciji detaljnog prikaza tiketa za klijenta i komunikacije između klijenta i agenta unutar sistema za podršku. |
+| Kratak opis zadatka ili upita | AI je korišten za pomoć pri organizaciji TicketDetail stranice, prikazu detalja tiketa, navigaciji između stranica i prilagođavanju prikaza za klijenta bez narušavanja postojeće funkcionalnosti za agente i tehničare. |
+| Šta je AI predložio ili generisao | Generisani prijedlozi za strukturu TicketDetail komponente, prikaz statusa, prioriteta, kategorije, komunikacije unutar tiketa i organizaciju frontend ruta i komponenti. |
+| Šta je tim prihvatio | Strukturu detaljnog prikaza tiketa za klijenta, organizaciju komunikacije unutar tiketa i dio prijedloga za frontend navigaciju i prikaz podataka. |
+| Šta je tim izmijenio | Prilagođeni su nazivi ruta, način prikaza pojedinih elemenata i dio logike kako bi postojeće funkcionalnosti za agente i tehničare ostale nepromijenjene. |
+| Šta je tim odbacio | Prijedlozi koji bi zahtijevali promjene postojeće backend logike ili uvođenje dodatnih biblioteka koje nisu potrebne projektu. |
+| Rizici, problemi ili greške koje su uočene | Problemi sa React import/export konfiguracijom, pokretanjem frontend aplikacije i povezivanjem frontend-a sa backend servisima tokom razvoja TicketDetail funkcionalnosti. |
+| Ko je koristio alat | Lejan Kozlić, Uma Mahmutović |
+
+## Unos #13
+
+| Polje | Detalji |
+|---|---|
+| Datum | 05.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | Claude Code |
+| Svrha korištenja | Pomoć pri implementaciji pregleda svih tiketa i detaljnog prikaza tiketa za agenta i administratora u TelecomSupport sistemu. |
+| Kratak opis zadatka ili upita | AI je korišten za provjeru usklađenosti funkcionalnosti sa Sprint 1-5 dokumentacijom i za pomoć pri implementaciji stranice “Svi tiketi” i stranice detalja tiketa za uloge agent i administrator. |
+| Šta je AI predložio ili generisao | Generisani su prijedlozi za prikaz svih tiketa sa paginacijom, detaljni prikaz pojedinačnog tiketa, prikaz statusa, prioriteta, klijenta, datuma i historije aktivnosti, kao i smjernice za autorizaciju putem JWT tokena. |
+| Šta je tim prihvatio | Prihvaćena je organizacija stranice “Svi tiketi”, prikaz detalja tiketa za agente i administratore, korištenje postojećeg dizajna aplikacije i smjernica da agent i administrator imaju pristup svim tiketima bez ograničenja. |
+| Šta je tim izmijenio | Prilagođeni su nazivi ruta, prikaz UI elemenata i tekstovi na bosanskom jeziku kako bi se uklopili u postojeću frontend strukturu i stil aplikacije. |
+| Šta je tim odbacio | Odbijeni su dijelovi prijedloga koji nisu odgovarali postojećoj arhitekturi projekta, tehnologijama koje se stvarno koriste ili bi narušili postojeće funkcionalnosti za druge uloge. |
+| Rizici, problemi ili greške koje su uočene | Potencijalni rizici su neusklađenost API endpointa sa postojećim backend rutama, razlike u nazivima polja između backend odgovora i frontend prikaza, kao i potreba da se očuva postojeća autorizacija za ostale korisničke uloge. |
+| Ko je koristio alat | Eldar Hadžiselimović |
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
