@@ -9,7 +9,8 @@ import {
     XCircle,
     MessageCircle,
 } from 'lucide-react'
-import { getTicketById, getTicketComments } from '../services/ticketService'
+import * as signalR from '@microsoft/signalr'
+import { getTicketById, getTicketComments, addComment } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
 import EmptyState from '../components/common/EmptyState'
@@ -28,6 +29,7 @@ export default function TicketDetail() {
 
     // message je placeholder za SignalR — handleSend će biti spojen na Hub (PB-27)
     const [message, setMessage] = useState('')
+    const [isSending, setIsSending] = useState(false)
 
     useEffect(() => {
         const ticketId = Number(id)
@@ -47,10 +49,45 @@ export default function TicketDetail() {
             .finally(() => setLoading(false))
     }, [id])
 
+    useEffect(() => {
+        if (!id) return;
+
+        const newConnection = new signalR.HubConnectionBuilder()
+            .withUrl('/chathub')
+            .withAutomaticReconnect()
+            .build();
+
+        newConnection.start()
+            .then(() => {
+                newConnection.invoke('JoinTicketGroup', id).catch(e => console.error(e));
+                newConnection.on('ReceiveComment', (comment) => {
+                    setComments((prev) => [...prev, comment]);
+                });
+            })
+            .catch(e => console.error('SignalR Connection Error: ', e));
+
+        return () => {
+            if (newConnection.state === signalR.HubConnectionState.Connected) {
+                newConnection.invoke('LeaveTicketGroup', id).catch(console.error);
+            }
+            newConnection.stop();
+        };
+    }, [id]);
+
     // Slanje poruke — implementira se u PB-27 putem SignalR Hub-a
-    const handleSend = () => {
-        if (!message.trim()) return
-        setMessage('')
+    const handleSend = async () => {
+        if (!message.trim() || isSending) return
+        setIsSending(true)
+        try {
+            await addComment(id, message)
+            setMessage('')
+        } catch (err) {
+            console.error('Failed to send comment', err)
+            // Error could be displayed to the user
+            alert(err.response?.data || 'Neuspješno slanje poruke.')
+        } finally {
+            setIsSending(false)
+        }
     }
 
     // Zatvaranje tiketa — implementira se u PB-25
@@ -76,7 +113,6 @@ export default function TicketDetail() {
     }
 
     const title = ticket.title || 'Bez naslova'
-    const description = ticket.description || 'Nema opisa za ovaj tiket.'
     const category = ticket.problemCategory
     const createdDate = ticket.createdDate
         ? new Date(ticket.createdDate).toLocaleString('bs-BA')
@@ -84,6 +120,15 @@ export default function TicketDetail() {
 
     const clientName = ticket.clientName || 'Klijent'
     const agentName = ticket.assignedAgentName || 'Nije dodijeljen'
+
+    const initialComment = {
+        commentId: 'initial',
+        authorName: clientName,
+        authorRole: 'CLIENT',
+        dateTime: ticket.createdDate,
+        content: ticket.description || 'Nema opisa za ovaj tiket.'
+    }
+    const allComments = [initialComment, ...comments]
 
     return (
         <div className="max-w-5xl mx-auto space-y-5">
@@ -109,8 +154,6 @@ export default function TicketDetail() {
                         {category && <Badge value={category} />}
                     </div>
                 </div>
-
-                <p className="text-sm text-gray-600 leading-6 mt-5">{description}</p>
 
                 <div className="border-t border-gray-100 mt-6 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-500">
                     <div className="flex items-center gap-2">
@@ -146,17 +189,17 @@ export default function TicketDetail() {
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                     <MessageCircle size={18} className="text-gray-500" />
                     <h3 className="text-sm font-semibold text-gray-900">
-                        Razgovor ({comments.length})
+                        Razgovor ({allComments.length})
                     </h3>
                 </div>
 
                 <div className="p-6 space-y-5">
-                    {comments.length === 0 ? (
+                    {allComments.length === 0 ? (
                         <p className="text-sm text-gray-400 text-center py-4">
                             Nema poruka u razgovoru.
                         </p>
                     ) : (
-                        comments.map((comment) => {
+                        allComments.map((comment) => {
                             const initials = comment.authorName
                                 .split(' ')
                                 .map((p) => p[0])
@@ -209,11 +252,11 @@ export default function TicketDetail() {
                                 <button
                                     type="button"
                                     onClick={handleSend}
-                                    disabled={!message.trim()}
+                                    disabled={!message.trim() || isSending}
                                     className="inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
                                 >
                                     <Send size={16} />
-                                    Pošalji
+                                    {isSending ? 'Slanje...' : 'Pošalji'}
                                 </button>
                             </div>
                         </div>

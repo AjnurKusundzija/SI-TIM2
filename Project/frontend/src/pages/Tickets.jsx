@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getAllTickets } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import { Search, Ticket } from 'lucide-react'
@@ -27,6 +28,7 @@ const TYPE_LABELS = {
 }
 
 export default function Tickets() {
+  const navigate = useNavigate()
   const { user } = useAuth()
   const isAgent = user?.role === 'AGENT'
 
@@ -140,7 +142,7 @@ export default function Tickets() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {filtered.map((t) => (
-                  <tr key={t.ticketId} className="hover:bg-gray-50 transition-colors">
+                  <tr key={t.ticketId} onClick={() => navigate(`/tickets/${t.ticketId}`)} className="hover:bg-gray-50 transition-colors cursor-pointer">
                     <td className="px-5 py-3">
                       <p className="text-sm font-medium text-gray-900 truncate max-w-xs">{t.title || t.subject}</p>
                       <p className="text-xs text-gray-400">{t.ticketId}</p>
@@ -169,7 +171,7 @@ export default function Tickets() {
 
           <div className="md:hidden divide-y divide-gray-50">
             {filtered.map((t) => (
-              <div key={t.ticketId} className="px-4 py-3">
+              <div key={t.ticketId} onClick={() => navigate(`/tickets/${t.ticketId}`)} className="px-4 py-3 cursor-pointer hover:bg-gray-50">
                 <p className="text-sm font-medium text-gray-900 truncate">{t.title || t.subject}</p>
                 <div className="flex flex-wrap items-center gap-2 mt-2">
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[t.status] || 'bg-gray-100 text-gray-800'}`}>

@@ -29,3 +29,9 @@ export async function getTicketComments(ticketId) {
   const response = await api.get(`/comment/tickets/${ticketId}`)
   return response.data
 }
+
+// PB-27: Dodaj novi komentar na tiket
+export async function addComment(ticketId, content) {
+  const response = await api.post(`/comment/tickets/${ticketId}`, { content })
+  return response.data
+}
