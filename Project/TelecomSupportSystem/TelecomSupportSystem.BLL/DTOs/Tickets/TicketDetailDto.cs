@@ -1,7 +1,6 @@
-// Lokacija: TelecomSupportSystem.BLL/DTOs/MyTicketDto.cs
-namespace TelecomSupportSystem.BLL.DTOs
+namespace TelecomSupportSystem.BLL.DTOs.Tickets
 {
-    public class MyTicketDto
+    public class TicketDetailDto
     {
         public int TicketId { get; set; }
         public string Title { get; set; } = string.Empty;
@@ -11,5 +10,7 @@ namespace TelecomSupportSystem.BLL.DTOs
         public string ProblemCategory { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime? ClosedDate { get; set; }
+        public string ClientName { get; set; } = string.Empty;
+        public string AssignedAgentName { get; set; } = string.Empty;
     }
 }
