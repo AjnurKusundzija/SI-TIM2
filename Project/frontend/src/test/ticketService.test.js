@@ -18,12 +18,12 @@ describe('ticketService', () => {
   // ─── getMyTickets (US-11) ─────────────────────────────────────────────────
 
   // US-11: dohvat tiketa poziva ispravan endpoint
-  it('getMyTickets() calls GET /ticket/my-tickets', async () => {
+  it('getMyTickets() calls GET /mytickets', async () => {
     api.get.mockResolvedValueOnce({ data: [] })
 
     await getMyTickets()
 
-    expect(api.get).toHaveBeenCalledWith('/ticket/my-tickets')
+    expect(api.get).toHaveBeenCalledWith('/mytickets')
   })
 
   // US-11: vraća podatke iz API odgovora
@@ -48,13 +48,13 @@ describe('ticketService', () => {
   // ─── createTicket (US-8) ──────────────────────────────────────────────────
 
   // US-8: kreiranje tiketa poziva ispravan endpoint sa podacima
-  it('createTicket() calls POST /ticket with ticket data', async () => {
+  it('createTicket() calls POST /tickets with ticket data', async () => {
     const ticketData = { Subject: 'Problem', Type: 'INTERNET', Description: 'Opis', Priority: 'HIGH' }
     api.post.mockResolvedValueOnce({ data: { ticketId: 1 } })
 
     await createTicket(ticketData)
 
-    expect(api.post).toHaveBeenCalledWith('/ticket', ticketData)
+    expect(api.post).toHaveBeenCalledWith('/tickets', ticketData)
   })
 
   // US-8: vraća kreiran tiket iz API odgovora

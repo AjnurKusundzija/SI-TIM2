@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
-import { getMyTickets } from '../services/ticketService'
+import { getAllTickets } from '../services/ticketService'
+import { useAuth } from '../context/AuthContext'
 import { Search, Ticket } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState'
 
@@ -26,6 +27,9 @@ const TYPE_LABELS = {
 }
 
 export default function Tickets() {
+  const { user } = useAuth()
+  const isAgent = user?.role === 'AGENT'
+
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -33,13 +37,14 @@ export default function Tickets() {
   const [statusFilter, setStatusFilter] = useState('ALL')
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [priorityFilter, setPriorityFilter] = useState('ALL')
+  const [assignedOnly, setAssignedOnly] = useState(false)
 
   useEffect(() => {
-    getMyTickets()
+    getAllTickets(isAgent ? assignedOnly : false)
       .then(setTickets)
       .catch((err) => { console.error(err); setError('Failed to load tickets.') })
       .finally(() => setLoading(false))
-  }, [])
+  }, [assignedOnly, isAgent])
 
   const filtered = useMemo(() => {
     return tickets.filter((t) => {
@@ -58,6 +63,22 @@ export default function Tickets() {
     <div className="space-y-4">
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+        {isAgent && (
+          <div className="flex rounded-lg border border-gray-300 overflow-hidden text-sm self-start">
+            <button
+              onClick={() => setAssignedOnly(false)}
+              className={`px-3 py-2 ${!assignedOnly ? 'bg-navy-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              Svi tiketi
+            </button>
+            <button
+              onClick={() => setAssignedOnly(true)}
+              className={`px-3 py-2 border-l border-gray-300 ${assignedOnly ? 'bg-navy-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              Dodijeljeni meni
+            </button>
+          </div>
+        )}
         <div className="relative flex-1 w-full sm:max-w-xs">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input

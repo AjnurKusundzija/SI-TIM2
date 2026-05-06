@@ -14,7 +14,7 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         // US-14, US-30: Detaljan prikaz tiketa — pristup ovisi o roli
         Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role);
 
-        // PB-32: Lista svih tiketa filtrirana prema roli korisnika
-        Task<IEnumerable<MyTicketDto>> GetAllTicketsAsync(int userId, string role);
+        // PB-32: Lista svih tiketa filtrirana prema roli korisnika; assignedOnly filtrira samo dodijeljene (AGENT)
+        Task<IEnumerable<MyTicketDto>> GetAllTicketsAsync(int userId, string role, bool assignedOnly = false);
     }
 }
