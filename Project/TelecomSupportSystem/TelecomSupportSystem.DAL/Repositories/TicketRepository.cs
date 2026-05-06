@@ -43,5 +43,20 @@ namespace TelecomSupportSystem.DAL.Repositories
             await _context.SaveChangesAsync();
             return ticket;
         }
+
+        public async Task<IEnumerable<Ticket>> GetAllAsync()
+        {
+            return await _context.Tickets
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Ticket>> GetByAssigneeIdAsync(int userId)
+        {
+            return await _context.Tickets
+                .Where(t => t.Assignments.Any(a => a.UserId == userId))
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
+        }
     }
 }

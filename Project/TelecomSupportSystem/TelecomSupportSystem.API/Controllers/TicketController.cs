@@ -18,6 +18,28 @@ namespace TelecomSupportSystem.API.Controllers
             _ticketService = ticketService;
         }
 
+        // PB-32: GET /api/ticket
+        // ADMINISTRATOR i AGENT vide sve tikete, TECHNICIAN vidi samo dodijeljene, CLIENT dobija 403.
+        [HttpGet]
+        public async Task<IActionResult> GetAllTickets()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            try
+            {
+                var tickets = await _ticketService.GetAllTicketsAsync(userId, role);
+                return Ok(tickets);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
         // US-11: GET /api/ticket/my-tickets
         // Čita userId iz JWT claims-a — korisnik nikad ne može proslijediti
         // tuđi ID, što garantuje AC: "Sistem ne smije prikazivati tikete drugih korisnika"
