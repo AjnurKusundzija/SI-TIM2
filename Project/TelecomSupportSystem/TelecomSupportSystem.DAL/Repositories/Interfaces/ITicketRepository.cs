@@ -1,4 +1,4 @@
-﻿using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities;
 
 namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 {
@@ -9,9 +9,6 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 
         // US-29: Svi tiketi sa paginacijom (agent/administrator)
         Task<(IEnumerable<Ticket> Items, int TotalCount)> GetAllPagedAsync(int page, int pageSize);
-
-        // US-30: Detalji tiketa sa kreatorom i komentarima
-        Task<Ticket?> GetByIdWithDetailsAsync(int ticketId);
 
         Task<Ticket?> GetByIdAsync(int ticketId);
 
