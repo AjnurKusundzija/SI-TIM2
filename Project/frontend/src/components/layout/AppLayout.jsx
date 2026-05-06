@@ -8,6 +8,7 @@ const pageTitles = {
   '/mytickets': 'Moji tiketi',
   '/tickets': 'Svi tiketi',
   '/create-ticket': 'Kreiraj tiket',
+  '/faq': 'FAQ',
 };
 
 export default function AppLayout() {

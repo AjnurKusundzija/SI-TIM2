@@ -13,5 +13,7 @@ namespace TelecomSupportSystem.BLL.DTOs.Tickets
         public int CreatorId { get; set; }
         public string CreatorName { get; set; } = string.Empty;
         public List<CommentDto> Comments { get; set; } = [];
+        public string ClientName { get; set; } = string.Empty;
+        public string AssignedAgentName { get; set; } = string.Empty;
     }
 }

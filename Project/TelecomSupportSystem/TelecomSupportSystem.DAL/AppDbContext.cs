@@ -23,6 +23,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Report> Reports => Set<Report>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Faq> Faqs => Set<Faq>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -209,6 +210,21 @@ public class ApplicationDbContext : DbContext
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Faq>(entity =>
+        {
+            entity.HasKey(e => e.FaqId);
+
+            entity.Property(e => e.Question).IsRequired().HasMaxLength(300);
+            entity.Property(e => e.Answer).IsRequired().HasMaxLength(2000);
+            entity.Property(e => e.Category).HasMaxLength(100);
+            entity.Property(e => e.SortOrder).IsRequired();
+            entity.Property(e => e.IsActive).IsRequired();
+            entity.Property(e => e.CreatedDate).IsRequired();
+
+            entity.HasIndex(e => e.IsActive);
+            entity.HasIndex(e => e.SortOrder);
         });
 
         modelBuilder.Entity<TicketUser>(entity =>
