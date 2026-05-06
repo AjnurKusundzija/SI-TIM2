@@ -11,7 +11,6 @@ import Tickets from './pages/Tickets'
 import TicketDetail from './pages/TicketDetail'
 import CreateTicket from './pages/CreateTicket'
 import Faq from './pages/Faq'
-import TicketDetail from './pages/TicketDetail'
 
 function AppRoutes() {
   const { user } = useAuth()
