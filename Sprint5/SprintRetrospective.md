@@ -72,7 +72,7 @@ Većina članova smatra da je sprint bio jasno planiran, no dio navodi da su nek
 - Razmotriti uvođenje **alata poput Jira ili Slack** za jasniji pregled rokova i statusa zadataka.
 
 ### Tehnički prijedlozi
-- **Napisati API dokumentaciju** (lokalna dokumentacija ruta i resursa) kako bi svi znali šta šta radi i s čime komunicira.
+- **Napisati API dokumentaciju** (lokalna dokumentacija ruta i resursa) kako bi svi znali šta radi i s čime komunicira.
 - **Više koristiti Pull Request-ove** za code review.
 - Svaki član treba elaborirati šta je napravio i šta je izmijenjeno, kako bi ostali bili upućeni u promjene.
 
