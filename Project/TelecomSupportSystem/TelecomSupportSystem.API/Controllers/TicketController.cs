@@ -7,7 +7,7 @@ using TelecomSupportSystem.BLL.Services.Interfaces;
 namespace TelecomSupportSystem.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/tickets")]
     [Authorize] // Svi endpointi zahtijevaju validan JWT
     public class TicketController : ControllerBase
     {
@@ -40,10 +40,10 @@ namespace TelecomSupportSystem.API.Controllers
             }
         }
 
-        // US-11: GET /api/ticket/my-tickets
+        // US-11: GET /api/mytickets
         // Čita userId iz JWT claims-a — korisnik nikad ne može proslijediti
         // tuđi ID, što garantuje AC: "Sistem ne smije prikazivati tikete drugih korisnika"
-        [HttpGet("my-tickets")]
+        [HttpGet("/api/mytickets")]
         public async Task<IActionResult> GetMyTickets()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

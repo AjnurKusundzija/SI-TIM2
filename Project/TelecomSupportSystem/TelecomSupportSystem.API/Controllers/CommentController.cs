@@ -17,10 +17,10 @@ namespace TelecomSupportSystem.API.Controllers
             _commentService = commentService;
         }
 
-        // US-15: GET /api/comment/ticket/{ticketId}
+        // US-15: GET /api/comment/tickets/{ticketId}
         // Vraća historiju komentara za tiket. Slanje poruka će biti implementirano
         // putem SignalR Hub-a (PB-27).
-        [HttpGet("ticket/{ticketId:int}")]
+        [HttpGet("tickets/{ticketId:int}")]
         public async Task<IActionResult> GetCommentsForTicket(int ticketId)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
