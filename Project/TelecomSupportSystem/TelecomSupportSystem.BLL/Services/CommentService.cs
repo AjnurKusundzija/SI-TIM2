@@ -25,9 +25,8 @@ namespace TelecomSupportSystem.BLL.Services
 
             bool hasAccess = role switch
             {
-                "ADMINISTRATOR" => true,
+                "ADMINISTRATOR" or "AGENT" => true,
                 "CLIENT"        => ticket.CreatorId == requestingUserId,
-                "AGENT"         => ticket.Assignments.Any(a => a.UserId == requestingUserId),
                 "TECHNICIAN"    => ticket.Assignments.Any(a => a.UserId == requestingUserId),
                 _               => false,
             };
@@ -46,6 +45,77 @@ namespace TelecomSupportSystem.BLL.Services
                 AuthorName = $"{c.Author.FirstName} {c.Author.LastName}",
                 AuthorRole = c.Author.Role.ToString(),
             });
+        }
+
+        public async Task<CommentDto> AddCommentAsync(int ticketId, int userId, string role, string content)
+        {
+            if (content.Length > 1000)
+                throw new ArgumentException("Message exceeds maximum length of 1000 characters.");
+
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
+
+            if (ticket is null)
+                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+
+            bool hasAccess = role switch
+            {
+                "ADMINISTRATOR" or "AGENT" => true,
+                "CLIENT"        => ticket.CreatorId == userId,
+                "TECHNICIAN"    => ticket.Assignments.Any(a => a.UserId == userId),
+                _               => false,
+            };
+
+            if (!hasAccess)
+                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+
+            // Basic sanitization
+            var offensiveWords = new[]
+            {
+                // English common profanity
+                "ass", "asshole", "bastard", "bitch", "bullshit",
+                "dick", "cock", "pussy", "shit", "fuck",
+                "motherfucker", "fucker", "damn", "prick",
+                "douchebag", "jackass", "slut", "whore",
+                "twat", "wank", "jerkoff", "handjob",
+
+                // Sexual explicit terms
+                "penis", "vagina", "cum", "cunt", "anal",
+
+                // Bosnian / regional profanity
+                "jebem", "jebo", "jebi", "jebiga",
+                "kurac", "pička", "picka", "pickica",
+                "sranje", "serem", "seronja",
+                "govno", "kreten", "budala",
+                "moron", "idiot"
+            };
+            foreach (var word in offensiveWords)
+            {
+                content = System.Text.RegularExpressions.Regex.Replace(content, $@"\b{word}\b", "***", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            }
+
+            var comment = new TelecomSupportSystem.DAL.Entities.Comment
+            {
+                TicketId = ticketId,
+                AuthorId = userId,
+                Content = content,
+                DateTime = DateTime.UtcNow,
+                IsInternal = false
+            };
+
+            await _commentRepository.CreateAsync(comment);
+
+            // Fetch the created comment to get author details
+            var createdComment = (await _commentRepository.GetByTicketIdAsync(ticketId)).Last();
+
+            return new CommentDto
+            {
+                CommentId = createdComment.CommentId,
+                Content = createdComment.Content,
+                DateTime = createdComment.DateTime,
+                AuthorId = createdComment.AuthorId,
+                AuthorName = $"{createdComment.Author.FirstName} {createdComment.Author.LastName}",
+                AuthorRole = createdComment.Author.Role.ToString()
+            };
         }
     }
 }

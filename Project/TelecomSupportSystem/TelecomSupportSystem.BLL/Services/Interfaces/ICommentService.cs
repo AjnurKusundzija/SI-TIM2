@@ -6,5 +6,7 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
     {
         // US-15: Vraća komentare za tiket; pristup ovisi o roli (ista logika kao i za tiket)
         Task<IEnumerable<CommentDto>> GetCommentsForTicketAsync(int ticketId, int requestingUserId, string role);
+        
+        Task<CommentDto> AddCommentAsync(int ticketId, int userId, string role, string content);
     }
 }

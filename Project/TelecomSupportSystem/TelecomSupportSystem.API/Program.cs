@@ -26,6 +26,7 @@ builder.Services.AddControllers()
     });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -167,6 +168,18 @@ if (app.Environment.IsDevelopment())
                 Address = "",
                 Role = Role.CLIENT,
                 AccountStatus = AccountStatus.ACTIVE
+            },
+            new User
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john@test.com",
+                Username = "Joohnyy",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Johny123!"),
+                Phone = "",
+                Address = "",
+                Role = Role.CLIENT,
+                AccountStatus = AccountStatus.ACTIVE
             }
         );
         db.SaveChanges();
@@ -224,5 +237,6 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<TelecomSupportSystem.API.Hubs.ChatHub>("/chathub");
 
 app.Run();

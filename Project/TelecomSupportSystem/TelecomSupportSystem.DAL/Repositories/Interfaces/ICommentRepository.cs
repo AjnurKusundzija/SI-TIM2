@@ -1,4 +1,4 @@
-﻿using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities;
 
 namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 {
@@ -6,5 +6,7 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
     {
         // US-15: Dohvata komentare za tiket hronološki (najstariji prvi)
         Task<IEnumerable<Comment>> GetByTicketIdAsync(int ticketId);
+        
+        Task<Comment> CreateAsync(Comment comment);
     }
 }

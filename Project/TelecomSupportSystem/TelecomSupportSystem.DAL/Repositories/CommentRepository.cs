@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
@@ -21,6 +21,13 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .Where(c => c.TicketId == ticketId && !c.IsInternal)
                 .OrderBy(c => c.DateTime)
                 .ToListAsync();
+        }
+
+        public async Task<Comment> CreateAsync(Comment comment)
+        {
+            await _context.Comments.AddAsync(comment);
+            await _context.SaveChangesAsync();
+            return comment;
         }
     }
 }
