@@ -40,7 +40,6 @@ export default function Tickets() {
   const [assignedOnly, setAssignedOnly] = useState(false)
 
   useEffect(() => {
-    setLoading(true)
     getAllTickets(isAgent ? assignedOnly : false)
       .then(setTickets)
       .catch((err) => { console.error(err); setError('Failed to load tickets.') })
