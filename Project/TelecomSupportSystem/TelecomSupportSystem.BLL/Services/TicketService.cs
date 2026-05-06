@@ -45,11 +45,10 @@ namespace TelecomSupportSystem.BLL.Services
 
             bool hasAccess = role switch
             {
-                "ADMINISTRATOR" => true,
-                "CLIENT"        => ticket.CreatorId == userId,
-                "AGENT"         => ticket.Assignments.Any(a => a.UserId == userId),
-                "TECHNICIAN"    => ticket.Assignments.Any(a => a.UserId == userId),
-                _               => false,
+                "ADMINISTRATOR" or "AGENT" => true,
+                "CLIENT"                   => ticket.CreatorId == userId,
+                "TECHNICIAN"               => ticket.Assignments.Any(a => a.UserId == userId),
+                _                          => false,
             };
 
             if (!hasAccess)
@@ -75,10 +74,12 @@ namespace TelecomSupportSystem.BLL.Services
         }
 
         // PB-32: Lista tiketa filtrirana prema roli — AGENT/ADMIN vide sve, TECHNICIAN samo dodijeljene
-        public async Task<IEnumerable<MyTicketDto>> GetAllTicketsAsync(int userId, string role)
+        // assignedOnly=true: AGENT dobija samo tikete na kojima je dodijeljen
+        public async Task<IEnumerable<MyTicketDto>> GetAllTicketsAsync(int userId, string role, bool assignedOnly = false)
         {
             IEnumerable<Ticket> tickets = role switch
             {
+                "AGENT" when assignedOnly  => await _ticketRepository.GetByAssigneeIdAsync(userId),
                 "ADMINISTRATOR" or "AGENT" => await _ticketRepository.GetAllAsync(),
                 "TECHNICIAN"               => await _ticketRepository.GetByAssigneeIdAsync(userId),
                 _                          => throw new UnauthorizedAccessException("Access not allowed.")

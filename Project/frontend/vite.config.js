@@ -20,7 +20,7 @@ export default defineConfig({
       },
     },
   },
-  ...(process.env.VITEST && { esbuild: { jsx: 'automatic' } }),
+  esbuild: { jsx: 'automatic' },
   test: {
     environment: 'jsdom',
     globals: true,

@@ -18,10 +18,11 @@ namespace TelecomSupportSystem.API.Controllers
             _ticketService = ticketService;
         }
 
-        // PB-32: GET /api/ticket
+        // PB-32: GET /api/tickets?assignedOnly=true
         // ADMINISTRATOR i AGENT vide sve tikete, TECHNICIAN vidi samo dodijeljene, CLIENT dobija 403.
+        // assignedOnly=true (opcionalno): AGENT vidi samo tikete na kojima je dodijeljen
         [HttpGet]
-        public async Task<IActionResult> GetAllTickets()
+        public async Task<IActionResult> GetAllTickets([FromQuery] bool assignedOnly = false)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
@@ -31,7 +32,7 @@ namespace TelecomSupportSystem.API.Controllers
 
             try
             {
-                var tickets = await _ticketService.GetAllTicketsAsync(userId, role);
+                var tickets = await _ticketService.GetAllTicketsAsync(userId, role, assignedOnly);
                 return Ok(tickets);
             }
             catch (UnauthorizedAccessException)
