@@ -23,3 +23,15 @@ export async function getTicketById(id) {
   const response = await api.get(`/ticket/${id}`)
   return response.data
 }
+// US-14, US-30: Dohvati detalje jednog tiketa — backend provjerava pristup prema roli
+export async function getTicketById(ticketId) {
+  const response = await api.get(`/ticket/${ticketId}`)
+  return response.data
+}
+
+// US-15: Dohvati historiju komentara za tiket
+// Koristi se pri učitavanju stranice; real-time poruke će ići kroz SignalR (PB-27)
+export async function getTicketComments(ticketId) {
+  const response = await api.get(`/comment/ticket/${ticketId}`)
+  return response.data
+}

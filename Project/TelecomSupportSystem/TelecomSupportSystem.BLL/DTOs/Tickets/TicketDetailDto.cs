@@ -15,3 +15,7 @@ namespace TelecomSupportSystem.BLL.DTOs.Tickets
         public List<CommentDto> Comments { get; set; } = [];
     }
 }
+        public string ClientName { get; set; } = string.Empty;
+        public string AssignedAgentName { get; set; } = string.Empty;
+    }
+}

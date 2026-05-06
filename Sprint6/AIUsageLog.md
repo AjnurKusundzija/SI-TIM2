@@ -197,4 +197,20 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Rizici, problemi ili greške koje su uočene | jsdom ne primjenjuje CSS media queries, pa komponente koje koriste responsive prikaz (desktop tabela + mobile kartice) renderuju oba prikaza istovremeno, što uzrokuje duplikate teksta i greške pri korištenju `getByText`. Rješenje: koristiti `queryAllByText` za provjeru prisustva i odsustva elemenata. |
 | Ko je koristio alat | Lejan Kozlić, Uma Mahmutović |
 
+## Unos #12
+
+| Polje | Detalji |
+|---|---|
+| Datum | 05.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | Codex / ChatGPT |
+| Svrha korištenja | Pomoć pri implementaciji PB-47 FAQ funkcionalnosti, provjeri testova i ispravci UI detalja |
+| Kratak opis zadatka ili upita | Korišten je AI za implementaciju FAQ funkcionalnosti: dodavanje backend podrške za često postavljana pitanja, zaštićenog API endpointa, seed podataka, frontend FAQ stranice u autentificiranom dijelu aplikacije, sidebar navigacije i unit testova. Naknadno je korišten za uklanjanje FAQ sekcije sa početnog ekrana, ispravku bosanskih afrikata u UI tekstovima i rješavanje lint greške u `useEffect` logici. |
+| Šta je AI predložio ili generisao | AI je generisao `Faq` entitet, `IFaqRepository` i `FaqRepository`, `IFaqService` i `FaqService`, `GetFaqDto`, `FaqController` sa zaštićenim `GET /api/faq` endpointom, registraciju repozitorija i servisa u `Program.cs`, EF konfiguraciju i migraciju za `Faqs` tabelu, te razvojne seed podatke. Na frontendu je generisao `faqService.js`, `/faq` stranicu sa loading, empty, error/retry stanjima i accordion prikazom, protected route, naslov stranice i sidebar link za `CLIENT`, `AGENT` i `ADMINISTRATOR`. Također su generisani backend i frontend unit testovi za FAQ funkcionalnost. |
+| Šta je tim prihvatio | Prihvaćena je osnovna 3-slojna backend struktura, zaštićeni endpoint, seed FAQ sadržaj, frontend FAQ stranica unutar postojećeg autentificiranog layouta, sidebar navigacija i testovi za repository, service, controller, frontend service i FAQ komponentu. |
+| Šta je tim izmijenio | Uklonjena je FAQ sekcija sa početnog ekrana jer FAQ ne treba biti prikazan na Home stranici. Seed logika je promijenjena iz jednokratnog insertovanja u upsert po `SortOrder`, kako bi se postojeći FAQ redovi u razvojnoj bazi ažurirali i dobili ispravne znakove. UI tekstovi su ispravljeni da koriste bosanske afrikate (`č`, `ć`, `ž`, `š`, `đ`). `useEffect` logika u `Faq.jsx` je izmijenjena kako bi prošla strogo React lint pravilo koje zabranjuje sinhrono pozivanje `setState` unutar efekta. |
+| Šta je tim odbacio | Odbačen je prijedlog da FAQ bude vidljiv ili klikabilan na početnom ekranu. Odbačen je i pristup gdje se postojeći seed podaci ne ažuriraju, jer bi to ostavilo neispravne ASCII tekstove u lokalnoj bazi. |
+| Rizici, problemi ili greške koje su uočene | Uočeno je da Docker volume zadržava stare FAQ seed podatke, pa izmjene teksta u kodu nisu odmah bile vidljive u UI-u. Riješeno je upsert seed logikom. Također je u CI lint provjeri uočena greška `react-hooks/set-state-in-effect`, pa je inicijalni fetch prebačen na promise callbackove unutar `useEffect`, dok je reset stanja ostavljen samo za retry akciju korisnika. |
+| Ko je koristio alat | Ajnur Kušundžija |
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.

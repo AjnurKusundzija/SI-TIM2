@@ -14,6 +14,10 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
         Task<Ticket?> GetByIdWithDetailsAsync(int ticketId);
 
         Task<Ticket?> GetByIdAsync(int ticketId);
+
+        // Dohvata tiket s Creator i Assignments.User za prikaz detalja i provjeru pristupa
+        Task<Ticket?> GetByIdWithDetailsAsync(int ticketId);
+
         Task<Ticket> CreateAsync(Ticket ticket);
     }
 }
