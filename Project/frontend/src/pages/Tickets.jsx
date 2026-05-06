@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
-import { getMyTickets } from '../services/ticketService'
+import { useNavigate } from 'react-router-dom'
+import { getAllTickets } from '../services/ticketService'
+import { useAuth } from '../context/AuthContext'
 import { Search, Ticket } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState'
 
@@ -26,6 +28,10 @@ const TYPE_LABELS = {
 }
 
 export default function Tickets() {
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const isAgent = user?.role === 'AGENT'
+
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -33,13 +39,14 @@ export default function Tickets() {
   const [statusFilter, setStatusFilter] = useState('ALL')
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [priorityFilter, setPriorityFilter] = useState('ALL')
+  const [assignedOnly, setAssignedOnly] = useState(false)
 
   useEffect(() => {
-    getMyTickets()
+    getAllTickets(isAgent ? assignedOnly : false)
       .then(setTickets)
       .catch((err) => { console.error(err); setError('Failed to load tickets.') })
       .finally(() => setLoading(false))
-  }, [])
+  }, [assignedOnly, isAgent])
 
   const filtered = useMemo(() => {
     return tickets.filter((t) => {
@@ -58,6 +65,22 @@ export default function Tickets() {
     <div className="space-y-4">
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+        {isAgent && (
+          <div className="flex rounded-lg border border-gray-300 overflow-hidden text-sm self-start">
+            <button
+              onClick={() => setAssignedOnly(false)}
+              className={`px-3 py-2 ${!assignedOnly ? 'bg-navy-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              Svi tiketi
+            </button>
+            <button
+              onClick={() => setAssignedOnly(true)}
+              className={`px-3 py-2 border-l border-gray-300 ${assignedOnly ? 'bg-navy-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              Dodijeljeni meni
+            </button>
+          </div>
+        )}
         <div className="relative flex-1 w-full sm:max-w-xs">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -119,7 +142,7 @@ export default function Tickets() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {filtered.map((t) => (
-                  <tr key={t.ticketId} className="hover:bg-gray-50 transition-colors">
+                  <tr key={t.ticketId} onClick={() => navigate(`/tickets/${t.ticketId}`)} className="hover:bg-gray-50 transition-colors cursor-pointer">
                     <td className="px-5 py-3">
                       <p className="text-sm font-medium text-gray-900 truncate max-w-xs">{t.title || t.subject}</p>
                       <p className="text-xs text-gray-400">{t.ticketId}</p>
@@ -148,7 +171,7 @@ export default function Tickets() {
 
           <div className="md:hidden divide-y divide-gray-50">
             {filtered.map((t) => (
-              <div key={t.ticketId} className="px-4 py-3">
+              <div key={t.ticketId} onClick={() => navigate(`/tickets/${t.ticketId}`)} className="px-4 py-3 cursor-pointer hover:bg-gray-50">
                 <p className="text-sm font-medium text-gray-900 truncate">{t.title || t.subject}</p>
                 <div className="flex flex-wrap items-center gap-2 mt-2">
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[t.status] || 'bg-gray-100 text-gray-800'}`}>

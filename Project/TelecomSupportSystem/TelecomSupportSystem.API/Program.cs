@@ -26,6 +26,7 @@ builder.Services.AddControllers()
     });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -103,6 +104,7 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IFaqRepository, FaqRepository>();
 
 // Services
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
@@ -166,6 +168,18 @@ if (app.Environment.IsDevelopment())
                 Address = "",
                 Role = Role.CLIENT,
                 AccountStatus = AccountStatus.ACTIVE
+            },
+            new User
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john@test.com",
+                Username = "Joohnyy",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Johny123!"),
+                Phone = "",
+                Address = "",
+                Role = Role.CLIENT,
+                AccountStatus = AccountStatus.ACTIVE
             }
         );
         db.SaveChanges();
@@ -223,5 +237,6 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<TelecomSupportSystem.API.Hubs.ChatHub>("/chathub");
 
 app.Run();

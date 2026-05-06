@@ -26,6 +26,70 @@ namespace TelecomSupportSystem.BLL.Services
             {
                 TicketId        = t.TicketId,
                 Title           = t.Title,
+                Description     = t.Description,
+                Status          = t.Status.ToString(),
+                Priority        = t.Priority.ToString(),
+                ProblemCategory = t.ProblemCategory.ToString(),
+                CreatedDate     = t.CreatedDate,
+                ClosedDate      = t.ClosedDate
+            });
+        }
+
+        // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
+        public async Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role)
+        {
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
+
+            if (ticket is null)
+                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+
+            bool hasAccess = role switch
+            {
+                "ADMINISTRATOR" or "AGENT" => true,
+                "CLIENT"                   => ticket.CreatorId == userId,
+                "TECHNICIAN"               => ticket.Assignments.Any(a => a.UserId == userId),
+                _                          => false,
+            };
+
+            if (!hasAccess)
+                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+
+            var agentAssignment = ticket.Assignments.FirstOrDefault();
+
+            return new TicketDetailDto
+            {
+                TicketId          = ticket.TicketId,
+                Title             = ticket.Title,
+                Description       = ticket.Description,
+                Status            = ticket.Status.ToString(),
+                Priority          = ticket.Priority.ToString(),
+                ProblemCategory   = ticket.ProblemCategory.ToString(),
+                CreatedDate       = ticket.CreatedDate,
+                ClosedDate        = ticket.ClosedDate,
+                ClientName        = $"{ticket.Creator.FirstName} {ticket.Creator.LastName}",
+                AssignedAgentName = agentAssignment is not null
+                    ? $"{agentAssignment.User.FirstName} {agentAssignment.User.LastName}"
+                    : string.Empty,
+            };
+        }
+
+        // PB-32: Lista tiketa filtrirana prema roli — AGENT/ADMIN vide sve, TECHNICIAN samo dodijeljene
+        // assignedOnly=true: AGENT dobija samo tikete na kojima je dodijeljen
+        public async Task<IEnumerable<MyTicketDto>> GetAllTicketsAsync(int userId, string role, bool assignedOnly = false)
+        {
+            IEnumerable<Ticket> tickets = role switch
+            {
+                "AGENT" when assignedOnly  => await _ticketRepository.GetByAssigneeIdAsync(userId),
+                "ADMINISTRATOR" or "AGENT" => await _ticketRepository.GetAllAsync(),
+                "TECHNICIAN"               => await _ticketRepository.GetByAssigneeIdAsync(userId),
+                _                          => throw new UnauthorizedAccessException("Access not allowed.")
+            };
+
+            return tickets.Select(t => new MyTicketDto
+            {
+                TicketId        = t.TicketId,
+                Title           = t.Title,
+                Description     = t.Description,
                 Status          = t.Status.ToString(),
                 Priority        = t.Priority.ToString(),
                 ProblemCategory = t.ProblemCategory.ToString(),
