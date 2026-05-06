@@ -74,6 +74,29 @@ namespace TelecomSupportSystem.BLL.Services
             };
         }
 
+        // PB-32: Lista tiketa filtrirana prema roli — AGENT/ADMIN vide sve, TECHNICIAN samo dodijeljene
+        public async Task<IEnumerable<MyTicketDto>> GetAllTicketsAsync(int userId, string role)
+        {
+            IEnumerable<Ticket> tickets = role switch
+            {
+                "ADMINISTRATOR" or "AGENT" => await _ticketRepository.GetAllAsync(),
+                "TECHNICIAN"               => await _ticketRepository.GetByAssigneeIdAsync(userId),
+                _                          => throw new UnauthorizedAccessException("Access not allowed.")
+            };
+
+            return tickets.Select(t => new MyTicketDto
+            {
+                TicketId        = t.TicketId,
+                Title           = t.Title,
+                Description     = t.Description,
+                Status          = t.Status.ToString(),
+                Priority        = t.Priority.ToString(),
+                ProblemCategory = t.ProblemCategory.ToString(),
+                CreatedDate     = t.CreatedDate,
+                ClosedDate      = t.ClosedDate
+            });
+        }
+
         // PB-22: Kreira novi tiket
         public async Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId)
         {

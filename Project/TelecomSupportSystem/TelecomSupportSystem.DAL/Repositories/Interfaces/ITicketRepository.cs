@@ -13,5 +13,11 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
         Task<Ticket?> GetByIdWithDetailsAsync(int ticketId);
 
         Task<Ticket> CreateAsync(Ticket ticket);
+
+        // PB-32: Svi tiketi (za ADMINISTRATOR/AGENT)
+        Task<IEnumerable<Ticket>> GetAllAsync();
+
+        // PB-32: Tiketi dodijeljeni korisniku (za TECHNICIAN)
+        Task<IEnumerable<Ticket>> GetByAssigneeIdAsync(int userId);
     }
 }
