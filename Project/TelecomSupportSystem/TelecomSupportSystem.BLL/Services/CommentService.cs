@@ -68,6 +68,29 @@ namespace TelecomSupportSystem.BLL.Services
             if (!hasAccess)
                 throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
 
+            if (role == "CLIENT")
+            {
+                var existingComments = await _commentRepository.GetByTicketIdAsync(ticketId);
+                int consecutiveClientComments = 0;
+
+                foreach (var c in existingComments.OrderByDescending(x => x.DateTime))
+                {
+                    if (c.Author.Role.ToString() == "CLIENT")
+                    {
+                        consecutiveClientComments++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (consecutiveClientComments >= 3)
+                {
+                    throw new InvalidOperationException("You cannot spam comments! Please wait for an agent to respond.");
+                }
+            }
+
             // Basic sanitization
             var offensiveWords = new[]
             {
