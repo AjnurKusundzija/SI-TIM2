@@ -1,0 +1,67 @@
+name: CI — Tests & Coverage
+
+on:
+  push:
+    branches: [feature/testing, develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Run backend tests with coverage
+        working-directory: Project/TelecomSupportSystem
+        run: |
+          dotnet test --settings coverage.runsettings \
+            --collect:"XPlat Code Coverage" \
+            --results-directory TestResults/raw
+
+      - name: Generate HTML report
+        run: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          reportgenerator \
+            -reports:"Project/TelecomSupportSystem/TestResults/raw/**/coverage.cobertura.xml" \
+            -targetdir:"coverage-backend-html" \
+            -reporttypes:Html \
+            -assemblyfilters:"-TelecomSupportSystem.Tests" \
+            -classfilters:"-Program;-*.Migrations.*;-*ModelSnapshot*"
+
+      - name: Upload backend coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-backend-html
+          path: coverage-backend-html/
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: Project/frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: Project/frontend
+        run: npm ci --legacy-peer-deps
+
+      - name: Run frontend tests with coverage
+        working-directory: Project/frontend
+        run: npx vitest run --coverage
+
+      - name: Upload frontend coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-frontend-html
+          path: Project/frontend/coverage/
