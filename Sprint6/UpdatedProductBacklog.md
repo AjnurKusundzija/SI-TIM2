@@ -36,20 +36,20 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-16](#pb-16) | Inicijalna struktura repozitorija        | Technical Task |     1     |     L     | Done        | Sprint 4    |
 | [PB-17](#pb-17) | AI Usage Log                             | Dokumentacija  |     3     |     XS    | Done        | Sprint 5    |
 | [PB-18](#pb-18) | Decision Log                             | Dokumentacija  |     2     |     XS    | Done        | Sprint 5    |
-| [PB-19](#pb-19) | Login korisnika                          | Feature        |     1     |     L     | In Progress | Sprint 5 |
+| [PB-19](#pb-19) | Login korisnika                          | Feature        |     1     |     L     | Done | Sprint 5 |
 | [PB-20](#pb-20) | Upravljanje korisničkim profilom         | Feature        |     2     |     M     | Backlog | Sprint 9 |
 | [PB-21](#pb-21) | Prikaz paketa i pretplata                | Feature        |     4     |     M     | Backlog | Sprint 9 |
-| [PB-22](#pb-22) | Kreiranje novog tiketa                  | Feature        |     1     |     M     | Backlog | Sprint 5 |
-| [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Backlog | Sprint 5 |
-| [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Backlog | Sprint 6 |
+| [PB-22](#pb-22) | Kreiranje novog tiketa                  | Feature        |     1     |     M     | Done | Sprint 5 |
+| [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Done | Sprint 5 |
+| [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Done | Sprint 6 |
 | [PB-25](#pb-25) | Zatvaranje tiketa                       | Feature        |     1     |     L     | Backlog | Sprint 7 |
 | [PB-26](#pb-26) | Ocjenjivanje tiketa                     | Feature        |     5     |     S     | Backlog | Sprint 8 |
-| [PB-27](#pb-27) | Komunikacija kroz tiket                  | Feature        |     1     |     M     | Backlog | Sprint 6 |
+| [PB-27](#pb-27) | Komunikacija kroz tiket                  | Feature        |     1     |     M     | Done | Sprint 6 |
 | [PB-28](#pb-28) | Upravljanje prioritetima tiketa          | Feature        |     2     |     M     | Backlog | Sprint 7 |
 | [PB-29](#pb-29) | Preraspodjela agenata po timovima        | Feature        |     1     |     M     | Backlog | Sprint 10 |
 | [PB-30](#pb-30) | Automatska dodjela tiketa                | Feature        |     3     |     XS    | Backlog | Sprint 10 |
 | [PB-31](#pb-31) | Prosljeđivanje tiketa                    | Feature        |     2     |     M     | Backlog | Sprint 10 |
-| [PB-32](#pb-32) | Pregled svih tiketa                      | Feature        |     1     |     M     | Backlog | Sprint 6 |
+| [PB-32](#pb-32) | Pregled svih tiketa                      | Feature        |     1     |     M     | Done | Sprint 6 |
 | [PB-33](#pb-33) | Pretraživanje i filtriranje tiketa       | Feature        |     1     |     M     | Backlog | Sprint 9 |
 | [PB-34](#pb-34) | Pregled i uređivanje korisničkih profila | Feature        |     2     |     M     | Backlog | Sprint 9 |
 | [PB-35](#pb-35) | Pregled dodijeljenih tiketa (tehničari)  | Feature        |     1     |     S     | Backlog | Sprint 9 |
@@ -64,7 +64,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-44](#pb-44) | Izvještaj o ocjenama korisnika           | Feature        |     2     |     S     | Backlog | Sprint 11 |
 | [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama    | Feature        |     1     |     L     | Backlog | Sprint 11 |
 | [PB-46](#pb-46) | Export izvještaja                        | Feature        |     5     |     S     | Backlog | Sprint 11 |
-| [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Backlog | Sprint 6 |
+| [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Done | Sprint 6 |
 
 
 
