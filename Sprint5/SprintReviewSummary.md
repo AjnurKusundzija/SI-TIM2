@@ -37,9 +37,10 @@
 - **ODL-2 (27.04.2026)** – Sprint 5 backlog usklađen: dodani PB-22 i PB-23 (kreiranje i pregled tiketa), a detaljan prikaz tiketa (PB-24) premješten u Sprint 6.
 
 ## Povratna informacija Product Ownera
-- 
+- Ažurni projektni dokumenti moraju se nalaziti na `main` branchu kako bi svi članovi tima imali pristup najnovijim verzijama artefakata i sprint dokumentacije.
+- Sprint Backlog treba sadržavati detaljan prikaz svakog User Story-ja zajedno sa pripadajućim acceptance kriterijima radi jasnijeg praćenja implementacije i validacije funkcionalnosti.
 
 ## Zakljucak za naredni sprint
-- Sprint 6 će se fokusirati na PB-24 (Detaljan prikaz tiketa) i PB-47 (FAQ segment), kao i dalje unapređenje isporučenih funkcionalnosti prema povratnoj informaciji PO-a.
+- Sprint 6 će se fokusirati na PB-24 (Detaljan prikaz tiketa), PB-47 (FAQ segment) i PB-27(Komunikacija kroz tiket), kao i dalje unapređenje isporučenih funkcionalnosti prema povratnoj informaciji PO-a.
 
 Ovaj dokument se piše tek nakon sastanka sa PO.

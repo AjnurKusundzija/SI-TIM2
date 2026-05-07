@@ -14,11 +14,11 @@ Implementirati ključne funkcionalnosti za pregled, komunikaciju i upravljanje t
 
 | ID | Naziv zadatka ili storyja | Povezani US | Odgovorna osoba ili osobe | Status | Napomena |
 |---|---|---|---|---|---|
-| SB-01 | PB-24 Detaljan prikaz tiketa | US-14, US-15 | Lejan | To Do | Implementiran prikaz detalja i historije komunikacije |
-| SB-02 | PB-27 Komunikacija kroz tiket | US-19, US-20 | Ajdin, Uma | To Do | Implementirana razmjena poruka korisnik–agent |
-| SB-03 | PB-32 Pregled svih tiketa | US-29, US-30 | Eldar | To Do | Implementiran pregled svih tiketa za agente |
+| SB-01 | PB-24 Detaljan prikaz tiketa | US-14, US-15 | Lejan | Done | Implementiran prikaz detalja i historije komunikacije |
+| SB-02 | PB-27 Komunikacija kroz tiket | US-19, US-20 | Ajdin, Uma | Done | Implementirana razmjena poruka korisnik–agent |
+| SB-03 | PB-32 Pregled svih tiketa | US-29, US-30 | Eldar | Done | Implementiran pregled svih tiketa za agente |
 | SB-04 | PB-47 FAQ Segment | US-56 | Ajnur | Done | Implementiran FAQ modul |
-| SB-05 | Pisanje unit i integracijskih testova za Sprint 6 funkcionalnosti | US-14, US-15, US-19, US-20, US-29, US-30, US-56 | Ajnur, Hana, Lamija, Merisa | To Do | Testovi za backend i frontend (komunikacija, tiket pregled, FAQ, detalji tiketa) |
+| SB-05 | Pisanje unit i integracijskih testova za Sprint 6 funkcionalnosti | US-14, US-15, US-19, US-20, US-29, US-30, US-56 | Ajnur, Hana, Lamija, Merisa | Done | Testovi za backend i frontend (komunikacija, tiket pregled, FAQ, detalji tiketa) |
 
 ---
 
