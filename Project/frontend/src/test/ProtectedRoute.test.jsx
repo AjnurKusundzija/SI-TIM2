@@ -1,14 +1,23 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import ProtectedRoute from '../components/ProtectedRoute'
 
-describe('ProtectedRoute', () => {
-  beforeEach(() => sessionStorage.clear())
-  afterEach(() => sessionStorage.clear())
+const mocks = vi.hoisted(() => ({ user: null }))
 
-  // US-2: zaštićena stranica nije dostupna bez tokena (preusmjeravanje na /login)
-  it('does not render children when not authenticated', () => {
+vi.mock('../context/AuthContext', () => ({
+  useAuth: () => ({ user: mocks.user }),
+}))
+
+import ProtectedRoute from '../components/layout/ProtectedRoute'
+
+describe('ProtectedRoute (layout — US-1, US-2)', () => {
+  beforeEach(() => {
+    mocks.user = null
+    vi.clearAllMocks()
+  })
+
+  // US-2: neautentifikovani korisnik se preusmjerava na /login
+  it('redirects to /login when user is not authenticated', () => {
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
         <ProtectedRoute>
@@ -16,22 +25,45 @@ describe('ProtectedRoute', () => {
         </ProtectedRoute>
       </MemoryRouter>
     )
-
     expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()
   })
 
-  // US-1: zaštićena stranica dostupna uz valjani token u sessionStorage
-  it('renders children when authenticated', () => {
-    sessionStorage.setItem('accessToken', 'valid-jwt')
-
+  // US-1: autentifikovani korisnik vidi zaštićeni sadržaj
+  it('renders children when user is authenticated', () => {
+    mocks.user = { role: 'CLIENT' }
     render(
-      <MemoryRouter initialEntries={['/dashboard']}>
+      <MemoryRouter>
         <ProtectedRoute>
           <div>Protected Content</div>
         </ProtectedRoute>
       </MemoryRouter>
     )
-
     expect(screen.getByText('Protected Content')).toBeInTheDocument()
+  })
+
+  // Sigurnosno: korisnik s pogrešnom ulogom se preusmjerava na /dashboard
+  it('redirects to /dashboard when user role is not in allowedRoles', () => {
+    mocks.user = { role: 'CLIENT' }
+    render(
+      <MemoryRouter>
+        <ProtectedRoute allowedRoles={['AGENT', 'ADMINISTRATOR']}>
+          <div>Agent Only</div>
+        </ProtectedRoute>
+      </MemoryRouter>
+    )
+    expect(screen.queryByText('Agent Only')).not.toBeInTheDocument()
+  })
+
+  // Sigurnosno: korisnik s ispravnom ulogom vidi sadržaj
+  it('renders children when user role is in allowedRoles', () => {
+    mocks.user = { role: 'AGENT' }
+    render(
+      <MemoryRouter>
+        <ProtectedRoute allowedRoles={['AGENT', 'ADMINISTRATOR']}>
+          <div>Agent Content</div>
+        </ProtectedRoute>
+      </MemoryRouter>
+    )
+    expect(screen.getByText('Agent Content')).toBeInTheDocument()
   })
 })
