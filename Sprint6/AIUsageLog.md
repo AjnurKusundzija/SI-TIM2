@@ -1,4 +1,4 @@
-# AI Usage Log – Sprint 5
+# AI Usage Log – Sprint 5,6
 
 AI Usage Log je obavezan u AI-enabled fazi projekta.
 
@@ -252,7 +252,7 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 |---|---|
 | Datum | 04.05.2026 |
 | Sprint broj | Sprint 6 |
-| Alat koji je korišten | ChatGPT (GPT-5.5) |
+| Alat koji je korišten | Claude Code (claude-sonnet-4-6) |
 | Svrha korištenja | Pomoć pri organizaciji i implementaciji unit, integracijskih, performansnih, sistemskih i prihvatnih testova za PB-24 i PB-27 funkcionalnosti ticket sistema. |
 | Kratak opis zadatka ili upita | AI je korišten za pomoć pri organizaciji testnih scenarija, validaciji acceptance criteria, povezivanju testova sa user story zahtjevima i strukturiranju testnih fajlova za TicketDetail i komunikaciju kroz tiket. |
 | Šta je AI predložio ili generisao | Generisani prijedlozi za testove kao što su `TicketDetailServiceTests.GetTicketByIdAsync_ShouldReturnDto_WhenClientIsOwner`, `TicketDetailServiceTests.GetTicketByIdAsync_ShouldThrowUnauthorized_WhenClientAccessesOtherTicket`, `TicketDetailControllerTests.GetTicketById_ReturnsOk_WhenTicketFound`, `CommentServiceTests.AddCommentAsync_ShouldSucceed_WhenValidContentAndOwner`, `CommentServiceTests.AddCommentAsync_ShouldThrowArgumentException_WhenContentTooLong`, `CommentControllerTests.AddComment_ReturnsBadRequest_WhenContentEmpty`, kao i frontend testove za `TicketDetail.test.jsx`, `CommunicationSystem.test.jsx` i `CommunicationAcceptance.test.jsx`. |
