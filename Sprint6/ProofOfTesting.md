@@ -5,14 +5,14 @@
 
 | Nivo | US | Alat | Broj testova | Rezultat |
 | --- | --- | --- | --- | --- |
-| Unit — Backend | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30 | xUnit + Moq + EF InMemory | 28 novih testova (Sprint 6) | PASS |
-| Unit — Frontend | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | Vitest + Testing Library | 17 novih testova (Sprint 6) | PASS |
+| Unit — Backend | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30 | xUnit + Moq + EF InMemory | 29 novih testova (Sprint 6) | PASS |
+| Unit — Frontend (stranice + servisi) | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-18, US-19, US-20, US-29, US-30, US-31, US-32 | Vitest + Testing Library | 75 novih testova (Sprint 6) | PASS |
 | Integracijsko — Backend | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | xUnit + EF InMemory | 22 nova testa (Sprint 6) | PASS |
 | Performansno — Backend | US-1, US-2, US-8, US-11, US-14, US-19, US-29, US-30, US-31, US-32 | xUnit + Stopwatch | 6 novih testova (Sprint 6) | PASS |
 | Sistemsko — Frontend | US-1, US-2, US-3, US-8, US-11, US-12, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | Vitest + Testing Library | 8 testova (Sprint 6) | PASS |
 | Prihvatno — Frontend | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | Vitest + Testing Library | 9 testova (Sprint 6) | PASS |
-| **Ukupno Sprint 6** | **US-1 do US-3, US-8 do US-15, US-19, US-20, US-29 do US-32** | | **90 novih testova** | **PASS** |
-| **Ukupno projekat** | **US-1 do US-3, US-8 do US-15, US-19, US-20, US-29 do US-32** | | **119 backend + 96 frontend = 215** | **PASS** |
+| **Ukupno Sprint 6** | **US-1 do US-3, US-8 do US-15, US-18 do US-20, US-29 do US-32** | | **149 novih testova** | **PASS** |
+| **Ukupno projekat** | **US-1 do US-3, US-8 do US-15, US-18 do US-20, US-29 do US-32** | | **120 backend + 154 frontend = 274** | **PASS** |
 
 ---
 
@@ -25,6 +25,10 @@
 | Unit | US-1 | Ispravna validacija emaila i lozinke | `AuthServiceTests` — provjera toka prijave | PASS |
 | Unit | US-3 | Generička poruka greške bez otkrivanja detalja | `AuthControllerTests` — 401 odgovor | PASS |
 | UI | US-1, US-2, US-3 | Forma prijave, poruka greške, stanje sesije | `Login.test.jsx` — 4 testa | PASS |
+| UI | US-1 | Landing stranica prikazuje Prijava dugme za neautentificiranog korisnika i Dashboard dugme za autentificiranog; CTA navigira na ispravnu rutu; footer copyright | `Home.test.jsx` — 8 testova | PASS |
+| UI | US-1 | Dashboard prikazuje ispravan pozdravni tekst s imenom korisnika i kartice specifične za ulogu (CLIENT, AGENT, TECHNICIAN, ADMINISTRATOR) | `Dashboard.test.jsx` — 7 testova | PASS |
+| UI — Sigurnosno | US-1, US-2 | ProtectedRoute preusmjerava neautentificiranog korisnika na `/login`; korisnik s pogrešnom ulogom se preusmjerava na `/dashboard`; ispravan korisnik s dozvolom vidi sadržaj | `ProtectedRoute.test.jsx` — 4 testa | PASS |
+| Unit — Sigurnosni | US-1, US-3 | Pristup bez JWT ključa u konfiguraciji baca `InvalidOperationException` (pokriva `??` throw granu u `GenerateAccessToken`) | `AuthServiceTests.LoginAsync_MissingJwtKey_ThrowsInvalidOperationException` | PASS |
 | Integracijsko | US-1 | Login s ispravnim kredencijalima vraća JWT kroz sve slojeve | `AuthIntegrationTests.Login_WithValidCredentials_ReturnsJwtTokenThroughFullStack` | PASS |
 | Integracijsko | US-3 | Pogrešna lozinka vraća 401 generičkim odgovorom | `AuthIntegrationTests.Login_WithWrongPassword_ReturnsUnauthorizedWithGenericMessage` | PASS |
 | Integracijsko | US-3 | Nepostojeci email vraća 401 (isti odgovor kao pogrešna lozinka) | `AuthIntegrationTests.Login_WithUnknownEmail_ReturnsUnauthorized` | PASS |
@@ -43,6 +47,9 @@
 - [TelecomSupportSystem.Tests/Integration/AuthIntegrationTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Integration/AuthIntegrationTests.cs) — 5 testova
 - [TelecomSupportSystem.Tests/Performance/AuthPerformanceTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Performance/AuthPerformanceTests.cs) — 1 test
 - [frontend/src/test/Login.test.jsx](../Project/frontend/src/test/Login.test.jsx) — 4 testa
+- [frontend/src/test/Home.test.jsx](../Project/frontend/src/test/Home.test.jsx) — 8 testova
+- [frontend/src/test/Dashboard.test.jsx](../Project/frontend/src/test/Dashboard.test.jsx) — 7 testova
+- [frontend/src/test/ProtectedRoute.test.jsx](../Project/frontend/src/test/ProtectedRoute.test.jsx) — 4 testa (layout/ProtectedRoute)
 - [frontend/src/test/system/AuthSystem.test.jsx](../Project/frontend/src/test/system/AuthSystem.test.jsx) — 2 testa
 - [frontend/src/test/acceptance/AuthAcceptance.test.jsx](../Project/frontend/src/test/acceptance/AuthAcceptance.test.jsx) — 2 testa
 
@@ -118,6 +125,7 @@
 | Unit | US-14 | Controller vraca 404 za nepostojeci tiket | `TicketDetailControllerTests.GetTicketById_ReturnsNotFound_WhenTicketMissing` | PASS |
 | Unit — Sigurnosno | US-14 | Controller vraca 403 za neovlasteni pristup | `TicketDetailControllerTests.GetTicketById_ReturnsForbid_WhenClientAccessesForeignTicket` | PASS |
 | Unit — Sigurnosno | US-14 | Controller vraca 401 bez JWT claimova | `TicketDetailControllerTests.GetTicketById_ReturnsUnauthorized_WhenNoUserClaim` | PASS |
+| Unit — Frontend servis | US-14 | `getTicketById()` poziva `GET /tickets/:id` i vraća podatke tiketa | `ticketService.test.js` — 2 testa (getTicketById) | PASS |
 | UI | US-14 | UI prikazuje detalje tiketa | `TicketDetail.test.jsx > renders ticket details after successful load` | PASS |
 | UI | US-14 | UI prikazuje ime klijenta i agenta | `TicketDetail.test.jsx > shows client name and assigned agent name` | PASS |
 | UI | US-15 | UI prikazuje historiju komentara | `TicketDetail.test.jsx > displays comment history when comments exist` | PASS |
@@ -136,6 +144,7 @@
 - [TelecomSupportSystem.Tests/TicketT/TicketDetailControllerTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/TicketT/TicketDetailControllerTests.cs) — 4 testa
 - [TelecomSupportSystem.Tests/Integration/TicketDetailIntegrationTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Integration/TicketDetailIntegrationTests.cs) — 4 testa
 - [TelecomSupportSystem.Tests/Performance/TicketDetailPerformanceTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Performance/TicketDetailPerformanceTests.cs) — 1 test
+- [frontend/src/test/ticketService.test.js](../Project/frontend/src/test/ticketService.test.js) — 2 testa (getTicketById)
 - [frontend/src/test/TicketDetail.test.jsx](../Project/frontend/src/test/TicketDetail.test.jsx) — 8 testova (pokriva PB-24 i PB-27)
 - [frontend/src/test/system/TicketDetailSystem.test.jsx](../Project/frontend/src/test/system/TicketDetailSystem.test.jsx) — 1 test
 - [frontend/src/test/acceptance/TicketDetailAcceptance.test.jsx](../Project/frontend/src/test/acceptance/TicketDetailAcceptance.test.jsx) — 1 test
@@ -158,6 +167,8 @@
 | Unit — Sigurnosno | US-19, US-20 | Controller vraca 401 bez JWT claimova (GET) | `CommentControllerTests.GetComments_ReturnsUnauthorized_WhenNoUserClaim` | PASS |
 | Unit | US-19 | Controller vraca 400 za prazan sadrzaj | `CommentControllerTests.AddComment_ReturnsBadRequest_WhenContentEmpty` | PASS |
 | Unit — Sigurnosno | US-19 | Controller vraca 401 bez JWT claimova (POST) | `CommentControllerTests.AddComment_ReturnsUnauthorized_WhenNoUserClaim` | PASS |
+| Unit — Frontend servis | US-15 | `getTicketComments()` poziva `GET /comment/tickets/:id` i vraća niz komentara | `ticketService.test.js` — 2 testa (getTicketComments) | PASS |
+| Unit — Frontend servis | US-19 | `addComment()` poziva `POST /comment/tickets/:id` s ispravnim sadržajem i vraća kreiran komentar | `ticketService.test.js` — 2 testa (addComment) | PASS |
 | UI | US-19 | UI input vidljiv za otvoreni tiket | `TicketDetail.test.jsx > shows message input for open ticket` | PASS |
 | UI | US-19 | UI input skriven za zatvoreni tiket | `TicketDetail.test.jsx > hides message input for closed ticket` | PASS |
 | UI | US-19 | Dugme Pošalji onemoguceno za prazan unos | `TicketDetail.test.jsx > disables send button when message is empty` | PASS |
@@ -177,6 +188,7 @@
 - [TelecomSupportSystem.Tests/Communication/CommentControllerTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Communication/CommentControllerTests.cs) — 4 testa
 - [TelecomSupportSystem.Tests/Integration/CommentIntegrationTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Integration/CommentIntegrationTests.cs) — 4 testa
 - [TelecomSupportSystem.Tests/Performance/CommentPerformanceTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Performance/CommentPerformanceTests.cs) — 1 test
+- [frontend/src/test/ticketService.test.js](../Project/frontend/src/test/ticketService.test.js) — 4 testa (getTicketComments, addComment)
 - [frontend/src/test/TicketDetail.test.jsx](../Project/frontend/src/test/TicketDetail.test.jsx) — 8 testova (pokriva PB-24 i PB-27)
 - [frontend/src/test/system/CommunicationSystem.test.jsx](../Project/frontend/src/test/system/CommunicationSystem.test.jsx) — 1 test
 - [frontend/src/test/acceptance/CommunicationAcceptance.test.jsx](../Project/frontend/src/test/acceptance/CommunicationAcceptance.test.jsx) — 2 testa
@@ -189,6 +201,7 @@
 
 | Nivo | US | AC | Test koji pokriva | Status |
 | --- | --- | --- | --- | --- |
+| Unit — Frontend servis | US-29, US-30 | `getAllTickets()` poziva `GET /tickets` bez parametara; s `assignedOnly=true` dodaje query param; vraća niz tiketa | `ticketService.test.js` — 3 testa (getAllTickets) | PASS |
 | Unit — Repozitorij | US-29 | GetAllAsync vraca sve tikete | `AllTicketsRepositoryTests.GetAllAsync_ReturnsAllTickets` | PASS |
 | Unit — Repozitorij | US-29 | Prazna lista kada nema tiketa | `AllTicketsRepositoryTests.GetAllAsync_ReturnsEmpty_WhenNoTickets` | PASS |
 | Unit — Repozitorij | US-29 | Tiketi sortirani od najnovijeg | `AllTicketsRepositoryTests.GetAllAsync_ReturnsTickets_OrderedByDateDescending` | PASS |
@@ -221,6 +234,7 @@
 - [TelecomSupportSystem.Tests/TicketT/AllTicketsControllerTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/TicketT/AllTicketsControllerTests.cs) — 3 testa
 - [TelecomSupportSystem.Tests/Integration/AllTicketsIntegrationTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Integration/AllTicketsIntegrationTests.cs) — 4 testa (pokriva PB-32 i PB-33)
 - [TelecomSupportSystem.Tests/Performance/AllTicketsPerformanceTests.cs](../Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Performance/AllTicketsPerformanceTests.cs) — 1 test (pokriva PB-32 i PB-33)
+- [frontend/src/test/ticketService.test.js](../Project/frontend/src/test/ticketService.test.js) — 3 testa (getAllTickets)
 - [frontend/src/test/Tickets.test.jsx](../Project/frontend/src/test/Tickets.test.jsx) — 9 testova
 - [frontend/src/test/system/TicketsSystem.test.jsx](../Project/frontend/src/test/system/TicketsSystem.test.jsx) — 1 test
 - [frontend/src/test/acceptance/TicketsAcceptance.test.jsx](../Project/frontend/src/test/acceptance/TicketsAcceptance.test.jsx) — 1 test
@@ -252,6 +266,28 @@
 
 ---
 
+## Zajednički UI komponenti
+
+Testovi zajedničkih komponenti (`components/common`) pokrivaju izoliranu renderabilnost, interakciju i edge-case ponašanje UI gradivnih blokova koji se koriste kroz više stranica.
+
+| Nivo | US | AC | Test koji pokriva | Status |
+| --- | --- | --- | --- | --- |
+| Unit — UI | US-12, US-29, US-32 | Badge prikazuje ispravne labele za statuse (OPEN, CLOSED, PENDING_CLOSE), kategorije (MOBILE_NETWORK, TECHNICAL_SUPPORT) i prioritete; nepoznata vrijednost ne ruši komponentu; CSS klase za boje ispravno primijenjene | `Badge.test.jsx` — 8 testova | PASS |
+| Unit — UI | US-13, US-29, US-31 | EmptyState prikazuje naslov i opis; bez `action` nema gumba; s `action` i `actionLabel` gumb se rendira i klik poziva callback | `EmptyState.test.jsx` — 5 testova | PASS |
+| Unit — UI | US-14, US-15, US-19 | Modal se ne rendira kada je `isOpen=false`; prikazuje naslov i djecu kada je otvoren; X gumb i klik na backdrop pozivaju `onClose`; veličine `md` (max-w-lg) i `lg` (max-w-2xl) ispravno primijenjene | `Modal.test.jsx` — 6 testova | PASS |
+| Unit — UI | US-16, US-17 | ConfirmDialog se ne rendira kada je zatvoren; prikazuje naslov, poruku i prilagođene tekste gumba; Potvrdi poziva `onConfirm` i `onClose`; Odustani poziva `onClose`; `danger` varijanta ima `bg-red-600`, `primary` varijanta `bg-navy-700` | `ConfirmDialog.test.jsx` — 7 testova | PASS |
+| Unit — UI | US-18 | StarRating rendira 5 gumba; klik na zvjezdicu poziva `onChange` s ispravnom vrijednosti (1–5); `readonly` mod ne poziva `onChange` i onemogućuje sve gumbe | `StarRating.test.jsx` — 6 testova | PASS |
+
+### Fajlovi sa testovima
+
+- [frontend/src/test/Badge.test.jsx](../Project/frontend/src/test/Badge.test.jsx) — 8 testova
+- [frontend/src/test/EmptyState.test.jsx](../Project/frontend/src/test/EmptyState.test.jsx) — 5 testova
+- [frontend/src/test/Modal.test.jsx](../Project/frontend/src/test/Modal.test.jsx) — 6 testova
+- [frontend/src/test/ConfirmDialog.test.jsx](../Project/frontend/src/test/ConfirmDialog.test.jsx) — 7 testova
+- [frontend/src/test/StarRating.test.jsx](../Project/frontend/src/test/StarRating.test.jsx) — 6 testova
+
+---
+
 ## Veza sa Test Strategijom
 
 | Test strategija nivo | US | PB | Dokaz | Status |
@@ -261,7 +297,8 @@
 | Unit — repository (EF InMemory) | US-8, US-9, US-10, US-11, US-12, US-13, US-29, US-30 | PB-22, PB-23, PB-32 | `TicketRepositoryTests`, `AllTicketsRepositoryTests` | PASS |
 | Integracijsko — backend | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | PB-19, PB-22, PB-23, PB-24, PB-27, PB-32, PB-33 | `AuthIntegrationTests`, `TicketIntegrationTests`, `TicketDetailIntegrationTests`, `CommentIntegrationTests`, `AllTicketsIntegrationTests` | PASS |
 | Performansno — backend | US-1, US-2, US-8, US-11, US-14, US-19, US-29, US-30, US-31, US-32 | PB-19, PB-22, PB-23, PB-24, PB-27, PB-32, PB-33 | `AuthPerformanceTests`, `TicketPerformanceTests`, `TicketDetailPerformanceTests`, `CommentPerformanceTests`, `AllTicketsPerformanceTests` | PASS |
-| UI | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | PB-19, PB-22, PB-23, PB-24, PB-27, PB-32, PB-33 | `Login.test.jsx`, `CreateTicket.test.jsx`, `MyTickets.test.jsx`, `TicketDetail.test.jsx`, `Tickets.test.jsx` | PASS |
+| UI — stranice | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | PB-19, PB-22, PB-23, PB-24, PB-27, PB-32, PB-33 | `Home.test.jsx`, `Dashboard.test.jsx`, `Login.test.jsx`, `CreateTicket.test.jsx`, `MyTickets.test.jsx`, `TicketDetail.test.jsx`, `Tickets.test.jsx` | PASS |
+| UI — zajednički komponenti | US-12, US-13, US-16, US-17, US-18, US-29, US-31, US-32 | Zajednički UI blokovi | `Badge.test.jsx`, `EmptyState.test.jsx`, `Modal.test.jsx`, `ConfirmDialog.test.jsx`, `StarRating.test.jsx` | PASS |
 | Sistemsko | US-1, US-2, US-3, US-8, US-11, US-12, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | PB-19, PB-22, PB-23, PB-24, PB-27, PB-32, PB-33 | `AuthSystem.test.jsx`, `TicketCreateSystem.test.jsx`, `MyTicketsSystem.test.jsx`, `TicketDetailSystem.test.jsx`, `CommunicationSystem.test.jsx`, `TicketsSystem.test.jsx` | PASS |
 | Prihvatno | US-1, US-2, US-3, US-8, US-9, US-10, US-11, US-12, US-13, US-14, US-15, US-19, US-20, US-29, US-30, US-31, US-32 | PB-19, PB-22, PB-23, PB-24, PB-27, PB-32, PB-33 | `AuthAcceptance.test.jsx`, `CreateTicketAcceptance.test.jsx`, `MyTicketsAcceptance.test.jsx`, `TicketDetailAcceptance.test.jsx`, `CommunicationAcceptance.test.jsx`, `TicketsAcceptance.test.jsx`, `SearchFilterAcceptance.test.jsx` | PASS |
 | Sigurnosno (rola/vlasnistvo) | US-1, US-2, US-3, US-14, US-15, US-19, US-20, US-29, US-30 | PB-19, PB-24, PB-27, PB-32 | `AuthIntegrationTests`, `TicketDetailServiceTests`, `CommentServiceTests`, `AllTicketsServiceTests`, `AllTicketsControllerTests` | PASS |

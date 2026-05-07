@@ -37,6 +37,7 @@ Svi AC iz US-14 i US-15 su zadovoljeni; korisnik dobija kompletan i konzistentan
 
 | Datum | Nivo | Metoda | Alati i testovi | Rezultat |
 | --- | --- | --- | --- | --- |
+| 07-05-2026 | Unit — Frontend servis | Regression | Vitest + api mock: `ticketService.test.js` — 2 testa (getTicketById); provjera: `GET /tickets/:id` pozvan s ispravnim ID-om; vraća podatke tiketa iz API odgovora | PASS |
 | 07-05-2026 | Unit | Regression | xUnit + Moq: `TicketDetailServiceTests` — 5 testova; provjera: klijent vidi vlastiti tiket, KeyNotFound za nepostojeci tiket, UnauthorizedAccess za tudji tiket, agent vidi svaki tiket, ispravno mapiranje svih DTO polja (ClientName, AssignedAgentName) | PASS |
 | 07-05-2026 | Unit | Regression | xUnit + Moq: `TicketDetailControllerTests` — 4 testa; provjera: 200 OK za vlasnika, 404 NotFound, 403 Forbid za klijenta koji pristupa tuđem tiketu, 401 Unauthorized bez JWT claimova | PASS |
 | 07-05-2026 | UI | Regression | Vitest + Testing Library: `TicketDetail.test.jsx` — 8 testova; provjera: prikaz detalja tiketa (naslov, opis), ime klijenta i agenta, historija komentara, input forma za otvoreni tiket, skriven input za zatvoreni tiket, error empty state pri API grešci | PASS |
@@ -80,6 +81,7 @@ Svi AC iz US-19 i US-20 su zadovoljeni; komunikacija radi bez gresaka i poruke s
 
 | Datum | Nivo | Metoda | Alati i testovi | Rezultat |
 | --- | --- | --- | --- | --- |
+| 07-05-2026 | Unit — Frontend servis | Regression | Vitest + api mock: `ticketService.test.js` — 4 testa (getTicketComments × 2, addComment × 2); provjera: `GET /comment/tickets/:id` pozvan s ispravnim ID-om; vraća niz komentara; `POST /comment/tickets/:id` šalje tijelo `{ content }` i vraća kreiran komentar | PASS |
 | 07-05-2026 | Unit | Regression | xUnit + Moq: `CommentServiceTests` — 6 testova; provjera: uspjesno slanje komentara, ArgumentException za sadrzaj >1000 znakova, KeyNotFound za nepostojeci tiket, UnauthorizedAccess za klijenta koji nije vlasnik tiketa, GetComments za vlasnika vraca listu, GetComments za tredju stranu baca UnauthorizedAccess | PASS |
 | 07-05-2026 | Unit | Regression | xUnit + Moq + SignalR stub: `CommentControllerTests` — 4 testa; provjera: 200 OK sa listom komentara za autoriziranog korisnika, 401 Unauthorized bez JWT claimova, 400 BadRequest za prazan sadrzaj, 401 Unauthorized za POST bez claimova | PASS |
 | 07-05-2026 | UI | Regression | Vitest + Testing Library: `TicketDetail.test.jsx` — 8 testova (pokriva i PB-24 i PB-27); provjera: input polje vidljivo za otvoreni tiket, skriveno za zatvoreni tiket, dugme Pošalji onemoguceno za prazan unos, slanje poruke poziva addComment sa ispravnim parametrima | PASS |
@@ -123,6 +125,7 @@ Svi AC iz US-29 i US-30 su zadovoljeni; lista i detalji rade bez greske.
 
 | Datum | Nivo | Metoda | Alati i testovi | Rezultat |
 | --- | --- | --- | --- | --- |
+| 07-05-2026 | Unit — Frontend servis | Regression | Vitest + api mock: `ticketService.test.js` — 3 testa (getAllTickets); provjera: `GET /tickets` bez query params za defaultni poziv; s `{ assignedOnly: true }` za filtrirani poziv; vraća niz tiketa | PASS |
 | 07-05-2026 | Unit — Repozitorij | Regression | xUnit + EF InMemory: `AllTicketsRepositoryTests` — 4 testa; provjera: GetAllAsync vraca sve tikete, prazna lista, sortiranje od najnovijeg, GetByAssigneeIdAsync filtrira po dodijeljenosti | PASS |
 | 07-05-2026 | Unit | Regression | xUnit + Moq: `AllTicketsServiceTests` — 4 testa; provjera: agent bez filtera poziva GetAllAsync, agent sa assignedOnly=true poziva GetByAssigneeIdAsync, tehnicar uvijek poziva GetByAssigneeIdAsync, klijent dobija UnauthorizedAccessException | PASS |
 | 07-05-2026 | Unit | Regression | xUnit + Moq: `AllTicketsControllerTests` — 3 testa; provjera: agent dobija 200 OK sa listom tiketa, klijent dobija 403 Forbid, zahtjev bez JWT claimova dobija 401 Unauthorized | PASS |
