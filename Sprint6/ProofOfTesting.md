@@ -266,7 +266,7 @@
 
 ---
 
-## Zajednički UI komponenti
+## Zajedničke UI komponente
 
 Testovi zajedničkih komponenti (`components/common`) pokrivaju izoliranu renderabilnost, interakciju i edge-case ponašanje UI gradivnih blokova koji se koriste kroz više stranica.
 
@@ -309,7 +309,7 @@ Testovi zajedničkih komponenti (`components/common`) pokrivaju izoliranu render
 Iz root direktorija: 
 
 ### Frontend:
-cd Project/TelecomSupportSystem && dotnet test TelecomSupportSystem.Tests/ --logger "console;verbosity=normal" 2>&1
+cd ../Project/TelecomSupportSystem && dotnet test TelecomSupportSystem.Tests/ --logger "console;verbosity=normal" 2>&1
 
 ### Backend:
-cd Project/frontend && npx vitest run 2>&1
+cd ../Project/frontend && npx vitest run 2>&1
