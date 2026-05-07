@@ -1,3 +1,4 @@
 .vs/
 .claude/
 .DS_Store
+package-lock.json

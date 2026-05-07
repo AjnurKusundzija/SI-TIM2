@@ -29,9 +29,34 @@ jobs:
         run: dotnet build --no-restore -c Release
 
       - name: Test
+        if: github.event_name == 'push'
         run: dotnet test --no-build -c Release
         env:
           JWT_KEY: ${{ secrets.JWT_KEY }}
+
+      - name: Test with coverage
+        if: github.event_name == 'pull_request'
+        run: dotnet test --no-build -c Release --settings coverage.runsettings --collect:"XPlat Code Coverage" --results-directory TestResults/raw
+        env:
+          JWT_KEY: ${{ secrets.JWT_KEY }}
+
+      - name: Generate coverage report
+        if: github.event_name == 'pull_request'
+        run: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          reportgenerator \
+            -reports:"TestResults/raw/**/coverage.cobertura.xml" \
+            -targetdir:"TestResults/coverage-html" \
+            -reporttypes:Html \
+            -assemblyfilters:"-TelecomSupportSystem.Tests" \
+            -classfilters:"-Program;-*.Migrations.*;-*ModelSnapshot*"
+
+      - name: Upload backend coverage
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-backend-html
+          path: Project/TelecomSupportSystem/TestResults/coverage-html/
 
   frontend:
     name: Frontend — Lint, Test & Build
@@ -51,13 +76,25 @@ jobs:
           cache-dependency-path: Project/frontend/package-lock.json
 
       - name: Install
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Lint
         run: npx eslint src/
 
       - name: Test
-        run: npm test -- --run
+        if: github.event_name == 'push'
+        run: npx vitest run
+
+      - name: Test with coverage
+        if: github.event_name == 'pull_request'
+        run: npx vitest run --coverage
 
       - name: Build
         run: npm run build
+
+      - name: Upload frontend coverage
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-frontend-html
+          path: Project/frontend/coverage/

@@ -8,7 +8,7 @@ vi.mock('../services/api', () => ({
 }))
 
 import api from '../services/api'
-import { getMyTickets, createTicket } from '../services/ticketService'
+import { getMyTickets, createTicket, getAllTickets, getTicketById, getTicketComments, addComment } from '../services/ticketService'
 
 describe('ticketService', () => {
   beforeEach(() => {
@@ -65,5 +65,89 @@ describe('ticketService', () => {
     const result = await createTicket({ Subject: 'Problem', Type: 'INTERNET', Description: 'D', Priority: 'LOW' })
 
     expect(result).toEqual(created)
+  })
+
+  // ─── getAllTickets (PB-32) ────────────────────────────────────────────────
+
+  it('getAllTickets() calls GET /tickets without params by default', async () => {
+    api.get.mockResolvedValueOnce({ data: [] })
+
+    await getAllTickets()
+
+    expect(api.get).toHaveBeenCalledWith('/tickets', { params: {} })
+  })
+
+  it('getAllTickets(true) calls GET /tickets with assignedOnly param', async () => {
+    api.get.mockResolvedValueOnce({ data: [] })
+
+    await getAllTickets(true)
+
+    expect(api.get).toHaveBeenCalledWith('/tickets', { params: { assignedOnly: true } })
+  })
+
+  it('getAllTickets() returns array of tickets', async () => {
+    const tickets = [{ ticketId: 1 }, { ticketId: 2 }]
+    api.get.mockResolvedValueOnce({ data: tickets })
+
+    const result = await getAllTickets()
+
+    expect(result).toEqual(tickets)
+  })
+
+  // ─── getTicketById (US-14, US-30) ────────────────────────────────────────
+
+  it('getTicketById() calls GET /tickets/:id', async () => {
+    api.get.mockResolvedValueOnce({ data: { ticketId: 7 } })
+
+    await getTicketById(7)
+
+    expect(api.get).toHaveBeenCalledWith('/tickets/7')
+  })
+
+  it('getTicketById() returns ticket data', async () => {
+    const ticket = { ticketId: 7, status: 'OPEN' }
+    api.get.mockResolvedValueOnce({ data: ticket })
+
+    const result = await getTicketById(7)
+
+    expect(result).toEqual(ticket)
+  })
+
+  // ─── getTicketComments (US-15) ────────────────────────────────────────────
+
+  it('getTicketComments() calls GET /comment/tickets/:id', async () => {
+    api.get.mockResolvedValueOnce({ data: [] })
+
+    await getTicketComments(3)
+
+    expect(api.get).toHaveBeenCalledWith('/comment/tickets/3')
+  })
+
+  it('getTicketComments() returns comments array', async () => {
+    const comments = [{ commentId: 1, content: 'Hello' }]
+    api.get.mockResolvedValueOnce({ data: comments })
+
+    const result = await getTicketComments(3)
+
+    expect(result).toEqual(comments)
+  })
+
+  // ─── addComment (PB-27) ──────────────────────────────────────────────────
+
+  it('addComment() calls POST /comment/tickets/:id with content', async () => {
+    api.post.mockResolvedValueOnce({ data: { commentId: 9 } })
+
+    await addComment(5, 'Nova poruka')
+
+    expect(api.post).toHaveBeenCalledWith('/comment/tickets/5', { content: 'Nova poruka' })
+  })
+
+  it('addComment() returns created comment', async () => {
+    const comment = { commentId: 9, content: 'Nova poruka' }
+    api.post.mockResolvedValueOnce({ data: comment })
+
+    const result = await addComment(5, 'Nova poruka')
+
+    expect(result).toEqual(comment)
   })
 })
