@@ -87,7 +87,7 @@ Implementirati ključne funkcionalnosti za pregled, komunikaciju i upravljanje t
 - Kada agent otvori listu tiketa, ako se podaci učitaju, tada sistem mora prikazati sve tikete
 - Kada postoji veliki broj tiketa, ako korisnik skrola ili traži više, tada sistem mora omogućiti učitavanje dodatnih rezultata
 - Sistem prikazuje sve tikete neovisno od stanja 
-- Sistem mora omogućiti pristup administratoru bez ograničenja  
+
 
 ---
 
