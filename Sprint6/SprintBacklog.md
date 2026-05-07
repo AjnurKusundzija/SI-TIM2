@@ -18,7 +18,7 @@ Implementirati ključne funkcionalnosti za pregled, komunikaciju i upravljanje t
 | SB-02 | PB-27 Komunikacija kroz tiket | US-19, US-20 | Ajdin, Uma | Done | Implementirana razmjena poruka korisnik–agent |
 | SB-03 | PB-32 Pregled svih tiketa | US-29, US-30 | Eldar | Done | Implementiran pregled svih tiketa za agente |
 | SB-04 | PB-47 FAQ Segment | US-56 | Ajnur | Done | Implementiran FAQ modul |
-| SB-05 | Pisanje unit i integracijskih testova za Sprint 6 funkcionalnosti | US-14, US-15, US-19, US-20, US-29, US-30, US-56 | Ajnur, Hana, Lamija, Merisa | Done | Testovi za backend i frontend (komunikacija, tiket pregled, FAQ, detalji tiketa) |
+| SB-05 | Pisanje testova po Test Strategy dokumentu za Sprint 6 funkcionalnosti i ProofOfTesting dokumenta | US-14, US-15, US-19, US-20, US-29, US-30, US-56 | Ajnur, Hana, Lamija, Merisa | Done | Testovi za backend i frontend (komunikacija, tiket pregled, FAQ, detalji tiketa) |
 
 ---
 
