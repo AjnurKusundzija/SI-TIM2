@@ -28,11 +28,35 @@ namespace TelecomSupportSystem.DAL.Repositories
             return await _context.Tickets.FindAsync(ticketId);
         }
 
+        public async Task<Ticket?> GetByIdWithDetailsAsync(int ticketId)
+        {
+            return await _context.Tickets
+                .Include(t => t.Creator)
+                .Include(t => t.Assignments)
+                    .ThenInclude(a => a.User)
+                .FirstOrDefaultAsync(t => t.TicketId == ticketId);
+        }
+
         public async Task<Ticket> CreateAsync(Ticket ticket)
         {
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
             return ticket;
+        }
+
+        public async Task<IEnumerable<Ticket>> GetAllAsync()
+        {
+            return await _context.Tickets
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Ticket>> GetByAssigneeIdAsync(int userId)
+        {
+            return await _context.Tickets
+                .Where(t => t.Assignments.Any(a => a.UserId == userId))
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
         }
     }
 }

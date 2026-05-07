@@ -104,6 +104,46 @@ namespace TelecomSupportSystem.DAL.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Faq", b =>
+                {
+                    b.Property<int>("FaqId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FaqId"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("FaqId");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("SortOrder");
+
+                    b.ToTable("Faqs");
+                });
+
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Notification", b =>
                 {
                     b.Property<int>("NotificationId")

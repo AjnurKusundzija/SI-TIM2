@@ -18,12 +18,30 @@ export default defineConfig({
         // IMPORTANT: Tells Vite to accept the local .NET self-signed certificate
         secure: false,
       },
+      '/chathub': {
+        target: 'http://localhost:7149',
+        ws: true,
+        secure: false,
+      },
     },
   },
-  ...(process.env.VITEST && { esbuild: { jsx: 'automatic' } }),
+  esbuild: { jsx: 'automatic' },
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.js'],
+    coverage: {
+      provider: 'v8',
+      exclude: [
+        'src/main.jsx',
+        'src/App.jsx',
+        'src/components/layout/**',
+        'src/services/api.js',
+        'socket-server.js',
+        'vite.config.js',
+        'eslint.config.js',
+        'src/test/**',
+      ],
+    },
   },
 })

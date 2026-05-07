@@ -1,4 +1,4 @@
-# AI Usage Log – Sprint 5
+# AI Usage Log – Sprint 5,6
 
 AI Usage Log je obavezan u AI-enabled fazi projekta.
 
@@ -196,5 +196,102 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Šta je tim odbacio | Odbačeni su prijedlozi koji uvode nove biblioteke ili odstupaju od postojećeg načina implementacije u projektu. |
 | Rizici, problemi ili greške koje su uočene | jsdom ne primjenjuje CSS media queries, pa komponente koje koriste responsive prikaz (desktop tabela + mobile kartice) renderuju oba prikaza istovremeno, što uzrokuje duplikate teksta i greške pri korištenju `getByText`. Rješenje: koristiti `queryAllByText` za provjeru prisustva i odsustva elemenata. |
 | Ko je koristio alat | Lejan Kozlić, Uma Mahmutović |
+
+## Unos #12
+
+| Polje | Detalji |
+|---|---|
+| Datum | 05.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | Codex / ChatGPT |
+| Svrha korištenja | Pomoć pri implementaciji PB-47 FAQ funkcionalnosti, provjeri testova i ispravci UI detalja |
+| Kratak opis zadatka ili upita | Korišten je AI za implementaciju FAQ funkcionalnosti: dodavanje backend podrške za često postavljana pitanja, zaštićenog API endpointa, seed podataka, frontend FAQ stranice u autentificiranom dijelu aplikacije, sidebar navigacije i unit testova. Naknadno je korišten za uklanjanje FAQ sekcije sa početnog ekrana, ispravku bosanskih afrikata u UI tekstovima i rješavanje lint greške u `useEffect` logici. |
+| Šta je AI predložio ili generisao | AI je generisao `Faq` entitet, `IFaqRepository` i `FaqRepository`, `IFaqService` i `FaqService`, `GetFaqDto`, `FaqController` sa zaštićenim `GET /api/faq` endpointom, registraciju repozitorija i servisa u `Program.cs`, EF konfiguraciju i migraciju za `Faqs` tabelu, te razvojne seed podatke. Na frontendu je generisao `faqService.js`, `/faq` stranicu sa loading, empty, error/retry stanjima i accordion prikazom, protected route, naslov stranice i sidebar link za `CLIENT`, `AGENT` i `ADMINISTRATOR`. Također su generisani backend i frontend unit testovi za FAQ funkcionalnost. |
+| Šta je tim prihvatio | Prihvaćena je osnovna 3-slojna backend struktura, zaštićeni endpoint, seed FAQ sadržaj, frontend FAQ stranica unutar postojećeg autentificiranog layouta, sidebar navigacija i testovi za repository, service, controller, frontend service i FAQ komponentu. |
+| Šta je tim izmijenio | Uklonjena je FAQ sekcija sa početnog ekrana jer FAQ ne treba biti prikazan na Home stranici. Seed logika je promijenjena iz jednokratnog insertovanja u upsert po `SortOrder`, kako bi se postojeći FAQ redovi u razvojnoj bazi ažurirali i dobili ispravne znakove. UI tekstovi su ispravljeni da koriste bosanske afrikate (`č`, `ć`, `ž`, `š`, `đ`). `useEffect` logika u `Faq.jsx` je izmijenjena kako bi prošla strogo React lint pravilo koje zabranjuje sinhrono pozivanje `setState` unutar efekta. |
+| Šta je tim odbacio | Odbačen je prijedlog da FAQ bude vidljiv ili klikabilan na početnom ekranu. Odbačen je i pristup gdje se postojeći seed podaci ne ažuriraju, jer bi to ostavilo neispravne ASCII tekstove u lokalnoj bazi. |
+| Rizici, problemi ili greške koje su uočene | Uočeno je da Docker volume zadržava stare FAQ seed podatke, pa izmjene teksta u kodu nisu odmah bile vidljive u UI-u. Riješeno je upsert seed logikom. Također je u CI lint provjeri uočena greška `react-hooks/set-state-in-effect`, pa je inicijalni fetch prebačen na promise callbackove unutar `useEffect`, dok je reset stanja ostavljen samo za retry akciju korisnika. |
+| Ko je koristio alat | Ajnur Kušundžija |
+
+
+## Unos #13
+
+| Polje | Detalji |
+|---|---|
+| Datum | 05.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | ChatGPT (GPT-5.5) |
+| Svrha korištenja | Pomoć pri implementaciji detaljnog prikaza tiketa za klijenta i komunikacije između klijenta i agenta unutar sistema za podršku. |
+| Kratak opis zadatka ili upita | AI je korišten za pomoć pri organizaciji TicketDetail stranice, prikazu detalja tiketa, navigaciji između stranica i prilagođavanju prikaza za klijenta bez narušavanja postojeće funkcionalnosti za agente i tehničare. |
+| Šta je AI predložio ili generisao | Generisani prijedlozi za strukturu TicketDetail komponente, prikaz statusa, prioriteta, kategorije, komunikacije unutar tiketa i organizaciju frontend ruta i komponenti. |
+| Šta je tim prihvatio | Strukturu detaljnog prikaza tiketa za klijenta, organizaciju komunikacije unutar tiketa i dio prijedloga za frontend navigaciju i prikaz podataka. |
+| Šta je tim izmijenio | Prilagođeni su nazivi ruta, način prikaza pojedinih elemenata i dio logike kako bi postojeće funkcionalnosti za agente i tehničare ostale nepromijenjene. |
+| Šta je tim odbacio | Prijedlozi koji bi zahtijevali promjene postojeće backend logike ili uvođenje dodatnih biblioteka koje nisu potrebne projektu. |
+| Rizici, problemi ili greške koje su uočene | Problemi sa React import/export konfiguracijom, pokretanjem frontend aplikacije i povezivanjem frontend-a sa backend servisima tokom razvoja TicketDetail funkcionalnosti. |
+| Ko je koristio alat | Lejan Kozlić, Uma Mahmutović |
+
+## Unos #14
+
+| Polje | Detalji |
+|---|---|
+| Datum | 05.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | Claude Code |
+| Svrha korištenja | Pomoć pri implementaciji pregleda svih tiketa i detaljnog prikaza tiketa za agenta i administratora u TelecomSupport sistemu. |
+| Kratak opis zadatka ili upita | AI je korišten za provjeru usklađenosti funkcionalnosti sa Sprint 1-5 dokumentacijom i za pomoć pri implementaciji stranice “Svi tiketi” i stranice detalja tiketa za uloge agent i administrator. |
+| Šta je AI predložio ili generisao | Generisani su prijedlozi za prikaz svih tiketa sa paginacijom, detaljni prikaz pojedinačnog tiketa, prikaz statusa, prioriteta, klijenta, datuma i historije aktivnosti, kao i smjernice za autorizaciju putem JWT tokena. |
+| Šta je tim prihvatio | Prihvaćena je organizacija stranice “Svi tiketi”, prikaz detalja tiketa za agente i administratore, korištenje postojećeg dizajna aplikacije i smjernica da agent i administrator imaju pristup svim tiketima bez ograničenja. |
+| Šta je tim izmijenio | Prilagođeni su nazivi ruta, prikaz UI elemenata i tekstovi na bosanskom jeziku kako bi se uklopili u postojeću frontend strukturu i stil aplikacije. |
+| Šta je tim odbacio | Odbijeni su dijelovi prijedloga koji nisu odgovarali postojećoj arhitekturi projekta, tehnologijama koje se stvarno koriste ili bi narušili postojeće funkcionalnosti za druge uloge. |
+| Rizici, problemi ili greške koje su uočene | Potencijalni rizici su neusklađenost API endpointa sa postojećim backend rutama, razlike u nazivima polja između backend odgovora i frontend prikaza, kao i potreba da se očuva postojeća autorizacija za ostale korisničke uloge. |
+| Ko je koristio alat | Eldar Hadžiselimović |
+
+## Unos #15
+
+| Polje | Detalji |
+|---|---|
+| Datum | 04.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | Claude Code (claude-sonnet-4-6) |
+| Svrha korištenja | Pomoć pri organizaciji i implementaciji unit, integracijskih, performansnih, sistemskih i prihvatnih testova za PB-24 i PB-27 funkcionalnosti ticket sistema. |
+| Kratak opis zadatka ili upita | AI je korišten za pomoć pri organizaciji testnih scenarija, validaciji acceptance criteria, povezivanju testova sa user story zahtjevima i strukturiranju testnih fajlova za TicketDetail i komunikaciju kroz tiket. |
+| Šta je AI predložio ili generisao | Generisani prijedlozi za testove kao što su `TicketDetailServiceTests.GetTicketByIdAsync_ShouldReturnDto_WhenClientIsOwner`, `TicketDetailServiceTests.GetTicketByIdAsync_ShouldThrowUnauthorized_WhenClientAccessesOtherTicket`, `TicketDetailControllerTests.GetTicketById_ReturnsOk_WhenTicketFound`, `CommentServiceTests.AddCommentAsync_ShouldSucceed_WhenValidContentAndOwner`, `CommentServiceTests.AddCommentAsync_ShouldThrowArgumentException_WhenContentTooLong`, `CommentControllerTests.AddComment_ReturnsBadRequest_WhenContentEmpty`, kao i frontend testove za `TicketDetail.test.jsx`, `CommunicationSystem.test.jsx` i `CommunicationAcceptance.test.jsx`. |
+| Šta je tim prihvatio | Strukturu testiranja za TicketDetail i komunikaciju kroz tiket, povezivanje acceptance criteria sa testovima, organizaciju testnih nivoa i dio prijedloga za frontend i backend testne scenarije. |
+| Šta je tim izmijenio | Prilagođeni su nazivi testova, organizacija testnih fajlova i dio validacija kako bi odgovarali postojećoj arhitekturi projekta i implementiranim funkcionalnostima sistema. |
+| Šta je tim odbacio | Prijedlozi koji nisu bili kompatibilni sa postojećom backend logikom, organizacijom ruta ili tehnologijama korištenim unutar projekta. |
+| Rizici, problemi ili greške koje su uočene | Problemi sa autorizacijom pristupa tiketima, validacijom korisničkih uloga, povezivanjem frontend i backend testova i organizacijom testnih scenarija za komunikaciju kroz tiket. |
+| Ko je koristio alat | Uma Mahmutović |
+
+## Unos #16
+
+| Polje | Detalji |
+|---|---|
+| Datum | 05.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | ChatGPT (GPT-5.5) |
+| Svrha korištenja | Pomoć pri organizaciji Sprint 6 aktivnosti, povezivanju user story zahtjeva sa PB zadacima i usklađivanju ticket funkcionalnosti sa sprint ciljevima. |
+| Kratak opis zadatka ili upita | AI je korišten za pomoć pri definisanju Sprint Goal-a, povezivanju PB-24 funkcionalnosti sa user story zahtjevima, organizaciji sprint backlog stavki i usklađivanju ticket funkcionalnosti sa planiranim sprint aktivnostima. |
+| Šta je AI predložio ili generisao | Generisani prijedlozi za organizaciju sprint backlog stavki, povezivanje detaljnog prikaza tiketa sa sprint ciljevima, raspodjelu zadataka po članovima tima i definisanje fokusnih tačaka Sprinta 6. |
+| Šta je tim prihvatio | Organizaciju Sprint 6 backlog stavki, povezivanje PB-24 funkcionalnosti sa sprint ciljevima i dio prijedloga za raspodjelu ticket funkcionalnosti između članova tima. |
+| Šta je tim izmijenio | Prilagođeni su nazivi backlog stavki, statusi zadataka i dio opisa sprint aktivnosti kako bi odgovarali stvarnoj organizaciji tima i implementiranim funkcionalnostima. |
+| Šta je tim odbacio | Prijedlozi koji nisu odgovarali postojećoj organizaciji sprintova ili planiranoj raspodjeli zadataka unutar tima. |
+| Rizici, problemi ili greške koje su uočene | Problemi sa organizacijom branch workflow-a, merge procesom na main granu i usklađivanjem ticket funkcionalnosti između frontend i backend dijela sistema. |
+| Ko je koristio alat | Lejan Kozlić |
+
+## Unos #17
+
+| Polje | Detalji |
+|---|---|
+| Datum | 05.05.2026 |
+| Sprint broj | Sprint 6 |
+| Alat koji je korišten | Gemini 3.1 Pro|
+| Svrha korištenja | Pomoć pri proširenju ticket sistema sa real-time komunikacijom između klijenta i agenta, SignalR integracijom i proširenjem autorizacije pristupa tiketima za agente i administratore. |
+| Kratak opis zadatka ili upita | AI je korišten za definisanje i generisanje detaljnog prompta za implementaciju funkcionalnosti gdje agent može pregledati detalje svakog tiketa, kliknuti na tiket iz prikaza “Svi tiketi”, te ostvariti real-time komunikaciju sa klijentom kroz sistem komentara unutar TicketDetail stranice koristeći SignalR. |
+| Šta je AI predložio ili generisao | Generisan je detaljan implementacijski prompt koji uključuje izmjene backend autorizacije za pristup detaljima tiketa, omogućavanje pristupa svim tiketima za AGENT i ADMINISTRATOR uloge, klikabilne kartice/redove tiketa u frontend prikazu, SignalR Hub za komunikaciju po ticket grupama, automatsko osvježavanje komentara bez refresh-a, organizaciju TicketDetail stranice kao chat interfejsa, validaciju maksimalne dužine komentara (1000 karaktera), te filtriranje uvredljivih riječi zamjenom znakovima `*`. |
+| Šta je tim prihvatio | Prihvaćen je koncept real-time komunikacije putem SignalR-a, organizacija komentara unutar TicketDetail stranice, pristup svim tiketima za agente i administratore, kao i prijedlog da se prvi opis problema tretira kao inicijalni komentar u razgovoru. |
+| Šta je tim izmijenio | Prilagođene su SignalR rute, nazivi DTO objekata, frontend struktura komponenti i postojeća logika autorizacije kako bi se uklopili u postojeću arhitekturu projekta i JWT autentifikaciju. |
+| Šta je tim odbacio | Ništa. |
+| Rizici, problemi ili greške koje su uočene | Uočeni su potencijalni problemi sa duplim prikazom komentara zbog istovremenog lokalnog state update-a i SignalR event-a, problemi sa autorizacijom pristupa ticket grupama, kao i potreba za pravilnim cleanup-om SignalR konekcija pri napuštanju stranice. |
+| Ko je koristio alat | Ajdin Dželo |
 
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.

@@ -71,3 +71,6 @@ docker-data/
 # Ignore Azure-specific files
 .azure/
 dotnet-install.sh
+
+# Test results and coverage reports (generated — regenerate locally)
+TelecomSupportSystem/TestResults/

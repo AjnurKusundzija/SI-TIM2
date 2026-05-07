@@ -167,6 +167,27 @@ public class AuthServiceTests
         Assert.Equal(role.ToString(), result.Role);
     }
 
+    // Konfiguracija: JWT_KEY nije postavljen — GenerateAccessToken mora baciti iznimku
+    [Fact]
+    public async Task LoginAsync_MissingJwtKey_ThrowsInvalidOperationException()
+    {
+        var configWithoutKey = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Jwt:Issuer"] = "TestIssuer",
+                ["Jwt:Audience"] = "TestAudience",
+            })
+            .Build();
+
+        var sut = new AuthService(_userRepo.Object, _tokenRepo.Object, configWithoutKey);
+
+        var user = MakeUser();
+        _userRepo.Setup(r => r.GetByEmailAsync(user.Email)).ReturnsAsync(user);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => sut.LoginAsync(new LoginRequestDto { Email = user.Email, Password = TestPassword }));
+    }
+
     // ─── RefreshAsync ─────────────────────────────────────────────────────────
 
     [Fact]

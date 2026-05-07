@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <Exclude>
+            [*]*CompilerServices*,
+            [*]*Generated*,
+            [TelecomSupportSystem.API]TelecomSupportSystem.API.Program,
+            [TelecomSupportSystem.DAL]*Migration*,
+            [TelecomSupportSystem.DAL]*ModelSnapshot*
+          </Exclude>
+          <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+          <IncludeTestAssembly>false</IncludeTestAssembly>
+          <SkipAutoProps>true</SkipAutoProps>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

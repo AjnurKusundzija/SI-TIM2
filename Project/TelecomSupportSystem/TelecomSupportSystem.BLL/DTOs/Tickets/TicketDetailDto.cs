@@ -1,0 +1,16 @@
+namespace TelecomSupportSystem.BLL.DTOs.Tickets
+{
+    public class TicketDetailDto
+    {
+        public int TicketId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string Priority { get; set; } = string.Empty;
+        public string ProblemCategory { get; set; } = string.Empty;
+        public DateTime CreatedDate { get; set; }
+        public DateTime? ClosedDate { get; set; }
+        public string ClientName { get; set; } = string.Empty;
+        public string AssignedAgentName { get; set; } = string.Empty;
+    }
+}

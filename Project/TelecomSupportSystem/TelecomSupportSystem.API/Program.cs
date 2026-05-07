@@ -26,6 +26,7 @@ builder.Services.AddControllers()
     });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -100,13 +101,16 @@ builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<ISubscriptionPackageRepository, SubscriptionPackageRepository>();
 builder.Services.AddScoped<IPackageFeatureRepository, PackageFeatureRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IFaqRepository, FaqRepository>();
 
 // Services
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IFaqService, FaqService>();
 
 var app = builder.Build();
 
@@ -164,6 +168,18 @@ if (app.Environment.IsDevelopment())
                 Address = "",
                 Role = Role.CLIENT,
                 AccountStatus = AccountStatus.ACTIVE
+            },
+            new User
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john@test.com",
+                Username = "Joohnyy",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Johny123!"),
+                Phone = "",
+                Address = "",
+                Role = Role.CLIENT,
+                AccountStatus = AccountStatus.ACTIVE
             }
         );
         db.SaveChanges();
@@ -185,6 +201,34 @@ if (app.Environment.IsDevelopment())
         );
         db.SaveChanges();
     }
+
+    var seededFaqs = new[]
+    {
+        new Faq { Question = "Kako resetovati ruter?", Answer = "Isključite ruter 30 sekundi, uključite i sačekajte da se LED indikatori stabilizuju.", Category = "Internet", SortOrder = 1, IsActive = true, CreatedDate = DateTime.UtcNow },
+        new Faq { Question = "Internet je spor", Answer = "Provjerite kablove, restartujte ruter i testirajte brzinu; ako problem ostaje, prijavite tiket.", Category = "Internet", SortOrder = 2, IsActive = true, CreatedDate = DateTime.UtcNow },
+        new Faq { Question = "TV signal nestaje", Answer = "Provjerite HDMI/koaksijalni kabl i ponovo pokrenite STB uređaj.", Category = "TV", SortOrder = 3, IsActive = true, CreatedDate = DateTime.UtcNow },
+        new Faq { Question = "Nema signala na mobilnoj mreži", Answer = "Uključite/isključite avion režim i probajte SIM u drugom telefonu.", Category = "Mobilna mreža", SortOrder = 4, IsActive = true, CreatedDate = DateTime.UtcNow },
+        new Faq { Question = "Pogrešan iznos na računu", Answer = "Provjerite detalje računa; ako stavka nije jasna, otvorite tiket.", Category = "Računi", SortOrder = 5, IsActive = true, CreatedDate = DateTime.UtcNow },
+        new Faq { Question = "Kako otvoriti novi tiket?", Answer = "Izaberite Kreiraj tiket, popunite obavezna polja i pošaljite zahtjev.", Category = "Tiketi", SortOrder = 6, IsActive = true, CreatedDate = DateTime.UtcNow }
+    };
+
+    foreach (var seededFaq in seededFaqs)
+    {
+        var existingFaq = db.Faqs.FirstOrDefault(faq => faq.SortOrder == seededFaq.SortOrder);
+
+        if (existingFaq is null)
+        {
+            db.Faqs.Add(seededFaq);
+            continue;
+        }
+
+        existingFaq.Question = seededFaq.Question;
+        existingFaq.Answer = seededFaq.Answer;
+        existingFaq.Category = seededFaq.Category;
+        existingFaq.IsActive = seededFaq.IsActive;
+    }
+
+    db.SaveChanges();
 }
 
 app.UseHttpsRedirection();
@@ -193,5 +237,6 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<TelecomSupportSystem.API.Hubs.ChatHub>("/chathub");
 
 app.Run();

@@ -8,6 +8,7 @@ import {
   X,
   Headphones,
   PlusCircle,
+  HelpCircle,
 } from 'lucide-react';
 
 const navConfig = {
@@ -15,10 +16,12 @@ const navConfig = {
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/mytickets', label: 'Moji tiketi', icon: Ticket },
     { to: '/create-ticket', label: 'Kreiraj tiket', icon: PlusCircle },
+    { to: '/faq', label: 'FAQ', icon: HelpCircle },
   ],
   AGENT: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
+    { to: '/faq', label: 'FAQ', icon: HelpCircle },
   ],
   TECHNICIAN: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -27,6 +30,7 @@ const navConfig = {
   ADMINISTRATOR: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
+    { to: '/faq', label: 'FAQ', icon: HelpCircle },
   ],
 };
 

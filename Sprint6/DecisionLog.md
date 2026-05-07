@@ -37,5 +37,20 @@ Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i pra
 | **Status odluke** | aktivna |
 
 ---
+## Odluka #3
+
+| Polje | Detalji |
+|---|---|
+| ID odluke | ODL-3 |
+| Datum | 03.05.2026 |
+| Kratak naziv odluke | Korištenje SignalR-a za real-time komunikaciju |
+| Opis problema ili pitanja | Potrebno je omogućiti real-time komunikaciju između klijenta i agenta unutar detaljnog prikaza tiketa bez ručnog osvježavanja stranice. |
+| Razmatrane opcije | 1. Klasični HTTP polling<br>2. WebSocket komunikacija korištenjem SignalR-a |
+| Odabrana opcija | 2. WebSocket komunikacija korištenjem SignalR-a |
+| Razlog izbora | SignalR omogućava trenutni prijenos poruka i ažuriranje prikaza bez refreshanja stranice. Integracija sa ASP.NET backendom je jednostavna i pogodna za ticketing sistem. |
+| Posljedice odluke | Potrebno je održavati SignalR hub konekcije i sinhronizaciju komunikacije između korisnika i agenata. Ako je tiket zatvoren, komunikacija više nije dozvoljena. Maksimalna dužina poruke je 1000 karaktera, a neprikladne riječi se filtriraju i zamjenjuju sa ****. |
+| Status odluke | aktivna |
+
+---
 
 Napomena: Ovaj Decision Log je živi dokument i ažurira se kroz sprintove.
