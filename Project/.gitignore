@@ -74,3 +74,4 @@ dotnet-install.sh
 
 # Test results and coverage reports (generated — regenerate locally)
 TelecomSupportSystem/TestResults/
+coverage/
