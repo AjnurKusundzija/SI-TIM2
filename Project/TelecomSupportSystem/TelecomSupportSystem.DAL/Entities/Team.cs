@@ -12,6 +12,7 @@ namespace TelecomSupportSystem.DAL.Entities
         public string Description { get; set; } = string.Empty;
         public TeamType TeamType { get; set; }
         public TeamStatus TeamStatus { get; set; }
+        public ProblemCategory? SpecializedCategory { get; set; }
 
         public ICollection<User> Members { get; set; } = new List<User>();
         public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();

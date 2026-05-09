@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelecomSupportSystem.DAL;
 
@@ -11,9 +12,11 @@ using TelecomSupportSystem.DAL;
 namespace TelecomSupportSystem.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260509095506_Sprint7_DbRefactor")]
+    partial class Sprint7_DbRefactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,7 +69,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuditLogs", (string)null);
+                    b.ToTable("AuditLogs");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Comment", b =>
@@ -101,7 +104,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Faq", b =>
@@ -141,7 +144,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("SortOrder");
 
-                    b.ToTable("Faqs", (string)null);
+                    b.ToTable("Faqs");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Notification", b =>
@@ -181,7 +184,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.PackageFeature", b =>
@@ -219,7 +222,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("PackageId");
 
-                    b.ToTable("PackageFeatures", (string)null);
+                    b.ToTable("PackageFeatures");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Rating", b =>
@@ -253,7 +256,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.RefreshToken", b =>
@@ -288,7 +291,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Report", b =>
@@ -322,7 +325,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("ReportType");
 
-                    b.ToTable("Reports", (string)null);
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.SubscriptionPackage", b =>
@@ -334,7 +337,6 @@ namespace TelecomSupportSystem.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackageId"));
 
                     b.Property<decimal>("MonthlyPrice")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PackageDescription")
@@ -360,7 +362,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SubscriptionPackages", (string)null);
+                    b.ToTable("SubscriptionPackages");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Team", b =>
@@ -392,7 +394,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasKey("TeamId");
 
-                    b.ToTable("Teams", (string)null);
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Ticket", b =>
@@ -445,7 +447,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Tickets", (string)null);
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.TicketUser", b =>
@@ -484,7 +486,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TicketUser", (string)null);
+                    b.ToTable("TicketUser");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.User", b =>
@@ -551,7 +553,7 @@ namespace TelecomSupportSystem.DAL.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Comment", b =>

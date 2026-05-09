@@ -39,7 +39,7 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.Username).IsRequired().HasMaxLength(100);
             entity.Property(e => e.PasswordHash).IsRequired();
             entity.Property(e => e.Phone).HasMaxLength(20);
-            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.Location).HasMaxLength(500);
 
             entity.HasIndex(e => e.Email).IsUnique();
             entity.HasIndex(e => e.Username).IsUnique();
@@ -150,6 +150,7 @@ public class ApplicationDbContext : DbContext
 
             entity.Property(e => e.PackageName).IsRequired().HasMaxLength(100);
             entity.Property(e => e.PackageDescription).HasMaxLength(500);
+            entity.Property(e => e.MonthlyPrice).HasPrecision(18, 2);
 
             entity.HasIndex(e => e.UserId);
 
