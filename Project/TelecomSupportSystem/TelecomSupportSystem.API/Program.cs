@@ -126,8 +126,22 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    // DODANO: Kreira bazu i tabele ako ne postoje
-    db.Database.EnsureCreated();
+    var retries = 10;
+    var delay = TimeSpan.FromSeconds(3);
+    while (retries > 0)
+    {
+        try
+        {
+            db.Database.Migrate();
+            break;
+        }
+        catch
+        {
+            retries--;
+            if (retries == 0) throw;
+            Thread.Sleep(delay);
+        }
+    }
 
     // add users if not existant
     if (!db.Users.Any())
