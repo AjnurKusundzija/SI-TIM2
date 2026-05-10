@@ -42,9 +42,8 @@ export default function Tickets({ assignedOnly = false }) {
   const [priorityFilter, setPriorityFilter] = useState('ALL')
 
   useEffect(() => {
-    setLoading(true)
     getAllTickets(isAgent ? assignedOnly : false)
-      .then(setTickets)
+      .then((data) => { setError(null); setTickets(data) })
       .catch((err) => { console.error(err); setError('Failed to load tickets.') })
       .finally(() => setLoading(false))
   }, [assignedOnly, isAgent])
