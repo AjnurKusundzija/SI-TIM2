@@ -35,6 +35,7 @@ function AppRoutes() {
         <Route path="/mytickets/:id" element={<TicketDetail />} />
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/tickets/:id" element={<TicketDetail />} />
+        <Route path="/assigned" element={<Tickets assignedOnly />} />
         <Route path="/create-ticket" element={<CreateTicket />} />
         <Route path="/faq" element={<Faq />} />
       </Route>

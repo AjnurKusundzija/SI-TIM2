@@ -2,6 +2,7 @@
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
 namespace TelecomSupportSystem.BLL.Services
@@ -9,10 +10,17 @@ namespace TelecomSupportSystem.BLL.Services
     public class TicketService : ITicketService
     {
         private readonly ITicketRepository _ticketRepository;
+        private readonly ITeamRepository _teamRepository;
+        private readonly IUserRepository _userRepository;
 
-        public TicketService(ITicketRepository ticketRepository)
+        public TicketService(
+            ITicketRepository ticketRepository,
+            ITeamRepository teamRepository,
+            IUserRepository userRepository)
         {
             _ticketRepository = ticketRepository;
+            _teamRepository   = teamRepository;
+            _userRepository   = userRepository;
         }
 
         // US-11: Dohvata tikete iz repozitorija i mapira ih u DTO.
@@ -98,34 +106,78 @@ namespace TelecomSupportSystem.BLL.Services
             });
         }
 
-        // PB-22: Kreira novi tiket
+        // US-25: Kreira tiket i automatski ga dodjeljuje agentu prema kategoriji
         public async Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId)
         {
+            var team = await _teamRepository.GetBySpecializedCategoryAsync(createTicketDto.Type);
+
             var ticket = new Ticket
             {
-                Title = createTicketDto.Subject,
-                Description = createTicketDto.Description,
-                CreatedDate = DateTime.UtcNow,
-                Status = DAL.Entities.Enums.TicketStatus.OPEN,
-                Priority = createTicketDto.Priority,
+                Title           = createTicketDto.Subject,
+                Description     = createTicketDto.Description,
+                CreatedDate     = DateTime.UtcNow,
+                Status          = TicketStatus.OPEN,
+                Priority        = createTicketDto.Priority,
                 ProblemCategory = createTicketDto.Type,
-                CreatorId = userId
+                CreatorId       = userId,
+                TeamId          = team?.TeamId
             };
 
             await _ticketRepository.CreateAsync(ticket);
 
+            string? assignedAgentName = null;
+            string? assignmentMessage = null;
+
+            if (team is null)
+            {
+                assignmentMessage = "Nema definisanih pravila dodjele za odabranu kategoriju.";
+            }
+            else
+            {
+                var agents = (await _userRepository.GetAvailableAgentsByTeamIdAsync(team.TeamId)).ToList();
+
+                if (agents.Count == 0)
+                {
+                    assignmentMessage = "Nema dostupnih agenata. Tiket je označen kao Nedodijeljen.";
+                }
+                else
+                {
+                    // Sortiranje: prvo po broju dodijeljenih tiketa (ASC), pa po prosječnom prioritetu — load (ASC)
+                    var bestAgent = agents
+                        .OrderBy(a => a.TicketAssignments.Count)
+                        .ThenBy(a => a.TicketAssignments.Count > 0
+                            ? a.TicketAssignments.Average(ta => (int)ta.Ticket.Priority)
+                            : 0.0)
+                        .First();
+
+                    await _ticketRepository.AddAssignmentAsync(new TicketUser
+                    {
+                        TicketId       = ticket.TicketId,
+                        UserId         = bestAgent.UserId,
+                        TeamId         = team.TeamId,
+                        AssignmentDate = DateTime.UtcNow,
+                        AssignmentType = AssignmentType.AUTOMATIC,
+                        Note           = "Automatska dodjela prema kategoriji tiketa"
+                    });
+
+                    assignedAgentName = $"{bestAgent.FirstName} {bestAgent.LastName}";
+                }
+            }
+
             return new GetTicketDto
             {
-                TicketId = ticket.TicketId,
-                Title = ticket.Title,
-                Description = ticket.Description,
-                Status = ticket.Status.ToString(),
-                Priority = ticket.Priority.ToString(),
-                ProblemCategory = ticket.ProblemCategory.ToString(),
-                CreatedDate = ticket.CreatedDate,
-                ClosedDate = ticket.ClosedDate,
-                CreatorId = ticket.CreatorId,
-                TeamId = ticket.TeamId
+                TicketId         = ticket.TicketId,
+                Title            = ticket.Title,
+                Description      = ticket.Description,
+                Status           = ticket.Status.ToString(),
+                Priority         = ticket.Priority.ToString(),
+                ProblemCategory  = ticket.ProblemCategory.ToString(),
+                CreatedDate      = ticket.CreatedDate,
+                ClosedDate       = ticket.ClosedDate,
+                CreatorId        = ticket.CreatorId,
+                TeamId           = ticket.TeamId,
+                AssignedAgentName = assignedAgentName,
+                AssignmentMessage = assignmentMessage
             };
         }
     }

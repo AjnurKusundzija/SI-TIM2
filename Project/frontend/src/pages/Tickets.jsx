@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllTickets } from '../services/ticketService'
@@ -27,7 +28,7 @@ const TYPE_LABELS = {
   TECHNICAL_SUPPORT: 'Tehnička podrška',
 }
 
-export default function Tickets() {
+export default function Tickets({ assignedOnly = false }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const isAgent = user?.role === 'AGENT'
@@ -39,9 +40,9 @@ export default function Tickets() {
   const [statusFilter, setStatusFilter] = useState('ALL')
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [priorityFilter, setPriorityFilter] = useState('ALL')
-  const [assignedOnly, setAssignedOnly] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     getAllTickets(isAgent ? assignedOnly : false)
       .then(setTickets)
       .catch((err) => { console.error(err); setError('Failed to load tickets.') })
@@ -65,22 +66,6 @@ export default function Tickets() {
     <div className="space-y-4">
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-        {isAgent && (
-          <div className="flex rounded-lg border border-gray-300 overflow-hidden text-sm self-start">
-            <button
-              onClick={() => setAssignedOnly(false)}
-              className={`px-3 py-2 ${!assignedOnly ? 'bg-navy-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
-            >
-              Svi tiketi
-            </button>
-            <button
-              onClick={() => setAssignedOnly(true)}
-              className={`px-3 py-2 border-l border-gray-300 ${assignedOnly ? 'bg-navy-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
-            >
-              Dodijeljeni meni
-            </button>
-          </div>
-        )}
         <div className="relative flex-1 w-full sm:max-w-xs">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -191,4 +176,8 @@ export default function Tickets() {
       )}
     </div>
   )
+}
+
+Tickets.propTypes = {
+  assignedOnly: PropTypes.bool,
 }
