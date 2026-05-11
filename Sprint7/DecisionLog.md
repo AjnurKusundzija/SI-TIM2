@@ -1,4 +1,4 @@
-# Decision Log
+# Decision Log - UPDATE ZA SPRINT 7
 
 Decision Log se koristi za evidentiranje važnih projektnih, zahtjevnih, arhitektonskih, tehničkih i procesnih odluka.
 
@@ -49,6 +49,22 @@ Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i pra
 | Odabrana opcija | 2. WebSocket komunikacija korištenjem SignalR-a |
 | Razlog izbora | SignalR omogućava trenutni prijenos poruka i ažuriranje prikaza bez refreshanja stranice. Integracija sa ASP.NET backendom je jednostavna i pogodna za ticketing sistem. |
 | Posljedice odluke | Potrebno je održavati SignalR hub konekcije i sinhronizaciju komunikacije između korisnika i agenata. Ako je tiket zatvoren, komunikacija više nije dozvoljena. Maksimalna dužina poruke je 1000 karaktera, a neprikladne riječi se filtriraju i zamjenjuju sa ****. |
+| Status odluke | aktivna |
+
+---
+
+## Odluka #4
+
+| Polje | Detalji |
+|---|---|
+| ID odluke | ODL-4 |
+| Datum | 08.05.2026 |
+| Kratak naziv odluke | Refaktorisanje ticket workflow logike i proširenje agent/tehničar funkcionalnosti |
+| Opis problema ili pitanja | Tokom planiranja Sprinta 7 identificirana je potreba za reorganizacijom ticket workflow logike kako bi sistem podržao automatsku dodjelu tiketa, upravljanje prioritetima, pregled dodijeljenih tiketa za tehničare i proširene funkcionalnosti notifikacija i statusa tiketa. Također je bilo potrebno redefinisati određene user story zahtjeve i proširiti postojeće backlog stavke. |
+| Razmatrane opcije | 1. Zadržati postojeću logiku ručne dodjele tiketa i postojeće user story zahtjeve<br>2. Refaktorisati workflow i dio logike prebaciti isključivo na backend uz proširenje PB i US funkcionalnosti |
+| Odabrana opcija | 2. Refaktorisati workflow i dio logike prebaciti isključivo na backend uz proširenje PB i US funkcionalnosti |
+| Razlog izbora | Postojeća struktura nije bila dovoljno fleksibilna za automatsku dodjelu tiketa, routing po prioritetima i proširenje tehničarskog workflow-a. Centralizacija logike na backend omogućava sigurniju i konzistentniju obradu dodjele tiketa, lakšu integraciju notifikacija i bolju skalabilnost sistema. |
+| Posljedice odluke | US-26 se uklanja iz trenutnog oblika i njegova logika se provodi isključivo kroz backend sistem. PB-37 dobija novi user story US-52 koji omogućava tehničaru pregled dodatnih informacija o dodijeljenim tiketima, uključujući prioritet, status, kategoriju problema i osnovne podatke o korisniku. Dodan je novi PB-48 sa user story zahtjevima US-53 i US-54. US-53 omogućava agentima prosljeđivanje tiketa između timova ili tehničara, dok US-54 omogućava pregled historije prosljeđivanja i promjena statusa tiketa. Sprint 7 fokus prebacuje se na automatsku dodjelu tiketa, upravljanje prioritetima, pregled dodijeljenih tiketa za tehničare, ažuriranje statusa i zatvaranje tiketa. Planirano je i dalje proširenje user story zahtjeva u narednim iteracijama. |
 | Status odluke | aktivna |
 
 ---
