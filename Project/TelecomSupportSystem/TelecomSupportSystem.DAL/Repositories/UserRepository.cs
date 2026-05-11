@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
 namespace TelecomSupportSystem.DAL.Repositories
@@ -15,5 +16,14 @@ namespace TelecomSupportSystem.DAL.Repositories
 
         public async Task<User?> GetByEmailAsync(string email)
             => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+        public async Task<IEnumerable<User>> GetAvailableAgentsByTeamIdAsync(int teamId)
+            => await _context.Users
+                .Where(u => u.TeamId == teamId
+                         && u.Role == Role.AGENT
+                         && u.AvailabilityStatus == AvailabilityStatus.AVAILABLE)
+                .Include(u => u.TicketAssignments)
+                    .ThenInclude(ta => ta.Ticket)
+                .ToListAsync();
     }
 }
