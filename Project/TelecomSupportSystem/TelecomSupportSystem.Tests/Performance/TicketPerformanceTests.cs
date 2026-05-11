@@ -29,7 +29,7 @@ namespace TelecomSupportSystem.Tests.Performance
 
         private static TicketController CreateController(ApplicationDbContext context, int userId, string role = "CLIENT")
         {
-            var controller = new TicketController(new TicketService(new TicketRepository(context)));
+            var controller = new TicketController(new TicketService(new TicketRepository(context), new TeamRepository(context), new UserRepository(context)));
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, userId.ToString()),

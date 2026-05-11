@@ -58,5 +58,11 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }
+
+        public async Task AddAssignmentAsync(TicketUser assignment)
+        {
+            _context.Set<TicketUser>().Add(assignment);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -11,11 +11,13 @@ namespace TelecomSupportSystem.Tests.Tickets
     public class AllTicketsServiceTests
     {
         private readonly Mock<ITicketRepository> _repoMock = new();
+        private readonly Mock<ITeamRepository> _teamRepoMock = new();
+        private readonly Mock<IUserRepository> _userRepoMock = new();
         private readonly TicketService _service;
 
         public AllTicketsServiceTests()
         {
-            _service = new TicketService(_repoMock.Object);
+            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object);
         }
 
         private static Ticket MakeTicket(int id = 1, int creatorId = 5) => new()

@@ -19,5 +19,8 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 
         // PB-32: Tiketi dodijeljeni korisniku (za TECHNICIAN)
         Task<IEnumerable<Ticket>> GetByAssigneeIdAsync(int userId);
+
+        // US-25: Kreira zapis o automatskoj dodjeli tiketa agentu
+        Task AddAssignmentAsync(TicketUser assignment);
     }
 }

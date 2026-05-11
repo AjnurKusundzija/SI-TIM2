@@ -167,14 +167,16 @@ describe('Tickets page — PB-32, PB-33', () => {
     })
   })
 
-  // PB-32: agent vidi toggle "Svi tiketi / Dodijeljeni meni"
-  it('shows assigned-only toggle for agent role', async () => {
-    mocks.getAllTickets.mockResolvedValueOnce(FAKE_TICKETS)
-    renderTickets(AGENT_USER)
+  // PB-32: kada je assignedOnly prop postavljen na true, poziva se API s assignedOnly=true
+  it('calls getAllTickets with assignedOnly=true when prop is set', async () => {
+    mocks.getAllTickets.mockResolvedValueOnce([])
+    mocks.useAuth.mockReturnValue({ user: AGENT_USER })
+    render(
+      <MemoryRouter>
+        <Tickets assignedOnly />
+      </MemoryRouter>
+    )
 
-    await waitFor(() => expect(screen.queryAllByText('Internet ne radi')).not.toHaveLength(0))
-
-    expect(screen.getByText('Svi tiketi')).toBeInTheDocument()
-    expect(screen.getByText('Dodijeljeni meni')).toBeInTheDocument()
+    await waitFor(() => expect(mocks.getAllTickets).toHaveBeenCalledWith(true))
   })
 })

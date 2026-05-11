@@ -237,6 +237,21 @@ public class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.TicketId);
             entity.HasIndex(e => e.UserId);
+
+            entity.HasOne(e => e.Ticket)
+                .WithMany(t => t.Assignments)
+                .HasForeignKey(e => e.TicketId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.TicketAssignments)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.Team)
+                .WithMany(t => t.Assignments)
+                .HasForeignKey(e => e.TeamId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

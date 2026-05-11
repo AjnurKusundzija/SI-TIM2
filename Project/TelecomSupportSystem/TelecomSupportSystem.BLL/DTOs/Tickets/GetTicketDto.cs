@@ -14,5 +14,7 @@ namespace TelecomSupportSystem.BLL.DTOs.Tickets
         public DateTime? ClosedDate { get; set; }
         public int CreatorId { get; set; }
         public int? TeamId { get; set; }
+        public string? AssignedAgentName { get; set; }
+        public string? AssignmentMessage { get; set; }
     }
 }
