@@ -16,5 +16,11 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
 
         // PB-32: Lista svih tiketa filtrirana prema roli korisnika; assignedOnly filtrira samo dodijeljene (AGENT)
         Task<IEnumerable<MyTicketDto>> GetAllTicketsAsync(int userId, string role, bool assignedOnly = false);
+
+        // US-53: Otvoreni tiketi dodijeljeni agentu
+        Task<IEnumerable<MyTicketDto>> GetOpenAssignedTicketsAsync(int userId);
+
+        // US-54: Zatvoreni tiketi koji su bili dodijeljeni agentu
+        Task<IEnumerable<MyTicketDto>> GetClosedAssignedTicketsAsync(int userId);
     }
 }

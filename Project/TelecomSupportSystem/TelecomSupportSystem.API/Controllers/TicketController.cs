@@ -82,6 +82,44 @@ namespace TelecomSupportSystem.API.Controllers
             }
         }
 
+        // US-53: GET /api/tickets/assigned/open
+        // Agent vidi sve otvorene tikete koji su mu dodijeljeni
+        [HttpGet("assigned/open")]
+        public async Task<IActionResult> GetOpenAssignedTickets()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            // Samo AGENT može pristupiti ovom endpointu
+            if (role != "AGENT")
+                return Forbid();
+
+            var tickets = await _ticketService.GetOpenAssignedTicketsAsync(userId);
+            return Ok(tickets);
+        }
+
+        // US-54: GET /api/tickets/assigned/closed
+        // Agent vidi sve zatvorene tikete koji su mu bili dodijeljeni
+        [HttpGet("assigned/closed")]
+        public async Task<IActionResult> GetClosedAssignedTickets()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            // Samo AGENT može pristupiti ovom endpointu
+            if (role != "AGENT")
+                return Forbid();
+
+            var tickets = await _ticketService.GetClosedAssignedTicketsAsync(userId);
+            return Ok(tickets);
+        }
+
         // PB-22: POST /api/ticket
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto createTicketDto)
