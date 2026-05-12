@@ -46,3 +46,21 @@ export async function getClosedAssignedTickets() {
   const response = await api.get('/tickets/assigned/closed')
   return response.data
 }
+
+// US-56: Dohvati listu dostupnih agenata sa score-ovima za prosljeđivanje
+export async function getAgentScores(ticketId) {
+  const response = await api.get(`/tickets/${ticketId}/forward/agents`)
+  return response.data
+}
+
+// US-55: Automatski proslijedi tiket agentu s najvišim score-om
+export async function autoForwardTicket(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/forward/auto`)
+  return response.data
+}
+
+// US-56: Proslijedi tiket konkretnom odabranom agentu
+export async function forwardTicketToAgent(ticketId, targetAgentId) {
+  const response = await api.post(`/tickets/${ticketId}/forward/agent`, { targetAgentId })
+  return response.data
+}

@@ -22,5 +22,14 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
 
         // US-54: Zatvoreni tiketi koji su bili dodijeljeni agentu
         Task<IEnumerable<MyTicketDto>> GetClosedAssignedTicketsAsync(int userId);
+
+        // US-56: Dohvata listu dostupnih agenata sa izračunatim score-ovima za ručni odabir
+        Task<IEnumerable<AgentScoreDto>> GetAgentScoresAsync(int ticketId, int currentAgentId);
+
+        // US-55: Automatski proslijedi tiket agentu s najvišim score-om
+        Task<AgentScoreDto> AutoForwardTicketAsync(int ticketId, int currentAgentId);
+
+        // US-56: Proslijedi tiket odabranom agentu
+        Task<AgentScoreDto> ForwardTicketToAgentAsync(int ticketId, int targetAgentId, int currentAgentId);
     }
 }

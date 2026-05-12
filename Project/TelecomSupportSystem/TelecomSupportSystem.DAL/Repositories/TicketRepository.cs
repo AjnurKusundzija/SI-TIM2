@@ -54,26 +54,50 @@ namespace TelecomSupportSystem.DAL.Repositories
 
         public async Task<IEnumerable<Ticket>> GetByAssigneeIdAsync(int userId)
         {
+            var latestAssignedIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId &&
+                             !_context.Set<TicketUser>().Any(tu2 =>
+                                 tu2.TicketId == tu.TicketId &&
+                                 tu2.AssignmentDate > tu.AssignmentDate))
+                .Select(tu => tu.TicketId)
+                .ToListAsync();
+
             return await _context.Tickets
-                .Where(t => t.Assignments.Any(a => a.UserId == userId))
+                .Where(t => latestAssignedIds.Contains(t.TicketId))
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }
 
-        // US-53: Otvoreni tiketi dodijeljeni korisniku
+        // US-53: Otvoreni tiketi gdje je POSLJEDNJA dodjela na korisnika
         public async Task<IEnumerable<Ticket>> GetOpenAssignedTicketsAsync(int userId)
         {
+            var latestAssignedIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId &&
+                             !_context.Set<TicketUser>().Any(tu2 =>
+                                 tu2.TicketId == tu.TicketId &&
+                                 tu2.AssignmentDate > tu.AssignmentDate))
+                .Select(tu => tu.TicketId)
+                .ToListAsync();
+
             return await _context.Tickets
-                .Where(t => t.Assignments.Any(a => a.UserId == userId) && t.Status == TicketStatus.OPEN)
+                .Where(t => latestAssignedIds.Contains(t.TicketId) && t.Status == TicketStatus.OPEN)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }
 
-        // US-54: Zatvoreni tiketi koji su bili dodijeljeni korisniku
+        // US-54: Zatvoreni tiketi gdje je POSLJEDNJA dodjela bila na korisnika
         public async Task<IEnumerable<Ticket>> GetClosedAssignedTicketsAsync(int userId)
         {
+            var latestAssignedIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId &&
+                             !_context.Set<TicketUser>().Any(tu2 =>
+                                 tu2.TicketId == tu.TicketId &&
+                                 tu2.AssignmentDate > tu.AssignmentDate))
+                .Select(tu => tu.TicketId)
+                .ToListAsync();
+
             return await _context.Tickets
-                .Where(t => t.Assignments.Any(a => a.UserId == userId) && t.Status == TicketStatus.CLOSED)
+                .Where(t => latestAssignedIds.Contains(t.TicketId) && t.Status == TicketStatus.CLOSED)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }

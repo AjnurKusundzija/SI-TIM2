@@ -109,16 +109,32 @@ Implementirati funkcionalnosti za upravljanje životnim ciklusom tiketa kroz zat
 
 ## PB-31 Prosljeđivanje tiketa
 
-### Lamija i Hana trebaju definisati svoje US kako su rijesile problem
-### paziti da broj US-a nije vec iskoristen, US-27 smatrajte da ne postoji
-### ovo ce Lejan evidentirari kroz DecisionLog
-primjer:
+### US-55
+*Kao agent, želim proslijediti tiket automatski najkompetentnijem dostupnom agentu kako bih brzo prenio odgovornost bez ručnog odabira.*
 
-us-1: kao agent želim da proslijedim tiket drugom agentu koji će riješiti problem
-us-2: Kao agent želim da proslijedim tiket tehničarima koji su na toj lokaciji kako bi ....
-us-3 kao agent zelim da proslijedim tiket drugom "TIMU" agenata kako bi neko iz njihove stručnosti rijesio ovaj problem
+**Acceptance Criteria:**
+
+- Kada agent otvori tiket koji mu je dodijeljen i odabere opciju "Proslijedi tiket", sistem prikazuje dvije opcije: "Proslijedi najboljom agentu" i "Odaberi agenta"
+- Kada agent odabere "Proslijedi najboljom agentu", sistem automatski kalkuliše score svih dostupnih agenata na osnovu iskustva u kategoriji problema, prosječne ocjene i trenutnog opterećenja
+- Težine u kalkulaciji se dinamički prilagođavaju prioritetu tiketa
+- Sistem ne smije razmatrati agenta koji je trenutno vlasnik tiketa
+- Sistem razmatra samo agente sa statusom SLOBODAN
+- Tiket se automatski dodjeljuje agentu s najvišim score-om
+- Kada prosljeđivanje nije uspješno, sistem prikazuje poruku greške i dodjela se ne mijenja
+---
+
+### US-56
+Kao agent, želim vidjeti listu agenata sa njihovim score-ovima i odabrati konkretnog agenta kojem ću proslijediti tiket.
+
+Acceptance Criteria:
+• Kada agent odabere opciju "Odaberi agenta", sistem prikazuje listu svih dostupnih agenata sa statusom `SLOBODAN`, sortiranu po score-u silazno
+• Sistem ne smije prikazivati agenta koji je trenutno vlasnik tiketa
+• Za svakog agenta prikazuje se score u procentima, broj riješenih tiketa iste kategorije, prosječna ocjena i broj trenutno otvorenih tiketa
+• Kada agent odabere konkretnog agenta i potvrdi akciju, tiket se dodjeljuje odabranom agentu
+• Kada prosljeđivanje nije uspješno, sistem prikazuje poruku greške i dodjela se ne mijenja
 
 ---
+
 ## PB-48 Pregled i historija dodijeljenih tiketa za agente
 
 ### US-53

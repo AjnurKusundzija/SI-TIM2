@@ -120,6 +120,100 @@ namespace TelecomSupportSystem.API.Controllers
             return Ok(tickets);
         }
 
+        // US-56: GET /api/tickets/{id}/forward/agents
+        // Vraća sortiranu listu dostupnih agenata sa score-ovima za ručni odabir pri prosljeđivanju
+        [HttpGet("{id:int}/forward/agents")]
+        public async Task<IActionResult> GetAgentScores(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            if (role != "AGENT")
+                return Forbid();
+
+            try
+            {
+                var agents = await _ticketService.GetAgentScoresAsync(id, userId);
+                return Ok(agents);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        // US-55: POST /api/tickets/{id}/forward/auto
+        // Automatski proslijedi tiket agentu s najvišim score-om
+        [HttpPost("{id:int}/forward/auto")]
+        public async Task<IActionResult> AutoForwardTicket(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            if (role != "AGENT")
+                return Forbid();
+
+            try
+            {
+                var result = await _ticketService.AutoForwardTicketAsync(id, userId);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { poruka = ex.Message });
+            }
+        }
+
+        // US-56: POST /api/tickets/{id}/forward/agent
+        // Proslijedi tiket konkretnom odabranom agentu
+        [HttpPost("{id:int}/forward/agent")]
+        public async Task<IActionResult> ForwardTicketToAgent(int id, [FromBody] ForwardToAgentDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            if (role != "AGENT")
+                return Forbid();
+
+            try
+            {
+                var result = await _ticketService.ForwardTicketToAgentAsync(id, dto.TargetAgentId, userId);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { poruka = ex.Message });
+            }
+        }
+
         // PB-22: POST /api/ticket
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto createTicketDto)

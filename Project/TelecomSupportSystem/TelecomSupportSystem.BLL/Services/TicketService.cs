@@ -62,7 +62,9 @@ namespace TelecomSupportSystem.BLL.Services
             if (!hasAccess)
                 throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
 
-            var agentAssignment = ticket.Assignments.FirstOrDefault();
+            var agentAssignment = ticket.Assignments
+                .OrderByDescending(a => a.AssignmentDate)
+                .FirstOrDefault();
 
             return new TicketDetailDto
             {
@@ -140,6 +142,157 @@ namespace TelecomSupportSystem.BLL.Services
                 CreatedDate     = t.CreatedDate,
                 ClosedDate      = t.ClosedDate
             });
+        }
+
+        // US-55, US-56: Vraća težine za scoring prema prioritetu tiketa —
+        // visok prioritet favorizuje dostupnost, nizak prioritet favorizuje iskustvo
+        private static (double experience, double rating, double availability) GetWeightsByPriority(Priority priority)
+            => priority switch
+            {
+                Priority.LOW    => (0.6, 0.3, 0.1),
+                Priority.MEDIUM => (0.5, 0.3, 0.2),
+                Priority.HIGH   => (0.3, 0.2, 0.5),
+                _               => (0.5, 0.3, 0.2)
+            };
+
+        // US-55, US-56: Izračunava relativni score za svakog agenta unutar kandidatskog skupa
+        private static List<AgentScoreDto> CalculateAgentScores(
+            IEnumerable<User> agents,
+            ProblemCategory category,
+            Priority priority)
+        {
+            var metrics = agents.Select(agent =>
+            {
+                var closedInCategory = agent.TicketAssignments
+                    .Where(ta => ta.Ticket.Status == TicketStatus.CLOSED
+                              && ta.Ticket.ProblemCategory == category)
+                    .ToList();
+
+                var resolved = closedInCategory.Count;
+                var avgRating = closedInCategory.Any(ta => ta.Ticket.Rating != null)
+                    ? closedInCategory
+                        .Where(ta => ta.Ticket.Rating != null)
+                        .Average(ta => (double)ta.Ticket.Rating!.RatingValue)
+                    : 0.0;
+                var openCount = agent.TicketAssignments
+                    .Count(ta => ta.Ticket.Status == TicketStatus.OPEN);
+
+                return new { Agent = agent, Resolved = resolved, AvgRating = avgRating, OpenCount = openCount };
+            }).ToList();
+
+            double maxResolved  = metrics.Max(m => (double)m.Resolved);
+            double maxRating    = metrics.Max(m => m.AvgRating);
+            double maxOpen      = metrics.Max(m => (double)m.OpenCount);
+
+            var (wExperience, wRating, wAvailability) = GetWeightsByPriority(priority);
+
+            return metrics.Select(m =>
+            {
+                double experienceScore   = maxResolved > 0 ? m.Resolved / maxResolved         : 0.0;
+                double ratingScore       = maxRating   > 0 ? m.AvgRating / maxRating           : 0.0;
+                double availabilityScore = maxOpen     > 0 ? (maxOpen - m.OpenCount) / maxOpen : 1.0;
+
+                double finalScore = experienceScore   * wExperience
+                                  + ratingScore       * wRating
+                                  + availabilityScore * wAvailability;
+
+                return new AgentScoreDto
+                {
+                    UserId             = m.Agent.UserId,
+                    FullName           = $"{m.Agent.FirstName} {m.Agent.LastName}",
+                    ScorePercent       = Math.Round(finalScore * 100, 1),
+                    ResolvedInCategory = m.Resolved,
+                    AvgRating          = Math.Round(m.AvgRating, 2),
+                    OpenTickets        = m.OpenCount
+                };
+            })
+            .OrderByDescending(a => a.ScorePercent)
+            .ToList();
+        }
+
+        // US-55, US-56: Zajednička logika — validacija tiketa i vlasništva, pa izvršenje prosljeđivanja
+        private async Task<TicketUser> ExecuteForwardAsync(int ticketId, int targetAgentId, int currentAgentId)
+        {
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            var currentAssignment = ticket.Assignments
+                .OrderByDescending(a => a.AssignmentDate)
+                .FirstOrDefault();
+
+            if (currentAssignment?.UserId != currentAgentId)
+                throw new UnauthorizedAccessException("Samo trenutni vlasnik tiketa može ga proslijediti.");
+
+            var targetAgent = await _userRepository.GetAvailableAgentsForForwardingAsync(currentAgentId)
+                .ContinueWith(t => t.Result.FirstOrDefault(a => a.UserId == targetAgentId))
+                ?? throw new InvalidOperationException("Odabrani agent nije dostupan za prosljeđivanje.");
+
+            var newAssignment = new TicketUser
+            {
+                TicketId       = ticketId,
+                UserId         = targetAgent.UserId,
+                TeamId         = targetAgent.TeamId ?? currentAssignment.TeamId,
+                AssignmentDate = DateTime.UtcNow,
+                AssignmentType = AssignmentType.FORWARDED_TO_AGENT,
+                Note           = "Prosljeđivanje tiketa od strane agenta"
+            };
+
+            if (targetAgent.TeamId.HasValue)
+                ticket.TeamId = targetAgent.TeamId;
+
+            await _ticketRepository.AddAssignmentAsync(newAssignment);
+            return newAssignment;
+        }
+
+        // US-56: Vraća listu agenata sa score-ovima za ručni odabir
+        public async Task<IEnumerable<AgentScoreDto>> GetAgentScoresAsync(int ticketId, int currentAgentId)
+        {
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            var agents = await _userRepository.GetAvailableAgentsForForwardingAsync(currentAgentId);
+
+            if (!agents.Any())
+                return Enumerable.Empty<AgentScoreDto>();
+
+            return CalculateAgentScores(agents, ticket.ProblemCategory, ticket.Priority);
+        }
+
+        // US-55: Automatski proslijedi tiket agentu s najvišim score-om
+        public async Task<AgentScoreDto> AutoForwardTicketAsync(int ticketId, int currentAgentId)
+        {
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            var agents = (await _userRepository.GetAvailableAgentsForForwardingAsync(currentAgentId)).ToList();
+
+            if (agents.Count == 0)
+                throw new InvalidOperationException("Nema dostupnih agenata za prosljeđivanje.");
+
+            var scores = CalculateAgentScores(agents, ticket.ProblemCategory, ticket.Priority);
+            var bestAgent = scores.First();
+
+            await ExecuteForwardAsync(ticketId, bestAgent.UserId, currentAgentId);
+            return bestAgent;
+        }
+
+        // US-56: Proslijedi tiket konkretnom odabranom agentu
+        public async Task<AgentScoreDto> ForwardTicketToAgentAsync(int ticketId, int targetAgentId, int currentAgentId)
+        {
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            var agents = (await _userRepository.GetAvailableAgentsForForwardingAsync(currentAgentId)).ToList();
+
+            if (agents.Count == 0)
+                throw new InvalidOperationException("Nema dostupnih agenata za prosljeđivanje.");
+
+            var scores = CalculateAgentScores(agents, ticket.ProblemCategory, ticket.Priority);
+            var targetScore = scores.FirstOrDefault(s => s.UserId == targetAgentId)
+                ?? throw new InvalidOperationException("Odabrani agent nije dostupan za prosljeđivanje.");
+
+            await ExecuteForwardAsync(ticketId, targetAgentId, currentAgentId);
+            return targetScore;
         }
 
         // US-25: Kreira tiket i automatski ga dodjeljuje agentu prema kategoriji

@@ -2,18 +2,31 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
     ArrowLeft,
-    User,
-    Tag,
+    ArrowRightLeft,
+    CheckCircle,
     Clock,
-    Send,
-    XCircle,
     MessageCircle,
+    Send,
+    Tag,
+    User,
+    Users,
+    Wrench,
+    XCircle,
+    Zap,
 } from 'lucide-react'
 import * as signalR from '@microsoft/signalr'
-import { getTicketById, getTicketComments, addComment } from '../services/ticketService'
+import {
+    addComment,
+    autoForwardTicket,
+    forwardTicketToAgent,
+    getAgentScores,
+    getTicketById,
+    getTicketComments,
+} from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
 import EmptyState from '../components/common/EmptyState'
+import Modal from '../components/common/Modal'
 
 export default function TicketDetail() {
     const { id } = useParams()
@@ -30,6 +43,15 @@ export default function TicketDetail() {
     // message je placeholder za SignalR — handleSend će biti spojen na Hub (PB-27)
     const [message, setMessage] = useState('')
     const [isSending, setIsSending] = useState(false)
+
+    // US-55, US-56: Stanje modalnog prozora za prosljeđivanje
+    const [forwardModalOpen, setForwardModalOpen] = useState(false)
+    const [forwardStep, setForwardStep] = useState('choice') // 'choice' | 'agents' | 'success'
+    const [agentScores, setAgentScores] = useState([])
+    const [selectedAgent, setSelectedAgent] = useState(null)
+    const [forwardLoading, setForwardLoading] = useState(false)
+    const [forwardError, setForwardError] = useState(null)
+    const [forwardedTo, setForwardedTo] = useState(null)
 
     useEffect(() => {
         const ticketId = Number(id)
@@ -83,7 +105,6 @@ export default function TicketDetail() {
             setMessage('')
         } catch (err) {
             console.error('Failed to send comment', err)
-            // Error could be displayed to the user
             alert(err.response?.data || 'Neuspješno slanje poruke.')
         } finally {
             setIsSending(false)
@@ -92,6 +113,80 @@ export default function TicketDetail() {
 
     // Zatvaranje tiketa — implementira se u PB-25
     const handleCloseTicket = () => {}
+
+    // US-55, US-56: Otvaranje modalnog prozora za prosljeđivanje
+    const handleOpenForward = () => {
+        setForwardModalOpen(true)
+        setForwardStep('choice')
+        setSelectedAgent(null)
+        setForwardError(null)
+        setForwardedTo(null)
+    }
+
+    const handleCloseForward = () => {
+        setForwardModalOpen(false)
+        setForwardStep('choice')
+        setAgentScores([])
+        setSelectedAgent(null)
+        setForwardError(null)
+        setForwardedTo(null)
+    }
+
+    // US-55: Automatsko prosljeđivanje agentu s najvišim score-om
+    const handleAutoForward = async () => {
+        setForwardLoading(true)
+        setForwardError(null)
+        try {
+            const result = await autoForwardTicket(Number(id))
+            setForwardedTo(result)
+            setForwardStep('success')
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+        } catch (err) {
+            setForwardError(err.response?.data?.poruka || 'Prosljeđivanje nije uspješno.')
+        } finally {
+            setForwardLoading(false)
+        }
+    }
+
+    // US-56: Učitavanje liste agenata sa score-ovima
+    const handleShowAgents = async () => {
+        setForwardLoading(true)
+        setForwardError(null)
+        try {
+            const scores = await getAgentScores(Number(id))
+            setAgentScores(scores)
+            setForwardStep('agents')
+        } catch (err) {
+            setForwardError(err.response?.data?.poruka || 'Nije moguće učitati listu agenata.')
+        } finally {
+            setForwardLoading(false)
+        }
+    }
+
+    // US-56: Prosljeđivanje odabranom agentu
+    const handleForwardToAgent = async () => {
+        if (!selectedAgent) return
+        setForwardLoading(true)
+        setForwardError(null)
+        try {
+            const result = await forwardTicketToAgent(Number(id), selectedAgent.userId)
+            setForwardedTo(result)
+            setForwardStep('success')
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+        } catch (err) {
+            setForwardError(err.response?.data?.poruka || 'Prosljeđivanje nije uspješno.')
+        } finally {
+            setForwardLoading(false)
+        }
+    }
+
+    const forwardModalTitle = {
+        choice: 'Proslijedi tiket',
+        agents: 'Odaberi agenta',
+        success: 'Tiket proslijeđen',
+    }[forwardStep]
 
     if (loading) {
         return (
@@ -171,7 +266,7 @@ export default function TicketDetail() {
                 </div>
 
                 {ticket.status !== 'CLOSED' && (
-                    <div className="border-t border-gray-100 mt-5 pt-4">
+                    <div className="border-t border-gray-100 mt-5 pt-4 flex flex-wrap gap-2">
                         <button
                             type="button"
                             onClick={handleCloseTicket}
@@ -180,6 +275,18 @@ export default function TicketDetail() {
                             <XCircle size={16} />
                             Zatvori tiket
                         </button>
+
+                        {/* US-55, US-56: Dugme za prosljeđivanje — vidljivo samo agentu */}
+                        {user?.role === 'AGENT' && (
+                            <button
+                                type="button"
+                                onClick={handleOpenForward}
+                                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors"
+                            >
+                                <ArrowRightLeft size={16} />
+                                Proslijedi tiket
+                            </button>
+                        )}
                     </div>
                 )}
             </section>
@@ -263,6 +370,225 @@ export default function TicketDetail() {
                     )}
                 </div>
             </section>
+
+            {/* US-55, US-56: Modalni prozor za prosljeđivanje tiketa */}
+            <Modal
+                isOpen={forwardModalOpen}
+                onClose={handleCloseForward}
+                title={forwardModalTitle}
+                size="md"
+            >
+                {forwardStep === 'choice' && (
+                    <div className="space-y-4">
+                        <p className="text-sm text-gray-500">
+                            Odaberite način prosljeđivanja tiketa drugom agentu.
+                        </p>
+
+                        {forwardError && (
+                            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                                {forwardError}
+                            </p>
+                        )}
+
+                        <div className="space-y-3">
+                            <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">
+                                Proslijedi agentu
+                            </p>
+
+                            <button
+                                onClick={handleAutoForward}
+                                disabled={forwardLoading}
+                                className="w-full flex items-center gap-4 p-4 border-2 border-navy-200 hover:border-navy-500 hover:bg-navy-50 rounded-xl text-left transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <div className="w-10 h-10 bg-navy-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <Zap size={20} className="text-navy-700" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-900">
+                                        Proslijedi najboljom agentu
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                        Sistem automatski bira agenta s najvišim score-om
+                                    </p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={handleShowAgents}
+                                disabled={forwardLoading}
+                                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 hover:border-navy-500 hover:bg-navy-50 rounded-xl text-left transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <Users size={20} className="text-gray-600" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-900">
+                                        Odaberi agenta
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                        Pregledaj listu agenata i odaberi najprikladnijeg
+                                    </p>
+                                </div>
+                            </button>
+
+                            <div className="flex items-center gap-3 pt-1">
+                                <div className="flex-1 h-px bg-gray-200" />
+                                <span className="text-xs text-gray-400">ili</span>
+                                <div className="flex-1 h-px bg-gray-200" />
+                            </div>
+
+                            <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">
+                                Proslijedi tehničaru
+                            </p>
+
+                            {/* Placeholder — implementacija u zasebnom US-u */}
+                            <div className="w-full flex items-center gap-4 p-4 border-2 border-dashed border-gray-200 rounded-xl opacity-50 cursor-not-allowed">
+                                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <Wrench size={20} className="text-gray-400" />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-sm font-semibold text-gray-500">
+                                            Proslijedi tehničaru
+                                        </p>
+                                        <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                                            Uskoro
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-0.5">
+                                        Prosljeđivanje tehničkim stručnjacima
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {forwardLoading && (
+                            <div className="flex justify-center pt-2">
+                                <div className="w-6 h-6 border-2 border-navy-600 border-t-transparent rounded-full animate-spin" />
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {forwardStep === 'agents' && (
+                    <div className="space-y-4">
+                        <p className="text-sm text-gray-500">
+                            Lista je sortirana po kompatibilnosti s ovim tiketom.
+                        </p>
+
+                        {forwardError && (
+                            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                                {forwardError}
+                            </p>
+                        )}
+
+                        {agentScores.length === 0 ? (
+                            <p className="text-sm text-gray-400 text-center py-6">
+                                Nema dostupnih agenata za prosljeđivanje.
+                            </p>
+                        ) : (
+                            <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                                {agentScores.map((agent) => {
+                                    const initials = agent.fullName
+                                        .split(' ')
+                                        .map((p) => p[0])
+                                        .join('')
+                                        .slice(0, 2)
+                                        .toUpperCase()
+                                    const isSelected = selectedAgent?.userId === agent.userId
+
+                                    return (
+                                        <button
+                                            key={agent.userId}
+                                            onClick={() => setSelectedAgent(agent)}
+                                            className={`w-full p-3 border-2 rounded-xl text-left transition-colors ${
+                                                isSelected
+                                                    ? 'border-navy-500 bg-navy-50'
+                                                    : 'border-gray-200 hover:border-gray-300'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-9 h-9 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                                                    {initials}
+                                                </div>
+
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-semibold text-gray-900">
+                                                        {agent.fullName}
+                                                    </p>
+                                                    <p className="text-xs text-gray-500 mt-0.5">
+                                                        {agent.resolvedInCategory} riješenih &middot;&nbsp;
+                                                        {agent.avgRating > 0 ? agent.avgRating.toFixed(1) : 'N/A'} ocjena &middot;&nbsp;
+                                                        {agent.openTickets} aktivnih
+                                                    </p>
+                                                </div>
+
+                                                <div className="text-right flex-shrink-0">
+                                                    <span className="text-sm font-bold text-navy-700">
+                                                        {agent.scorePercent}%
+                                                    </span>
+                                                    <div className="w-16 h-1.5 bg-gray-200 rounded-full mt-1">
+                                                        <div
+                                                            className="h-1.5 bg-navy-600 rounded-full"
+                                                            style={{ width: `${agent.scorePercent}%` }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    )
+                                })}
+                            </div>
+                        )}
+
+                        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                            <button
+                                onClick={() => {
+                                    setForwardStep('choice')
+                                    setSelectedAgent(null)
+                                    setForwardError(null)
+                                }}
+                                className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                            >
+                                ← Nazad
+                            </button>
+                            <button
+                                onClick={handleForwardToAgent}
+                                disabled={!selectedAgent || forwardLoading}
+                                className="px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+                            >
+                                {forwardLoading ? 'Slanje...' : 'Proslijedi'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {forwardStep === 'success' && (
+                    <div className="text-center space-y-4 py-4">
+                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                            <CheckCircle size={32} className="text-green-600" />
+                        </div>
+                        <div>
+                            <p className="text-base font-semibold text-gray-900">
+                                Tiket je uspješno proslijeđen
+                            </p>
+                            {forwardedTo && (
+                                <p className="text-sm text-gray-500 mt-1">
+                                    Dodijeljen:{' '}
+                                    <strong className="text-gray-700">{forwardedTo.fullName}</strong>
+                                    {' '}({forwardedTo.scorePercent}% kompatibilnosti)
+                                </p>
+                            )}
+                        </div>
+                        <button
+                            onClick={handleCloseForward}
+                            className="px-5 py-2 bg-navy-700 hover:bg-navy-800 text-white text-sm font-medium rounded-lg transition-colors"
+                        >
+                            Zatvori
+                        </button>
+                    </div>
+                )}
+            </Modal>
         </div>
     )
 }
