@@ -106,6 +106,42 @@ namespace TelecomSupportSystem.BLL.Services
             });
         }
 
+        // US-53: Otvoreni tiketi dodijeljeni agentu
+        public async Task<IEnumerable<MyTicketDto>> GetOpenAssignedTicketsAsync(int userId)
+        {
+            var tickets = await _ticketRepository.GetOpenAssignedTicketsAsync(userId);
+
+            return tickets.Select(t => new MyTicketDto
+            {
+                TicketId        = t.TicketId,
+                Title           = t.Title,
+                Description     = t.Description,
+                Status          = t.Status.ToString(),
+                Priority        = t.Priority.ToString(),
+                ProblemCategory = t.ProblemCategory.ToString(),
+                CreatedDate     = t.CreatedDate,
+                ClosedDate      = t.ClosedDate
+            });
+        }
+
+        // US-54: Zatvoreni tiketi koji su bili dodijeljeni agentu
+        public async Task<IEnumerable<MyTicketDto>> GetClosedAssignedTicketsAsync(int userId)
+        {
+            var tickets = await _ticketRepository.GetClosedAssignedTicketsAsync(userId);
+
+            return tickets.Select(t => new MyTicketDto
+            {
+                TicketId        = t.TicketId,
+                Title           = t.Title,
+                Description     = t.Description,
+                Status          = t.Status.ToString(),
+                Priority        = t.Priority.ToString(),
+                ProblemCategory = t.ProblemCategory.ToString(),
+                CreatedDate     = t.CreatedDate,
+                ClosedDate      = t.ClosedDate
+            });
+        }
+
         // US-25: Kreira tiket i automatski ga dodjeljuje agentu prema kategoriji
         public async Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId)
         {

@@ -35,3 +35,14 @@ export async function addComment(ticketId, content) {
   const response = await api.post(`/comment/tickets/${ticketId}`, { content })
   return response.data
 }
+// US-53: Dohvati otvorene tikete dodijeljene agentu
+export async function getOpenAssignedTickets() {
+  const response = await api.get('/tickets/assigned/open')
+  return response.data
+}
+
+// US-54: Dohvati zatvorene tikete koji su bili dodijeljeni agentu
+export async function getClosedAssignedTickets() {
+  const response = await api.get('/tickets/assigned/closed')
+  return response.data
+}

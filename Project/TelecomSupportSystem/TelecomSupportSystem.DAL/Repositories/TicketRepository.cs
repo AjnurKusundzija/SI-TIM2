@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
 namespace TelecomSupportSystem.DAL.Repositories
@@ -55,6 +56,24 @@ namespace TelecomSupportSystem.DAL.Repositories
         {
             return await _context.Tickets
                 .Where(t => t.Assignments.Any(a => a.UserId == userId))
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
+        }
+
+        // US-53: Otvoreni tiketi dodijeljeni korisniku
+        public async Task<IEnumerable<Ticket>> GetOpenAssignedTicketsAsync(int userId)
+        {
+            return await _context.Tickets
+                .Where(t => t.Assignments.Any(a => a.UserId == userId) && t.Status == TicketStatus.OPEN)
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
+        }
+
+        // US-54: Zatvoreni tiketi koji su bili dodijeljeni korisniku
+        public async Task<IEnumerable<Ticket>> GetClosedAssignedTicketsAsync(int userId)
+        {
+            return await _context.Tickets
+                .Where(t => t.Assignments.Any(a => a.UserId == userId) && t.Status == TicketStatus.CLOSED)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }

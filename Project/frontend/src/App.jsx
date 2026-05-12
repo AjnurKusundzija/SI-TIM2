@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+﻿import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import AppLayout from './components/layout/AppLayout'
 import ProtectedRoute from './components/layout/ProtectedRoute'
@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import MyTickets from './pages/MyTickets'
 import Tickets from './pages/Tickets'
+import AssignedTickets from './pages/AssignedTickets'
 import CreateTicket from './pages/CreateTicket'
 import Faq from './pages/Faq'
 import TicketDetail from './pages/TicketDetail'
@@ -35,7 +36,7 @@ function AppRoutes() {
         <Route path="/mytickets/:id" element={<TicketDetail />} />
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/tickets/:id" element={<TicketDetail />} />
-        <Route path="/assigned" element={<Tickets assignedOnly />} />
+        <Route path="/assigned" element={<AssignedTickets />} />
         <Route path="/create-ticket" element={<CreateTicket />} />
         <Route path="/faq" element={<Faq />} />
       </Route>

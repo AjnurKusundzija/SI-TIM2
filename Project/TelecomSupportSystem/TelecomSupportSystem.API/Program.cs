@@ -304,6 +304,119 @@ if (app.Environment.IsDevelopment())
     }
 
     db.SaveChanges();
+
+    // US-25, US-53, US-54: Seed TicketUser assignments (automatska dodjela tiketa agentima)
+    if (!db.Set<TicketUser>().Any())
+    {
+        var internetTeamId = db.Teams.First(t => t.SpecializedCategory == ProblemCategory.INTERNET).TeamId;
+        var tvTeamId = db.Teams.First(t => t.SpecializedCategory == ProblemCategory.TV).TeamId;
+        var mobileTeamId = db.Teams.First(t => t.SpecializedCategory == ProblemCategory.MOBILE_NETWORK).TeamId;
+        var billingTeamId = db.Teams.First(t => t.SpecializedCategory == ProblemCategory.BILLING).TeamId;
+        var techSupportTeamId = db.Teams.First(t => t.SpecializedCategory == ProblemCategory.TECHNICAL_SUPPORT).TeamId;
+
+        var aminaId = db.Users.First(u => u.Email == "amina.hodzic@telecom.ba").UserId;
+        var emerId = db.Users.First(u => u.Email == "emir.kovac@telecom.ba").UserId;
+        var dinoId = db.Users.First(u => u.Email == "dino.muratovic@telecom.ba").UserId;
+        var saraId = db.Users.First(u => u.Email == "sara.begic@telecom.ba").UserId;
+        var majaId = db.Users.First(u => u.Email == "maja.halilovic@telecom.ba").UserId;
+        var irmaId = db.Users.First(u => u.Email == "irma.spahic@telecom.ba").UserId;
+        var kenanId = db.Users.First(u => u.Email == "kenan.imamovic@telecom.ba").UserId;
+
+        var allTickets = db.Tickets.ToList();
+
+        // Dodjeljivanje tiketa agentima prema kategoriji
+        var assignments = new List<TicketUser>();
+
+        if (allTickets.Count > 0)
+        {
+            var internetTickets = allTickets.Where(t => t.ProblemCategory == ProblemCategory.INTERNET).ToList();
+            var tvTickets = allTickets.Where(t => t.ProblemCategory == ProblemCategory.TV).ToList();
+            var mobileTickets = allTickets.Where(t => t.ProblemCategory == ProblemCategory.MOBILE_NETWORK).ToList();
+            var billingTickets = allTickets.Where(t => t.ProblemCategory == ProblemCategory.BILLING).ToList();
+            var techSupportTickets = allTickets.Where(t => t.ProblemCategory == ProblemCategory.TECHNICAL_SUPPORT).ToList();
+
+            // Distribuiraj Internet tikete agentima
+            for (int i = 0; i < internetTickets.Count; i++)
+            {
+                var agentId = i % 2 == 0 ? aminaId : emerId;
+                assignments.Add(new TicketUser
+                {
+                    TicketId = internetTickets[i].TicketId,
+                    UserId = agentId,
+                    TeamId = internetTeamId,
+                    AssignmentDate = DateTime.UtcNow,
+                    AssignmentType = AssignmentType.AUTOMATIC,
+                    Note = "Automatska dodjela prema kategoriji tiketa"
+                });
+            }
+
+            // Distribuiraj TV tikete agentima
+            for (int i = 0; i < tvTickets.Count; i++)
+            {
+                var agentId = i % 2 == 0 ? dinoId : saraId;
+                assignments.Add(new TicketUser
+                {
+                    TicketId = tvTickets[i].TicketId,
+                    UserId = agentId,
+                    TeamId = tvTeamId,
+                    AssignmentDate = DateTime.UtcNow,
+                    AssignmentType = AssignmentType.AUTOMATIC,
+                    Note = "Automatska dodjela prema kategoriji tiketa"
+                });
+            }
+
+            // Distribuiraj Mobile tikete agentima
+            for (int i = 0; i < mobileTickets.Count; i++)
+            {
+                var agentId = majaId;
+                assignments.Add(new TicketUser
+                {
+                    TicketId = mobileTickets[i].TicketId,
+                    UserId = agentId,
+                    TeamId = mobileTeamId,
+                    AssignmentDate = DateTime.UtcNow,
+                    AssignmentType = AssignmentType.AUTOMATIC,
+                    Note = "Automatska dodjela prema kategoriji tiketa"
+                });
+            }
+
+            // Distribuiraj Billing tikete agentima
+            for (int i = 0; i < billingTickets.Count; i++)
+            {
+                var agentId = kenanId;
+                assignments.Add(new TicketUser
+                {
+                    TicketId = billingTickets[i].TicketId,
+                    UserId = agentId,
+                    TeamId = billingTeamId,
+                    AssignmentDate = DateTime.UtcNow,
+                    AssignmentType = AssignmentType.AUTOMATIC,
+                    Note = "Automatska dodjela prema kategoriji tiketa"
+                });
+            }
+
+            // Distribuiraj Tech Support tikete agentima
+            for (int i = 0; i < techSupportTickets.Count; i++)
+            {
+                var agentId = irmaId;
+                assignments.Add(new TicketUser
+                {
+                    TicketId = techSupportTickets[i].TicketId,
+                    UserId = agentId,
+                    TeamId = techSupportTeamId,
+                    AssignmentDate = DateTime.UtcNow,
+                    AssignmentType = AssignmentType.AUTOMATIC,
+                    Note = "Automatska dodjela prema kategoriji tiketa"
+                });
+            }
+
+            if (assignments.Count > 0)
+            {
+                db.Set<TicketUser>().AddRange(assignments);
+                db.SaveChanges();
+            }
+        }
+    }
 }
 
 app.UseHttpsRedirection();
