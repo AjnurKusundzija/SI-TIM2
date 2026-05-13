@@ -73,7 +73,8 @@ builder.Services.AddCors(options =>
             "https://localhost:7148"//Swagger UI
             )
               .AllowAnyMethod()
-              .AllowAnyHeader());
+              .AllowAnyHeader()
+              .AllowCredentials());
 });
 
 builder.Services.AddAuthorization();
