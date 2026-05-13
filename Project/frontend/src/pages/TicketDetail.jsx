@@ -23,6 +23,7 @@ import {
     getTicketById,
     getTicketComments,
     forwardTicketToTechnician,
+    updateInternalPriority,
 } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
@@ -66,6 +67,13 @@ export default function TicketDetail() {
         { value: 'BIHAC', label: 'Bihać' },
         { value: 'PRIJEDOR', label: 'Prijedor' },
         { value: 'DOBOJ', label: 'Doboj' },
+    ]
+
+    const INTERNAL_PRIORITIES = [
+        { value: 1, key: 'LOW', label: 'Nizak' },
+        { value: 2, key: 'MEDIUM', label: 'Srednji' },
+        { value: 3, key: 'HIGH', label: 'Visok' },
+        { value: 4, key: 'CRITICAL', label: 'Kritičan' },
     ]
 
     useEffect(() => {
@@ -215,6 +223,29 @@ export default function TicketDetail() {
         }
     }
 
+    // Internal Priority Management
+    const [updatingPriority, setUpdatingPriority] = useState(false)
+    const [priorityNotification, setPriorityNotification] = useState(null) // { type: 'success' | 'error', message: string }
+
+    const handleUpdateInternalPriority = async (newPriorityValue) => {
+        setUpdatingPriority(true)
+        setPriorityNotification(null)
+        try {
+            await updateInternalPriority(Number(id), newPriorityValue)
+            setPriorityNotification({ type: 'success', message: 'Interni prioritet je uspješno ažuriran.' })
+            // Osvježi tiket
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+        } catch (err) {
+            console.error('Failed to update internal priority', err)
+            setPriorityNotification({ type: 'error', message: err.response?.data?.message || 'Greška pri ažuriranju prioriteta.' })
+        } finally {
+            setUpdatingPriority(false)
+            // Sakrij notifikaciju nakon 3 sekunde
+            setTimeout(() => setPriorityNotification(null), 3000)
+        }
+    }
+
     const forwardModalTitle = {
         choice: 'Proslijedi tiket',
         agents: 'Odaberi agenta',
@@ -324,6 +355,56 @@ export default function TicketDetail() {
                     </div>
                 )}
             </section>
+
+            {/* Interni prioritet — samo za Staff (Agent/Admin/Technician), ali editabilno samo za Agent/Admin */}
+            {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN') && (
+                <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                        <Zap size={18} className="text-navy-600" />
+                        <h3 className="text-sm font-semibold text-gray-900">Interni prioritet</h3>
+                    </div>
+
+                    {priorityNotification && (
+                        <div className={`mb-4 p-3 rounded-lg text-xs font-medium animate-in fade-in slide-in-from-top-1 ${
+                            priorityNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
+                        }`}>
+                            {priorityNotification.message}
+                        </div>
+                    )}
+
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div className="flex-1">
+                            <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">Trenutni interni prioritet</p>
+                            <div className="flex items-center gap-3">
+                                {ticket.internalPriority ? (
+                                    <Badge value={ticket.internalPriority} className="text-sm px-4 py-1" />
+                                ) : (
+                                    <span className="text-sm text-gray-400 italic">Prioritet nije postavljen</span>
+                                )}
+                            </div>
+                        </div>
+
+                        {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR') && (
+                            <div className="sm:w-64">
+                                <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">Promijeni prioritet</p>
+                                <select
+                                    disabled={updatingPriority}
+                                    value={INTERNAL_PRIORITIES.find(p => p.key === ticket.internalPriority)?.value || ''}
+                                    onChange={(e) => handleUpdateInternalPriority(Number(e.target.value))}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500 disabled:opacity-50"
+                                >
+                                    <option value="" disabled>Odaberi prioritet...</option>
+                                    {INTERNAL_PRIORITIES.map((p) => (
+                                        <option key={p.value} value={p.value}>
+                                            {p.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
 
             {/* Historija komunikacije — US-15 */}
             <section className="bg-white rounded-xl shadow-sm border border-gray-100">

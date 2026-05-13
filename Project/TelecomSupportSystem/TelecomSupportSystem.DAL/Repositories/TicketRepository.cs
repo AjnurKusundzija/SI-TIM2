@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
@@ -105,6 +105,12 @@ namespace TelecomSupportSystem.DAL.Repositories
         public async Task AddAssignmentAsync(TicketUser assignment)
         {
             _context.Set<TicketUser>().Add(assignment);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Ticket ticket)
+        {
+            _context.Tickets.Update(ticket);
             await _context.SaveChangesAsync();
         }
     }

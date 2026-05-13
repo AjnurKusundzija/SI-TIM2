@@ -66,6 +66,8 @@ namespace TelecomSupportSystem.BLL.Services
                 .OrderByDescending(a => a.AssignmentDate)
                 .FirstOrDefault();
 
+            bool isStaff = role is "ADMINISTRATOR" or "AGENT" or "TECHNICIAN";
+
             return new TicketDetailDto
             {
                 TicketId          = ticket.TicketId,
@@ -73,6 +75,7 @@ namespace TelecomSupportSystem.BLL.Services
                 Description       = ticket.Description,
                 Status            = ticket.Status.ToString(),
                 Priority          = ticket.Priority.ToString(),
+                InternalPriority  = isStaff ? ticket.InternalPriority?.ToString() : null,
                 ProblemCategory   = ticket.ProblemCategory.ToString(),
                 CreatedDate       = ticket.CreatedDate,
                 ClosedDate        = ticket.ClosedDate,
@@ -81,6 +84,18 @@ namespace TelecomSupportSystem.BLL.Services
                     ? $"{agentAssignment.User.FirstName} {agentAssignment.User.LastName}"
                     : string.Empty,
             };
+        }
+
+        public async Task UpdateInternalPriorityAsync(int ticketId, InternalPriority priority, int userId, string role)
+        {
+            if (role is not ("ADMINISTRATOR" or "AGENT"))
+                throw new UnauthorizedAccessException("Samo agenti i administratori mogu mijenjati interni prioritet.");
+
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            ticket.InternalPriority = priority;
+            await _ticketRepository.UpdateAsync(ticket);
         }
 
         // PB-32: Lista tiketa filtrirana prema roli — AGENT/ADMIN vide sve, TECHNICIAN samo dodijeljene
@@ -102,6 +117,7 @@ namespace TelecomSupportSystem.BLL.Services
                 Description     = t.Description,
                 Status          = t.Status.ToString(),
                 Priority        = t.Priority.ToString(),
+                InternalPriority = t.InternalPriority?.ToString(),
                 ProblemCategory = t.ProblemCategory.ToString(),
                 CreatedDate     = t.CreatedDate,
                 ClosedDate      = t.ClosedDate
@@ -120,6 +136,7 @@ namespace TelecomSupportSystem.BLL.Services
                 Description     = t.Description,
                 Status          = t.Status.ToString(),
                 Priority        = t.Priority.ToString(),
+                InternalPriority = t.InternalPriority?.ToString(),
                 ProblemCategory = t.ProblemCategory.ToString(),
                 CreatedDate     = t.CreatedDate,
                 ClosedDate      = t.ClosedDate
@@ -138,6 +155,7 @@ namespace TelecomSupportSystem.BLL.Services
                 Description     = t.Description,
                 Status          = t.Status.ToString(),
                 Priority        = t.Priority.ToString(),
+                InternalPriority = t.InternalPriority?.ToString(),
                 ProblemCategory = t.ProblemCategory.ToString(),
                 CreatedDate     = t.CreatedDate,
                 ClosedDate      = t.ClosedDate

@@ -1,5 +1,6 @@
 using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
+using TelecomSupportSystem.DAL.Entities.Enums;
 
 namespace TelecomSupportSystem.BLL.Services.Interfaces
 {
@@ -34,5 +35,8 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
 
         // US-TechnicianForwarding: Proslijedi tiket tehničaru na određenoj lokaciji
         Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, string location, int currentAgentId);
+
+        // Internal Priority Management
+        Task UpdateInternalPriorityAsync(int ticketId, InternalPriority priority, int userId, string role);
     }
 }

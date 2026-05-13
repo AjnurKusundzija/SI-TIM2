@@ -254,6 +254,34 @@ namespace TelecomSupportSystem.API.Controllers
             }
         }
 
+        // POST /api/tickets/{id}/internal-priority
+        [HttpPost("{id:int}/internal-priority")]
+        public async Task<IActionResult> UpdateInternalPriority(int id, [FromBody] UpdateInternalPriorityDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            try
+            {
+                await _ticketService.UpdateInternalPriorityAsync(id, dto.Priority, userId, role);
+                return Ok(new { message = "Interni prioritet uspješno ažuriran." });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
         // PB-22: POST /api/ticket
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto createTicketDto)

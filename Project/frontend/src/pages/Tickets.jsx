@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllTickets } from '../services/ticketService'
-//import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 import { Search, Ticket } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState'
 
@@ -20,6 +20,7 @@ const PRIORITY_CLASSES = {
 
 const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', PENDING_CLOSE: 'Čeka zatvaranje' }
 const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok' }
+const INTERNAL_PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok', CRITICAL: 'Kritičan' }
 const TYPE_LABELS = {
   INTERNET: 'Internet',
   TV: 'TV',
@@ -30,8 +31,8 @@ const TYPE_LABELS = {
 
 export default function Tickets({ assignedOnly = false }) {
   const navigate = useNavigate()
-  //const { user } = useAuth()
-  //const isAgent = user?.role === 'AGENT'
+  const { user } = useAuth()
+  const isStaff = user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN'
 
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
@@ -120,6 +121,7 @@ export default function Tickets({ assignedOnly = false }) {
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tiket</th>
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Prioritet</th>
+                  {isStaff && <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Interni Prioritet</th>}
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tip</th>
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Kreirano</th>
                 </tr>
@@ -141,6 +143,17 @@ export default function Tickets({ assignedOnly = false }) {
                         {PRIORITY_LABELS[t.priority] ?? t.priority}
                       </span>
                     </td>
+                    {isStaff && (
+                      <td className="px-5 py-3">
+                        {t.internalPriority ? (
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${t.internalPriority === 'CRITICAL' ? 'bg-red-900 text-red-100' : PRIORITY_CLASSES[t.internalPriority] || 'bg-gray-100 text-gray-800'}`}>
+                            {INTERNAL_PRIORITY_LABELS[t.internalPriority] ?? t.internalPriority}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-gray-400 italic">—</span>
+                        )}
+                      </td>
+                    )}
                     <td className="px-5 py-3 text-sm text-gray-600">
                       {TYPE_LABELS[t.problemCategory] ?? t.problemCategory}
                     </td>
@@ -164,6 +177,11 @@ export default function Tickets({ assignedOnly = false }) {
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[t.priority] || 'bg-gray-100 text-gray-800'}`}>
                     {PRIORITY_LABELS[t.priority] ?? t.priority}
                   </span>
+                  {isStaff && t.internalPriority && (
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${t.internalPriority === 'CRITICAL' ? 'bg-red-900 text-red-100' : PRIORITY_CLASSES[t.internalPriority] || 'bg-gray-100 text-gray-800'}`}>
+                      {INTERNAL_PRIORITY_LABELS[t.internalPriority] ?? t.internalPriority}
+                    </span>
+                  )}
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
                   {t.createdDate ? new Date(t.createdDate).toLocaleDateString() : '—'}

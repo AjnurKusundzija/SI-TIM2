@@ -70,3 +70,9 @@ export async function forwardTicketToTechnician(ticketId, location) {
   const response = await api.post(`/tickets/${ticketId}/forward/technician`, { location })
   return response.data
 }
+
+// Internal Priority Management
+export async function updateInternalPriority(ticketId, priority) {
+  const response = await api.post(`/tickets/${ticketId}/internal-priority`, { priority })
+  return response.data
+}
