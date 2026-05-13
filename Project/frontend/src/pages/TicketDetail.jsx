@@ -163,7 +163,7 @@ export default function TicketDetail() {
     }
 
     // Zatvaranje tiketa — implementira se u PB-25
-    const handleCloseTicket = () => { }
+    //const handleCloseTicket = () => { }
 
     // US-55, US-56: Otvaranje modalnog prozora za prosljeđivanje
     const handleOpenForward = () => {
