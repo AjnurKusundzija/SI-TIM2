@@ -14,12 +14,12 @@ Implementirati funkcionalnosti za upravljanje životnim ciklusom tiketa kroz zat
 
 | ID | Naziv zadatka ili storyja | Povezani US | Odgovorna osoba ili osobe | Status | Napomena |
 |---|---|---|---|---|---|
-| SB-01 | PB-25 Zatvaranje tiketa | US-16, US-17 | Ajdin | To Do | Implementacija zatvaranja tiketa od strane korisnika i zahtjeva za zatvaranje od strane agenta |
-| SB-02 | PB-28 Upravljanje prioritetima tiketa | US-21 | Ajdin | To Do | Implementacija korisničkog i internog prioriteta tiketa |
-| SB-03 | PB-30 Automatska dodjela tiketa | US-25 | Uma | To Do | Implementacija automatske dodjele i pravila dodjele tiketa |
-| SB-04 | PB-37 Tehničar vidi osnovne informacije | US-39, US-49 | Eldar | To Do | Prikaz samo otvorenih assigned tiketa sa osnovnim informacijama |
-| SB-05 | PB-31 Prosljeđivanje tiketa | US-?? | Hana, Lamija | To Do | Implementacija prosljeđivanja tiketa između agenata |
-| SB-06 | PB-48 Pregled dodijeljenih i historija tiketa za agente | US-53, US-54 | Merisa | To Do | Implementacija pregleda aktivnih i zatvorenih tiketa po agentu |
+| SB-01 | PB-25 Zatvaranje tiketa | US-16, US-17 | Ajdin | Done | Implementacija zatvaranja tiketa od strane korisnika i zahtjeva za zatvaranje od strane agenta |
+| SB-02 | PB-28 Upravljanje prioritetima tiketa | US-21 | Ajdin | Done | Implementacija korisničkog i internog prioriteta tiketa |
+| SB-03 | PB-30 Automatska dodjela tiketa | US-25 | Eldar | Done | Implementacija automatske dodjele i pravila dodjele tiketa |
+| SB-04 | PB-37 Tehničar vidi osnovne informacije | US-39, US-42 | Eldar | Done | Prikaz samo otvorenih assigned tiketa sa osnovnim informacijama |
+| SB-05 | PB-31 Prosljeđivanje tiketa | US-55, US-56, US-57 | Uma, Ajdin | Done | Implementacija prosljeđivanja tiketa između agenata i tehničarima na osnovu lokacije |
+| SB-06 | PB-48 Pregled dodijeljenih i historija tiketa za agente | US-53, US-54 | Merisa | Done | Implementacija pregleda aktivnih i zatvorenih tiketa po agentu |
 
 ---
 
@@ -47,8 +47,8 @@ Implementirati funkcionalnosti za upravljanje životnim ciklusom tiketa kroz zat
 - Kada korisnik primi zahtjev za zatvaranje, tada može prihvatiti ili odbiti zatvaranje tiketa  
 - Ako korisnik prihvati zahtjev, tada se tiket zatvara, poprima status zatvoren i sistem evidentira koji je agent zatvorio tiket  
 - Ako korisnik odbije zahtjev, tada tiket ostaje otvoren  
-- Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada se tiket automatski zatvara, a sistem evidentira koji je agent inicirao zahtjev za zatvaranje  
-- Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje, automatsko zatvaranje tiketa nakon 7 dana bez odgovora, i prikaz agenta koji je zatvorio tiket  
+- Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada agent ima mogućnost prisilnog zatvaranja tiketa
+- Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje  
 
 ---
 
@@ -109,16 +109,49 @@ Implementirati funkcionalnosti za upravljanje životnim ciklusom tiketa kroz zat
 
 ## PB-31 Prosljeđivanje tiketa
 
-### Lamija i Hana trebaju definisati svoje US kako su rijesile problem
-### paziti da broj US-a nije vec iskoristen, US-27 smatrajte da ne postoji
-### ovo ce Lejan evidentirari kroz DecisionLog
-primjer:
+### US-55
+*Kao agent, želim proslijediti tiket automatski najkompetentnijem dostupnom agentu kako bih brzo prenio odgovornost bez ručnog odabira.*
 
-us-1: kao agent želim da proslijedim tiket drugom agentu koji će riješiti problem
-us-2: Kao agent želim da proslijedim tiket tehničarima koji su na toj lokaciji kako bi ....
-us-3 kao agent zelim da proslijedim tiket drugom "TIMU" agenata kako bi neko iz njihove stručnosti rijesio ovaj problem
+**Acceptance Criteria:**
+
+- Kada agent otvori tiket koji mu je dodijeljen i odabere opciju "Proslijedi tiket", sistem prikazuje dvije opcije: "Proslijedi najboljom agentu" i "Odaberi agenta"
+- Kada agent odabere "Proslijedi najboljom agentu", sistem automatski kalkuliše score svih dostupnih agenata na osnovu iskustva u kategoriji problema, prosječne ocjene i trenutnog opterećenja
+- Težine u kalkulaciji se dinamički prilagođavaju prioritetu tiketa
+- Sistem ne smije razmatrati agenta koji je trenutno vlasnik tiketa
+- Sistem razmatra samo agente sa statusom SLOBODAN
+- Tiket se automatski dodjeljuje agentu s najvišim score-om
+- Kada prosljeđivanje nije uspješno, sistem prikazuje poruku greške i dodjela se ne mijenja
+---
+
+### US-56
+Kao agent, želim vidjeti listu agenata sa njihovim score-ovima i odabrati konkretnog agenta kojem ću proslijediti tiket.
+
+Acceptance Criteria:
+• Kada agent odabere opciju "Odaberi agenta", sistem prikazuje listu svih dostupnih agenata sa statusom `SLOBODAN`, sortiranu po score-u silazno
+• Sistem ne smije prikazivati agenta koji je trenutno vlasnik tiketa
+• Za svakog agenta prikazuje se score u procentima, broj riješenih tiketa iste kategorije, prosječna ocjena i broj trenutno otvorenih tiketa
+• Kada agent odabere konkretnog agenta i potvrdi akciju, tiket se dodjeljuje odabranom agentu
+• Kada prosljeđivanje nije uspješno, sistem prikazuje poruku greške i dodjela se ne mijenja
 
 ---
+
+### US-57
+*Kao agent, želim proslijediti tiket tehničaru na osnovu lokacije kreatora tiketa, kako bih osigurao da problem rješava tehničar koji je fizički najbliži korisniku i ima najmanje trenutnih obaveza.*
+
+**Acceptance Criteria:**
+- Kada agent otvori tiket koji mu je dodijeljen i odabere opciju "Proslijedi tiket", sistem prikazuje opciju "Proslijedi tehničaru"
+- Kada agent odabere "Proslijedi tehničaru", sistem automatski dohvaća lokaciju kreatora tiketa
+- Sistem filtrira samo aktivne tehničare (`AccountStatus = ACTIVE`, `Role = TECHNICIAN`) koji se nalaze na istoj lokaciji kao kreator tiketa
+- Kada postoji više tehničara na toj lokaciji, sistem dodjeljuje tiket tehničaru s najmanjim brojem trenutno otvorenih tiketa
+- Kada postoji tehničar s nula otvorenih tiketa, sistem daje prednost njemu pri dodjeli
+- Sistem ne smije dodijeliti tiket tehničaru s drugom lokacijom od lokacije kreatora tiketa
+- Kada na lokaciji kreatora tiketa ne postoji nijedan aktivni tehničar, sistem prikazuje poruku greške i dodjela se ne mijenja
+- Kada prosljeđivanje uspije, tiket dobiva tip dodjele `FORWARDED_TO_TECHNICIAN` i agent vidi potvrdu o uspješnom prosljeđivanju
+- Samo agent koji je trenutni vlasnik tiketa može proslijediti tiket tehničaru
+- Kada prosljeđivanje nije uspješno, sistem prikazuje odgovarajuću poruku greške i dodjela ostaje nepromijenjena
+
+---
+
 ## PB-48 Pregled i historija dodijeljenih tiketa za agente
 
 ### US-53
