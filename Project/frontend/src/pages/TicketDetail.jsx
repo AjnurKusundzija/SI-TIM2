@@ -91,7 +91,6 @@ export default function TicketDetail() {
 
     useEffect(() => {
         if (ticket?.status !== 'CLOSURE_REQUESTED') {
-            setTimeLeft('')
             return
         }
 
@@ -119,7 +118,10 @@ export default function TicketDetail() {
 
         updateTimer()
         const interval = setInterval(updateTimer, 60000)
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+            setTimeLeft('')
+        }
     }, [ticket, comments])
 
     useEffect(() => {
