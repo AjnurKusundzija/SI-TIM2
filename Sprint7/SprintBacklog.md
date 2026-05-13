@@ -14,12 +14,12 @@ Implementirati funkcionalnosti za upravljanje životnim ciklusom tiketa kroz zat
 
 | ID | Naziv zadatka ili storyja | Povezani US | Odgovorna osoba ili osobe | Status | Napomena |
 |---|---|---|---|---|---|
-| SB-01 | PB-25 Zatvaranje tiketa | US-16, US-17 | Ajdin | To Do | Implementacija zatvaranja tiketa od strane korisnika i zahtjeva za zatvaranje od strane agenta |
-| SB-02 | PB-28 Upravljanje prioritetima tiketa | US-21 | Ajdin | To Do | Implementacija korisničkog i internog prioriteta tiketa |
-| SB-03 | PB-30 Automatska dodjela tiketa | US-25 | Uma | To Do | Implementacija automatske dodjele i pravila dodjele tiketa |
-| SB-04 | PB-37 Tehničar vidi osnovne informacije | US-39, US-49 | Eldar | To Do | Prikaz samo otvorenih assigned tiketa sa osnovnim informacijama |
-| SB-05 | PB-31 Prosljeđivanje tiketa | US-?? | Hana, Lamija | To Do | Implementacija prosljeđivanja tiketa između agenata |
-| SB-06 | PB-48 Pregled dodijeljenih i historija tiketa za agente | US-53, US-54 | Merisa | To Do | Implementacija pregleda aktivnih i zatvorenih tiketa po agentu |
+| SB-01 | PB-25 Zatvaranje tiketa | US-16, US-17 | Ajdin | Done | Implementacija zatvaranja tiketa od strane korisnika i zahtjeva za zatvaranje od strane agenta |
+| SB-02 | PB-28 Upravljanje prioritetima tiketa | US-21 | Ajdin | Done | Implementacija korisničkog i internog prioriteta tiketa |
+| SB-03 | PB-30 Automatska dodjela tiketa | US-25 | Uma | Done | Implementacija automatske dodjele i pravila dodjele tiketa |
+| SB-04 | PB-37 Tehničar vidi osnovne informacije | US-39, US-49 | Eldar | Done | Prikaz samo otvorenih assigned tiketa sa osnovnim informacijama |
+| SB-05 | PB-31 Prosljeđivanje tiketa | US-?? | Hana, Lamija | Done | Implementacija prosljeđivanja tiketa između agenata |
+| SB-06 | PB-48 Pregled dodijeljenih i historija tiketa za agente | US-53, US-54 | Merisa | Done | Implementacija pregleda aktivnih i zatvorenih tiketa po agentu |
 
 ---
 
@@ -47,8 +47,8 @@ Implementirati funkcionalnosti za upravljanje životnim ciklusom tiketa kroz zat
 - Kada korisnik primi zahtjev za zatvaranje, tada može prihvatiti ili odbiti zatvaranje tiketa  
 - Ako korisnik prihvati zahtjev, tada se tiket zatvara, poprima status zatvoren i sistem evidentira koji je agent zatvorio tiket  
 - Ako korisnik odbije zahtjev, tada tiket ostaje otvoren  
-- Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada se tiket automatski zatvara, a sistem evidentira koji je agent inicirao zahtjev za zatvaranje  
-- Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje, automatsko zatvaranje tiketa nakon 7 dana bez odgovora, i prikaz agenta koji je zatvorio tiket  
+- Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada agent ima mogućnost prisilnog zatvaranja tiketa
+- Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje  
 
 ---
 
