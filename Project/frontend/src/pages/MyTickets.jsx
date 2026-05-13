@@ -3,27 +3,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import { getMyTickets } from '../services/ticketService'
 import { Search, Plus, Ticket } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState'
+import Badge from '../components/common/Badge'
 
 const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok' }
-const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', PENDING_CLOSE: 'Čeka zatvaranje' }
+const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', CLOSURE_REQUESTED: 'Čeka zatvaranje' }
 const TYPE_LABELS = {
     INTERNET: 'Internet',
     TV: 'TV',
     MOBILE_NETWORK: 'Mobilna mreža',
     BILLING: 'Računi/Naplata',
     TECHNICAL_SUPPORT: 'Tehnička podrška',
-}
-
-const STATUS_CLASSES = {
-    OPEN: 'bg-emerald-100 text-emerald-800',
-    CLOSED: 'bg-gray-100 text-gray-800',
-    PENDING_CLOSE: 'bg-amber-100 text-amber-800',
-}
-
-const PRIORITY_CLASSES = {
-    HIGH: 'bg-red-100 text-red-800',
-    MEDIUM: 'bg-yellow-100 text-yellow-800',
-    LOW: 'bg-blue-100 text-blue-800',
 }
 
 const EMPTY_FILTERS = { priority: '', status: '', type: '', dateFrom: '' }
@@ -219,15 +208,11 @@ export default function MyTickets() {
                                         </td>
 
                                         <td className="px-5 py-3">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[ticket.status] || 'bg-gray-100 text-gray-800'}`}>
-                                                {STATUS_LABELS[ticket.status] ?? ticket.status}
-                                            </span>
+                                            <Badge value={ticket.status} />
                                         </td>
 
                                         <td className="px-5 py-3">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[ticket.priority] || 'bg-gray-100 text-gray-800'}`}>
-                                                {PRIORITY_LABELS[ticket.priority] ?? ticket.priority}
-                                            </span>
+                                            <Badge value={ticket.priority} />
                                         </td>
 
                                         <td className="px-5 py-3 text-sm text-gray-600">
@@ -257,13 +242,8 @@ export default function MyTickets() {
                                 </p>
 
                                 <div className="flex flex-wrap items-center gap-2 mt-2">
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[ticket.status] || 'bg-gray-100 text-gray-800'}`}>
-                                        {STATUS_LABELS[ticket.status] ?? ticket.status}
-                                    </span>
-
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[ticket.priority] || 'bg-gray-100 text-gray-800'}`}>
-                                        {PRIORITY_LABELS[ticket.priority] ?? ticket.priority}
-                                    </span>
+                                    <Badge value={ticket.status} />
+                                    <Badge value={ticket.priority} />
                                 </div>
 
                                 <p className="text-xs text-gray-400 mt-1">

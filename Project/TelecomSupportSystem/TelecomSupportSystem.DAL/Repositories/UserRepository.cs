@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
@@ -22,6 +22,27 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .Where(u => u.TeamId == teamId
                          && u.Role == Role.AGENT
                          && u.AvailabilityStatus == AvailabilityStatus.AVAILABLE)
+                .Include(u => u.TicketAssignments)
+                    .ThenInclude(ta => ta.Ticket)
+                .ToListAsync();
+
+        // US-55, US-56: Svi dostupni agenti osim trenutnog vlasnika, s tiketima i ocjenama za izračun score-a
+        public async Task<IEnumerable<User>> GetAvailableAgentsForForwardingAsync(int excludeUserId)
+            => await _context.Users
+                .Where(u => u.Role == Role.AGENT
+                         && u.AvailabilityStatus == AvailabilityStatus.AVAILABLE
+                         && u.AccountStatus == AccountStatus.ACTIVE
+                         && u.UserId != excludeUserId)
+                .Include(u => u.TicketAssignments)
+                    .ThenInclude(ta => ta.Ticket)
+                        .ThenInclude(t => t.Rating)
+                .ToListAsync();
+
+        public async Task<IEnumerable<User>> GetTechniciansByLocationAsync(Location location)
+            => await _context.Users
+                .Where(u => u.Role == Role.TECHNICIAN
+                         && u.Location == location
+                         && u.AccountStatus == AccountStatus.ACTIVE)
                 .Include(u => u.TicketAssignments)
                     .ThenInclude(ta => ta.Ticket)
                 .ToListAsync();

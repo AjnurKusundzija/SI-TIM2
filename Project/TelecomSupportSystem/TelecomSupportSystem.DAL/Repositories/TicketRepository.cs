@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
 namespace TelecomSupportSystem.DAL.Repositories
@@ -34,6 +35,8 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .Include(t => t.Creator)
                 .Include(t => t.Assignments)
                     .ThenInclude(a => a.User)
+                .Include(t => t.Comments)
+                    .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
         }
 
@@ -53,8 +56,50 @@ namespace TelecomSupportSystem.DAL.Repositories
 
         public async Task<IEnumerable<Ticket>> GetByAssigneeIdAsync(int userId)
         {
+            var latestAssignedIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId &&
+                             !_context.Set<TicketUser>().Any(tu2 =>
+                                 tu2.TicketId == tu.TicketId &&
+                                 tu2.AssignmentDate > tu.AssignmentDate))
+                .Select(tu => tu.TicketId)
+                .ToListAsync();
+
             return await _context.Tickets
-                .Where(t => t.Assignments.Any(a => a.UserId == userId))
+                .Where(t => latestAssignedIds.Contains(t.TicketId))
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
+        }
+
+        // US-53: Otvoreni tiketi gdje je POSLJEDNJA dodjela na korisnika
+        public async Task<IEnumerable<Ticket>> GetOpenAssignedTicketsAsync(int userId)
+        {
+            var latestAssignedIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId &&
+                             !_context.Set<TicketUser>().Any(tu2 =>
+                                 tu2.TicketId == tu.TicketId &&
+                                 tu2.AssignmentDate > tu.AssignmentDate))
+                .Select(tu => tu.TicketId)
+                .ToListAsync();
+
+            return await _context.Tickets
+                .Where(t => latestAssignedIds.Contains(t.TicketId) && t.Status == TicketStatus.OPEN)
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
+        }
+
+        // US-54: Zatvoreni tiketi gdje je POSLJEDNJA dodjela bila na korisnika
+        public async Task<IEnumerable<Ticket>> GetClosedAssignedTicketsAsync(int userId)
+        {
+            var latestAssignedIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId &&
+                             !_context.Set<TicketUser>().Any(tu2 =>
+                                 tu2.TicketId == tu.TicketId &&
+                                 tu2.AssignmentDate > tu.AssignmentDate))
+                .Select(tu => tu.TicketId)
+                .ToListAsync();
+
+            return await _context.Tickets
+                .Where(t => latestAssignedIds.Contains(t.TicketId) && t.Status == TicketStatus.CLOSED)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }
@@ -62,6 +107,12 @@ namespace TelecomSupportSystem.DAL.Repositories
         public async Task AddAssignmentAsync(TicketUser assignment)
         {
             _context.Set<TicketUser>().Add(assignment);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Ticket ticket)
+        {
+            _context.Tickets.Update(ticket);
             await _context.SaveChangesAsync();
         }
     }

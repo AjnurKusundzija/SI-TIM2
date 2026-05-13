@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelecomSupportSystem.DAL;
 
@@ -11,9 +12,11 @@ using TelecomSupportSystem.DAL;
 namespace TelecomSupportSystem.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260513150000_AddInternalPriority")]
+    partial class AddInternalPriority
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -403,19 +406,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
 
-                    b.Property<int?>("ClosedById")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ClosedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ClosureRequestStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClosureRequestedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ClosureRequestedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedDate")

@@ -32,7 +32,13 @@ export default function Dashboard() {
   ]
 
   const staffCards = [
-    { icon: Ticket, label: 'Tiketi', description: 'Pregledajte i upravljajte tiketima za podršku', to: '/tickets', color: 'bg-navy-600' },
+    { 
+      icon: Ticket, 
+      label: user?.role === 'TECHNICIAN' ? 'Dodijeljeni meni' : 'Svi tiketi', 
+      description: user?.role === 'TECHNICIAN' ? 'Pregledajte vaše dodijeljene tikete' : 'Pregledajte i upravljajte tiketima za podršku', 
+      to: user?.role === 'TECHNICIAN' ? '/assigned' : '/tickets', 
+      color: 'bg-navy-600' 
+    },
   ]
 
   const cards = user?.role === 'CLIENT' ? clientCards : staffCards

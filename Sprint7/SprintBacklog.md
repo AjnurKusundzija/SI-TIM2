@@ -49,6 +49,8 @@ Implementirati funkcionalnosti za upravljanje životnim ciklusom tiketa kroz zat
 - Ako korisnik odbije zahtjev, tada tiket ostaje otvoren  
 - Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada agent ima mogućnost prisilnog zatvaranja tiketa
 - Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje  
+- Ako korisnik ne odgovori na zahtjev zatvaranja unutar 7 dana od zadnje poruke, tada agent ima mogućnost prisilnog zatvaranja tiketa
+- Sistem mora omogućiti praćenje statusa zahtjeva za zatvaranje  
 
 ---
 

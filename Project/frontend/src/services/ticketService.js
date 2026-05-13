@@ -35,3 +35,70 @@ export async function addComment(ticketId, content) {
   const response = await api.post(`/comment/tickets/${ticketId}`, { content })
   return response.data
 }
+// US-53: Dohvati otvorene tikete dodijeljene agentu
+export async function getOpenAssignedTickets() {
+  const response = await api.get('/tickets/assigned/open')
+  return response.data
+}
+
+// US-54: Dohvati zatvorene tikete koji su bili dodijeljeni agentu
+export async function getClosedAssignedTickets() {
+  const response = await api.get('/tickets/assigned/closed')
+  return response.data
+}
+
+// US-56: Dohvati listu dostupnih agenata sa score-ovima za prosljeđivanje
+export async function getAgentScores(ticketId) {
+  const response = await api.get(`/tickets/${ticketId}/forward/agents`)
+  return response.data
+}
+
+// US-55: Automatski proslijedi tiket agentu s najvišim score-om
+export async function autoForwardTicket(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/forward/auto`)
+  return response.data
+}
+
+// US-56: Proslijedi tiket konkretnom odabranom agentu
+export async function forwardTicketToAgent(ticketId, targetAgentId) {
+  const response = await api.post(`/tickets/${ticketId}/forward/agent`, { targetAgentId })
+  return response.data
+}
+
+// US-TechnicianForwarding: Automatski proslijedi tiket tehničaru na lokaciji kreatora
+export async function forwardTicketToTechnician(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/forward/technician`)
+  return response.data
+}
+
+// Internal Priority Management
+export async function updateInternalPriority(ticketId, priority) {
+  const response = await api.post(`/tickets/${ticketId}/internal-priority`, { priority })
+  return response.data
+}
+
+// Closure Workflow
+export async function closeTicket(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/close`)
+  return response.data
+}
+
+export async function requestTicketClosure(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/request-closure`)
+  return response.data
+}
+
+export async function acceptTicketClosure(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/accept-closure`)
+  return response.data
+}
+
+export async function rejectTicketClosure(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/reject-closure`)
+  return response.data
+}
+
+export async function forceCloseTicket(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/force-close`)
+  return response.data
+}

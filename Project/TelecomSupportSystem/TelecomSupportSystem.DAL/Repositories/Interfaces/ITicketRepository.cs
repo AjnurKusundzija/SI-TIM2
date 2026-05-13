@@ -1,4 +1,4 @@
-﻿using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities;
 
 namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 {
@@ -20,7 +20,15 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
         // PB-32: Tiketi dodijeljeni korisniku (za TECHNICIAN)
         Task<IEnumerable<Ticket>> GetByAssigneeIdAsync(int userId);
 
+        // US-53: Otvoreni tiketi dodijeljeni korisniku (za AGENT)
+        Task<IEnumerable<Ticket>> GetOpenAssignedTicketsAsync(int userId);
+
+        // US-54: Zatvoreni tiketi koji su bili dodijeljeni korisniku (za AGENT)
+        Task<IEnumerable<Ticket>> GetClosedAssignedTicketsAsync(int userId);
+
         // US-25: Kreira zapis o automatskoj dodjeli tiketa agentu
         Task AddAssignmentAsync(TicketUser assignment);
+
+        Task UpdateAsync(Ticket ticket);
     }
 }
