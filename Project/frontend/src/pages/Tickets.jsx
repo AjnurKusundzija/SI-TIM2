@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllTickets } from '../services/ticketService'
-import { useAuth } from '../context/AuthContext'
+//import { useAuth } from '../context/AuthContext'
 import { Search, Ticket } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState'
 
