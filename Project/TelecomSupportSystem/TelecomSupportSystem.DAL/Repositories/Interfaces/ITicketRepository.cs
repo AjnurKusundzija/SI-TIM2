@@ -1,4 +1,4 @@
-﻿using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities;
 
 namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 {
@@ -28,5 +28,7 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 
         // US-25: Kreira zapis o automatskoj dodjeli tiketa agentu
         Task AddAssignmentAsync(TicketUser assignment);
+
+        Task UpdateAsync(Ticket ticket);
     }
 }

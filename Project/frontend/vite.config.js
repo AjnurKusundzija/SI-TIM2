@@ -12,14 +12,14 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // Point to "https" backend endpoint
-        target: 'http://localhost:7149',
+        // Point to backend endpoint
+        target: 'http://localhost:5122',
         changeOrigin: true,
         // IMPORTANT: Tells Vite to accept the local .NET self-signed certificate
         secure: false,
       },
       '/chathub': {
-        target: 'http://localhost:7149',
+        target: 'http://localhost:5122',
         ws: true,
         secure: false,
       },

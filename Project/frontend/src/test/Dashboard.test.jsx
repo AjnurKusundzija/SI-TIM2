@@ -38,7 +38,7 @@ describe('Dashboard', () => {
   it('does not show Kreiraj tiket for AGENT role', () => {
     mocks.user = { firstName: 'Haris', role: 'AGENT' }
     render(<Dashboard />)
-    expect(screen.getByText('Tiketi')).toBeInTheDocument()
+    expect(screen.getByText('Svi tiketi')).toBeInTheDocument()
     expect(screen.queryByText('Kreiraj tiket')).not.toBeInTheDocument()
   })
 

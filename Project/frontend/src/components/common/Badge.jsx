@@ -5,10 +5,12 @@ const variants = {
   OPEN: 'bg-emerald-100 text-emerald-800',
   CLOSED: 'bg-gray-100 text-gray-800',
   PENDING_CLOSE: 'bg-amber-100 text-amber-800',
+  CLOSURE_REQUESTED: 'bg-amber-100 text-amber-800',
   // Priority badges
   LOW: 'bg-blue-100 text-blue-800',
   MEDIUM: 'bg-yellow-100 text-yellow-800',
   HIGH: 'bg-red-100 text-red-800',
+  CRITICAL: 'bg-red-900 text-red-100',
   // Category badges
   INTERNET: 'bg-indigo-100 text-indigo-800',
   TV: 'bg-purple-100 text-purple-800',
@@ -28,9 +30,26 @@ const variants = {
 };
 
 const labels = {
-  PENDING_CLOSE: 'Pending Close',
-  MOBILE_NETWORK: 'Mobile Network',
-  TECHNICAL_SUPPORT: 'Technical Support',
+  PENDING_CLOSE: 'ČEKA SE',
+  CLOSURE_REQUESTED: 'ČEKA SE',
+  MOBILE_NETWORK: 'Mobilna mreža',
+  TECHNICAL_SUPPORT: 'Tehnička podrška',
+  // Status badges
+  OPEN: 'OTVOREN',
+  CLOSED: 'ZATVOREN',
+  // Priority badges
+  LOW: 'NIZAK',
+  MEDIUM: 'SREDNJI',
+  HIGH: 'VISOK',
+  CRITICAL: 'KRITICAN',
+  // Role badges
+  CLIENT: 'KLIJENT',
+  AGENT: 'AGENT',
+  TECHNICIAN: 'TEHNICAR',
+  ADMINISTRATOR: 'ADMINISTRATOR',
+  // Account status
+  ACTIVE: 'AKTIVAN',
+  INACTIVE: 'NEAKTIVAN',
 };
 
 export default function Badge({ value, className = '' }) {
