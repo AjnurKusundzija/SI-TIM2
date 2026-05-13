@@ -31,7 +31,7 @@ const TYPE_LABELS = {
 export default function Tickets({ assignedOnly = false }) {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const isAgent = user?.role === 'AGENT'
+  //const isAgent = user?.role === 'AGENT'
 
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
