@@ -215,13 +215,10 @@ namespace TelecomSupportSystem.API.Controllers
         }
 
         // US-TechnicianForwarding: POST /api/tickets/{id}/forward/technician
-        // Proslijedi tiket tehničaru na određenoj lokaciji
+        // Automatski proslijedi tiket tehničaru na lokaciji kreatora tiketa
         [HttpPost("{id:int}/forward/technician")]
-        public async Task<IActionResult> ForwardTicketToTechnician(int id, [FromBody] ForwardToTechnicianDto dto)
+        public async Task<IActionResult> ForwardTicketToTechnician(int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
@@ -233,7 +230,7 @@ namespace TelecomSupportSystem.API.Controllers
 
             try
             {
-                var result = await _ticketService.ForwardTicketToTechnicianAsync(id, dto.Location, userId);
+                var result = await _ticketService.ForwardTicketToTechnicianAsync(id, userId);
                 return Ok(result);
             }
             catch (KeyNotFoundException)
@@ -280,6 +277,104 @@ namespace TelecomSupportSystem.API.Controllers
             {
                 return Forbid();
             }
+        }
+
+        // POST /api/tickets/{id}/close
+        [HttpPost("{id:int}/close")]
+        public async Task<IActionResult> CloseTicket(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            try
+            {
+                await _ticketService.CloseTicketAsync(id, userId, role);
+                return Ok(new { message = "Tiket uspješno zatvoren." });
+            }
+            catch (KeyNotFoundException) { return NotFound(); }
+            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) { return BadRequest(new { poruka = ex.Message }); }
+        }
+
+        // POST /api/tickets/{id}/request-closure
+        [HttpPost("{id:int}/request-closure")]
+        public async Task<IActionResult> RequestClosure(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            try
+            {
+                await _ticketService.RequestClosureAsync(id, userId, role);
+                return Ok(new { message = "Zahtjev za zatvaranje uspješno poslan." });
+            }
+            catch (KeyNotFoundException) { return NotFound(); }
+            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) { return BadRequest(new { poruka = ex.Message }); }
+        }
+
+        // POST /api/tickets/{id}/accept-closure
+        [HttpPost("{id:int}/accept-closure")]
+        public async Task<IActionResult> AcceptClosure(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            try
+            {
+                await _ticketService.AcceptClosureAsync(id, userId);
+                return Ok(new { message = "Zatvaranje tiketa prihvaćeno." });
+            }
+            catch (KeyNotFoundException) { return NotFound(); }
+            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) { return BadRequest(new { poruka = ex.Message }); }
+        }
+
+        // POST /api/tickets/{id}/reject-closure
+        [HttpPost("{id:int}/reject-closure")]
+        public async Task<IActionResult> RejectClosure(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            try
+            {
+                await _ticketService.RejectClosureAsync(id, userId);
+                return Ok(new { message = "Zatvaranje tiketa odbijeno." });
+            }
+            catch (KeyNotFoundException) { return NotFound(); }
+            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) { return BadRequest(new { poruka = ex.Message }); }
+        }
+
+        // POST /api/tickets/{id}/force-close
+        [HttpPost("{id:int}/force-close")]
+        public async Task<IActionResult> ForceClose(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            try
+            {
+                await _ticketService.ForceCloseAsync(id, userId, role);
+                return Ok(new { message = "Tiket je prisilno zatvoren nakon isteka roka." });
+            }
+            catch (KeyNotFoundException) { return NotFound(); }
+            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) { return BadRequest(new { poruka = ex.Message }); }
         }
 
         // PB-22: POST /api/ticket

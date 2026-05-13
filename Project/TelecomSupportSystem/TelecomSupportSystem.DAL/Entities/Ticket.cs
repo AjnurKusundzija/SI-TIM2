@@ -16,6 +16,13 @@ namespace TelecomSupportSystem.DAL.Entities
         public Priority Priority { get; set; }
         public InternalPriority? InternalPriority { get; set; }
         public ProblemCategory ProblemCategory { get; set; }
+
+        // Closure Workflow
+        public DateTime? ClosureRequestedDate { get; set; }
+        public int? ClosureRequestedById { get; set; }
+        public ClosureRequestStatus? ClosureRequestStatus { get; set; }
+        public int? ClosedById { get; set; }
+
         public int CreatorId { get; set; }
         public int? TeamId { get; set; }
 

@@ -79,6 +79,10 @@ namespace TelecomSupportSystem.BLL.Services
                 ProblemCategory   = ticket.ProblemCategory.ToString(),
                 CreatedDate       = ticket.CreatedDate,
                 ClosedDate        = ticket.ClosedDate,
+                ClosureRequestedDate = ticket.ClosureRequestedDate,
+                ClosureRequestedById = ticket.ClosureRequestedById,
+                ClosureRequestStatus = ticket.ClosureRequestStatus?.ToString(),
+                ClosedById           = ticket.ClosedById,
                 ClientName        = $"{ticket.Creator.FirstName} {ticket.Creator.LastName}",
                 AssignedAgentName = agentAssignment is not null
                     ? $"{agentAssignment.User.FirstName} {agentAssignment.User.LastName}"
@@ -95,6 +99,111 @@ namespace TelecomSupportSystem.BLL.Services
                 ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             ticket.InternalPriority = priority;
+            await _ticketRepository.UpdateAsync(ticket);
+        }
+
+        public async Task CloseTicketAsync(int ticketId, int userId, string role)
+        {
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            if (ticket.Status == TicketStatus.CLOSED)
+                throw new InvalidOperationException("Tiket je već zatvoren.");
+
+            // Klijent može zatvoriti samo svoj tiket
+            if (role == "CLIENT" && ticket.CreatorId != userId)
+                throw new UnauthorizedAccessException("Nemate dozvolu za zatvaranje ovog tiketa.");
+
+            // Agent/Admin/Technician mogu zatvoriti ako su dodijeljeni ili imaju ovlaštenja (ovdje dozvoljavamo svima sa Staff rolom radi jednostavnosti, uz validaciju u Controlleru)
+            
+            ticket.Status = TicketStatus.CLOSED;
+            ticket.ClosedDate = DateTime.Now;
+            ticket.ClosedById = userId;
+            await _ticketRepository.UpdateAsync(ticket);
+        }
+
+        public async Task RequestClosureAsync(int ticketId, int userId, string role)
+        {
+            if (role is not ("AGENT" or "TECHNICIAN" or "ADMINISTRATOR"))
+                throw new UnauthorizedAccessException("Samo osoblje može zatražiti zatvaranje tiketa.");
+
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            if (ticket.Status != TicketStatus.OPEN)
+                throw new InvalidOperationException("Zahtjev za zatvaranje se može poslati samo za otvorene tikete.");
+
+            ticket.Status = TicketStatus.CLOSURE_REQUESTED;
+            ticket.ClosureRequestedDate = DateTime.Now;
+            ticket.ClosureRequestedById = userId;
+            ticket.ClosureRequestStatus = ClosureRequestStatus.PENDING;
+
+            await _ticketRepository.UpdateAsync(ticket);
+        }
+
+        public async Task AcceptClosureAsync(int ticketId, int userId)
+        {
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            if (ticket.CreatorId != userId)
+                throw new UnauthorizedAccessException("Samo kreator tiketa može prihvatiti zatvaranje.");
+
+            if (ticket.Status != TicketStatus.CLOSURE_REQUESTED)
+                throw new InvalidOperationException("Ovaj tiket nema aktivan zahtjev za zatvaranje.");
+
+            ticket.Status = TicketStatus.CLOSED;
+            ticket.ClosedDate = DateTime.Now;
+            ticket.ClosedById = userId;
+            ticket.ClosureRequestStatus = ClosureRequestStatus.ACCEPTED;
+
+            await _ticketRepository.UpdateAsync(ticket);
+        }
+
+        public async Task RejectClosureAsync(int ticketId, int userId)
+        {
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            if (ticket.CreatorId != userId)
+                throw new UnauthorizedAccessException("Samo kreator tiketa može odbiti zatvaranje.");
+
+            if (ticket.Status != TicketStatus.CLOSURE_REQUESTED)
+                throw new InvalidOperationException("Ovaj tiket nema aktivan zahtjev za zatvaranje.");
+
+            ticket.Status = TicketStatus.OPEN;
+            ticket.ClosureRequestStatus = ClosureRequestStatus.REJECTED;
+
+            await _ticketRepository.UpdateAsync(ticket);
+        }
+
+        public async Task ForceCloseAsync(int ticketId, int userId, string role)
+        {
+            if (role is not ("AGENT" or "TECHNICIAN" or "ADMINISTRATOR"))
+                throw new UnauthorizedAccessException("Nemate dozvolu za prisilno zatvaranje tiketa.");
+
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            if (ticket.Status != TicketStatus.CLOSURE_REQUESTED)
+                throw new InvalidOperationException("Tiket mora biti u statusu 'Zahtjev za zatvaranje' da bi se mogao prisilno zatvoriti.");
+
+            // Provjera 7 dana od zadnjeg komentara klijenta
+            var lastClientComment = ticket.Comments
+                .Where(c => c.Author.Role == Role.CLIENT)
+                .OrderByDescending(c => c.DateTime)
+                .FirstOrDefault();
+
+            DateTime referenceDate = lastClientComment?.DateTime ?? ticket.CreatedDate;
+
+            if (DateTime.Now < referenceDate.AddDays(7))
+                throw new InvalidOperationException("Mora proći 7 dana bez odgovora klijenta da bi se tiket prisilno zatvorio.");
+
+            ticket.Status = TicketStatus.CLOSED;
+            ticket.ClosedDate = DateTime.Now;
+            ticket.ClosedById = userId;
+            ticket.ClosureRequestStatus = ClosureRequestStatus.EXPIRED;
+
             await _ticketRepository.UpdateAsync(ticket);
         }
 
@@ -313,15 +422,13 @@ namespace TelecomSupportSystem.BLL.Services
             return targetScore;
         }
 
-        // US-TechnicianForwarding: Proslijedi tiket tehničaru na određenoj lokaciji
-        public async Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, string locationStr, int currentAgentId)
+        // US-TechnicianForwarding: Proslijedi tiket tehničaru na lokaciji kreatora tiketa
+        public async Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, int currentAgentId)
         {
-            if (!Enum.TryParse<Location>(locationStr, true, out var location))
-                throw new ArgumentException("Neispravna lokacija.");
-
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
                 ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
+            var location = ticket.Creator.Location;
             var currentAssignment = ticket.Assignments
                 .OrderByDescending(a => a.AssignmentDate)
                 .FirstOrDefault();
@@ -359,7 +466,7 @@ namespace TelecomSupportSystem.BLL.Services
                 TeamId         = bestTech.TeamId ?? currentAssignment.TeamId,
                 AssignmentDate = DateTime.UtcNow,
                 AssignmentType = AssignmentType.FORWARDED_TO_TECHNICIAN,
-                Note           = $"Prosljeđivanje tehničaru na lokaciji {locationStr}"
+                Note           = $"Prosljeđivanje tehničaru na lokaciji {location}"
             };
 
             if (bestTech.TeamId.HasValue)

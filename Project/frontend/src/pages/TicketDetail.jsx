@@ -17,13 +17,18 @@ import {
 import * as signalR from '@microsoft/signalr'
 import {
     addComment,
+    getTicketById,
     autoForwardTicket,
     forwardTicketToAgent,
     getAgentScores,
-    getTicketById,
     getTicketComments,
     forwardTicketToTechnician,
     updateInternalPriority,
+    closeTicket,
+    requestTicketClosure,
+    acceptTicketClosure,
+    rejectTicketClosure,
+    forceCloseTicket,
 } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
@@ -54,20 +59,10 @@ export default function TicketDetail() {
     const [forwardLoading, setForwardLoading] = useState(false)
     const [forwardError, setForwardError] = useState(null)
     const [forwardedTo, setForwardedTo] = useState(null)
-    const [selectedLocation, setSelectedLocation] = useState('')
 
-    const LOCATIONS = [
-        { value: 'SARAJEVO', label: 'Sarajevo' },
-        { value: 'BANJA_LUKA', label: 'Banja Luka' },
-        { value: 'TUZLA', label: 'Tuzla' },
-        { value: 'ZENICA', label: 'Zenica' },
-        { value: 'MOSTAR', label: 'Mostar' },
-        { value: 'BIJELJINA', label: 'Bijeljina' },
-        { value: 'BRCKO', label: 'Brčko' },
-        { value: 'BIHAC', label: 'Bihać' },
-        { value: 'PRIJEDOR', label: 'Prijedor' },
-        { value: 'DOBOJ', label: 'Doboj' },
-    ]
+    // Closure Workflow States
+    const [closureNotification, setClosureNotification] = useState(null)
+    const [timeLeft, setTimeLeft] = useState('')
 
     const INTERNAL_PRIORITIES = [
         { value: 1, key: 'LOW', label: 'Nizak' },
@@ -93,6 +88,39 @@ export default function TicketDetail() {
             })
             .finally(() => setLoading(false))
     }, [id])
+
+    useEffect(() => {
+        if (ticket?.status !== 'CLOSURE_REQUESTED') {
+            setTimeLeft('')
+            return
+        }
+
+        const updateTimer = () => {
+            const clientComments = comments.filter(c => c.authorRole === 'CLIENT')
+            const lastCommentDate = clientComments.length > 0
+                ? new Date(Math.max(...clientComments.map(c => new Date(c.dateTime))))
+                : new Date(ticket.createdDate)
+
+            const expireDate = new Date(lastCommentDate.getTime() + 7 * 24 * 60 * 60 * 1000)
+            const now = new Date()
+            const diff = expireDate - now
+
+            if (diff <= 0) {
+                setTimeLeft('Može se prisilno zatvoriti')
+                return
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+
+            setTimeLeft(`Preostalo: ${days}d ${hours}h ${minutes}m`)
+        }
+
+        updateTimer()
+        const interval = setInterval(updateTimer, 60000)
+        return () => clearInterval(interval)
+    }, [ticket, comments])
 
     useEffect(() => {
         if (!id) return;
@@ -135,7 +163,7 @@ export default function TicketDetail() {
     }
 
     // Zatvaranje tiketa — implementira se u PB-25
-    const handleCloseTicket = () => {}
+    const handleCloseTicket = () => { }
 
     // US-55, US-56: Otvaranje modalnog prozora za prosljeđivanje
     const handleOpenForward = () => {
@@ -205,13 +233,12 @@ export default function TicketDetail() {
         }
     }
 
-    // US-TechnicianForwarding: Prosljeđivanje tehničaru na lokaciji
+    // US-TechnicianForwarding: Automatsko prosljeđivanje tehničaru na lokaciji kreatora
     const handleForwardToTechnician = async () => {
-        if (!selectedLocation) return
         setForwardLoading(true)
         setForwardError(null)
         try {
-            const result = await forwardTicketToTechnician(Number(id), selectedLocation)
+            const result = await forwardTicketToTechnician(Number(id))
             setForwardedTo(result)
             setForwardStep('success')
             const updatedTicket = await getTicketById(Number(id))
@@ -243,6 +270,90 @@ export default function TicketDetail() {
             setUpdatingPriority(false)
             // Sakrij notifikaciju nakon 3 sekunde
             setTimeout(() => setPriorityNotification(null), 3000)
+        }
+    }
+
+    // Closure Workflow Actions
+    const [closureLoading, setClosureLoading] = useState(false)
+
+    const handleCloseTicketAction = async () => {
+        if (!window.confirm('Jeste li sigurni da želite zatvoriti ovaj tiket?')) return
+        setClosureLoading(true)
+        try {
+            await closeTicket(Number(id))
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+            setClosureNotification({ type: 'success', message: 'Tiket je uspješno zatvoren.' })
+        } catch (err) {
+            console.error(err)
+            setClosureNotification({ type: 'error', message: err.response?.data?.poruka || 'Greška pri zatvaranju tiketa.' })
+        } finally {
+            setClosureLoading(false)
+            setTimeout(() => setClosureNotification(null), 3000)
+        }
+    }
+
+    const handleRequestClosure = async () => {
+        setClosureLoading(true)
+        try {
+            await requestTicketClosure(Number(id))
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+            setClosureNotification({ type: 'success', message: 'Zahtjev za zatvaranje je poslan klijentu.' })
+        } catch (err) {
+            console.error(err)
+            setClosureNotification({ type: 'error', message: err.response?.data?.poruka || 'Greška pri slanju zahtjeva.' })
+        } finally {
+            setClosureLoading(false)
+            setTimeout(() => setClosureNotification(null), 3000)
+        }
+    }
+
+    const handleAcceptClosure = async () => {
+        setClosureLoading(true)
+        try {
+            await acceptTicketClosure(Number(id))
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+            setClosureNotification({ type: 'success', message: 'Zatvaranje tiketa je prihvaćeno.' })
+        } catch (err) {
+            console.error(err)
+            setClosureNotification({ type: 'error', message: err.response?.data?.poruka || 'Greška pri prihvaćanju zahtjeva.' })
+        } finally {
+            setClosureLoading(false)
+            setTimeout(() => setClosureNotification(null), 3000)
+        }
+    }
+
+    const handleRejectClosure = async () => {
+        setClosureLoading(true)
+        try {
+            await rejectTicketClosure(Number(id))
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+            setClosureNotification({ type: 'success', message: 'Zatvaranje tiketa je odbijeno.' })
+        } catch (err) {
+            console.error(err)
+            setClosureNotification({ type: 'error', message: err.response?.data?.poruka || 'Greška pri odbijanju zahtjeva.' })
+        } finally {
+            setClosureLoading(false)
+            setTimeout(() => setClosureNotification(null), 3000)
+        }
+    }
+
+    const handleForceClose = async () => {
+        setClosureLoading(true)
+        try {
+            await forceCloseTicket(Number(id))
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+            setClosureNotification({ type: 'success', message: 'Tiket je prisilno zatvoren.' })
+        } catch (err) {
+            console.error(err)
+            setClosureNotification({ type: 'error', message: err.response?.data?.poruka || 'Greška pri prisilnom zatvaranju.' })
+        } finally {
+            setClosureLoading(false)
+            setTimeout(() => setClosureNotification(null), 3000)
         }
     }
 
@@ -332,26 +443,99 @@ export default function TicketDetail() {
 
                 {ticket.status !== 'CLOSED' && (
                     <div className="border-t border-gray-100 mt-5 pt-4 flex flex-wrap gap-2">
-                        <button
-                            type="button"
-                            onClick={handleCloseTicket}
-                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
-                        >
-                            <XCircle size={16} />
-                            Zatvori tiket
-                        </button>
-
-                        {/* US-55, US-56: Dugme za prosljeđivanje — vidljivo samo agentu */}
-                        {user?.role === 'AGENT' && (
-                            <button
-                                type="button"
-                                onClick={handleOpenForward}
-                                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors"
-                            >
-                                <ArrowRightLeft size={16} />
-                                Proslijedi tiket
-                            </button>
+                        {/* Akcije za Klijenta */}
+                        {user?.role === 'CLIENT' && (
+                            <>
+                                {(ticket.status === 'OPEN' || ticket.status === 'CLOSURE_REQUESTED') && (
+                                    <button
+                                        type="button"
+                                        disabled={closureLoading}
+                                        onClick={handleCloseTicketAction}
+                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
+                                    >
+                                        <XCircle size={16} />
+                                        Zatvori tiket
+                                    </button>
+                                )}
+                                {ticket.status === 'CLOSURE_REQUESTED' && (
+                                    <>
+                                        <button
+                                            type="button"
+                                            disabled={closureLoading}
+                                            onClick={handleAcceptClosure}
+                                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 rounded-lg transition-colors disabled:opacity-50"
+                                        >
+                                            <CheckCircle size={16} />
+                                            Prihvati zatvaranje
+                                        </button>
+                                        <button
+                                            type="button"
+                                            disabled={closureLoading}
+                                            onClick={handleRejectClosure}
+                                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors disabled:opacity-50"
+                                        >
+                                            <XCircle size={16} />
+                                            Odbij zatvaranje
+                                        </button>
+                                    </>
+                                )}
+                            </>
                         )}
+
+                        {/* Akcije za Staff */}
+                        {(user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR') && (
+                            <>
+                                {ticket.status === 'OPEN' && (
+                                    <button
+                                        type="button"
+                                        disabled={closureLoading}
+                                        onClick={handleRequestClosure}
+                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
+                                    >
+                                        <Clock size={16} />
+                                        Zatraži zatvaranje
+                                    </button>
+                                )}
+                                {ticket.status === 'CLOSURE_REQUESTED' && (user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN') && (
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            type="button"
+                                            disabled={closureLoading}
+                                            onClick={handleForceClose}
+                                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
+                                            title="Moguće tek nakon 7 dana bez odgovora klijenta"
+                                        >
+                                            <Zap size={16} />
+                                            Prisilno zatvori
+                                        </button>
+                                        {timeLeft && (
+                                            <div className="flex items-center gap-1.5 text-xs font-medium text-amber-600 bg-amber-50 px-3 py-2 rounded-lg border border-amber-100">
+                                                <Clock size={14} />
+                                                <span>{timeLeft}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                                {user?.role === 'AGENT' && ticket.status === 'OPEN' && (
+                                    <button
+                                        type="button"
+                                        onClick={handleOpenForward}
+                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors"
+                                    >
+                                        <ArrowRightLeft size={16} />
+                                        Proslijedi tiket
+                                    </button>
+                                )}
+                            </>
+                        )}
+                    </div>
+                )}
+
+                {/* Notifikacije za Closure Workflow */}
+                {closureNotification && (
+                    <div className={`mt-4 p-3 rounded-lg text-xs font-medium animate-in fade-in slide-in-from-top-1 ${closureNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
+                        }`}>
+                        {closureNotification.message}
                     </div>
                 )}
             </section>
@@ -365,9 +549,8 @@ export default function TicketDetail() {
                     </div>
 
                     {priorityNotification && (
-                        <div className={`mb-4 p-3 rounded-lg text-xs font-medium animate-in fade-in slide-in-from-top-1 ${
-                            priorityNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
-                        }`}>
+                        <div className={`mb-4 p-3 rounded-lg text-xs font-medium animate-in fade-in slide-in-from-top-1 ${priorityNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
+                            }`}>
                             {priorityNotification.message}
                         </div>
                     )}
@@ -520,7 +703,7 @@ export default function TicketDetail() {
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-gray-900">
-                                        Proslijedi najboljom agentu
+                                        Proslijedi najboljem agentu
                                     </p>
                                     <p className="text-xs text-gray-500 mt-0.5">
                                         Sistem automatski bira agenta s najvišim score-om
@@ -557,7 +740,7 @@ export default function TicketDetail() {
                             </p>
 
                             <button
-                                onClick={() => setForwardStep('locations')}
+                                onClick={handleForwardToTechnician}
                                 disabled={forwardLoading}
                                 className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 hover:border-navy-500 hover:bg-navy-50 rounded-xl text-left transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
@@ -569,7 +752,7 @@ export default function TicketDetail() {
                                         Proslijedi tehničaru
                                     </p>
                                     <p className="text-xs text-gray-500 mt-0.5">
-                                        Prosljeđivanje tehničkim stručnjacima po lokaciji
+                                        Sistem automatski bira tehničara na lokaciji klijenta
                                     </p>
                                 </div>
                             </button>
@@ -614,11 +797,10 @@ export default function TicketDetail() {
                                         <button
                                             key={agent.userId}
                                             onClick={() => setSelectedAgent(agent)}
-                                            className={`w-full p-3 border-2 rounded-xl text-left transition-colors ${
-                                                isSelected
-                                                    ? 'border-navy-500 bg-navy-50'
-                                                    : 'border-gray-200 hover:border-gray-300'
-                                            }`}
+                                            className={`w-full p-3 border-2 rounded-xl text-left transition-colors ${isSelected
+                                                ? 'border-navy-500 bg-navy-50'
+                                                : 'border-gray-200 hover:border-gray-300'
+                                                }`}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className="w-9 h-9 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
@@ -676,57 +858,7 @@ export default function TicketDetail() {
                     </div>
                 )}
 
-                {forwardStep === 'locations' && (
-                    <div className="space-y-4">
-                        <p className="text-sm text-gray-500">
-                            Odaberite lokaciju na kojoj se nalazi klijent. Sistem će automatski dodijeliti tiket najprikladnijem tehničaru.
-                        </p>
 
-                        {forwardError && (
-                            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
-                                {forwardError}
-                            </p>
-                        )}
-
-                        <div className="space-y-3">
-                            <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-                                Lokacija
-                            </label>
-                            <select
-                                value={selectedLocation}
-                                onChange={(e) => setSelectedLocation(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
-                            >
-                                <option value="">Odaberi lokaciju...</option>
-                                {LOCATIONS.map((loc) => (
-                                    <option key={loc.value} value={loc.value}>
-                                        {loc.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                            <button
-                                onClick={() => {
-                                    setForwardStep('choice')
-                                    setSelectedLocation('')
-                                    setForwardError(null)
-                                }}
-                                className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-                            >
-                                ← Nazad
-                            </button>
-                            <button
-                                onClick={handleForwardToTechnician}
-                                disabled={!selectedLocation || forwardLoading}
-                                className="px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
-                            >
-                                {forwardLoading ? 'Slanje...' : 'Proslijedi'}
-                            </button>
-                        </div>
-                    </div>
-                )}
 
                 {forwardStep === 'success' && (
                     <div className="text-center space-y-4 py-4">

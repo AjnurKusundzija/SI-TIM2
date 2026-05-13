@@ -65,14 +65,40 @@ export async function forwardTicketToAgent(ticketId, targetAgentId) {
   return response.data
 }
 
-// US-TechnicianForwarding: Proslijedi tiket tehničaru na određenoj lokaciji
-export async function forwardTicketToTechnician(ticketId, location) {
-  const response = await api.post(`/tickets/${ticketId}/forward/technician`, { location })
+// US-TechnicianForwarding: Automatski proslijedi tiket tehničaru na lokaciji kreatora
+export async function forwardTicketToTechnician(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/forward/technician`)
   return response.data
 }
 
 // Internal Priority Management
 export async function updateInternalPriority(ticketId, priority) {
   const response = await api.post(`/tickets/${ticketId}/internal-priority`, { priority })
+  return response.data
+}
+
+// Closure Workflow
+export async function closeTicket(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/close`)
+  return response.data
+}
+
+export async function requestTicketClosure(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/request-closure`)
+  return response.data
+}
+
+export async function acceptTicketClosure(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/accept-closure`)
+  return response.data
+}
+
+export async function rejectTicketClosure(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/reject-closure`)
+  return response.data
+}
+
+export async function forceCloseTicket(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/force-close`)
   return response.data
 }

@@ -11,6 +11,13 @@ namespace TelecomSupportSystem.BLL.DTOs.Tickets
         public string ProblemCategory { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime? ClosedDate { get; set; }
+
+        // Closure Workflow
+        public DateTime? ClosureRequestedDate { get; set; }
+        public int? ClosureRequestedById { get; set; }
+        public string? ClosureRequestStatus { get; set; }
+        public int? ClosedById { get; set; }
+
         public string ClientName { get; set; } = string.Empty;
         public string AssignedAgentName { get; set; } = string.Empty;
     }

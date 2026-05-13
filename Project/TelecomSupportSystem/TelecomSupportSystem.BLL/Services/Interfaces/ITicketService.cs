@@ -33,10 +33,17 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         // US-56: Proslijedi tiket odabranom agentu
         Task<AgentScoreDto> ForwardTicketToAgentAsync(int ticketId, int targetAgentId, int currentAgentId);
 
-        // US-TechnicianForwarding: Proslijedi tiket tehničaru na određenoj lokaciji
-        Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, string location, int currentAgentId);
+        // US-TechnicianForwarding: Proslijedi tiket tehničaru na lokaciji kreatora tiketa
+        Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, int currentAgentId);
 
         // Internal Priority Management
         Task UpdateInternalPriorityAsync(int ticketId, InternalPriority priority, int userId, string role);
+
+        // Closure Workflow
+        Task CloseTicketAsync(int ticketId, int userId, string role);
+        Task RequestClosureAsync(int ticketId, int userId, string role);
+        Task AcceptClosureAsync(int ticketId, int userId);
+        Task RejectClosureAsync(int ticketId, int userId);
+        Task ForceCloseAsync(int ticketId, int userId, string role);
     }
 }
