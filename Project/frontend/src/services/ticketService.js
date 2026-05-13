@@ -64,3 +64,9 @@ export async function forwardTicketToAgent(ticketId, targetAgentId) {
   const response = await api.post(`/tickets/${ticketId}/forward/agent`, { targetAgentId })
   return response.data
 }
+
+// US-TechnicianForwarding: Proslijedi tiket tehničaru na određenoj lokaciji
+export async function forwardTicketToTechnician(ticketId, location) {
+  const response = await api.post(`/tickets/${ticketId}/forward/technician`, { location })
+  return response.data
+}

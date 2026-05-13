@@ -22,6 +22,7 @@ import {
     getAgentScores,
     getTicketById,
     getTicketComments,
+    forwardTicketToTechnician,
 } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
@@ -52,6 +53,20 @@ export default function TicketDetail() {
     const [forwardLoading, setForwardLoading] = useState(false)
     const [forwardError, setForwardError] = useState(null)
     const [forwardedTo, setForwardedTo] = useState(null)
+    const [selectedLocation, setSelectedLocation] = useState('')
+
+    const LOCATIONS = [
+        { value: 'SARAJEVO', label: 'Sarajevo' },
+        { value: 'BANJA_LUKA', label: 'Banja Luka' },
+        { value: 'TUZLA', label: 'Tuzla' },
+        { value: 'ZENICA', label: 'Zenica' },
+        { value: 'MOSTAR', label: 'Mostar' },
+        { value: 'BIJELJINA', label: 'Bijeljina' },
+        { value: 'BRCKO', label: 'Brčko' },
+        { value: 'BIHAC', label: 'Bihać' },
+        { value: 'PRIJEDOR', label: 'Prijedor' },
+        { value: 'DOBOJ', label: 'Doboj' },
+    ]
 
     useEffect(() => {
         const ticketId = Number(id)
@@ -182,9 +197,28 @@ export default function TicketDetail() {
         }
     }
 
+    // US-TechnicianForwarding: Prosljeđivanje tehničaru na lokaciji
+    const handleForwardToTechnician = async () => {
+        if (!selectedLocation) return
+        setForwardLoading(true)
+        setForwardError(null)
+        try {
+            const result = await forwardTicketToTechnician(Number(id), selectedLocation)
+            setForwardedTo(result)
+            setForwardStep('success')
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+        } catch (err) {
+            setForwardError(err.response?.data?.poruka || 'Prosljeđivanje nije uspješno.')
+        } finally {
+            setForwardLoading(false)
+        }
+    }
+
     const forwardModalTitle = {
         choice: 'Proslijedi tiket',
         agents: 'Odaberi agenta',
+        locations: 'Odaberi lokaciju',
         success: 'Tiket proslijeđen',
     }[forwardStep]
 
@@ -441,25 +475,23 @@ export default function TicketDetail() {
                                 Proslijedi tehničaru
                             </p>
 
-                            {/* Placeholder — implementacija u zasebnom US-u */}
-                            <div className="w-full flex items-center gap-4 p-4 border-2 border-dashed border-gray-200 rounded-xl opacity-50 cursor-not-allowed">
+                            <button
+                                onClick={() => setForwardStep('locations')}
+                                disabled={forwardLoading}
+                                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 hover:border-navy-500 hover:bg-navy-50 rounded-xl text-left transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
                                 <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <Wrench size={20} className="text-gray-400" />
+                                    <Wrench size={20} className="text-gray-600" />
                                 </div>
                                 <div className="flex-1">
-                                    <div className="flex items-center gap-2">
-                                        <p className="text-sm font-semibold text-gray-500">
-                                            Proslijedi tehničaru
-                                        </p>
-                                        <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                                            Uskoro
-                                        </span>
-                                    </div>
-                                    <p className="text-xs text-gray-400 mt-0.5">
-                                        Prosljeđivanje tehničkim stručnjacima
+                                    <p className="text-sm font-semibold text-gray-900">
+                                        Proslijedi tehničaru
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                        Prosljeđivanje tehničkim stručnjacima po lokaciji
                                     </p>
                                 </div>
-                            </div>
+                            </button>
                         </div>
 
                         {forwardLoading && (
@@ -555,6 +587,58 @@ export default function TicketDetail() {
                             <button
                                 onClick={handleForwardToAgent}
                                 disabled={!selectedAgent || forwardLoading}
+                                className="px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+                            >
+                                {forwardLoading ? 'Slanje...' : 'Proslijedi'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {forwardStep === 'locations' && (
+                    <div className="space-y-4">
+                        <p className="text-sm text-gray-500">
+                            Odaberite lokaciju na kojoj se nalazi klijent. Sistem će automatski dodijeliti tiket najprikladnijem tehničaru.
+                        </p>
+
+                        {forwardError && (
+                            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                                {forwardError}
+                            </p>
+                        )}
+
+                        <div className="space-y-3">
+                            <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">
+                                Lokacija
+                            </label>
+                            <select
+                                value={selectedLocation}
+                                onChange={(e) => setSelectedLocation(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
+                            >
+                                <option value="">Odaberi lokaciju...</option>
+                                {LOCATIONS.map((loc) => (
+                                    <option key={loc.value} value={loc.value}>
+                                        {loc.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                            <button
+                                onClick={() => {
+                                    setForwardStep('choice')
+                                    setSelectedLocation('')
+                                    setForwardError(null)
+                                }}
+                                className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                            >
+                                ← Nazad
+                            </button>
+                            <button
+                                onClick={handleForwardToTechnician}
+                                disabled={!selectedLocation || forwardLoading}
                                 className="px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
                             >
                                 {forwardLoading ? 'Slanje...' : 'Proslijedi'}

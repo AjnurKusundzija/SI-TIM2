@@ -26,7 +26,7 @@ const navConfig = {
   ],
   TECHNICIAN: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/tickets', label: 'Dodijeljeni meni', icon: Ticket },
+    { to: '/assigned', label: 'Dodijeljeni meni', icon: Ticket },
   ],
   ADMINISTRATOR: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },

@@ -1,4 +1,5 @@
-﻿using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities.Enums;
 
 namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 {
@@ -11,5 +12,8 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 
         // US-55, US-56: Dohvata sve dostupne agente za prosljeđivanje (s historijom tiketa za scoring)
         Task<IEnumerable<User>> GetAvailableAgentsForForwardingAsync(int excludeUserId);
+
+        // US-TechnicianForwarding: Dohvata tehničare na određenoj lokaciji sa njihovim zaduženjima
+        Task<IEnumerable<User>> GetTechniciansByLocationAsync(Location location);
     }
 }

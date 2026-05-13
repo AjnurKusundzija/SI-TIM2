@@ -156,7 +156,7 @@ if (app.Environment.IsDevelopment())
                 Username = "admin",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
                 Phone = "",
-                Location = "",
+                Location = Location.SARAJEVO,
                 Role = Role.ADMINISTRATOR,
                 AccountStatus = AccountStatus.ACTIVE
             },
@@ -168,7 +168,7 @@ if (app.Environment.IsDevelopment())
                 Username = "agent",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"),
                 Phone = "",
-                Location = "",
+                Location = Location.SARAJEVO,
                 Role = Role.AGENT,
                 AccountStatus = AccountStatus.ACTIVE
             },
@@ -180,7 +180,7 @@ if (app.Environment.IsDevelopment())
                 Username = "client",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Client123!"),
                 Phone = "",
-                Location = "Sarajevo",
+                Location = Location.SARAJEVO,
                 Role = Role.CLIENT,
                 AccountStatus = AccountStatus.ACTIVE
             },
@@ -192,7 +192,7 @@ if (app.Environment.IsDevelopment())
                 Username = "Joohnyy",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Johny123!"),
                 Phone = "",
-                Location = "Mostar",
+                Location = Location.MOSTAR,
                 Role = Role.CLIENT,
                 AccountStatus = AccountStatus.ACTIVE
             }
@@ -240,25 +240,25 @@ if (app.Environment.IsDevelopment())
 
         db.Users.AddRange(
             // Internet Tim
-            new User { FirstName = "Amina", LastName = "Hodžić", Email = "amina.hodzic@telecom.ba", Username = "amina.hodzic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Sarajevo", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = internetTeamId },
-            new User { FirstName = "Emir", LastName = "Kovač", Email = "emir.kovac@telecom.ba", Username = "emir.kovac", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Sarajevo", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = internetTeamId },
-            new User { FirstName = "Lejla", LastName = "Softić", Email = "lejla.softic@telecom.ba", Username = "lejla.softic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Sarajevo", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = internetTeamId },
+            new User { FirstName = "Amina", LastName = "Hodžić", Email = "amina.hodzic@telecom.ba", Username = "amina.hodzic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.SARAJEVO, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = internetTeamId },
+            new User { FirstName = "Emir", LastName = "Kovač", Email = "emir.kovac@telecom.ba", Username = "emir.kovac", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.SARAJEVO, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = internetTeamId },
+            new User { FirstName = "Lejla", LastName = "Softić", Email = "lejla.softic@telecom.ba", Username = "lejla.softic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.SARAJEVO, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = internetTeamId },
             // TV Tim
-            new User { FirstName = "Dino", LastName = "Muratović", Email = "dino.muratovic@telecom.ba", Username = "dino.muratovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Sarajevo", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = tvTeamId },
-            new User { FirstName = "Sara", LastName = "Begić", Email = "sara.begic@telecom.ba", Username = "sara.begic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Sarajevo", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = tvTeamId },
-            new User { FirstName = "Haris", LastName = "Čolić", Email = "haris.colic@telecom.ba", Username = "haris.colic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Sarajevo", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = tvTeamId },
+            new User { FirstName = "Dino", LastName = "Muratović", Email = "dino.muratovic@telecom.ba", Username = "dino.muratovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.SARAJEVO, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = tvTeamId },
+            new User { FirstName = "Sara", LastName = "Begić", Email = "sara.begic@telecom.ba", Username = "sara.begic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.SARAJEVO, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = tvTeamId },
+            new User { FirstName = "Haris", LastName = "Čolić", Email = "haris.colic@telecom.ba", Username = "haris.colic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.SARAJEVO, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = tvTeamId },
             // Mobilni Tim
-            new User { FirstName = "Maja", LastName = "Halilović", Email = "maja.halilovic@telecom.ba", Username = "maja.halilovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Mostar", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = mobileTeamId },
-            new User { FirstName = "Tarik", LastName = "Džanić", Email = "tarik.dzanic@telecom.ba", Username = "tarik.dzanic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Mostar", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = mobileTeamId },
-            new User { FirstName = "Nela", LastName = "Selimović", Email = "nela.selimovic@telecom.ba", Username = "nela.selimovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Mostar", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = mobileTeamId },
+            new User { FirstName = "Maja", LastName = "Halilović", Email = "maja.halilovic@telecom.ba", Username = "maja.halilovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.MOSTAR, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = mobileTeamId },
+            new User { FirstName = "Tarik", LastName = "Džanić", Email = "tarik.dzanic@telecom.ba", Username = "tarik.dzanic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.MOSTAR, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = mobileTeamId },
+            new User { FirstName = "Nela", LastName = "Selimović", Email = "nela.selimovic@telecom.ba", Username = "nela.selimovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.MOSTAR, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = mobileTeamId },
             // Naplata Tim
-            new User { FirstName = "Kenan", LastName = "Imamović", Email = "kenan.imamovic@telecom.ba", Username = "kenan.imamovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Banja Luka", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = billingTeamId },
-            new User { FirstName = "Alma", LastName = "Karić", Email = "alma.karic@telecom.ba", Username = "alma.karic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Banja Luka", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = billingTeamId },
-            new User { FirstName = "Nermin", LastName = "Zukić", Email = "nermin.zukic@telecom.ba", Username = "nermin.zukic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Banja Luka", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = billingTeamId },
+            new User { FirstName = "Kenan", LastName = "Imamović", Email = "kenan.imamovic@telecom.ba", Username = "kenan.imamovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.BANJA_LUKA, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = billingTeamId },
+            new User { FirstName = "Alma", LastName = "Karić", Email = "alma.karic@telecom.ba", Username = "alma.karic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.BANJA_LUKA, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = billingTeamId },
+            new User { FirstName = "Nermin", LastName = "Zukić", Email = "nermin.zukic@telecom.ba", Username = "nermin.zukic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.BANJA_LUKA, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = billingTeamId },
             // Tehnička Podrška Tim
-            new User { FirstName = "Irma", LastName = "Spahić", Email = "irma.spahic@telecom.ba", Username = "irma.spahic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Tuzla", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techSupportTeamId },
-            new User { FirstName = "Adnan", LastName = "Mešić", Email = "adnan.mesic@telecom.ba", Username = "adnan.mesic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Tuzla", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techSupportTeamId },
-            new User { FirstName = "Belma", LastName = "Fočo", Email = "belma.foco@telecom.ba", Username = "belma.foco", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = "Tuzla", Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techSupportTeamId }
+            new User { FirstName = "Irma", LastName = "Spahić", Email = "irma.spahic@telecom.ba", Username = "irma.spahic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.TUZLA, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techSupportTeamId },
+            new User { FirstName = "Adnan", LastName = "Mešić", Email = "adnan.mesic@telecom.ba", Username = "adnan.mesic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.TUZLA, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techSupportTeamId },
+            new User { FirstName = "Belma", LastName = "Fočo", Email = "belma.foco@telecom.ba", Username = "belma.foco", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Agent123!"), Phone = "", Location = Location.TUZLA, Role = Role.AGENT, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techSupportTeamId }
         );
         db.SaveChanges();
     }
@@ -268,12 +268,18 @@ if (app.Environment.IsDevelopment())
         var techTeamId = db.Teams.First(t => t.TeamType == TeamType.TECHNICIANS).TeamId;
 
         db.Users.AddRange(
-            new User { FirstName = "Mirza", LastName = "Omerović", Email = "mirza.omerovic@telecom.ba", Username = "mirza.omerovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = "Sarajevo", Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
-            new User { FirstName = "Damir", LastName = "Čaušević", Email = "damir.causevic@telecom.ba", Username = "damir.causevic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = "Sarajevo", Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
-            new User { FirstName = "Vedran", LastName = "Bajrić", Email = "vedran.bajric@telecom.ba", Username = "vedran.bajric", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = "Mostar", Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
-            new User { FirstName = "Jasmina", LastName = "Hadžić", Email = "jasmina.hadzic@telecom.ba", Username = "jasmina.hadzic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = "Mostar", Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
-            new User { FirstName = "Sanel", LastName = "Petrović", Email = "sanel.petrovic@telecom.ba", Username = "sanel.petrovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = "Banja Luka", Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
-            new User { FirstName = "Azra", LastName = "Numanović", Email = "azra.numanovic@telecom.ba", Username = "azra.numanovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = "Tuzla", Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId }
+            new User { FirstName = "Mirza", LastName = "Omerović", Email = "mirza.omerovic@telecom.ba", Username = "mirza.omerovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.SARAJEVO, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Damir", LastName = "Čaušević", Email = "damir.causevic@telecom.ba", Username = "damir.causevic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.SARAJEVO, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Vedran", LastName = "Bajrić", Email = "vedran.bajric@telecom.ba", Username = "vedran.bajric", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.MOSTAR, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Jasmina", LastName = "Hadžić", Email = "jasmina.hadzic@telecom.ba", Username = "jasmina.hadzic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.MOSTAR, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Sanel", LastName = "Petrović", Email = "sanel.petrovic@telecom.ba", Username = "sanel.petrovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.BANJA_LUKA, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Azra", LastName = "Numanović", Email = "azra.numanovic@telecom.ba", Username = "azra.numanovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.TUZLA, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Elmir", LastName = "Hadžić", Email = "elmir.hadzic@telecom.ba", Username = "elmir.hadzic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.ZENICA, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Amra", LastName = "Babić", Email = "amra.babic@telecom.ba", Username = "amra.babic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.BIJELJINA, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Igor", LastName = "Lukić", Email = "igor.lukic@telecom.ba", Username = "igor.lukic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.BRCKO, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Edin", LastName = "Džeko", Email = "edin.dzeko@telecom.ba", Username = "edin.dzeko", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.BIHAC, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Milan", LastName = "Stanković", Email = "milan.stankovic@telecom.ba", Username = "milan.stankovic", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.PRIJEDOR, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId },
+            new User { FirstName = "Zoran", LastName = "Petrić", Email = "zoran.petric@telecom.ba", Username = "zoran.petric", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Tech123!"), Phone = "", Location = Location.DOBOJ, Role = Role.TECHNICIAN, AccountStatus = AccountStatus.ACTIVE, AvailabilityStatus = AvailabilityStatus.AVAILABLE, TeamId = techTeamId }
         );
         db.SaveChanges();
     }

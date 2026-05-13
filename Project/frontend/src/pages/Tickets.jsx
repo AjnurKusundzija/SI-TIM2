@@ -37,16 +37,16 @@ export default function Tickets({ assignedOnly = false }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState('ALL')
+  const [statusFilter, setStatusFilter] = useState(assignedOnly ? 'OPEN' : 'ALL')
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [priorityFilter, setPriorityFilter] = useState('ALL')
 
   useEffect(() => {
-    getAllTickets(isAgent ? assignedOnly : false)
+    getAllTickets(assignedOnly)
       .then((data) => { setError(null); setTickets(data) })
       .catch((err) => { console.error(err); setError('Failed to load tickets.') })
       .finally(() => setLoading(false))
-  }, [assignedOnly, isAgent])
+  }, [assignedOnly])
 
   const filtered = useMemo(() => {
     return tickets.filter((t) => {

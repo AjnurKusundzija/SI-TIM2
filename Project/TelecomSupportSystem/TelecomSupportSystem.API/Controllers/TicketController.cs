@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
@@ -207,6 +207,46 @@ namespace TelecomSupportSystem.API.Controllers
             catch (UnauthorizedAccessException)
             {
                 return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { poruka = ex.Message });
+            }
+        }
+
+        // US-TechnicianForwarding: POST /api/tickets/{id}/forward/technician
+        // Proslijedi tiket tehničaru na određenoj lokaciji
+        [HttpPost("{id:int}/forward/technician")]
+        public async Task<IActionResult> ForwardTicketToTechnician(int id, [FromBody] ForwardToTechnicianDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            if (role != "AGENT")
+                return Forbid();
+
+            try
+            {
+                var result = await _ticketService.ForwardTicketToTechnicianAsync(id, dto.Location, userId);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { poruka = ex.Message });
             }
             catch (InvalidOperationException ex)
             {

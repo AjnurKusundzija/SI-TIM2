@@ -1,4 +1,4 @@
-﻿using TelecomSupportSystem.BLL.DTOs;
+using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
@@ -293,6 +293,68 @@ namespace TelecomSupportSystem.BLL.Services
 
             await ExecuteForwardAsync(ticketId, targetAgentId, currentAgentId);
             return targetScore;
+        }
+
+        // US-TechnicianForwarding: Proslijedi tiket tehničaru na određenoj lokaciji
+        public async Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, string locationStr, int currentAgentId)
+        {
+            if (!Enum.TryParse<Location>(locationStr, true, out var location))
+                throw new ArgumentException("Neispravna lokacija.");
+
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            var currentAssignment = ticket.Assignments
+                .OrderByDescending(a => a.AssignmentDate)
+                .FirstOrDefault();
+
+            if (currentAssignment?.UserId != currentAgentId)
+                throw new UnauthorizedAccessException("Samo trenutni vlasnik tiketa može ga proslijediti.");
+
+            // Dohvati sve tehničare na toj lokaciji
+            var techniciansAtLocation = (await _userRepository.GetTechniciansByLocationAsync(location)).ToList();
+
+            if (!techniciansAtLocation.Any())
+                throw new InvalidOperationException("nemamo tehničara na toj lokaciji");
+
+            // Algoritam za dodjelu:
+            // 1. Ako neki tehničar ima 0 otvorenih tiketa, dodijeli njemu
+            // 2. Ako svi imaju, dodijeli onom s najmanje otvorenih tiketa
+            
+            // Moramo dohvatiti workload za svakog tehničara
+            // Workload = broj otvorenih tiketa dodijeljenih tom tehničaru
+            var techWorkloads = techniciansAtLocation.Select(tech => new
+            {
+                Technician = tech,
+                OpenTicketsCount = tech.TicketAssignments.Count(ta => ta.Ticket.Status == TicketStatus.OPEN)
+            }).ToList();
+
+            var bestTech = techWorkloads
+                .OrderBy(tw => tw.OpenTicketsCount)
+                .First()
+                .Technician;
+
+            var newAssignment = new TicketUser
+            {
+                TicketId       = ticketId,
+                UserId         = bestTech.UserId,
+                TeamId         = bestTech.TeamId ?? currentAssignment.TeamId,
+                AssignmentDate = DateTime.UtcNow,
+                AssignmentType = AssignmentType.FORWARDED_TO_TECHNICIAN,
+                Note           = $"Prosljeđivanje tehničaru na lokaciji {locationStr}"
+            };
+
+            if (bestTech.TeamId.HasValue)
+                ticket.TeamId = bestTech.TeamId;
+
+            await _ticketRepository.AddAssignmentAsync(newAssignment);
+
+            return new AgentScoreDto
+            {
+                UserId = bestTech.UserId,
+                FullName = $"{bestTech.FirstName} {bestTech.LastName}",
+                ScorePercent = 100 // Tehničar je "100% kompatibilan" jer je jedini izbor po lokaciji
+            };
         }
 
         // US-25: Kreira tiket i automatski ga dodjeljuje agentu prema kategoriji

@@ -1,4 +1,4 @@
-﻿using TelecomSupportSystem.BLL.DTOs;
+using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 
 namespace TelecomSupportSystem.BLL.Services.Interfaces
@@ -31,5 +31,8 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
 
         // US-56: Proslijedi tiket odabranom agentu
         Task<AgentScoreDto> ForwardTicketToAgentAsync(int ticketId, int targetAgentId, int currentAgentId);
+
+        // US-TechnicianForwarding: Proslijedi tiket tehničaru na određenoj lokaciji
+        Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, string location, int currentAgentId);
     }
 }
