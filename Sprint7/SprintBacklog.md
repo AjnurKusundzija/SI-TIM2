@@ -16,10 +16,10 @@ Implementirati funkcionalnosti za upravljanje životnim ciklusom tiketa kroz zat
 |---|---|---|---|---|---|
 | SB-01 | PB-25 Zatvaranje tiketa | US-16, US-17 | Ajdin | Done | Implementacija zatvaranja tiketa od strane korisnika i zahtjeva za zatvaranje od strane agenta |
 | SB-02 | PB-28 Upravljanje prioritetima tiketa | US-21 | Ajdin | Done | Implementacija korisničkog i internog prioriteta tiketa |
-| SB-03 | PB-30 Automatska dodjela tiketa | US-25 | Eldar | Done | Implementacija automatske dodjele i pravila dodjele tiketa |
+| SB-03 | PB-30 Automatska dodjela tiketa | US-25 | Eldar, Ajnur | Done | Implementacija automatske dodjele i pravila dodjele tiketa |
 | SB-04 | PB-37 Tehničar vidi osnovne informacije | US-39, US-42 | Eldar | Done | Prikaz samo otvorenih assigned tiketa sa osnovnim informacijama |
 | SB-05 | PB-31 Prosljeđivanje tiketa | US-55, US-56, US-57 | Uma, Ajdin | Done | Implementacija prosljeđivanja tiketa između agenata i tehničarima na osnovu lokacije |
-| SB-06 | PB-48 Pregled dodijeljenih i historija tiketa za agente | US-53, US-54 | Merisa | Done | Implementacija pregleda aktivnih i zatvorenih tiketa po agentu |
+| SB-06 | PB-48 Pregled dodijeljenih i historija tiketa za agente | US-53, US-54 | Merisa, Lejan | Done | Implementacija pregleda aktivnih i zatvorenih tiketa po agentu |
 
 ---
 
