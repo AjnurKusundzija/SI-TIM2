@@ -294,4 +294,84 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Rizici, problemi ili greške koje su uočene | Uočeni su potencijalni problemi sa duplim prikazom komentara zbog istovremenog lokalnog state update-a i SignalR event-a, problemi sa autorizacijom pristupa ticket grupama, kao i potreba za pravilnim cleanup-om SignalR konekcija pri napuštanju stranice. |
 | Ko je koristio alat | Ajdin Dželo |
 
+## Unos #18
+
+| Polje | Detalji |
+|---|---|
+| Datum | 10.05.2026 |
+| Sprint broj | Sprint 7 |
+| Alat koji je korišten | Claude Code (claude-opus-4-7) |
+| Svrha korištenja | Pisanje testova za US-25 (Automatska dodjela tiketa, PB-30) prema test strategiji iz Sprint 3, te ažuriranje dokumentacije ProofOfTesting.md u Sprintu 7 i TestStrategy.md u Sprintu 3 sa rezultatima testiranja. |
+| Kratak opis zadatka ili upita | AI je trebao pročitati Sprint3/TestStrategy.md, analizirati postojeću implementaciju US-25, napisati nove backend testove i ažurirati dokumentaciju za Sprint 7. |
+| Šta je AI predložio ili generisao | Generisani su backend testovi u TelecomSupportSystem.Tests: AutoAssignServiceTests.cs, AutoAssignRepositoryTests.cs, AutoAssignIntegrationTests.cs i AutoAssignPerformanceTests.cs, ukupno 25 test slučajeva. Također je popunjen Sprint7/ProofOfTesting.md i dodani su evidence redovi u Sprint3/TestStrategy.md. |
+| Šta je tim prihvatio | Prihvaćen je paket od 25 backend testova, struktura dokumenta ProofOfTesting.md, mapiranje testova na AC1–AC6, evidence stavke u TestStrategy.md i objašnjenje da AC3 koristi postojeći endpoint za prikaz dodijeljenih tiketa. |
+| Šta je tim izmijenio | Tim je odbacio inicijalni pristup sa posebnom AssignmentRules tabelom i prihvatio jednostavniji pristup preko Team.SpecializedCategory. Frontend je izmijenjen tako da agentski sidebar ima odvojene linkove /tickets i /assigned. Status „Nedodijeljen“ riješen je kroz postojeći status i AssignmentMessage u DTO-u, bez dodavanja novog TicketStatus.UNASSIGNED enuma. |
+| Šta je tim odbacio | Odbačeni su AssignmentRule entitet, AssignmentRules tabela, dodatni UNASSIGNED status, poseban admin ekran za upravljanje pravilima dodjele, IsSystem flag i dodatni assignment-rules endpointi. Također nije dodan novi frontend test fajl jer postojeći Tickets.test.jsx već pokriva potrebne izmjene. |
+| Rizici, problemi ili greške koje su uočene | Lokalno okruženje ima .NET 8 SDK, dok projekat cilja net10.0, pa testovi nisu mogli biti lokalno pokrenuti. Validacija će se izvršiti u CI-u ili Docker okruženju s .NET 10 SDK-om. Uočeni su mogući problemi s različitim pristupima implementaciji US-25 i ESLint greška react-hooks/set-state-in-effect, koja je riješena refaktorisanjem Promise.all().then().catch().finally() patternom. |
+| Ko je koristio alat | Eldar Hadžiselimović |
+
+## Unos #19
+
+| Polje | Detalji |
+|---|---|
+| Datum | 10.05.2026 |
+| Sprint broj | Sprint 7 |
+| Alat koji je korišten | ChatGPT (GPT-5.5) |
+| Svrha korištenja | Pomoć pri organizaciji Sprint 7 dokumentacije, rješavanju GitHub konflikata i usklađivanju sprint dokumenata sa dogovorenim PB i US stavkama. |
+| Kratak opis zadatka ili upita | AI je korišten za pomoć pri definisanju Sprint Goal-a, Decision Log odluke, objašnjenju merge konflikata i pravilnom postavljanju PR-a između docs branch-a i develop grane. |
+| Šta je AI predložio ili generisao | Prijedloge za Sprint Goal Sprinta 7, Decision Log odluku o ticket workflow logici, objašnjenje razlike između current i incoming changes, te smjernice za rješavanje konflikata u dokumentima. |
+| Šta je tim prihvatio | Strukturu Sprint Goal-a, dio opisa Decision Log odluke, postupak rješavanja konflikata i način spajanja dokumentacijskog branch-a u develop. |
+| Šta je tim izmijenio | Tekstovi su prilagođeni stvarnim dogovorima tima, raspodjeli PB zadataka i pravilima projekta. |
+| Šta je tim odbacio | Prijedlozi koji nisu odgovarali stvarnom sprint scope-u ili bi pogrešno prikazali planirane user story izmjene. |
+| Rizici, problemi ili greške koje su uočene | Merge konflikti u sprint dokumentima, nejasnoća oko base/compare grana i potreba da se pažljivo razlikuju current i incoming promjene. |
+| Ko je koristio alat | Lejan Kozlić |
+
+## Unos #20
+
+| Polje | Detalji |
+|---|---|
+| Datum | 09.05.2026 |
+| Sprint broj | Sprint 7 |
+| Alat koji je korišten | Claude Code (claude-opus-4-7) |
+| Svrha korištenja | Pomoć pri analizi postojeće arhitekture projekta i implementaciji funkcionalnosti za interno upravljanje prioritetima tiketa. |
+| Kratak opis zadatka ili upita | AI je korišten za definisanje backend i frontend izmjena potrebnih za dodavanje internog prioriteta tiketa, uključujući model, DTO strukture, API endpoint, autorizaciju, validaciju i prikaz na stranici detalja tiketa. |
+| Šta je AI predložio ili generisao | Prijedloge za dodavanje internog prioriteta na ticket model, definisanje enum vrijednosti prioriteta, kreiranje endpointa za ažuriranje prioriteta, ograničavanje pristupa na Agent/Admin role, sakrivanje internog prioriteta od klijenata, frontend dropdown za izbor prioriteta i prikaz success/error notifikacija. |
+| Šta je tim prihvatio | Koncept internog prioriteta tiketa, predefined listu prioriteta, role-based ograničenje za agente i administratore, prikaz prioriteta na TicketDetail stranici i sakrivanje ove funkcionalnosti od običnih korisnika. |
+| Šta je tim izmijenio | Nazivi DTO-a, endpointa, enum vrijednosti i UI prikaza prilagođeni su postojećoj arhitekturi projekta i ranije korištenim konvencijama za tikete. |
+| Šta je tim odbacio | Prijedlozi koji bi uvodili nepotrebne biblioteke, mijenjali postojeći authorization flow ili otkrivali interni prioritet korisnicima bez odgovarajuće role. |
+| Rizici, problemi ili greške koje su uočene | Potencijalni problemi sa migracijama baze, mapiranjem DTO-a, autorizacijom endpointa i očuvanjem odvojenosti internog prioriteta od korisničkog prikaza tiketa. |
+| Ko je koristio alat | Ajdin Dželo |
+
+## Unos #21
+
+| Polje | Detalji |
+|---|---|
+| Datum | 11.05.2026 |
+| Sprint broj | Sprint 7 |
+| Alat koji je korišten | Claude Code (claude-opus-4-7) |
+| Svrha korištenja | Pomoć pri analizi postojeće arhitekture projekta i implementaciji kompletnog workflow-a za zatvaranje tiketa za korisnike, agente i tehničare. |
+| Kratak opis zadatka ili upita | AI je korišten za definisanje backend i frontend izmjena potrebnih za zatvaranje tiketa, slanje zahtjeva za zatvaranje, prihvatanje ili odbijanje zahtjeva od strane korisnika i prinudno zatvaranje tiketa nakon isteka roka. |
+| Šta je AI predložio ili generisao | Prijedloge za proširenje statusa tiketa na Open, Resolved, Closure Requested i Closed, validaciju dozvoljenih promjena stanja, endpoint za korisničko zatvaranje vlastitog riješenog tiketa, endpoint za slanje closure request-a, prihvatanje i odbijanje zahtjeva, te logiku za zatvaranje nakon 7 dana bez odgovora korisnika. |
+| Šta je tim prihvatio | Workflow u kojem korisnik može zatvoriti vlastiti riješeni tiket, agent ili tehničar može poslati zahtjev za zatvaranje, korisnik može prihvatiti ili odbiti zahtjev, a ovlašteni agent može zatvoriti tiket nakon isteka definisanog roka. |
+| Šta je tim izmijenio | Nazivi statusa, DTO strukture, endpointi, validacije i UI kontrole prilagođeni su postojećoj arhitekturi projekta, postojećim korisničkim rolama i ranije definisanim konvencijama za ticket sistem. |
+| Šta je tim odbacio | Prijedlozi koji bi omogućili zatvaranje tiketa bez provjere vlasništva, role ili trenutnog statusa tiketa, kao i prijedlozi koji bi uvodili nepotrebne biblioteke ili narušili postojeći authorization flow. |
+| Rizici, problemi ili greške koje su uočene | Potencijalni problemi sa validacijom state transition logike, provjerom vlasništva tiketa, računanjem perioda od 7 dana, čuvanjem closure metadata podataka i pravilnim prikazom akcija za različite korisničke role. |
+| Ko je koristio alat | Ajdin Dželo |
+
+## Unos #22
+
+| Polje | Detalji |
+|---|---|
+| Datum | 12.05.2026 |
+| Sprint broj | Sprint 7 |
+| Alat koji je korišten | GitHub Copilot |
+| Svrha korištenja | Implementacija pregleda i historije dodijeljenih tiketa za agente (US-53 i US-54) u okviru PB-48. |
+| Kratak opis zadatka ili upita | Tim je implementirao funkcionalnosti koje agentima omogućavaju pregled trenutno otvorenih dodijeljenih tiketa i historije zatvorenih tiketa kojima su upravljali. AI je korišten za generisanje backend logike, API endpointa i frontend komponenti za pregled dodijeljenih tiketa. |
+| Šta je AI predložio ili generisao | Generisani su prijedlozi za proširenje ITicketService i TicketService interfejsa metodama GetOpenAssignedTicketsAsync i GetClosedAssignedTicketsAsync, zajedno sa ITicketRepository i TicketRepository implementacijama koje koriste EF Core LINQ upite za filtriranje tiketa po korisniku i statusu. AI je također generisao API endpoint-e GET /api/tickets/assigned/open i GET /api/tickets/assigned/closed u TicketController-u sa pristupom ograničenim na AGENT rolu. Na frontend strani generisane su funkcije getOpenAssignedTickets() i getClosedAssignedTickets() u ticketService.js, kao i AssignedTickets.jsx stranica sa tab navigacijom između otvorenih i zatvorenih tiketa, filtriranjem po kategoriji i prioritetu, pretragom po naslovu i prikazom datuma zatvaranja tiketa. |
+| Šta je tim prihvatio | Tim je prihvatio backend arhitekturu sa TicketRepository, TicketService i TicketController implementacijom, kao i sigurnosni pristup u kojem se userId preuzima iz JWT claims-a. Prihvaćena je i frontend AssignedTickets.jsx komponenta sa tab navigacijom, filtriranjem i rutom /assigned u aplikaciji. |
+| Šta je tim izmijenio | DTO struktura i namespace MyTicketDto klase prilagođeni su postojećoj organizaciji projekta i smješteni u postojeći DTOs/Tickets folder. Prilagođena je i konfiguracija relacija u AppDbContext-u kako bi Ticket koristio cascade delete, dok User i Team relacije koriste Restrict pravila radi očuvanja integriteta podataka. |
+| Šta je tim odbacio | Odbačeni su prijedlozi koji nisu bili dio definisanog sprint scope-a ili bi uvodili nepotrebne izmjene u postojeću arhitekturu sistema. |
+| Rizici, problemi ili greške koje su uočene | Uočeno je da TicketUser entitet već postoji u projektu bez odgovarajućeg DbSet-a u AppDbContext-u, što je izazivalo probleme prilikom migracija. Problem je riješen dodavanjem DbSet<TicketUser> TicketUsers i konfiguracijom relacija. Također, inicijalni namespace prijedlog za MyTicketDto nije bio usklađen sa konvencijama projekta i ručno je prilagođen. |
+| Ko je koristio alat | Merisa Ogrić |
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.

@@ -42,19 +42,19 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-22](#pb-22) | Kreiranje novog tiketa                  | Feature        |     1     |     M     | Done | Sprint 5 |
 | [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Done | Sprint 5 |
 | [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Done | Sprint 6 |
-| [PB-25](#pb-25) | Zatvaranje tiketa                       | Feature        |     1     |     L     | SB | Sprint 7 |
+| [PB-25](#pb-25) | Zatvaranje tiketa                       | Feature        |     1     |     L     | Done | Sprint 7 |
 | [PB-26](#pb-26) | Ocjenjivanje tiketa                     | Feature        |     5     |     S     | Backlog | Sprint 8 |
 | [PB-27](#pb-27) | Komunikacija kroz tiket                  | Feature        |     1     |     M     | Done | Sprint 6 |
-| [PB-28](#pb-28) | Upravljanje prioritetima tiketa          | Feature        |     2     |     M     | SB | Sprint 7 |
+| [PB-28](#pb-28) | Upravljanje prioritetima tiketa          | Feature        |     2     |     M     | Done | Sprint 7 |
 | [PB-29](#pb-29) | Preraspodjela agenata po timovima        | Feature        |     1     |     M     | Backlog | Sprint 10 |
-| [PB-30](#pb-30) | Automatska dodjela tiketa                | Feature        |     3     |     XS    | SB | Sprint 7 |
-| [PB-31](#pb-31) | Prosljeđivanje tiketa                    | Feature        |     2     |     M     | SB | Sprint 7 |
+| [PB-30](#pb-30) | Automatska dodjela tiketa                | Feature        |     3     |     XS    | Done | Sprint 7 |
+| [PB-31](#pb-31) | Prosljeđivanje tiketa                    | Feature        |     2     |     M     | Done | Sprint 7 |
 | [PB-32](#pb-32) | Pregled svih tiketa                      | Feature        |     1     |     M     | Done | Sprint 6 |
 | [PB-33](#pb-33) | Pretraživanje i filtriranje tiketa       | Feature        |     1     |     M     | Backlog | Sprint 9 |
 | [PB-34](#pb-34) | Pregled i uređivanje korisničkih profila | Feature        |     2     |     M     | Backlog | Sprint 9 |
 | [PB-35](#pb-35) | Pregled dodijeljenih tiketa (tehničari)  | Feature        |     1     |     S     | Backlog | Sprint 9 |
 | [PB-36](#pb-36) | Ažuriranje statusa tiketa                | Feature        |     1     |     S     | Backlog | Sprint 8 |
-| [PB-37](#pb-37) | Tehničar vidi osnovne informacije        | Feature        |     2     |     S     | SB | Sprint 7 |
+| [PB-37](#pb-37) | Tehničar vidi osnovne informacije        | Feature        |     2     |     S     | Done | Sprint 7 |
 | [PB-38](#pb-38) | Izvještaj o broju tiketa                 | Feature        |     1     |     M     | Backlog | Sprint 11 |
 | [PB-39](#pb-39) | Izvještaj po statusu tiketa              | Feature        |     5     |     M     | Backlog | Sprint 11 |
 | [PB-40](#pb-40) | Izvještaj po tipu problema               | Feature        |     3     |     S     | Backlog | Sprint 11 |
@@ -65,7 +65,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama    | Feature        |     1     |     L     | Backlog | Sprint 11 |
 | [PB-46](#pb-46) | Export izvještaja                        | Feature        |     5     |     S     | Backlog | Sprint 11 |
 | [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Done | Sprint 6 |
-| [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente | Feature | 1 | M | SB | Sprint 7 |
+| [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente | Feature | 1 | M | Done | Sprint 7 |
 
 
 
@@ -295,7 +295,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
-- **Status:** In Progress
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 5
 - **Napomena:** Za korisnika smatramo da već ima registrovan profil gdje pristupni podaci se nalaze u njegovom ugovoru za paket koji koristi
 
@@ -332,7 +332,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 5
 
 ---
@@ -344,7 +344,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** S
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 5
 
 ---
@@ -356,7 +356,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 6
 
 ---
@@ -368,7 +368,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 7
 - **Napomena:** Tiket može zatvoriti i korisnik i agent kome je tiket dodijeljen kao i tehničar koji je na terenu riješio problem
 
@@ -393,7 +393,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 6
 
 ---
@@ -405,7 +405,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 7
 - **Napomena:** Korisnik nema uvid u internu evaluaciju tiketa
 
@@ -430,7 +430,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 3
 - **Procjena složenosti ili napora:** XS
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 10
 
 ---
@@ -442,7 +442,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 10
 
 ---
@@ -454,7 +454,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 6
 
 ---
@@ -515,7 +515,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** S
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 7
 
 ---
@@ -636,7 +636,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 3
 - **Procjena složenosti ili napora:** S
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 6
 
 ---
@@ -648,5 +648,5 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 7
