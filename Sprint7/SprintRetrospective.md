@@ -1,106 +1,121 @@
 # Sprint Retrospective – Sprint 7
 
----
-
 ## Opće ocjene sprinta
 
 | Kategorija | Prosjek (1–5) |
 |---|---|
-| Ocjena sprinta u cjelini | **4.1** |
-| Razina stresa / opterećenja | **3.3** |
-| Zadovoljstvo suradnjom tima | **4.4** |
+| Ocjena sprinta u cjelini | 4.1 |
+| Razina stresa / opterećenja | 3.3 |
+| Zadovoljstvo suradnjom tima | 4.8 |
 
 ---
 
-## Što je funkcioniralo dobro
+# Što je funkcioniralo dobro
 
-- **Komunikacija i suradnja** istaknuti su kao najveća snaga sprinta — svi su bili dostupni i odgovarali promptno.
-- **Alati** (Git, AI agenti, razvojna okruženja) su generalno funkcionirali bez većih tehničkih poteškoća.
-- Korištenje **Git brancha** omogućilo je paralelni rad bez konflikata.
-- **AI agenti** su bili posebno korisni i pohvaljeni od strane tima.
+- Komunikacija i suradnja unutar tima bile su jedna od najvećih prednosti sprinta.
+- Većina članova istaknula je da je tim bio dostupan i odgovarao pravovremeno.
+- Git branch workflow omogućio je paralelan razvoj bez većih konflikata.
+- AI alati i razvojna okruženja generalno su funkcionirali stabilno i pomogli pri implementaciji funkcionalnosti.
+- Deployment aplikacije i testiranje prošli su uspješno.
+- Sprint je završen uz visoku pokrivenost planiranih zadataka.
+- Testiranje aplikacije i prolazak testova označeni su kao važan uspjeh sprinta.
 
 ---
 
-## Osobni uspjesi i highlight momenti
+# Osobni uspjesi i highlight momenti
 
-- Postignuta 100% pokrivenost zadataka.
 - Uspješan deployment aplikacije.
-- Implementacija i testiranje ticket modula (unit testovi).
-- Korekcija koda u zadnjem trenutku uz isporuku dobrog dizajna.
+- Implementacija i testiranje ticket modula.
+- Prolazak testova i validacija funkcionalnosti.
+- Dobra koordinacija između backend i frontend dijela tima.
+- Završavanje kompleksnijih funkcionalnosti vezanih za workflow tiketa.
 
 ---
 
-## Što je usporavalo tim (problemi i frustracije)
+# Što je usporavalo tim (problemi i frustracije)
 
-- **Odlaganje rada do zadnjeg trenutka** — najčešće navođen problem (5+ odgovora). Većina posla završavana je pri kraju sprinta.
-- **Tehničke poteškoće**: konfiguracija portova, environment varijable, deployment, merge konflikti.
-- **Zavisnosti između zadataka** — neki članovi nisu mogli krenuti dok drugi nisu završili svoju komponentu.
-- **Razumijevanje tuđeg koda** i postavljanje razvojnog okruženja.
-
----
-
-## Što treba prestati raditi
-
-- Koristiti **AI alate bez pregleda** generisanih promjena — AI ponekad mijenja portove, rute ili konfiguracije koje drugi developeri ne očekuju.
-- Pokretati **git komande bez razumijevanja** efekta na repozitorij.
-- Slati obavijesti putem **Vibera** koje ostaju nepročitane.
+- Dio zadataka završavan je pri kraju sprinta, što je povećalo pritisak i stres.
+- Problemi s konfiguracijom portova, environment varijabli i deployment procesom.
+- Merge konflikti i usklađivanje promjena između članova tima.
+- Povremeno čekanje na feedback i code review.
+- Token ograničenja i povremeno opterećenje AI alata/servera.
+- Pojedini tehnički zahtjevi i algoritmi nisu bili potpuno jasno definisani od početka.
+- Postavljanje lokalnog okruženja i migracije baze oduzimali su dodatno vrijeme.
 
 ---
 
-## Planiranje i jasnoća scope-a
+# Što treba prestati raditi
 
-Većina članova smatra da je sprint bio jasno planiran, no dio navodi da su neke stvari bile nejasne ili da se scope mijenjao tokom sprinta (ODL-2: uklanjanje detaljnog prikaza tiketa, dodavanje PB-22 i PB-23).
-
----
-
-## Glavni blokeri
-
-- Kasna raspodjela zadataka — taskovi nisu dodijeljeni odmah po konsultacijama.
-- Konfiguracija environment varijabli i ključeva (riješeno na vrijeme).
-- Problemi s portovima i deploymentom.
-- Čekanje na feedback i code review.
-- Kasni setup projekta — gubilo se vrijeme na početno podešavanje.
+- Prihvatati AI generisane promjene bez detaljnog pregleda.
+- Oslanjati se na zadnji trenutak za završavanje ključnih taskova.
+- Pokretati Git komande bez razumijevanja njihovog efekta na repozitorij.
+- Oslanjati se isključivo na neformalnu komunikaciju bez jasnog praćenja taskova i statusa.
 
 ---
 
-## Prijedlozi za sljedeći sprint
+# Planiranje i jasnoća scope-a
 
-### Procesi i organizacija
-- **Rasporediti taskove odmah nakon konsultacija** — ne čekati do polovice sprinta.
-- **Uvesti konkretne interne deadlineove** za svakog člana, neovisno o finalnom roku.
-- **Uvesti kratke daily sync sastanke** (5–10 min) kako bi svi bili u toku s napretkom i problemima.
-- Razmotriti uvođenje **alata poput Jira ili Slack** za jasniji pregled rokova i statusa zadataka.
-
-### Tehnički prijedlozi
-- **Napisati API dokumentaciju** (lokalna dokumentacija ruta i resursa) kako bi svi znali šta radi i s čime komunicira.
-- **Više koristiti Pull Request-ove** za code review.
-- Svaki član treba elaborirati šta je napravio i šta je izmijenjeno, kako bi ostali bili upućeni u promjene.
-
-### Korištenje AI-a
-- **Pametnije koristiti AI** — pregledati svaku AI generisanu promjenu prije prihvatanja, posebno za konfiguracijske fajlove.
+Većina članova smatra da je sprint bio jasno planiran i da su ciljevi uglavnom bili poznati od početka. Ipak, dio članova naveo je da su pojedine funkcionalnosti i tehnički detalji postajali jasniji tek tokom implementacije, što je uzrokovalo manje izmjene scope-a i dodatne konsultacije.
 
 ---
 
-## Vještine i znanja koji bi timu pomogla
+# Glavni blokeri
 
-- Bolje razumijevanje **arhitekture projekta** i komunikacije između komponenti (frontend–backend–baza).
-- Bolji **individualni menadžment vremena** i navika redovnog rada.
-- **Tehničke vještine** vezane za Docker, lokalno okruženje i pokretanje projekta.
-
----
-
-## Pohvale i dodatni komentari
-
-> *"Zadovoljna sam saradnjom i mislim da kao tim dobro napredujemo."*
+- Kasnija raspodjela pojedinih zadataka.
+- Problemi s deploymentom i konfiguracijom aplikacije.
+- Merge konflikti između različitih grana.
+- Čekanje na review i potvrdu određenih implementacija.
+- Lokalno postavljanje projekta i migracije baze podataka.
 
 ---
 
-## TOP akcijske stavke za Sprint 6
+# Prijedlozi za sljedeći sprint
+
+## Procesi i organizacija
+
+- Raspodijeliti taskove odmah nakon konsultacija i sprint planning sastanaka.
+- Uvesti kraće sync sastanke radi boljeg praćenja napretka.
+- Jasnije definisati tehničke zahtjeve prije početka implementacije.
+- Koristiti Pull Request review dosljednije za zajedničke komponente.
+
+## Tehnički prijedlozi
+
+- Napisati osnovnu API dokumentaciju i opis ključnih ruta.
+- Standardizovati setup lokalnog okruženja za sve članove tima.
+- Bolje organizovati migracije baze i seed podatke.
+- Detaljnije pregledati AI generisani kod prije merge-a.
+
+## Korištenje AI-a
+
+- AI alati pokazali su se korisnim tokom razvoja i ubrzali implementaciju više funkcionalnosti.
+- Potrebno je dodatno provjeravati konfiguracijske i sigurnosno osjetljive dijelove koje AI generiše.
+- AI koristiti kao pomoć pri implementaciji, ali ne kao zamjenu za code review i validaciju logike.
+
+---
+
+# Vještine i znanja koja bi timu pomogla
+
+- Bolje razumijevanje arhitekture projekta i komunikacije između komponenti.
+- Naprednije Git i branching prakse.
+- Više iskustva s Dockerom, deploymentom i lokalnim okruženjem.
+- Bolji individualni menadžment vremena i raspodjela rada kroz sprint.
+
+---
+
+# Pohvale i dodatni komentari
+
+- Timska saradnja ocijenjena je veoma visoko.
+- Komunikacija unutar tima bila je jasna i pravovremena.
+- Članovi tima smatraju da je sprint završen uspješno i da tim kontinuirano napreduje kroz svaki naredni sprint.
+
+---
+
+# TOP akcijske stavke za Sprint 8
 
 | Prioritet | Akcija |
 |---|---|
-| 1 | Rasporediti taskove odmah nakon konsultacija |
-| 2 | Napisati API dokumentaciju (lokalna, barem bazična) |
-| 3 | Uvesti kratke sync sastanke (daily ili 2x sedmično) |
-| 4 | Pametnije koristiti AI — obavezni pregled svih promjena |
-| 5 | Koristiti PR-ove za sve promjene na zajedničkim komponentama |
+| 1 | Raspodijeliti taskove ranije i preciznije definisati odgovornosti |
+| 2 | Uvesti kraće redovne sync sastanke |
+| 3 | Poboljšati dokumentaciju API-ja i setup procesa |
+| 4 | Obavezno pregledati AI generisane promjene prije merge-a |
+| 5 | Koristiti Pull Request review za sve zajedničke komponente |
