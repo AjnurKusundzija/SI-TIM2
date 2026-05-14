@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Team> Teams => Set<Team>();
     public DbSet<Ticket> Tickets => Set<Ticket>();
+    public DbSet<TicketUser> TicketUsers => Set<TicketUser>();
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<Rating> Ratings => Set<Rating>();
     public DbSet<SubscriptionPackage> SubscriptionPackages => Set<SubscriptionPackage>();
@@ -39,7 +40,7 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.Username).IsRequired().HasMaxLength(100);
             entity.Property(e => e.PasswordHash).IsRequired();
             entity.Property(e => e.Phone).HasMaxLength(20);
-            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.Location).HasMaxLength(500);
 
             entity.HasIndex(e => e.Email).IsUnique();
             entity.HasIndex(e => e.Username).IsUnique();
@@ -150,6 +151,7 @@ public class ApplicationDbContext : DbContext
 
             entity.Property(e => e.PackageName).IsRequired().HasMaxLength(100);
             entity.Property(e => e.PackageDescription).HasMaxLength(500);
+            entity.Property(e => e.MonthlyPrice).HasPrecision(18, 2);
 
             entity.HasIndex(e => e.UserId);
 
@@ -236,6 +238,21 @@ public class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.TicketId);
             entity.HasIndex(e => e.UserId);
+
+            entity.HasOne(e => e.Ticket)
+                .WithMany(t => t.Assignments)
+                .HasForeignKey(e => e.TicketId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.TicketAssignments)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.Team)
+                .WithMany(t => t.Assignments)
+                .HasForeignKey(e => e.TeamId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

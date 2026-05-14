@@ -59,10 +59,6 @@ describe('PB-32 Tickets acceptance — agent poslovni tok', () => {
     )
     expect(screen.queryAllByText('Mobilna mreža bez signala')).not.toHaveLength(0)
 
-    // AC: agent vidi Svi tiketi / Dodijeljeni meni toggle (PB-32)
-    expect(screen.getByText('Svi tiketi')).toBeInTheDocument()
-    expect(screen.getByText('Dodijeljeni meni')).toBeInTheDocument()
-
     // AC: nema poruke o grešci — lista se učitava uspješno
     expect(screen.queryByText(/failed to load/i)).not.toBeInTheDocument()
   })

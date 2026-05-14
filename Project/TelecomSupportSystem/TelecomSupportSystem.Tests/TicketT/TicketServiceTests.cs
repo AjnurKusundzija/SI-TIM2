@@ -13,11 +13,13 @@ namespace TelecomSupportSystem.Tests.Tickets
     public class TicketServiceTests
     {
         private readonly Mock<ITicketRepository> _ticketRepositoryMock = new();
+        private readonly Mock<ITeamRepository> _teamRepoMock = new();
+        private readonly Mock<IUserRepository> _userRepoMock = new();
         private readonly TicketService _ticketService;
 
         public TicketServiceTests()
         {
-            _ticketService = new TicketService(_ticketRepositoryMock.Object);
+            _ticketService = new TicketService(_ticketRepositoryMock.Object, _teamRepoMock.Object, _userRepoMock.Object);
         }
 
         // ─── Helpers ─────────────────────────────────────────────────────────────
@@ -49,6 +51,15 @@ namespace TelecomSupportSystem.Tests.Tickets
             Description = description,
             Priority = priority,
             Type = category
+        };
+
+        private static User MakeAgent(int id = 10, string firstName = "Test", string lastName = "Agent",
+            List<TicketUser>? assignments = null) => new()
+        {
+            UserId = id,
+            FirstName = firstName,
+            LastName = lastName,
+            TicketAssignments = assignments ?? new List<TicketUser>()
         };
 
         [Fact]
@@ -214,6 +225,132 @@ namespace TelecomSupportSystem.Tests.Tickets
             var result = await _ticketService.CreateTicketAsync(MakeCreateDto(category: category), 1);
 
             Assert.Equal(category.ToString(), result.ProblemCategory);
+        }
+
+        // ─── GetWeightsByPriority — pokrivanje svih grana switch izraza ─────────
+        // Metoda je private static, testira se indirektno kroz GetAgentScoresAsync
+        // → CalculateAgentScores → GetWeightsByPriority
+
+        [Theory]
+        [InlineData(Priority.LOW)]
+        [InlineData(Priority.MEDIUM)]
+        [InlineData(Priority.HIGH)]
+        public async Task GetAgentScoresAsync_ShouldReturnScores_ForEachPriority(Priority priority)
+        {
+            var ticket = MakeTicket(priority: priority);
+            var agent = MakeAgent();
+
+            _ticketRepositoryMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(ticket);
+            _userRepoMock.Setup(r => r.GetAvailableAgentsForForwardingAsync(5))
+                .ReturnsAsync(new List<User> { agent });
+
+            var result = (await _ticketService.GetAgentScoresAsync(1, 5)).ToList();
+
+            result.Should().ContainSingle();
+            result[0].UserId.Should().Be(10);
+        }
+
+        // LOW priority — wExperience=0.6 dominira: agent s više riješenih tiketa treba imati veći score
+        [Fact]
+        public async Task GetAgentScoresAsync_LowPriority_FavorsExperiencedAgent()
+        {
+            var closedTicket = MakeTicket(id: 99, status: TicketStatus.CLOSED, category: ProblemCategory.INTERNET);
+
+            var experiencedAgent = MakeAgent(id: 10, firstName: "Iskusan", lastName: "Agent",
+                assignments: new List<TicketUser>
+                {
+                    new() { TicketId = 99, Ticket = closedTicket, UserId = 10,
+                            AssignmentDate = DateTime.UtcNow, AssignmentType = AssignmentType.AUTOMATIC }
+                });
+
+            var newAgent = MakeAgent(id: 11, firstName: "Novi", lastName: "Agent");
+
+            _ticketRepositoryMock.Setup(r => r.GetByIdAsync(1))
+                .ReturnsAsync(MakeTicket(priority: Priority.LOW));
+            _userRepoMock.Setup(r => r.GetAvailableAgentsForForwardingAsync(5))
+                .ReturnsAsync(new List<User> { experiencedAgent, newAgent });
+
+            var result = (await _ticketService.GetAgentScoresAsync(1, 5)).ToList();
+
+            result.Should().HaveCount(2);
+            result[0].UserId.Should().Be(10);
+        }
+
+        // HIGH priority — wAvailability=0.5 dominira: agent s manje otvorenih tiketa treba imati veći score
+        [Fact]
+        public async Task GetAgentScoresAsync_HighPriority_FavorsAvailableAgent()
+        {
+            var openTicket = MakeTicket(id: 50, status: TicketStatus.OPEN);
+
+            var busyAgent = MakeAgent(id: 10, firstName: "Zauzet", lastName: "Agent",
+                assignments: new List<TicketUser>
+                {
+                    new() { TicketId = 50, Ticket = openTicket, UserId = 10,
+                            AssignmentDate = DateTime.UtcNow, AssignmentType = AssignmentType.AUTOMATIC }
+                });
+
+            var freeAgent = MakeAgent(id: 11, firstName: "Slobodan", lastName: "Agent");
+
+            _ticketRepositoryMock.Setup(r => r.GetByIdAsync(1))
+                .ReturnsAsync(MakeTicket(priority: Priority.HIGH));
+            _userRepoMock.Setup(r => r.GetAvailableAgentsForForwardingAsync(5))
+                .ReturnsAsync(new List<User> { busyAgent, freeAgent });
+
+            var result = (await _ticketService.GetAgentScoresAsync(1, 5)).ToList();
+
+            result.Should().HaveCount(2);
+            result[0].UserId.Should().Be(11);
+        }
+
+        // MEDIUM priority — uravnotežene težine: oba agenta se rangiraju i vraća se validan rezultat
+        [Fact]
+        public async Task GetAgentScoresAsync_MediumPriority_RanksAgentsCorrectly()
+        {
+            var closedTicket = MakeTicket(id: 99, status: TicketStatus.CLOSED, category: ProblemCategory.INTERNET);
+
+            var agentA = MakeAgent(id: 10, firstName: "A", lastName: "Agent",
+                assignments: new List<TicketUser>
+                {
+                    new() { TicketId = 99, Ticket = closedTicket, UserId = 10,
+                            AssignmentDate = DateTime.UtcNow, AssignmentType = AssignmentType.AUTOMATIC }
+                });
+            var agentB = MakeAgent(id: 11, firstName: "B", lastName: "Agent");
+
+            _ticketRepositoryMock.Setup(r => r.GetByIdAsync(1))
+                .ReturnsAsync(MakeTicket(priority: Priority.MEDIUM));
+            _userRepoMock.Setup(r => r.GetAvailableAgentsForForwardingAsync(5))
+                .ReturnsAsync(new List<User> { agentA, agentB });
+
+            var result = (await _ticketService.GetAgentScoresAsync(1, 5)).ToList();
+
+            result.Should().HaveCount(2);
+            result.Should().BeInDescendingOrder(a => a.ScorePercent);
+        }
+
+        // Nema dostupnih agenata → vraća se prazna lista (rana return grana)
+        [Fact]
+        public async Task GetAgentScoresAsync_NoAgents_ReturnsEmpty()
+        {
+            _ticketRepositoryMock.Setup(r => r.GetByIdAsync(1))
+                .ReturnsAsync(MakeTicket());
+            _userRepoMock.Setup(r => r.GetAvailableAgentsForForwardingAsync(5))
+                .ReturnsAsync(new List<User>());
+
+            var result = await _ticketService.GetAgentScoresAsync(1, 5);
+
+            result.Should().BeEmpty();
+        }
+
+        // Tiket ne postoji → KeyNotFoundException
+        [Fact]
+        public async Task GetAgentScoresAsync_TicketNotFound_ThrowsKeyNotFoundException()
+        {
+            _ticketRepositoryMock.Setup(r => r.GetByIdAsync(99))
+                .ReturnsAsync((Ticket?)null);
+
+            Func<Task> act = () => _ticketService.GetAgentScoresAsync(99, 5);
+
+            await act.Should().ThrowAsync<KeyNotFoundException>();
         }
     }
 }

@@ -1,24 +1,15 @@
+import PropTypes from 'prop-types'
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllTickets } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import { Search, Ticket } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState'
+import Badge from '../components/common/Badge'
 
-const STATUS_CLASSES = {
-  OPEN: 'bg-emerald-100 text-emerald-800',
-  CLOSED: 'bg-gray-100 text-gray-800',
-  PENDING_CLOSE: 'bg-amber-100 text-amber-800',
-}
-
-const PRIORITY_CLASSES = {
-  HIGH: 'bg-red-100 text-red-800',
-  MEDIUM: 'bg-yellow-100 text-yellow-800',
-  LOW: 'bg-blue-100 text-blue-800',
-}
-
-const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', PENDING_CLOSE: 'Čeka zatvaranje' }
+const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', CLOSURE_REQUESTED: 'Čeka zatvaranje' }
 const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok' }
+const INTERNAL_PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok', CRITICAL: 'Kritičan' }
 const TYPE_LABELS = {
   INTERNET: 'Internet',
   TV: 'TV',
@@ -27,26 +18,25 @@ const TYPE_LABELS = {
   TECHNICAL_SUPPORT: 'Tehnička podrška',
 }
 
-export default function Tickets() {
+export default function Tickets({ assignedOnly = false }) {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const isAgent = user?.role === 'AGENT'
+  const isStaff = user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN'
 
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState('ALL')
+  const [statusFilter, setStatusFilter] = useState(assignedOnly ? 'OPEN' : 'ALL')
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [priorityFilter, setPriorityFilter] = useState('ALL')
-  const [assignedOnly, setAssignedOnly] = useState(false)
 
   useEffect(() => {
-    getAllTickets(isAgent ? assignedOnly : false)
-      .then(setTickets)
+    getAllTickets(assignedOnly)
+      .then((data) => { setError(null); setTickets(data) })
       .catch((err) => { console.error(err); setError('Failed to load tickets.') })
       .finally(() => setLoading(false))
-  }, [assignedOnly, isAgent])
+  }, [assignedOnly])
 
   const filtered = useMemo(() => {
     return tickets.filter((t) => {
@@ -65,22 +55,6 @@ export default function Tickets() {
     <div className="space-y-4">
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-        {isAgent && (
-          <div className="flex rounded-lg border border-gray-300 overflow-hidden text-sm self-start">
-            <button
-              onClick={() => setAssignedOnly(false)}
-              className={`px-3 py-2 ${!assignedOnly ? 'bg-navy-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
-            >
-              Svi tiketi
-            </button>
-            <button
-              onClick={() => setAssignedOnly(true)}
-              className={`px-3 py-2 border-l border-gray-300 ${assignedOnly ? 'bg-navy-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
-            >
-              Dodijeljeni meni
-            </button>
-          </div>
-        )}
         <div className="relative flex-1 w-full sm:max-w-xs">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -136,6 +110,7 @@ export default function Tickets() {
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tiket</th>
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Prioritet</th>
+                  {isStaff && <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Interni Prioritet</th>}
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Tip</th>
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Kreirano</th>
                 </tr>
@@ -148,15 +123,20 @@ export default function Tickets() {
                       <p className="text-xs text-gray-400">{t.ticketId}</p>
                     </td>
                     <td className="px-5 py-3">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[t.status] || 'bg-gray-100 text-gray-800'}`}>
-                        {STATUS_LABELS[t.status] ?? t.status}
-                      </span>
+                      <Badge value={t.status} />
                     </td>
                     <td className="px-5 py-3">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[t.priority] || 'bg-gray-100 text-gray-800'}`}>
-                        {PRIORITY_LABELS[t.priority] ?? t.priority}
-                      </span>
+                      <Badge value={t.priority} />
                     </td>
+                    {isStaff && (
+                      <td className="px-5 py-3">
+                        {t.internalPriority ? (
+                          <Badge value={t.internalPriority} />
+                        ) : (
+                          <span className="text-xs text-gray-400 italic">—</span>
+                        )}
+                      </td>
+                    )}
                     <td className="px-5 py-3 text-sm text-gray-600">
                       {TYPE_LABELS[t.problemCategory] ?? t.problemCategory}
                     </td>
@@ -174,12 +154,11 @@ export default function Tickets() {
               <div key={t.ticketId} onClick={() => navigate(`/tickets/${t.ticketId}`)} className="px-4 py-3 cursor-pointer hover:bg-gray-50">
                 <p className="text-sm font-medium text-gray-900 truncate">{t.title || t.subject}</p>
                 <div className="flex flex-wrap items-center gap-2 mt-2">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[t.status] || 'bg-gray-100 text-gray-800'}`}>
-                    {STATUS_LABELS[t.status] ?? t.status}
-                  </span>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${PRIORITY_CLASSES[t.priority] || 'bg-gray-100 text-gray-800'}`}>
-                    {PRIORITY_LABELS[t.priority] ?? t.priority}
-                  </span>
+                  <Badge value={t.status} />
+                  <Badge value={t.priority} />
+                  {isStaff && t.internalPriority && (
+                    <Badge value={t.internalPriority} />
+                  )}
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
                   {t.createdDate ? new Date(t.createdDate).toLocaleDateString() : '—'}
@@ -191,4 +170,8 @@ export default function Tickets() {
       )}
     </div>
   )
+}
+
+Tickets.propTypes = {
+  assignedOnly: PropTypes.bool,
 }

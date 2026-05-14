@@ -21,11 +21,12 @@ const navConfig = {
   AGENT: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
+    { to: '/assigned', label: 'Dodijeljeni meni', icon: Ticket },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
   ],
   TECHNICIAN: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/tickets', label: 'Dodijeljeni tiketi', icon: Ticket },
+    { to: '/assigned', label: 'Dodijeljeni meni', icon: Ticket },
   ],
   ADMINISTRATOR: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },

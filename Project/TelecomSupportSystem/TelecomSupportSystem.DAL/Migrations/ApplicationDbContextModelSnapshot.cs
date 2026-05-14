@@ -334,6 +334,7 @@ namespace TelecomSupportSystem.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackageId"));
 
                     b.Property<decimal>("MonthlyPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PackageDescription")
@@ -375,6 +376,9 @@ namespace TelecomSupportSystem.DAL.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<int?>("SpecializedCategory")
+                        .HasColumnType("int");
+
                     b.Property<string>("TeamName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -399,7 +403,19 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
 
+                    b.Property<int?>("ClosedById")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ClosedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ClosureRequestStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClosureRequestedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ClosureRequestedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedDate")
@@ -411,6 +427,9 @@ namespace TelecomSupportSystem.DAL.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("InternalPriority")
+                        .HasColumnType("int");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -480,7 +499,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TicketUser");
+                    b.ToTable("TicketUsers");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.User", b =>
@@ -493,11 +512,6 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.Property<int>("AccountStatus")
                         .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int?>("AvailabilityStatus")
                         .HasColumnType("int");
@@ -516,6 +530,10 @@ namespace TelecomSupportSystem.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Location")
+                        .HasMaxLength(500)
+                        .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -655,7 +673,7 @@ namespace TelecomSupportSystem.DAL.Migrations
                     b.HasOne("TelecomSupportSystem.DAL.Entities.Team", "Team")
                         .WithMany("Assignments")
                         .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TelecomSupportSystem.DAL.Entities.Ticket", "Ticket")
@@ -667,7 +685,7 @@ namespace TelecomSupportSystem.DAL.Migrations
                     b.HasOne("TelecomSupportSystem.DAL.Entities.User", "User")
                         .WithMany("TicketAssignments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Team");

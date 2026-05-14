@@ -56,7 +56,7 @@ namespace TelecomSupportSystem.Tests.Performance
             }
             await context.SaveChangesAsync();
 
-            var controller = new TicketController(new TicketService(new TicketRepository(context)));
+            var controller = new TicketController(new TicketService(new TicketRepository(context), new TeamRepository(context), new UserRepository(context)));
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, "1"),

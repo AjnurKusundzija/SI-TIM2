@@ -26,7 +26,7 @@ namespace TelecomSupportSystem.Tests.Integration
         private static TicketController CreateController(ApplicationDbContext context, int userId, string role = "CLIENT")
         {
             var repo = new TicketRepository(context);
-            var service = new TicketService(repo);
+            var service = new TicketService(repo, new TeamRepository(context), new UserRepository(context));
             var controller = new TicketController(service);
 
             var claims = new List<Claim>
