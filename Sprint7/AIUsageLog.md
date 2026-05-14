@@ -374,4 +374,52 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Rizici, problemi ili greške koje su uočene | Uočeno je da TicketUser entitet već postoji u projektu bez odgovarajućeg DbSet-a u AppDbContext-u, što je izazivalo probleme prilikom migracija. Problem je riješen dodavanjem DbSet<TicketUser> TicketUsers i konfiguracijom relacija. Također, inicijalni namespace prijedlog za MyTicketDto nije bio usklađen sa konvencijama projekta i ručno je prilagođen. |
 | Ko je koristio alat | Merisa Ogrić |
 
+## Unos #23
+
+| Polje | Detalji |
+|---|---|
+| Datum | 14.05.2026 |
+| Sprint broj | Sprint 7 |
+| Alat koji je korišten | Claude Code (claude-opus-4-7) |
+| Svrha korištenja | Pomoć pri pisanju testova osnovnih i dodatnih nivoa testiranja. |
+| Kratak opis zadatka ili upita | Korišten AI za prijedloge i izradu skica testova za osnovne (unit) i dodatne nivoe (integracijski, sistemski, performansni i prihvatni) prema TestStrategy dokumentu i aktuelnim PB/US stavkama. |
+| Šta je AI predložio ili generisao | Predložene testne scenarije i strukturu test fajlova po nivoima testiranja, uključujući pokrivenost kritičnih tokova i rubnih slučajeva. |
+| Šta je tim prihvatio | Okvirnu strukturu testova i veći dio predloženih scenarija kao bazu za implementaciju. |
+| Šta je tim izmijenio | Prilagođeni nazivi testova, organizacija po folderima i mapiranje na postojeće PB/US zahtjeve. |
+| Šta je tim odbacio | Prijedloge koji nisu bili u scope-u Sprinta 7 ili bi zahtijevali nove biblioteke/alate. |
+| Rizici, problemi ili greške koje su uočene | Rizik da AI predloži testove koji ne odgovaraju stvarnoj implementaciji; svaki scenarij je zahtijevao ručnu validaciju. |
+| Ko je koristio alat | Ajnur Kušundžija |
+
+## Unos #24
+
+| Polje | Detalji |
+|---|---|
+| Datum | 14.05.2026 |
+| Sprint broj | Sprint 7 |
+| Alat koji je korišten | Codex / ChatGPT (GPT-5.5) |
+| Svrha korištenja | Pomoć pri implementiranju unit testova. |
+| Kratak opis zadatka ili upita | Korišten AI za izradu prijedloga i skica unit testova prema postojećoj TestStrategy dokumentaciji i aktuelnim PB/US zahtjevima. |
+| Šta je AI predložio ili generisao | Predložene strukture test fajlova, pokrivenost glavnih tokova i rubnih slučajeva za relevantne module. |
+| Šta je tim prihvatio | Veći dio predloženih test scenarija i strukturu testova. |
+| Šta je tim izmijenio | Prilagođeni nazivi testova, mockovi i organizacija testova u skladu sa postojećom arhitekturom. |
+| Šta je tim odbacio | Prijedloge koji nisu odgovarali trenutnom scope-u sprinta ili uvodili nepotrebne zavisnosti. |
+| Rizici, problemi ili greške koje su uočene | Potreba za ručnom validacijom scenarija kako bi se uskladili sa stvarnom implementacijom. |
+| Ko je koristio alat | Hana Piralić |
+
+## Unos #25
+
+| Polje | Detalji |
+|---|---|
+| Datum | 14.05.2026 |
+| Sprint broj | Sprint 7 |
+| Alat koji je korišten | Codex / ChatGPT (GPT-5.5) |
+| Svrha korištenja | Pomoć pri implementiranju unit testova. |
+| Kratak opis zadatka ili upita | Korišten AI za izradu prijedloga i skica unit testova prema postojećoj TestStrategy dokumentaciji i aktuelnim PB/US zahtjevima. |
+| Šta je AI predložio ili generisao | Predložene strukture test fajlova, pokrivenost glavnih tokova i rubnih slučajeva za relevantne module. |
+| Šta je tim prihvatio | Veći dio predloženih test scenarija i strukturu testova. |
+| Šta je tim izmijenio | Prilagođeni nazivi testova, mockovi i organizacija testova u skladu sa postojećom arhitekturom. |
+| Šta je tim odbacio | Prijedloge koji nisu odgovarali trenutnom scope-u sprinta ili uvodili nepotrebne zavisnosti. |
+| Rizici, problemi ili greške koje su uočene | Potreba za ručnom validacijom scenarija kako bi se uskladili sa stvarnom implementacijom. |
+| Ko je koristio alat | Lamija Maglić |
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
