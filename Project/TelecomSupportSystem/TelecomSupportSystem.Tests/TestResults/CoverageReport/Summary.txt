@@ -1,0 +1,83 @@
+Summary
+  Generated on: 5/14/2026 - 1:40:16 PM
+  Coverage date: 5/14/2026 - 11:26:38 AM - 5/14/2026 - 1:39:58 PM
+  Parser: MultiReport (5x Cobertura)
+  Assemblies: 3
+  Classes: 57
+  Files: 66
+  Line coverage: 11.9%
+  Covered lines: 1182
+  Uncovered lines: 8704
+  Coverable lines: 9886
+  Total lines: 11833
+  Branch coverage: 32.1% (226 of 704)
+  Covered branches: 226
+  Total branches: 704
+  Method coverage: 66.5% (271 of 407)
+  Full method coverage: 60.4% (246 of 407)
+  Covered methods: 271
+  Fully covered methods: 246
+  Total methods: 407
+
+TelecomSupportSystem.API                                                  22.7%
+  Microsoft.AspNetCore.OpenApi.Generated                                     0%
+  Program                                                                    0%
+  System.Runtime.CompilerServices                                            0%
+  TelecomSupportSystem.API.Controllers.AuthController                      100%
+  TelecomSupportSystem.API.Controllers.CommentController                  72.7%
+  TelecomSupportSystem.API.Controllers.FaqController                       100%
+  TelecomSupportSystem.API.Controllers.TicketController                   76.8%
+  TelecomSupportSystem.API.Hubs.ChatHub                                    100%
+
+TelecomSupportSystem.BLL                                                  68.5%
+  TelecomSupportSystem.BLL.DTOs.Auth.LoginRequestDto                       100%
+  TelecomSupportSystem.BLL.DTOs.Auth.LoginResponseDto                      100%
+  TelecomSupportSystem.BLL.DTOs.Auth.RefreshRequestDto                     100%
+  TelecomSupportSystem.BLL.DTOs.Auth.RefreshResponseDto                    100%
+  TelecomSupportSystem.BLL.DTOs.Comments.CommentDto                        100%
+  TelecomSupportSystem.BLL.DTOs.Faq.GetFaqDto                              100%
+  TelecomSupportSystem.BLL.DTOs.MyTicketDto                                100%
+  TelecomSupportSystem.BLL.DTOs.Tickets.AgentScoreDto                       50%
+  TelecomSupportSystem.BLL.DTOs.Tickets.CreateTicketDto                    100%
+  TelecomSupportSystem.BLL.DTOs.Tickets.ForwardToAgentDto                  100%
+  TelecomSupportSystem.BLL.DTOs.Tickets.ForwardToTechnicianDto               0%
+  TelecomSupportSystem.BLL.DTOs.Tickets.GetTicketDto                       100%
+  TelecomSupportSystem.BLL.DTOs.Tickets.TicketDetailDto                    100%
+  TelecomSupportSystem.BLL.DTOs.Tickets.UpdateInternalPriorityDto          100%
+  TelecomSupportSystem.BLL.Services.AuthService                            100%
+  TelecomSupportSystem.BLL.Services.CommentService                        89.4%
+  TelecomSupportSystem.BLL.Services.FaqService                             100%
+  TelecomSupportSystem.BLL.Services.TicketService                         51.2%
+
+TelecomSupportSystem.DAL                                                   5.5%
+  TelecomSupportSystem.DAL.ApplicationDbContext                           97.9%
+  TelecomSupportSystem.DAL.Entities.AuditLog                                 0%
+  TelecomSupportSystem.DAL.Entities.Comment                                100%
+  TelecomSupportSystem.DAL.Entities.Faq                                    100%
+  TelecomSupportSystem.DAL.Entities.Notification                             0%
+  TelecomSupportSystem.DAL.Entities.PackageFeature                           0%
+  TelecomSupportSystem.DAL.Entities.Rating                                   0%
+  TelecomSupportSystem.DAL.Entities.RefreshToken                           100%
+  TelecomSupportSystem.DAL.Entities.Report                                   0%
+  TelecomSupportSystem.DAL.Entities.SubscriptionPackage                      0%
+  TelecomSupportSystem.DAL.Entities.Team                                   100%
+  TelecomSupportSystem.DAL.Entities.Ticket                                90.9%
+  TelecomSupportSystem.DAL.Entities.TicketUser                             100%
+  TelecomSupportSystem.DAL.Entities.User                                    95%
+  TelecomSupportSystem.DAL.Migrations.AddFaq                                 0%
+  TelecomSupportSystem.DAL.Migrations.AddInternalPriority                    0%
+  TelecomSupportSystem.DAL.Migrations.AddTicketClosureWorkflow               0%
+  TelecomSupportSystem.DAL.Migrations.AddTicketUserRelationships             0%
+  TelecomSupportSystem.DAL.Migrations.ApplicationDbContextModelSnapshot      0%
+  TelecomSupportSystem.DAL.Migrations.Fix_MonthlyPricePrecision              0%
+  TelecomSupportSystem.DAL.Migrations.FixChanges                             0%
+  TelecomSupportSystem.DAL.Migrations.InitialCreate                          0%
+  TelecomSupportSystem.DAL.Migrations.SecureRefreshTokens                    0%
+  TelecomSupportSystem.DAL.Migrations.Sprint7_DbRefactor                     0%
+  TelecomSupportSystem.DAL.Migrations.UpdateLocationToEnum                   0%
+  TelecomSupportSystem.DAL.Repositories.CommentRepository                  100%
+  TelecomSupportSystem.DAL.Repositories.FaqRepository                      100%
+  TelecomSupportSystem.DAL.Repositories.RefreshTokenRepository            65.2%
+  TelecomSupportSystem.DAL.Repositories.TeamRepository                     100%
+  TelecomSupportSystem.DAL.Repositories.TicketRepository                  62.2%
+  TelecomSupportSystem.DAL.Repositories.UserRepository                     100%
