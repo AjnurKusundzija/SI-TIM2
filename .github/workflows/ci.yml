@@ -76,7 +76,7 @@ jobs:
           cache-dependency-path: Project/frontend/package-lock.json
 
       - name: Install
-        run: npm ci --legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       - name: Lint
         run: npx eslint src/
