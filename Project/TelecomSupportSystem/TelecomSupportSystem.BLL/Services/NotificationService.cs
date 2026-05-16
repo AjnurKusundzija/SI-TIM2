@@ -40,7 +40,7 @@ namespace TelecomSupportSystem.BLL.Services
             await _notificationRepository.MarkAllAsReadAsync(userId);
         }
 
-        public async Task SendNotificationAsync(int userId, string title, string content, NotificationType type)
+        public async Task SendNotificationAsync(int userId, string title, string content, NotificationType type, int? ticketId = null)
         {
             var notification = new Notification
             {
@@ -49,7 +49,8 @@ namespace TelecomSupportSystem.BLL.Services
                 Content = content,
                 NotificationType = type,
                 SentDate = DateTime.UtcNow,
-                IsRead = false
+                IsRead = false,
+                TicketId = ticketId
             };
 
             await _notificationRepository.CreateAsync(notification);
@@ -63,7 +64,8 @@ namespace TelecomSupportSystem.BLL.Services
             Content = n.Content,
             NotificationType = n.NotificationType.ToString(),
             SentDate = n.SentDate,
-            IsRead = n.IsRead
+            IsRead = n.IsRead,
+            TicketId = n.TicketId
         };
     }
 }

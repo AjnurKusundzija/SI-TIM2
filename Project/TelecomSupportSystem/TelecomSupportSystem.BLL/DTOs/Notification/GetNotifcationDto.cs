@@ -8,5 +8,6 @@ namespace TelecomSupportSystem.BLL.DTOs.Notification
         public string NotificationType { get; set; } = string.Empty;
         public DateTime SentDate { get; set; }
         public bool IsRead { get; set; }
+        public int? TicketId { get; set; }
     }
 }

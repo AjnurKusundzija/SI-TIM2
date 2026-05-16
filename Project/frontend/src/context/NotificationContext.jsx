@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useAuth } from './AuthContext'
 import {
@@ -15,25 +15,21 @@ export function NotificationProvider({ children }) {
   const [notifications, setNotifications] = useState([])
   const connectionRef = useRef(null)
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length
-
-  const load = useCallback(async () => {
+  // Exposed as `reload` so consumers can manually refresh
+  const load = useCallback(() => {
     if (!user) return
-    try {
-      const data = await getNotifications()
-      setNotifications(data)
-    } catch {
-      // ignore — user may not be authenticated yet
-    }
+    getNotifications()
+      .then((data) => setNotifications(data))
+      .catch(() => {})
   }, [user])
 
   useEffect(() => {
-    if (!user) {
-      setNotifications([])
-      return
-    }
+    if (!user) return
 
-    load()
+    // setState happens inside .then() callback — not synchronously in the effect body
+    getNotifications()
+      .then((data) => setNotifications(data))
+      .catch(() => {})
 
     const connection = createNotificationConnection()
     connectionRef.current = connection
@@ -50,7 +46,7 @@ export function NotificationProvider({ children }) {
     return () => {
       connection.stop()
     }
-  }, [user, load])
+  }, [user])
 
   const markAsRead = useCallback(async (notificationId) => {
     await apiMarkAsRead(notificationId)
@@ -64,8 +60,19 @@ export function NotificationProvider({ children }) {
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })))
   }, [])
 
+  const value = useMemo(() => {
+    const activeNotifications = user ? notifications : []
+    return {
+      notifications: activeNotifications,
+      unreadCount: activeNotifications.filter((n) => !n.isRead).length,
+      markAsRead,
+      markAllAsRead,
+      reload: load,
+    }
+  }, [user, notifications, markAsRead, markAllAsRead, load])
+
   return (
-    <NotificationContext.Provider value={{ notifications, unreadCount, markAsRead, markAllAsRead, reload: load }}>
+    <NotificationContext.Provider value={value}>
       {children}
     </NotificationContext.Provider>
   )

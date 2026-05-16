@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import { useNotifications } from '../context/NotificationContext'
 import { Bell, CheckCheck } from 'lucide-react'
 
@@ -29,7 +31,17 @@ const typeColor = {
 }
 
 export default function Notifications() {
+  const navigate = useNavigate()
+  const { user } = useAuth()
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications()
+
+  function handleClick(n) {
+    if (!n.isRead) markAsRead(n.notificationId)
+    if (n.ticketId) {
+      const path = user?.role === 'CLIENT' ? `/mytickets/${n.ticketId}` : `/tickets/${n.ticketId}`
+      navigate(path)
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -63,10 +75,9 @@ export default function Notifications() {
           {notifications.map((n) => (
             <div
               key={n.notificationId}
-              // TODO: dodati ticketId u Notification entitet i DTO kako bi klik redirectao na odgovarajući tiket
-          onClick={() => { if (!n.isRead) markAsRead(n.notificationId) }}
-              className={`flex items-start gap-4 px-5 py-4 border-b border-gray-50 last:border-0 transition-colors ${
-                !n.isRead ? 'bg-blue-50/50 cursor-pointer hover:bg-blue-50' : 'cursor-default'
+              onClick={() => handleClick(n)}
+              className={`flex items-start gap-4 px-5 py-4 border-b border-gray-50 last:border-0 transition-colors cursor-pointer hover:bg-gray-50 ${
+                !n.isRead ? 'bg-blue-50/50 hover:bg-blue-50' : ''
               }`}
             >
               {/* Unread dot */}

@@ -130,7 +130,8 @@ namespace TelecomSupportSystem.BLL.Services
                     ticket.CreatorId,
                     "Tiket zatvoren",
                     $"Vaš tiket \"{ticket.Title}\" je zatvoren.",
-                    NotificationType.TICKET_CLOSED);
+                    NotificationType.TICKET_CLOSED,
+                    ticket.TicketId);
         }
 
         public async Task RequestClosureAsync(int ticketId, int userId, string role)
@@ -155,7 +156,8 @@ namespace TelecomSupportSystem.BLL.Services
                 ticket.CreatorId,
                 "Promjena statusa tiketa",
                 $"Status vašeg tiketa \"{ticket.Title}\" je promijenjen na 'Čeka zatvaranje'.",
-                NotificationType.STATUS_CHANGED);
+                NotificationType.STATUS_CHANGED,
+                ticket.TicketId);
         }
 
         public async Task AcceptClosureAsync(int ticketId, int userId)
@@ -228,7 +230,8 @@ namespace TelecomSupportSystem.BLL.Services
                 ticket.CreatorId,
                 "Tiket zatvoren",
                 $"Vaš tiket \"{ticket.Title}\" je zatvoren.",
-                NotificationType.TICKET_CLOSED);
+                NotificationType.TICKET_CLOSED,
+                ticket.TicketId);
         }
 
         // PB-32: Lista tiketa filtrirana prema roli — AGENT/ADMIN vide sve, TECHNICIAN samo dodijeljene
@@ -397,7 +400,8 @@ namespace TelecomSupportSystem.BLL.Services
                 targetAgent.UserId,
                 "Tiket je proslijeđen vama",
                 $"Tiket \"{ticket.Title}\" je proslijeđen vama.",
-                NotificationType.TICKET_FORWARDED);
+                NotificationType.TICKET_FORWARDED,
+                ticket.TicketId);
 
             return newAssignment;
         }
@@ -509,7 +513,8 @@ namespace TelecomSupportSystem.BLL.Services
                 bestTech.UserId,
                 "Tiket je proslijeđen vama",
                 $"Tiket \"{ticket.Title}\" je proslijeđen vama.",
-                NotificationType.TICKET_FORWARDED);
+                NotificationType.TICKET_FORWARDED,
+                ticket.TicketId);
 
             return new AgentScoreDto
             {
@@ -579,7 +584,8 @@ namespace TelecomSupportSystem.BLL.Services
                         bestAgent.UserId,
                         "Dodijeljen vam je tiket",
                         $"Tiket \"{ticket.Title}\" vam je dodijeljen.",
-                        NotificationType.TICKET_ASSIGNED);
+                        NotificationType.TICKET_ASSIGNED,
+                        ticket.TicketId);
                 }
             }
 

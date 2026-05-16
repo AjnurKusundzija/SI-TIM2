@@ -11,7 +11,8 @@ import {
   Loader2,
 } from 'lucide-react'
 
-function StatCard({ icon: Icon, label, value, color, description }) {
+function StatCard({ icon, label, value, color, description }) {
+  const Icon = icon
   return (
     <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
       <div className="flex items-start justify-between">

@@ -54,7 +54,8 @@ function timeAgo(dateStr) {
 
 // ---------- sub-components ----------
 
-function QuickCard({ icon: Icon, label, description, to, color }) {
+function QuickCard({ icon, label, description, to, color }) {
+  const Icon = icon
   const navigate = useNavigate()
   return (
     <div
@@ -84,7 +85,8 @@ function QuickCard({ icon: Icon, label, description, to, color }) {
   )
 }
 
-function MiniStat({ icon: Icon, label, value, color }) {
+function MiniStat({ icon, label, value, color }) {
+  const Icon = icon
   return (
     <div className="bg-white rounded-lg px-4 py-3 shadow-sm border border-gray-100 flex items-center gap-3">
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${color}`}>

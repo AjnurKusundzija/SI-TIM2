@@ -148,7 +148,8 @@ namespace TelecomSupportSystem.BLL.Services
                         currentAssignee.UserId,
                         "Novi odgovor klijenta",
                         $"Klijent je odgovorio na tiket \"{ticket.Title}\".",
-                        NotificationType.TICKET_RESPONSE);
+                        NotificationType.TICKET_RESPONSE,
+                        ticketId);
             }
             else if (role is "AGENT" or "TECHNICIAN")
             {
@@ -156,7 +157,8 @@ namespace TelecomSupportSystem.BLL.Services
                     ticket.CreatorId,
                     "Odgovor na vaš tiket",
                     $"Dobili ste odgovor na tiket \"{ticket.Title}\".",
-                    NotificationType.TICKET_RESPONSE);
+                    NotificationType.TICKET_RESPONSE,
+                    ticketId);
             }
 
             return new CommentDto

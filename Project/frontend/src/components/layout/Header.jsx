@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Bell, Menu, X } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 import { useNotifications } from '../../context/NotificationContext'
 
 function timeAgo(dateStr) {
@@ -17,7 +18,12 @@ function timeAgo(dateStr) {
 
 export default function Header({ onMenuToggle, title }) {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications()
+
+  function ticketPath(ticketId) {
+    return user?.role === 'CLIENT' ? `/mytickets/${ticketId}` : `/tickets/${ticketId}`
+  }
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -36,7 +42,7 @@ export default function Header({ onMenuToggle, title }) {
   async function handleNotificationClick(n) {
     if (!n.isRead) await markAsRead(n.notificationId)
     setOpen(false)
-    // TODO: navigiraj na odgovarajući tiket (potrebno dodati ticketId u Notification entitet i DTO)
+    if (n.ticketId) navigate(ticketPath(n.ticketId))
   }
 
   return (
