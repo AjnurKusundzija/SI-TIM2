@@ -134,13 +134,13 @@ export default function TicketDetail() {
     }, [id])
 
     useEffect(() => {
-        if (ticket?.status !== 'CLOSURE_REQUESTED') {
-            setTimeLeft('')
-            setTimeLeftMs(null)
-            return
-        }
-
         const updateTimer = () => {
+            if (ticket?.status !== 'CLOSURE_REQUESTED') {
+                setTimeLeft('')
+                setTimeLeftMs(null)
+                return
+            }
+
             const clientComments = comments.filter(c => c.authorRole === 'CLIENT')
             const lastCommentDate = clientComments.length > 0
                 ? new Date(Math.max(...clientComments.map(c => new Date(c.dateTime))))
@@ -166,11 +166,7 @@ export default function TicketDetail() {
 
         updateTimer()
         const interval = setInterval(updateTimer, 60000)
-        return () => {
-            clearInterval(interval)
-            setTimeLeft('')
-            setTimeLeftMs(null)
-        }
+        return () => clearInterval(interval)
     }, [ticket, comments])
 
     useEffect(() => {

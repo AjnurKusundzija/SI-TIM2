@@ -235,29 +235,32 @@ export default function Statistics() {
         </div>
       ) : (
         <>
-          {/* Opterećenje — stat cards + donut chart */}
+          {/* Stat cards — uniform grid */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Opterećenje
-            </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4 content-start">
-                {statCards.slice(0, 3).map((card) => (
-                  <StatCard key={card.label} {...card} />
-                ))}
-              </div>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Pregled</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {statCards.map((card) => (
+                <StatCard key={card.label} {...card} />
+              ))}
+            </div>
+          </div>
 
+          {/* Charts — side by side */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Grafovi</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Donut chart */}
-              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col items-center justify-center">
-                <p className="text-sm font-semibold text-gray-700 mb-3">Distribucija tiketa</p>
-                <ResponsiveContainer width="100%" height={180}>
+              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <p className="text-sm font-semibold text-gray-700 mb-1">Distribucija tiketa</p>
+                <p className="text-xs text-gray-400 mb-3">Ukupno: {totalTickets}</p>
+                <ResponsiveContainer width="100%" height={200}>
                   <PieChart>
                     <Pie
                       data={distributionData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={48}
-                      outerRadius={72}
+                      innerRadius={52}
+                      outerRadius={80}
                       paddingAngle={3}
                       dataKey="value"
                     >
@@ -273,28 +276,14 @@ export default function Statistics() {
                     />
                   </PieChart>
                 </ResponsiveContainer>
-                <p className="text-xs text-gray-400 mt-1">Ukupno: {totalTickets}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Performanse — stat cards + bar chart */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Performanse
-            </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 content-start">
-                {statCards.slice(3).map((card) => (
-                  <StatCard key={card.label} {...card} />
-                ))}
               </div>
 
-              {/* Bar chart — response times in minutes */}
-              {perfData.length > 0 && (
+              {/* Bar chart */}
+              {perfData.length > 0 ? (
                 <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                  <p className="text-sm font-semibold text-gray-700 mb-3">Vremena odgovora (min)</p>
-                  <ResponsiveContainer width="100%" height={160}>
+                  <p className="text-sm font-semibold text-gray-700 mb-1">Vremena odgovora</p>
+                  <p className="text-xs text-gray-400 mb-3">Vrijednosti u minutama</p>
+                  <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={perfData} barCategoryGap="40%">
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
                       <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
@@ -303,7 +292,10 @@ export default function Statistics() {
                       <Bar dataKey="vrijednost" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
-                  <p className="text-xs text-gray-400 mt-2 text-center">Vrijednosti u minutama</p>
+                </div>
+              ) : (
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-center justify-center text-sm text-gray-400">
+                  Nema dovoljno podataka za grafikon.
                 </div>
               )}
             </div>
