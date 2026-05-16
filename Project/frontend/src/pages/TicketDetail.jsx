@@ -38,6 +38,10 @@ import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
 import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/common/Modal'
+import { formatDateTime } from '../utils/formatDate'
+
+const MAX_COMMENT_LENGTH = 1000
+
 function RatingScale({ value, onChange, readonly = false }) {
     const labels = ['Odaberite ocjenu', 'MOGLO BI BOLJE', 'ISPOD PROSJEKA', 'NORMALNO', 'DOBRO', 'ODLIČNO']
 
@@ -224,7 +228,7 @@ export default function TicketDetail() {
                 setError('Nije moguće učitati detalje tiketa.')
             })
             .finally(() => setLoading(false))
-    }, [id])
+    }, [id, user?.role])
 
     useEffect(() => {
         const updateTimer = () => {
@@ -535,6 +539,11 @@ export default function TicketDetail() {
     const title = ticket.title || 'Bez naslova'
     const category = ticket.problemCategory
     const createdDate = formatDateTime(ticket.createdDate)
+    const countdownClass = timeLeftMs !== null && timeLeftMs <= 0
+        ? 'bg-red-50 text-red-700 border-red-100'
+        : timeLeftMs !== null && timeLeftMs <= 86400000
+            ? 'bg-amber-50 text-amber-700 border-amber-100'
+            : 'bg-gray-50 text-gray-600 border-gray-100'
 
     const clientName = ticket.clientName || 'Klijent'
     const agentName = ticket.assignedAgentName || 'Nije dodijeljen'
