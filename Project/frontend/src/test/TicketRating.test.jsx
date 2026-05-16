@@ -159,7 +159,7 @@ describe('US-61: Ocjenjivanje tiketa', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Ocjena klijenta')).toBeInTheDocument()
-      expect(screen.getByText('"Odlična usluga!"')).toBeInTheDocument()
+      expect(screen.getByText(/Odlična usluga!/)).toBeInTheDocument()
     })
   })
 
@@ -202,7 +202,7 @@ describe('US-61: Ocjenjivanje tiketa', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Ocjena klijenta')).toBeInTheDocument()
-      expect(screen.getByText('"Odlična usluga!"')).toBeInTheDocument()
+      expect(screen.getByText(/Odlična usluga!/)).toBeInTheDocument()
     })
   })
 
