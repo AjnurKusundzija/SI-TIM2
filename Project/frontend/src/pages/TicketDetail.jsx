@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
     ArrowLeft,
@@ -31,43 +31,154 @@ import {
     acceptTicketClosure,
     rejectTicketClosure,
     forceCloseTicket,
+    getTicketRating,
+    createTicketRating,
 } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
+import ConfirmDialog from '../components/common/ConfirmDialog'
 import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/common/Modal'
-import ConfirmDialog from '../components/common/ConfirmDialog'
 import { formatDateTime } from '../utils/formatDate'
 
-const MAX_COMMENT_LENGTH = 2000
-
-// ---------- skeleton ----------
+const MAX_COMMENT_LENGTH = 1000
 
 function TicketDetailSkeleton() {
     return (
-        <div className="max-w-5xl mx-auto space-y-5 animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-32" />
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="h-6 bg-gray-200 rounded w-64 mb-2" />
-                <div className="h-3 bg-gray-100 rounded w-20 mb-6" />
-                <div className="border-t border-gray-100 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="h-4 bg-gray-200 rounded w-36" />
-                    <div className="h-4 bg-gray-200 rounded w-32" />
-                    <div className="h-4 bg-gray-200 rounded w-40" />
+        <div className="max-w-5xl mx-auto space-y-5">
+            <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+
+            <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    <div className="space-y-2">
+                        <div className="h-6 w-64 bg-gray-200 rounded animate-pulse" />
+                        <div className="h-3 w-24 bg-gray-100 rounded animate-pulse" />
+                    </div>
+                    <div className="flex gap-2">
+                        <div className="h-6 w-20 bg-gray-100 rounded-full animate-pulse" />
+                        <div className="h-6 w-20 bg-gray-100 rounded-full animate-pulse" />
+                    </div>
                 </div>
-            </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="h-4 bg-gray-200 rounded w-28 mb-6" />
-                <div className="space-y-5">
-                    {[1, 2, 3].map((i) => (
-                        <div key={i} className="flex gap-3">
-                            <div className="w-9 h-9 rounded-full bg-gray-200 flex-shrink-0" />
-                            <div className="flex-1">
-                                <div className="h-3.5 bg-gray-200 rounded w-32 mb-2" />
-                                <div className="h-3 bg-gray-100 rounded w-full mb-1" />
-                                <div className="h-3 bg-gray-100 rounded w-3/4" />
-                            </div>
+
+                <div className="border-t border-gray-100 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {[0, 1, 2].map((item) => (
+                        <div key={item} className="h-4 bg-gray-100 rounded animate-pulse" />
+                    ))}
+                </div>
+            </section>
+
+            <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+                <div className="h-5 w-36 bg-gray-200 rounded animate-pulse" />
+                {[0, 1, 2].map((item) => (
+                    <div key={item} className="flex gap-3">
+                        <div className="w-9 h-9 rounded-full bg-gray-100 animate-pulse" />
+                        <div className="flex-1 space-y-2">
+                            <div className="h-4 w-40 bg-gray-100 rounded animate-pulse" />
+                            <div className="h-4 w-full bg-gray-100 rounded animate-pulse" />
                         </div>
+                    </div>
+                ))}
+            </section>
+        </div>
+    )
+}
+
+function RatingScale({ value, onChange, readonly = false }) {
+    const labels = ['Odaberite ocjenu', 'MOGLO BI BOLJE', 'ISPOD PROSJEKA', 'NORMALNO', 'DOBRO', 'ODLIČNO']
+
+    const mouthPath = [
+        'M 32 63 L 68 63',
+        'M 32 66 Q 50 52 68 66',
+        'M 32 65 Q 50 57 68 65',
+        'M 32 63 L 68 63',
+        'M 32 60 Q 50 72 68 60',
+        'M 30 58 Q 50 78 70 58',
+    ]
+
+    const safeValue = value >= 0 && value <= 5 ? value : 0
+    const trackRef = useRef(null)
+    const dragging = useRef(false)
+
+    const getValueFromX = (clientX) => {
+        const rect = trackRef.current?.getBoundingClientRect()
+        if (!rect) return safeValue
+        const pad = 12 // matches px-3 on the container
+        const ratio = Math.max(0, Math.min(1, (clientX - rect.left - pad) / (rect.width - pad * 2)))
+        return Math.round(ratio * 4) + 1
+    }
+
+    const handlePointerDown = (e) => {
+        if (readonly) return
+        dragging.current = true
+        e.currentTarget.setPointerCapture(e.pointerId)
+        onChange?.(getValueFromX(e.clientX))
+    }
+
+    const handlePointerMove = (e) => {
+        if (!dragging.current || readonly) return
+        onChange?.(getValueFromX(e.clientX))
+    }
+
+    const handlePointerUp = () => { dragging.current = false }
+
+    return (
+        <div className="flex flex-col items-center gap-4 w-full py-2">
+            <p className="text-xs font-bold tracking-widest text-navy-700 uppercase min-h-[18px]">
+                {labels[safeValue]}
+            </p>
+
+            <svg
+                viewBox="0 0 100 100"
+                className="w-32 h-32 text-navy-700"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="4.5"
+                strokeLinecap="round"
+            >
+                <circle cx="50" cy="50" r="44" />
+                <circle cx="35" cy="38" r="4" fill="currentColor" stroke="none" />
+                <circle cx="65" cy="38" r="4" fill="currentColor" stroke="none" />
+                <path d={mouthPath[safeValue]} />
+            </svg>
+
+            <div
+                ref={trackRef}
+                className={`w-full relative select-none mt-1 py-3 px-3 ${readonly ? '' : 'cursor-pointer'}`}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerUp}
+            >
+                <div className="absolute left-3 right-3 h-[3px] bg-gray-200 rounded-full top-[21px]" />
+
+                <div className="relative h-[24px]">
+                    {[1, 2, 3, 4, 5].map((n) => {
+                        const isSelected = n === safeValue
+                        return (
+                            <div
+                                key={n}
+                                style={{ left: `${(n - 1) * 25}%` }}
+                                className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full transition-all duration-150 z-10 pointer-events-none ${
+                                    isSelected
+                                        ? 'w-6 h-6 bg-navy-700 shadow-md ring-2 ring-navy-200'
+                                        : 'w-3 h-3 bg-gray-300'
+                                }`}
+                            />
+                        )
+                    })}
+                </div>
+
+                <div className="relative h-6 mt-2">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                        <span
+                            key={n}
+                            style={{ left: `${(n - 1) * 25}%` }}
+                            className={`absolute -translate-x-1/2 text-sm font-semibold transition-colors pointer-events-none ${
+                                n === safeValue ? 'text-navy-700' : 'text-gray-400'
+                            }`}
+                        >
+                            {n}
+                        </span>
                     ))}
                 </div>
             </div>
@@ -108,6 +219,23 @@ export default function TicketDetail() {
     // Confirm dialog state
     const [confirmCloseOpen, setConfirmCloseOpen] = useState(false)
 
+    // US-61: Rating states
+    const [rating, setRating] = useState(undefined) // undefined = not fetched yet, null = no rating
+    const [ratingModalDismissed, setRatingModalDismissed] = useState(false)
+    const [ratingValue, setRatingValue] = useState(0)
+    const [ratingComment, setRatingComment] = useState('')
+    const [ratingLoading, setRatingLoading] = useState(false)
+    const [ratingError, setRatingError] = useState(null)
+    const [ratingSuccess, setRatingSuccess] = useState(false)
+
+    // US-61: Modal je otvoren kada klijent ima zatvoren tiket bez ocjene (izvedena vrijednost, nema useEffect)
+    const ratingModalOpen = (
+        ticket?.status === 'CLOSED' &&
+        user?.role === 'CLIENT' &&
+        rating === null &&
+        !ratingModalDismissed
+    ) || ratingSuccess
+
     const INTERNAL_PRIORITIES = [
         { value: 1, key: 'LOW', label: 'Nizak' },
         { value: 2, key: 'MEDIUM', label: 'Srednji' },
@@ -125,13 +253,23 @@ export default function TicketDetail() {
             .then(([fetchedTicket, fetchedComments]) => {
                 setTicket(fetchedTicket)
                 setComments(fetchedComments)
+
+                // US-61: Učitaj ocjenu za zatvorene tikete (CLIENT, AGENT, ADMINISTRATOR)
+                if (
+                    fetchedTicket.status === 'CLOSED' &&
+                    (user?.role === 'CLIENT' || user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR')
+                ) {
+                    return getTicketRating(ticketId)
+                        .then(fetchedRating => { setRating(fetchedRating) })
+                        .catch(() => setRating(null))
+                }
             })
             .catch((err) => {
                 console.error(err)
                 setError('Nije moguće učitati detalje tiketa.')
             })
             .finally(() => setLoading(false))
-    }, [id])
+    }, [id, user?.role])
 
     useEffect(() => {
         const updateTimer = () => {
@@ -320,6 +458,10 @@ export default function TicketDetail() {
             const updatedTicket = await getTicketById(Number(id))
             setTicket(updatedTicket)
             setClosureNotification({ type: 'success', message: 'Tiket je uspješno zatvoren.' })
+            if (user?.role === 'CLIENT') {
+                const currentRating = await getTicketRating(Number(id)).catch(() => null)
+                setRating(currentRating)
+            }
         } catch (err) {
             console.error(err)
             setClosureNotification({ type: 'error', message: err.response?.data?.poruka || 'Greška pri zatvaranju tiketa.' })
@@ -352,6 +494,10 @@ export default function TicketDetail() {
             const updatedTicket = await getTicketById(Number(id))
             setTicket(updatedTicket)
             setClosureNotification({ type: 'success', message: 'Zatvaranje tiketa je prihvaćeno.' })
+            if (user?.role === 'CLIENT') {
+                const currentRating = await getTicketRating(Number(id)).catch(() => null)
+                setRating(currentRating)
+            }
         } catch (err) {
             console.error(err)
             setClosureNotification({ type: 'error', message: err.response?.data?.poruka || 'Greška pri prihvaćanju zahtjeva.' })
@@ -393,14 +539,24 @@ export default function TicketDetail() {
         }
     }
 
-    // Determine countdown urgency color based on time remaining
-    const countdownClass = (() => {
-        if (timeLeftMs === null) return ''
-        if (timeLeftMs <= 0) return 'text-red-700 bg-red-50 border-red-200'
-        if (timeLeftMs <= 86400000) return 'text-red-600 bg-red-50 border-red-200'    // < 1 day
-        if (timeLeftMs <= 259200000) return 'text-amber-600 bg-amber-50 border-amber-200' // < 3 days
-        return 'text-amber-600 bg-amber-50 border-amber-100'
-    })()
+    // US-61: Slanje ocjene
+    const handleSubmitRating = async () => {
+        if (!ratingValue) return
+        setRatingLoading(true)
+        setRatingError(null)
+        try {
+            const newRating = await createTicketRating(Number(id), {
+                ratingValue,
+                ratingComment: ratingComment || '',
+            })
+            setRating(newRating)
+            setRatingSuccess(true)
+        } catch (err) {
+            setRatingError(err.response?.data?.poruka || 'Greška pri slanju ocjene.')
+        } finally {
+            setRatingLoading(false)
+        }
+    }
 
     const forwardModalTitle = {
         choice: 'Proslijedi tiket',
@@ -424,6 +580,11 @@ export default function TicketDetail() {
     const title = ticket.title || 'Bez naslova'
     const category = ticket.problemCategory
     const createdDate = formatDateTime(ticket.createdDate)
+    const countdownClass = timeLeftMs !== null && timeLeftMs <= 0
+        ? 'bg-red-50 text-red-700 border-red-100'
+        : timeLeftMs !== null && timeLeftMs <= 86400000
+            ? 'bg-amber-50 text-amber-700 border-amber-100'
+            : 'bg-gray-50 text-gray-600 border-gray-100'
 
     const clientName = ticket.clientName || 'Klijent'
     const agentName = ticket.assignedAgentName || 'Nije dodijeljen'
@@ -729,7 +890,118 @@ export default function TicketDetail() {
                 </div>
             </section>
 
-            {/* Forward ticket modal */}
+            {/* US-61: Poziv na ocjenjivanje za CLIENT (bez ocjene) */}
+            {ticket.status === 'CLOSED' && user?.role === 'CLIENT' && rating === null && (
+                <section className="bg-navy-50 rounded-xl border border-navy-100 p-5 flex items-center justify-between gap-4">
+                    <div>
+                        <p className="text-sm font-semibold text-navy-800">Ocijenite pruženu uslugu</p>
+                        <p className="text-xs text-navy-600 mt-0.5">Vaše mišljenje nam pomaže da unaprijedimo kvalitet usluge.</p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setRatingModalDismissed(false)}
+                        className="flex-shrink-0 px-4 py-2 bg-navy-700 hover:bg-navy-800 text-white text-sm font-medium rounded-lg transition-colors"
+                    >
+                        Ocijeni uslugu
+                    </button>
+                </section>
+            )}
+
+            {/* US-61: Read-only prikaz ocjene za Agent i Administrator */}
+            {ticket.status === 'CLOSED' &&
+                (user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR') &&
+                rating && (
+                    <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-sm font-semibold text-gray-900">Ocjena klijenta</span>
+                        </div>
+                        <RatingScale value={rating.ratingValue} readonly />
+                        {rating.ratingComment && (
+                            <p className="mt-3 text-sm text-gray-600 italic text-center">
+                                &ldquo;{rating.ratingComment}&rdquo;
+                            </p>
+                        )}
+                        <p className="mt-1 text-xs text-gray-400 text-center">
+                            {new Date(rating.ratingDate).toLocaleString('bs-BA')}
+                        </p>
+                    </section>
+                )}
+
+            {/* US-61: Modal za ocjenjivanje tiketa (CLIENT) */}
+            <Modal
+                isOpen={ratingModalOpen}
+                onClose={() => { setRatingModalDismissed(true); setRatingSuccess(false) }}
+                title={ratingSuccess ? 'Hvala!' : 'Ocijenite uslugu'}
+                size="sm"
+            >
+                {ratingSuccess ? (
+                    <div className="text-center space-y-5 py-4">
+                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                            <CheckCircle size={32} className="text-green-600" />
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-base font-semibold text-gray-900">Hvala na ocjeni!</p>
+                            <p className="text-sm text-gray-500">
+                                Cijenimo vaše mišljenje i koristit ćemo ga za poboljšanje kvaliteta usluge.
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => { setRatingModalDismissed(true); setRatingSuccess(false) }}
+                            className="px-5 py-2 bg-navy-700 hover:bg-navy-800 text-white text-sm font-medium rounded-lg transition-colors"
+                        >
+                            Zatvori
+                        </button>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        <p className="text-sm text-gray-500 text-center">
+                            Vaš tiket je zatvoren. Ocijenite kvalitet pružene usluge. Vaše mišljenje nam je bitno.
+                        </p>
+
+                        <RatingScale value={ratingValue} onChange={setRatingValue} />
+
+                        <div>
+                            <p className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">
+                                Komentar (opcionalno)
+                            </p>
+                            <textarea
+                                value={ratingComment}
+                                onChange={(e) => setRatingComment(e.target.value)}
+                                rows={3}
+                                placeholder="Podijelite vaše iskustvo..."
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none resize-none"
+                            />
+                        </div>
+
+                        {ratingError && (
+                            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                                {ratingError}
+                            </p>
+                        )}
+
+                        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                            <button
+                                type="button"
+                                onClick={() => setRatingModalDismissed(true)}
+                                className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                            >
+                                Kasnije
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleSubmitRating}
+                                disabled={!ratingValue || ratingLoading}
+                                className="px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+                            >
+                                {ratingLoading ? 'Slanje...' : 'Pošalji ocjenu'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </Modal>
+
+            {/* US-55, US-56: Modalni prozor za prosljeđivanje tiketa */}
             <Modal
                 isOpen={forwardModalOpen}
                 onClose={handleCloseForward}

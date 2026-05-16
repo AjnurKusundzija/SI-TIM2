@@ -128,6 +128,7 @@ builder.Services.AddScoped<INotificationPusher, NotificationPusher>();
 builder.Services.AddScoped<IChatPusher, ChatPusher>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFaqService, FaqService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 
 var app = builder.Build();
 

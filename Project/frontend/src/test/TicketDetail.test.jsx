@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   getTicketById: vi.fn(),
   getTicketComments: vi.fn(),
   addComment: vi.fn(),
+  getTicketRating: vi.fn(),
   useAuth: vi.fn(),
   HubConnectionBuilder: vi.fn(),
 }))
@@ -14,6 +15,18 @@ vi.mock('../services/ticketService', () => ({
   getTicketById: mocks.getTicketById,
   getTicketComments: mocks.getTicketComments,
   addComment: mocks.addComment,
+  getTicketRating: mocks.getTicketRating,
+  createTicketRating: vi.fn(),
+  closeTicket: vi.fn(),
+  requestTicketClosure: vi.fn(),
+  acceptTicketClosure: vi.fn(),
+  rejectTicketClosure: vi.fn(),
+  forceCloseTicket: vi.fn(),
+  autoForwardTicket: vi.fn(),
+  forwardTicketToAgent: vi.fn(),
+  getAgentScores: vi.fn(),
+  forwardTicketToTechnician: vi.fn(),
+  updateInternalPriority: vi.fn(),
 }))
 
 vi.mock('../context/AuthContext', () => ({
@@ -88,6 +101,7 @@ function renderTicketDetail(user = CLIENT_USER, ticketId = '1') {
 describe('TicketDetail page — PB-24, PB-27', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mocks.getTicketRating.mockResolvedValue(null)
   })
 
   // PB-24 / US-14: detalji tiketa se prikazuju nakon učitavanja
