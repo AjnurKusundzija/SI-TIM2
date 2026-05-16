@@ -30,5 +30,11 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
         Task AddAssignmentAsync(TicketUser assignment);
 
         Task UpdateAsync(Ticket ticket);
+
+        // PB-42: Svi tiketi gdje je korisnik posljednji dodjeljeni (svi statusi), s komentarima i ocjenama
+        Task<IEnumerable<Ticket>> GetAssignedTicketsForStatsAsync(int userId);
+
+        // Dashboard: N najrecentnijih tiketa sortiranih po zadnjoj aktivnosti
+        Task<IEnumerable<Ticket>> GetRecentAssignedTicketsAsync(int userId, int count);
     }
 }

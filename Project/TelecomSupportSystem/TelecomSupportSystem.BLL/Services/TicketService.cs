@@ -4,6 +4,7 @@ using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
+using NotificationType = TelecomSupportSystem.DAL.Entities.Enums.NotificationType;
 
 namespace TelecomSupportSystem.BLL.Services
 {
@@ -12,15 +13,18 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ITicketRepository _ticketRepository;
         private readonly ITeamRepository _teamRepository;
         private readonly IUserRepository _userRepository;
+        private readonly INotificationService _notificationService;
 
         public TicketService(
             ITicketRepository ticketRepository,
             ITeamRepository teamRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            INotificationService notificationService)
         {
-            _ticketRepository = ticketRepository;
-            _teamRepository   = teamRepository;
-            _userRepository   = userRepository;
+            _ticketRepository    = ticketRepository;
+            _teamRepository      = teamRepository;
+            _userRepository      = userRepository;
+            _notificationService = notificationService;
         }
 
         // US-11: Dohvata tikete iz repozitorija i mapira ih u DTO.
@@ -120,6 +124,13 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosedDate = DateTime.Now;
             ticket.ClosedById = userId;
             await _ticketRepository.UpdateAsync(ticket);
+
+            if (role != "CLIENT")
+                await _notificationService.SendNotificationAsync(
+                    ticket.CreatorId,
+                    "Tiket zatvoren",
+                    $"Vaš tiket \"{ticket.Title}\" je zatvoren.",
+                    NotificationType.TICKET_CLOSED);
         }
 
         public async Task RequestClosureAsync(int ticketId, int userId, string role)
@@ -139,6 +150,12 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosureRequestStatus = ClosureRequestStatus.PENDING;
 
             await _ticketRepository.UpdateAsync(ticket);
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Promjena statusa tiketa",
+                $"Status vašeg tiketa \"{ticket.Title}\" je promijenjen na 'Čeka zatvaranje'.",
+                NotificationType.STATUS_CHANGED);
         }
 
         public async Task AcceptClosureAsync(int ticketId, int userId)
@@ -158,6 +175,7 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosureRequestStatus = ClosureRequestStatus.ACCEPTED;
 
             await _ticketRepository.UpdateAsync(ticket);
+            // Klijent sam prihvata zatvaranje — ne šaljemo mu notifikaciju o vlastitoj akciji
         }
 
         public async Task RejectClosureAsync(int ticketId, int userId)
@@ -205,6 +223,12 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosureRequestStatus = ClosureRequestStatus.EXPIRED;
 
             await _ticketRepository.UpdateAsync(ticket);
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Tiket zatvoren",
+                $"Vaš tiket \"{ticket.Title}\" je zatvoren.",
+                NotificationType.TICKET_CLOSED);
         }
 
         // PB-32: Lista tiketa filtrirana prema roli — AGENT/ADMIN vide sve, TECHNICIAN samo dodijeljene
@@ -368,6 +392,13 @@ namespace TelecomSupportSystem.BLL.Services
                 ticket.TeamId = targetAgent.TeamId;
 
             await _ticketRepository.AddAssignmentAsync(newAssignment);
+
+            await _notificationService.SendNotificationAsync(
+                targetAgent.UserId,
+                "Tiket je proslijeđen vama",
+                $"Tiket \"{ticket.Title}\" je proslijeđen vama.",
+                NotificationType.TICKET_FORWARDED);
+
             return newAssignment;
         }
 
@@ -474,6 +505,12 @@ namespace TelecomSupportSystem.BLL.Services
 
             await _ticketRepository.AddAssignmentAsync(newAssignment);
 
+            await _notificationService.SendNotificationAsync(
+                bestTech.UserId,
+                "Tiket je proslijeđen vama",
+                $"Tiket \"{ticket.Title}\" je proslijeđen vama.",
+                NotificationType.TICKET_FORWARDED);
+
             return new AgentScoreDto
             {
                 UserId = bestTech.UserId,
@@ -537,6 +574,12 @@ namespace TelecomSupportSystem.BLL.Services
                     });
 
                     assignedAgentName = $"{bestAgent.FirstName} {bestAgent.LastName}";
+
+                    await _notificationService.SendNotificationAsync(
+                        bestAgent.UserId,
+                        "Dodijeljen vam je tiket",
+                        $"Tiket \"{ticket.Title}\" vam je dodijeljen.",
+                        NotificationType.TICKET_ASSIGNED);
                 }
             }
 

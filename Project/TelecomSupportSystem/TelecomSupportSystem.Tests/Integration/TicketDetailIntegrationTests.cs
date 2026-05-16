@@ -2,10 +2,12 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System.Security.Claims;
 using TelecomSupportSystem.API.Controllers;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
@@ -25,7 +27,7 @@ namespace TelecomSupportSystem.Tests.Integration
         private static TicketController CreateController(ApplicationDbContext context, int userId, string role)
         {
             var repo = new TicketRepository(context);
-            var service = new TicketService(repo, new TeamRepository(context), new UserRepository(context));
+            var service = new TicketService(repo, new TeamRepository(context), new UserRepository(context), new Mock<INotificationService>().Object);
             var controller = new TicketController(service);
 
             var claims = new List<Claim>

@@ -11,6 +11,7 @@ using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Comments;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
@@ -31,7 +32,8 @@ namespace TelecomSupportSystem.Tests.System
             var controller = new TicketController(new TicketService(
                 new TicketRepository(context),
                 new TeamRepository(context),
-                new UserRepository(context)));
+                new UserRepository(context),
+                new Mock<INotificationService>().Object));
 
             SetUser(controller, userId, role);
             return controller;
@@ -41,7 +43,8 @@ namespace TelecomSupportSystem.Tests.System
         {
             var controller = new CommentController(new CommentService(
                 new CommentRepository(context),
-                new TicketRepository(context)));
+                new TicketRepository(context),
+                new Mock<INotificationService>().Object));
 
             SetUser(controller, userId, role);
             return controller;

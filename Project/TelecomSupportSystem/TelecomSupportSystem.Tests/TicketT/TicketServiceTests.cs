@@ -3,6 +3,7 @@ using Moq;
 using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
@@ -15,11 +16,12 @@ namespace TelecomSupportSystem.Tests.Tickets
         private readonly Mock<ITicketRepository> _ticketRepositoryMock = new();
         private readonly Mock<ITeamRepository> _teamRepoMock = new();
         private readonly Mock<IUserRepository> _userRepoMock = new();
+        private readonly Mock<INotificationService> _notificationServiceMock = new();
         private readonly TicketService _ticketService;
 
         public TicketServiceTests()
         {
-            _ticketService = new TicketService(_ticketRepositoryMock.Object, _teamRepoMock.Object, _userRepoMock.Object);
+            _ticketService = new TicketService(_ticketRepositoryMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object);
         }
 
         // ─── Helpers ─────────────────────────────────────────────────────────────

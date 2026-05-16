@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Moq;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
@@ -12,11 +13,12 @@ namespace TelecomSupportSystem.Tests.Communication
     {
         private readonly Mock<ICommentRepository> _commentRepoMock = new();
         private readonly Mock<ITicketRepository> _ticketRepoMock = new();
+        private readonly Mock<INotificationService> _notificationServiceMock = new();
         private readonly CommentService _service;
 
         public CommentServiceTests()
         {
-            _service = new CommentService(_commentRepoMock.Object, _ticketRepoMock.Object);
+            _service = new CommentService(_commentRepoMock.Object, _ticketRepoMock.Object, _notificationServiceMock.Object);
         }
 
         private static User MakeUser(int id = 1, Role role = Role.CLIENT) => new()

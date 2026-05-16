@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace TelecomSupportSystem.BLL.DTOs.Notification
 {
-    internal class GetNotifcationDto
+    public class GetNotifcationDto
     {
+        public int NotificationId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
+        public string NotificationType { get; set; } = string.Empty;
+        public DateTime SentDate { get; set; }
+        public bool IsRead { get; set; }
     }
 }

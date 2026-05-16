@@ -11,6 +11,8 @@ using TelecomSupportSystem.DAL.Repositories;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.API.Hubs;
+using TelecomSupportSystem.API.Workers;
 
 DotNetEnv.Env.Load(".env", new DotNetEnv.LoadOptions(clobberExistingVars: false));
 DotNetEnv.Env.Load("../../.env", new DotNetEnv.LoadOptions(clobberExistingVars: false));
@@ -61,6 +63,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
+        // SignalR sends JWT via query string
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/notificationhub"))
+                    context.Token = accessToken;
+                return Task.CompletedTask;
+            }
+        };
     });
 
 //for REACT frontent port: 5173
@@ -110,6 +124,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<INotificationPusher, NotificationPusher>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFaqService, FaqService>();
 
@@ -440,6 +455,7 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<TelecomSupportSystem.API.Hubs.ChatHub>("/chathub");
+app.MapHub<ChatHub>("/chathub");
+app.MapHub<NotificationHub>("/notificationhub");
 
 app.Run();
