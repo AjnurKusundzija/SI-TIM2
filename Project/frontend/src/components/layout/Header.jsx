@@ -36,6 +36,7 @@ export default function Header({ onMenuToggle, title }) {
   async function handleNotificationClick(n) {
     if (!n.isRead) await markAsRead(n.notificationId)
     setOpen(false)
+    // TODO: navigiraj na odgovarajući tiket (potrebno dodati ticketId u Notification entitet i DTO)
   }
 
   return (

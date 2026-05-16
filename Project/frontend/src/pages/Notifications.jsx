@@ -63,7 +63,8 @@ export default function Notifications() {
           {notifications.map((n) => (
             <div
               key={n.notificationId}
-              onClick={() => { if (!n.isRead) markAsRead(n.notificationId) }}
+              // TODO: dodati ticketId u Notification entitet i DTO kako bi klik redirectao na odgovarajući tiket
+          onClick={() => { if (!n.isRead) markAsRead(n.notificationId) }}
               className={`flex items-start gap-4 px-5 py-4 border-b border-gray-50 last:border-0 transition-colors ${
                 !n.isRead ? 'bg-blue-50/50 cursor-pointer hover:bg-blue-50' : 'cursor-default'
               }`}
