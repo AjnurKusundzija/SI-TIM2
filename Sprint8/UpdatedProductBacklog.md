@@ -43,7 +43,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Done        | Sprint 5    |
 | [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Done        | Sprint 6    |
 | [PB-25](#pb-25) | Zatvaranje tiketa                        | Feature        |     1     |     L     | Done        | Sprint 7    |
-| [PB-26](#pb-26) | Ocjenjivanje tiketa                      | Feature        |     5     |     S     | To-Do       | Sprint 8    |
+| [PB-26](#pb-26) | Ocjenjivanje tiketa                      | Feature        |     5     |     S     | Done        | Sprint 8    |
 | [PB-27](#pb-27) | Komunikacija kroz tiket                  | Feature        |     1     |     M     | Done        | Sprint 6    |
 | [PB-28](#pb-28) | Upravljanje prioritetima tiketa          | Feature        |     2     |     M     | Done        | Sprint 7    |
 | [PB-29](#pb-29) | Preraspodjela agenata po timovima        | Feature        |     1     |     M     | Backlog     | Sprint 10   |
