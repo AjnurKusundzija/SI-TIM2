@@ -70,3 +70,21 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Sta je tim odbacio | Prijedlog za zasebnu "Historija dodjela" sekciju na tiketu — ocijenjeno kao prekomplicirana opcija koja zahtijeva novi UI element i endpoint, dok sistemske poruke u chatu postižu isti cilj jednostavnijim putem. |
 | Rizici, problemi ili greske koje su uocene | Perl `sed` zamjena za ažuriranje test konstruktora bila je previše agresivna — slučajno je dodala `new Mock<ICommentService>().Object` i u `CommentService` konstruktor u `Sprint7UserStoriesSystemTests.cs` (koji prima samo 3 parametra). Otkriveno pri `dotnet build` i ručno ispravljeno. FK relacija `Comment.AuthorId → User.UserId` ostaje kao opcionalna veza u EF Core konfiguraciji bez izmjena u `AppDbContext.cs` jer EF Core automatski tretira nullable FK kao opcionalu relaciju. |
 | Ko je koristio alat | Uma Mahmutović |
+
+---
+
+## Unos #4
+
+| Polje | Detalji |
+|---|---|
+| Datum | 17.05.2026 |
+| Sprint broj | Sprint 8 |
+| Alat koji je koristen | Claude Code (claude-opus-4-7) |
+| Svrha koristenja | Implementacija PB-26: Ocjenjivanje tiketa |
+| Kratak opis zadatka ili upita | Implementirati funkcionalnost koja korisniku omogucava da nakon zatvaranja tiketa ocijeni kvalitet rjesenja na skali od 1 do 5 i opcionalno ostavi komentar, uz prikaz ocjene agentu i administratoru na zatvorenom tiketu. |
+| Sta je AI predlozio ili generisao | Backend: prosirenje postojeceg `Rating` modela i repozitorija/servisa za cuvanje ocjene vezane za tiket, validacije da se moze ocijeniti samo zatvoren tiket, da korisnik moze ocijeniti samo vlastiti tiket i da isti tiket ne moze biti ocijenjen vise puta. Predlozeni su API endpointi za dodavanje i dohvat ocjene, DTO strukture za request/response i mapiranje ocjene u detaljni prikaz tiketa. Frontend: prikaz forme za ocjenjivanje na `TicketDetail` stranici samo za klijenta i samo kada je tiket zatvoren, `StarRating` komponenta za izbor ocjene 1-5, opcionalno polje za komentar, success/error poruke i prikaz postojece ocjene agentu/adminu. |
+| Sta je tim prihvatio | Osnovnu backend arhitekturu sa servisnom validacijom, povezivanje ocjene sa zatvorenim tiketom, ogranicenje na jednu ocjenu po tiketu, role-based prikaz forme i prikaz ocjene u detaljima tiketa. |
+| Sta je tim izmijenio | Nazivi DTO klasa, endpoint ruta i UI tekstovi prilagodjeni su postojecim konvencijama projekta. Frontend prikaz je uskladjen sa postojecim Tailwind stilovima i vec postojecom `StarRating` komponentom. |
+| Sta je tim odbacio | Prijedloge za anonimno ocjenjivanje i posebnu stranicu za sve ocjene, jer nisu dio trenutnog scope-a PB-26. Odbaceno je i omogucavanje izmjene ocjene nakon slanja, zbog acceptance kriterija da isti tiket ne smije biti ocijenjen vise puta. |
+| Rizici, problemi ili greske koje su uocene | Potrebno je pazljivo validirati vlasnistvo tiketa i status `Closed`, jer bi propust omogucio ocjenjivanje tudjih ili nezatvorenih tiketa. Postoji rizik od duplog slanja forme na frontendu, pa backend validacija jedinstvene ocjene ostaje obavezna zastita. |
+| Ko je koristio alat | Ajnur Kusundzija |
