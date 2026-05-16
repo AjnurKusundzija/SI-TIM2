@@ -1,5 +1,5 @@
-// PB-22: Kreiraj novi tiket
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { createTicket } from '../services/ticketService'
 import { CheckCircle } from 'lucide-react'
 
@@ -166,7 +166,13 @@ export default function CreateTicket() {
           {success && (
             <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700 flex items-center gap-2">
               <CheckCircle size={16} />
-              Tiket je uspješno kreiran!
+              <span>Tiket je uspješno kreiran!</span>
+              <Link
+                to="/mytickets"
+                className="ml-auto font-medium underline underline-offset-2 hover:text-emerald-900 whitespace-nowrap"
+              >
+                Pogledaj tikete →
+              </Link>
             </div>
           )}
 

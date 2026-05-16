@@ -4,17 +4,7 @@ import PropTypes from 'prop-types'
 import { Bell, Menu, X } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useNotifications } from '../../context/NotificationContext'
-
-function timeAgo(dateStr) {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const m = Math.floor(diff / 60000)
-  if (m < 1) return 'upravo'
-  if (m < 60) return `prije ${m} min`
-  const h = Math.floor(m / 60)
-  if (h < 24) return `prije ${h}h`
-  const d = Math.floor(h / 24)
-  return `prije ${d}d`
-}
+import { timeAgo } from '../../utils/formatDate'
 
 export default function Header({ onMenuToggle, title }) {
   const navigate = useNavigate()
@@ -122,6 +112,13 @@ export default function Header({ onMenuToggle, title }) {
                       </li>
                     ))}
                   </ul>
+                )}
+
+                {/* More indicator */}
+                {notifications.length > 5 && (
+                  <div className="px-4 py-2 text-center text-xs text-gray-400 border-t border-gray-50">
+                    i još {notifications.length - 5} notifikacija
+                  </div>
                 )}
 
                 {/* Footer */}
