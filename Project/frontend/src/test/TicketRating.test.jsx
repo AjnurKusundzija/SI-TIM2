@@ -213,7 +213,6 @@ describe('US-61: Ocjenjivanje tiketa', () => {
       .mockResolvedValueOnce(CLOSED_TICKET)
     mocks.closeTicket.mockResolvedValue(undefined)
     mocks.getTicketRating.mockResolvedValue(null)
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
 
     renderTicketDetail(CLIENT_USER)
 
@@ -222,6 +221,7 @@ describe('US-61: Ocjenjivanje tiketa', () => {
     })
 
     fireEvent.click(screen.getByText('Zatvori tiket'))
+    fireEvent.click(screen.getAllByRole('button', { name: 'Zatvori tiket' }).at(-1))
 
     await waitFor(() => {
       expect(screen.getByText('Ocijenite uslugu')).toBeInTheDocument()
