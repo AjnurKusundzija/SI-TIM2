@@ -31,7 +31,7 @@ namespace TelecomSupportSystem.Tests.Integration
         {
             var ticketRepo = new TicketRepository(context);
             var commentRepo = new CommentRepository(context);
-            var service = new CommentService(commentRepo, ticketRepo, new Mock<INotificationService>().Object);
+            var service = new CommentService(commentRepo, ticketRepo, new Mock<INotificationService>().Object, new Mock<IChatPusher>().Object);
             var controller = new CommentController(service);
 
             var claims = new List<Claim>

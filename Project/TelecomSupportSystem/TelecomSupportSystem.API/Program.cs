@@ -125,6 +125,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<INotificationPusher, NotificationPusher>();
+builder.Services.AddScoped<IChatPusher, ChatPusher>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFaqService, FaqService>();
 

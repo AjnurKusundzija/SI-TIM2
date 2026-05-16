@@ -59,14 +59,14 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-39](#pb-39) | Izvještaj po statusu tiketa              | Feature        |     5     |     M     | Backlog     | Sprint 11   |
 | [PB-40](#pb-40) | Izvještaj po tipu problema               | Feature        |     3     |     S     | Backlog     | Sprint 11   |
 | [PB-41](#pb-41) | Prosječno vrijeme rješavanja tiketa      | Feature        |     1     |     M     | Backlog     | Sprint 11   |
-| [PB-42](#pb-42) | Statistika agenta i tehničara            | Feature        |     2     |     M     | To-Do       | Sprint 8    |
+| [PB-42](#pb-42) | Statistika agenta i tehničara            | Feature        |     2     |     M     | Done        | Sprint 8    |
 | [PB-43](#pb-43) | Izvještaj o opterećenju agenata          | Feature        |     2     |     M     | Backlog     | Sprint 11   |
 | [PB-44](#pb-44) | Izvještaj o ocjenama korisnika           | Feature        |     2     |     S     | Backlog     | Sprint 11   |
 | [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama    | Feature        |     1     |     L     | Backlog     | Sprint 11   |
 | [PB-46](#pb-46) | Export izvještaja                        | Feature        |     5     |     S     | Backlog     | Sprint 11   |
 | [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Done        | Sprint 6    |
 | [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente | Feature | 1    |     M     | Done        | Sprint 7    |
-| [PB-49](#pb-49) | Notifikacije                             | Feature        |     1     |     L     | To-Do       | Sprint 8    |
+| [PB-49](#pb-49) | Notifikacije                             | Feature        |     1     |     L     | Done        | Sprint 8    |
 | [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature | 2  |     S     | Backlog     | Sprint 11   |
 
 ---
@@ -577,9 +577,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
-- **Status:** To-Do
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 8
-- **Napomena:** Redefinisano u Sprint 8 planiranju. Originalna metrika "Prosječno vrijeme prvog odgovora" za admin izvještaje evidentirana je kao PB-50.
+- **Napomena:** Redefinisano u Sprint 8 planiranju. Implementirano: backend `GET /api/user/my-statistics` endpoint, dedikirana stranica `/statistics`, te kondenzovani prikaz statistike i nedavnih tiketa na Dashboard-u za AGENT i TECHNICIAN role. Originalna metrika za admin izvještaje evidentirana je kao PB-50.
 
 ---
 
@@ -662,8 +662,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
-- **Status:** To-Do
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 8
+- **Napomena:** Implementirano: backend generisanje notifikacija za sve predviđene događaje (`TICKET_ASSIGNED`, `TICKET_FORWARDED`, `TICKET_RESPONSE`, `TICKET_CLOSED`, `STATUS_CHANGED`), real-time isporuka putem SignalR (`NotificationHub`), API endpointi za dohvat i označavanje pročitanog, frontend bell ikona s badge-om u headeru, dropdown s 5 najnovijih notifikacija, zasebna stranica `/notifications`, link u Sidebaru, klik na notifikaciju otvara odgovarajući tiket (role-based path), EF migracija `AddTicketIdToNotification`.
 
 ---
 

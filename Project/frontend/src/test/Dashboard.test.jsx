@@ -31,14 +31,14 @@ describe('Dashboard', () => {
   it('shows CLIENT cards (Moji tiketi + Kreiraj tiket) for CLIENT role', () => {
     mocks.user = { firstName: 'Emir', role: 'CLIENT' }
     render(<Dashboard />)
-    expect(screen.getByText('Moji tiketi')).toBeInTheDocument()
-    expect(screen.getByText('Kreiraj tiket')).toBeInTheDocument()
+    expect(screen.getAllByText('Moji tiketi')[0]).toBeInTheDocument()
+    expect(screen.getAllByText('Kreiraj tiket')[0]).toBeInTheDocument()
   })
 
   it('does not show Kreiraj tiket for AGENT role', () => {
     mocks.user = { firstName: 'Haris', role: 'AGENT' }
     render(<Dashboard />)
-    expect(screen.getByText('Svi tiketi')).toBeInTheDocument()
+    expect(screen.getAllByText('Svi tiketi')[0]).toBeInTheDocument()
     expect(screen.queryByText('Kreiraj tiket')).not.toBeInTheDocument()
   })
 

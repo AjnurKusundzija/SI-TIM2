@@ -19,7 +19,7 @@ namespace TelecomSupportSystem.Tests.Tickets
 
         public AllTicketsServiceTests()
         {
-            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object);
+            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object, new Mock<ICommentService>().Object);
         }
 
         private static Ticket MakeTicket(int id = 1, int creatorId = 5) => new()

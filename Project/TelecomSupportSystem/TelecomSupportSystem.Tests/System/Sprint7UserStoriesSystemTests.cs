@@ -33,7 +33,7 @@ namespace TelecomSupportSystem.Tests.System
                 new TicketRepository(context),
                 new TeamRepository(context),
                 new UserRepository(context),
-                new Mock<INotificationService>().Object));
+                new Mock<INotificationService>().Object, new Mock<ICommentService>().Object));
 
             SetUser(controller, userId, role);
             return controller;
@@ -44,7 +44,7 @@ namespace TelecomSupportSystem.Tests.System
             var controller = new CommentController(new CommentService(
                 new CommentRepository(context),
                 new TicketRepository(context),
-                new Mock<INotificationService>().Object));
+                new Mock<INotificationService>().Object, new Mock<IChatPusher>().Object));
 
             SetUser(controller, userId, role);
             return controller;

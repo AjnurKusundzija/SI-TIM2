@@ -18,7 +18,7 @@ namespace TelecomSupportSystem.Tests.Communication
 
         public CommentServiceTests()
         {
-            _service = new CommentService(_commentRepoMock.Object, _ticketRepoMock.Object, _notificationServiceMock.Object);
+            _service = new CommentService(_commentRepoMock.Object, _ticketRepoMock.Object, _notificationServiceMock.Object, new Mock<IChatPusher>().Object);
         }
 
         private static User MakeUser(int id = 1, Role role = Role.CLIENT) => new()

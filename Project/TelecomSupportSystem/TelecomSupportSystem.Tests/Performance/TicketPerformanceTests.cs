@@ -31,7 +31,7 @@ namespace TelecomSupportSystem.Tests.Performance
 
         private static TicketController CreateController(ApplicationDbContext context, int userId, string role = "CLIENT")
         {
-            var controller = new TicketController(new TicketService(new TicketRepository(context), new TeamRepository(context), new UserRepository(context), new Mock<INotificationService>().Object));
+            var controller = new TicketController(new TicketService(new TicketRepository(context), new TeamRepository(context), new UserRepository(context), new Mock<INotificationService>().Object, new Mock<ICommentService>().Object));
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, userId.ToString()),

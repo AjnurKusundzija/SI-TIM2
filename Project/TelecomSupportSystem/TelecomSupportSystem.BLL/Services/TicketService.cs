@@ -14,17 +14,20 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ITeamRepository _teamRepository;
         private readonly IUserRepository _userRepository;
         private readonly INotificationService _notificationService;
+        private readonly ICommentService _commentService;
 
         public TicketService(
             ITicketRepository ticketRepository,
             ITeamRepository teamRepository,
             IUserRepository userRepository,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            ICommentService commentService)
         {
             _ticketRepository    = ticketRepository;
             _teamRepository      = teamRepository;
             _userRepository      = userRepository;
             _notificationService = notificationService;
+            _commentService      = commentService;
         }
 
         // US-11: Dohvata tikete iz repozitorija i mapira ih u DTO.
@@ -403,6 +406,17 @@ namespace TelecomSupportSystem.BLL.Services
                 NotificationType.TICKET_FORWARDED,
                 ticket.TicketId);
 
+            await _commentService.AddSystemCommentAsync(
+                ticketId,
+                $"Tiket je proslijeđen agentu: {targetAgent.FirstName} {targetAgent.LastName}");
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Tiket proslijeđen",
+                $"Vaš tiket \"{ticket.Title}\" je proslijeđen drugom agentu.",
+                NotificationType.TICKET_FORWARDED,
+                ticket.TicketId);
+
             return newAssignment;
         }
 
@@ -513,6 +527,17 @@ namespace TelecomSupportSystem.BLL.Services
                 bestTech.UserId,
                 "Tiket je proslijeđen vama",
                 $"Tiket \"{ticket.Title}\" je proslijeđen vama.",
+                NotificationType.TICKET_FORWARDED,
+                ticket.TicketId);
+
+            await _commentService.AddSystemCommentAsync(
+                ticketId,
+                $"Tiket je proslijeđen tehničaru: {bestTech.FirstName} {bestTech.LastName}");
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Tiket proslijeđen",
+                $"Vaš tiket \"{ticket.Title}\" je proslijeđen tehničaru.",
                 NotificationType.TICKET_FORWARDED,
                 ticket.TicketId);
 

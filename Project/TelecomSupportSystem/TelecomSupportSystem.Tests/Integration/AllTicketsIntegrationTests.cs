@@ -28,7 +28,7 @@ namespace TelecomSupportSystem.Tests.Integration
         private static TicketController CreateController(ApplicationDbContext context, int userId, string role)
         {
             var repo = new TicketRepository(context);
-            var service = new TicketService(repo, new TeamRepository(context), new UserRepository(context), new Mock<INotificationService>().Object);
+            var service = new TicketService(repo, new TeamRepository(context), new UserRepository(context), new Mock<INotificationService>().Object, new Mock<ICommentService>().Object);
             var controller = new TicketController(service);
 
             var claims = new List<Claim>

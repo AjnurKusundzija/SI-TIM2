@@ -19,7 +19,7 @@ namespace TelecomSupportSystem.Tests.Tickets
 
         public TicketDetailServiceTests()
         {
-            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object);
+            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object, new Mock<ICommentService>().Object);
         }
 
         private static User MakeUser(int id = 1, string first = "Amir", string last = "Hadzic", Role role = Role.CLIENT) =>

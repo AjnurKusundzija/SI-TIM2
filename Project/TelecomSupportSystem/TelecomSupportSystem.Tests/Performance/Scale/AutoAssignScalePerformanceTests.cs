@@ -32,7 +32,7 @@ namespace TelecomSupportSystem.Tests.Performance.Scale
                 new TicketRepository(context),
                 new TeamRepository(context),
                 new UserRepository(context),
-                new Mock<INotificationService>().Object));
+                new Mock<INotificationService>().Object, new Mock<ICommentService>().Object));
 
             controller.ControllerContext = new ControllerContext
             {

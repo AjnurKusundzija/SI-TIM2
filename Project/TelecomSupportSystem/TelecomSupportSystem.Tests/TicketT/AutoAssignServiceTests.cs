@@ -27,7 +27,7 @@ namespace TelecomSupportSystem.Tests.Tickets
 
         public AutoAssignServiceTests()
         {
-            _service = new TicketService(_ticketRepoMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object);
+            _service = new TicketService(_ticketRepoMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object, new Mock<ICommentService>().Object);
 
             _ticketRepoMock
                 .Setup(r => r.CreateAsync(It.IsAny<Ticket>()))

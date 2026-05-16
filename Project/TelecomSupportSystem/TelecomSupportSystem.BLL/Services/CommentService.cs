@@ -10,15 +10,18 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ICommentRepository _commentRepository;
         private readonly ITicketRepository _ticketRepository;
         private readonly INotificationService _notificationService;
+        private readonly IChatPusher _chatPusher;
 
         public CommentService(
             ICommentRepository commentRepository,
             ITicketRepository ticketRepository,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IChatPusher chatPusher)
         {
             _commentRepository = commentRepository;
             _ticketRepository = ticketRepository;
             _notificationService = notificationService;
+            _chatPusher = chatPusher;
         }
 
         // US-15: Ista logika pristupa kao i za tiket (CLIENT → vlastiti, AGENT/TECHNICIAN → dodijeljeni, ADMIN → svi)
@@ -44,12 +47,13 @@ namespace TelecomSupportSystem.BLL.Services
 
             return comments.Select(c => new CommentDto
             {
-                CommentId  = c.CommentId,
-                Content    = c.Content,
-                DateTime   = c.DateTime,
-                AuthorId   = c.AuthorId,
-                AuthorName = $"{c.Author.FirstName} {c.Author.LastName}",
-                AuthorRole = c.Author.Role.ToString(),
+                CommentId       = c.CommentId,
+                Content         = c.Content,
+                DateTime        = c.DateTime,
+                AuthorId        = c.AuthorId,
+                AuthorName      = c.IsSystemMessage ? string.Empty : $"{c.Author!.FirstName} {c.Author.LastName}",
+                AuthorRole      = c.IsSystemMessage ? string.Empty : c.Author!.Role.ToString(),
+                IsSystemMessage = c.IsSystemMessage,
             });
         }
 
@@ -163,13 +167,37 @@ namespace TelecomSupportSystem.BLL.Services
 
             return new CommentDto
             {
-                CommentId = createdComment.CommentId,
-                Content = createdComment.Content,
-                DateTime = createdComment.DateTime,
-                AuthorId = createdComment.AuthorId,
-                AuthorName = $"{createdComment.Author.FirstName} {createdComment.Author.LastName}",
-                AuthorRole = createdComment.Author.Role.ToString()
+                CommentId  = createdComment.CommentId,
+                Content    = createdComment.Content,
+                DateTime   = createdComment.DateTime,
+                AuthorId   = createdComment.AuthorId,
+                AuthorName = $"{createdComment.Author!.FirstName} {createdComment.Author.LastName}",
+                AuthorRole = createdComment.Author.Role.ToString(),
             };
+        }
+
+        public async Task AddSystemCommentAsync(int ticketId, string content)
+        {
+            var comment = new TelecomSupportSystem.DAL.Entities.Comment
+            {
+                TicketId        = ticketId,
+                Content         = content,
+                DateTime        = DateTime.UtcNow,
+                IsSystemMessage = true,
+                IsInternal      = false,
+            };
+
+            await _commentRepository.CreateAsync(comment);
+
+            var dto = new CommentDto
+            {
+                CommentId       = comment.CommentId,
+                Content         = comment.Content,
+                DateTime        = comment.DateTime,
+                IsSystemMessage = true,
+            };
+
+            await _chatPusher.PushCommentAsync(ticketId, dto);
         }
     }
 }

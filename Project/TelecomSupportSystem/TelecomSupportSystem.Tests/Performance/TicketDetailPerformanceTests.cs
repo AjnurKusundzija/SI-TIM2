@@ -57,7 +57,7 @@ namespace TelecomSupportSystem.Tests.Performance
             });
             await context.SaveChangesAsync();
 
-            var controller = new TicketController(new TicketService(new TicketRepository(context), new TeamRepository(context), new UserRepository(context), new Mock<INotificationService>().Object));
+            var controller = new TicketController(new TicketService(new TicketRepository(context), new TeamRepository(context), new UserRepository(context), new Mock<INotificationService>().Object, new Mock<ICommentService>().Object));
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, "1"),

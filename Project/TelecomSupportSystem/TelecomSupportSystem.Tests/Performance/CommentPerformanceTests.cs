@@ -87,7 +87,7 @@ namespace TelecomSupportSystem.Tests.Performance
             await context.SaveChangesAsync();
 
             var controller = new CommentController(
-                new CommentService(new CommentRepository(context), new TicketRepository(context), new Mock<INotificationService>().Object));
+                new CommentService(new CommentRepository(context), new TicketRepository(context), new Mock<INotificationService>().Object, new Mock<IChatPusher>().Object));
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, "1"),

@@ -21,7 +21,7 @@ namespace TelecomSupportSystem.Tests.Tickets
 
         public TicketServiceTests()
         {
-            _ticketService = new TicketService(_ticketRepositoryMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object);
+            _ticketService = new TicketService(_ticketRepositoryMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object, new Mock<ICommentService>().Object);
         }
 
         // ─── Helpers ─────────────────────────────────────────────────────────────

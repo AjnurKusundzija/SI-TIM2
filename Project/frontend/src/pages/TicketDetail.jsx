@@ -607,6 +607,18 @@ export default function TicketDetail() {
                         </p>
                     ) : (
                         allComments.map((comment) => {
+                            if (comment.isSystemMessage) {
+                                return (
+                                    <div key={comment.commentId} className="flex items-center gap-3 py-1">
+                                        <div className="flex-1 border-t border-gray-100" />
+                                        <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100 whitespace-nowrap">
+                                            {comment.content}
+                                        </span>
+                                        <div className="flex-1 border-t border-gray-100" />
+                                    </div>
+                                )
+                            }
+
                             const initials = comment.authorName
                                 .split(' ')
                                 .map((p) => p[0])
