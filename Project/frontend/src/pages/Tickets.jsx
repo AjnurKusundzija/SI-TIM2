@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { getAllTickets } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import { Search, Ticket } from 'lucide-react'
+import { formatDateOnly } from '../utils/formatDate'
 import EmptyState from '../components/common/EmptyState'
 import Badge from '../components/common/Badge'
 
@@ -16,6 +17,45 @@ const TYPE_LABELS = {
   MOBILE_NETWORK: 'Mobilna mreža',
   BILLING: 'Računi/Naplata',
   TECHNICAL_SUPPORT: 'Tehnička podrška',
+}
+
+function SkeletonTable({ hasInternalPriority }) {
+  const colCount = hasInternalPriority ? 6 : 5
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+      <div className="hidden md:block">
+        <div className="flex gap-4 px-5 py-3 border-b border-gray-100 bg-gray-50">
+          {Array.from({ length: colCount }).map((_, i) => (
+            <div key={i} className="h-3 bg-gray-200 rounded" style={{ width: i === 0 ? 180 : 80 }} />
+          ))}
+        </div>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex items-center gap-4 px-5 py-3.5 border-b border-gray-50 last:border-0">
+            <div className="flex-1">
+              <div className="h-3.5 bg-gray-200 rounded w-52 mb-1.5" />
+              <div className="h-2.5 bg-gray-100 rounded w-16" />
+            </div>
+            <div className="h-5 bg-gray-200 rounded-full w-20" />
+            <div className="h-5 bg-gray-200 rounded-full w-14" />
+            {hasInternalPriority && <div className="h-5 bg-gray-200 rounded-full w-16" />}
+            <div className="h-3.5 bg-gray-100 rounded w-20" />
+            <div className="h-3 bg-gray-100 rounded w-20" />
+          </div>
+        ))}
+      </div>
+      <div className="md:hidden divide-y divide-gray-50">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="px-4 py-3">
+            <div className="h-3.5 bg-gray-200 rounded w-48 mb-2" />
+            <div className="flex gap-2">
+              <div className="h-5 bg-gray-200 rounded-full w-16" />
+              <div className="h-5 bg-gray-200 rounded-full w-14" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default function Tickets({ assignedOnly = false }) {
@@ -34,7 +74,7 @@ export default function Tickets({ assignedOnly = false }) {
   useEffect(() => {
     getAllTickets(assignedOnly)
       .then((data) => { setError(null); setTickets(data) })
-      .catch((err) => { console.error(err); setError('Failed to load tickets.') })
+      .catch((err) => { console.error(err); setError('Greška pri učitavanju tiketa.') })
       .finally(() => setLoading(false))
   }, [assignedOnly])
 
@@ -69,7 +109,7 @@ export default function Tickets({ assignedOnly = false }) {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
           >
             <option value="ALL">Svi statusi</option>
             {Object.entries(STATUS_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
@@ -77,7 +117,7 @@ export default function Tickets({ assignedOnly = false }) {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
           >
             <option value="ALL">Svi tipovi</option>
             {Object.entries(TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
@@ -85,7 +125,7 @@ export default function Tickets({ assignedOnly = false }) {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
           >
             <option value="ALL">Svi prioriteti</option>
             {Object.entries(PRIORITY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
@@ -94,9 +134,7 @@ export default function Tickets({ assignedOnly = false }) {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-16">
-          <div className="w-8 h-8 border-2 border-navy-600 border-t-transparent rounded-full animate-spin" />
-        </div>
+        <SkeletonTable hasInternalPriority={isStaff} />
       ) : error ? (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
       ) : filtered.length === 0 ? (
@@ -141,7 +179,7 @@ export default function Tickets({ assignedOnly = false }) {
                       {TYPE_LABELS[t.problemCategory] ?? t.problemCategory}
                     </td>
                     <td className="px-5 py-3 text-sm text-gray-500 whitespace-nowrap">
-                      {t.createdDate ? new Date(t.createdDate).toLocaleDateString() : '—'}
+                      {t.createdDate ? formatDateOnly(t.createdDate) : '—'}
                     </td>
                   </tr>
                 ))}
@@ -161,7 +199,7 @@ export default function Tickets({ assignedOnly = false }) {
                   )}
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
-                  {t.createdDate ? new Date(t.createdDate).toLocaleDateString() : '—'}
+                  {t.createdDate ? formatDateOnly(t.createdDate) : '—'}
                 </p>
               </div>
             ))}
@@ -174,4 +212,8 @@ export default function Tickets({ assignedOnly = false }) {
 
 Tickets.propTypes = {
   assignedOnly: PropTypes.bool,
+}
+
+SkeletonTable.propTypes = {
+  hasInternalPriority: PropTypes.bool,
 }

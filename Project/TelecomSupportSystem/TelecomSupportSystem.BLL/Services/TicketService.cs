@@ -56,7 +56,7 @@ namespace TelecomSupportSystem.BLL.Services
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
 
             if (ticket is null)
-                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+                throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             bool hasAccess = role switch
             {
@@ -67,7 +67,7 @@ namespace TelecomSupportSystem.BLL.Services
             };
 
             if (!hasAccess)
-                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+                throw new UnauthorizedAccessException("Nemate pristup ovom tiketu.");
 
             var agentAssignment = ticket.Assignments
                 .OrderByDescending(a => a.AssignmentDate)
@@ -246,7 +246,7 @@ namespace TelecomSupportSystem.BLL.Services
                 "AGENT" when assignedOnly  => await _ticketRepository.GetByAssigneeIdAsync(userId),
                 "ADMINISTRATOR" or "AGENT" => await _ticketRepository.GetAllAsync(),
                 "TECHNICIAN"               => await _ticketRepository.GetByAssigneeIdAsync(userId),
-                _                          => throw new UnauthorizedAccessException("Access not allowed.")
+                _                          => throw new UnauthorizedAccessException("Pristup nije dozvoljen.")
             };
 
             return tickets.Select(t => new MyTicketDto
@@ -489,7 +489,7 @@ namespace TelecomSupportSystem.BLL.Services
             var techniciansAtLocation = (await _userRepository.GetTechniciansByLocationAsync(location)).ToList();
 
             if (!techniciansAtLocation.Any())
-                throw new InvalidOperationException("nemamo tehničara na toj lokaciji");
+                throw new InvalidOperationException("Nema dostupnog tehničara na toj lokaciji.");
 
             // Algoritam za dodjelu:
             // 1. Ako neki tehničar ima 0 otvorenih tiketa, dodijeli njemu

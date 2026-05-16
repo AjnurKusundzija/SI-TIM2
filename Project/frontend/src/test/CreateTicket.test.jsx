@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 
 const mocks = vi.hoisted(() => ({
   createTicket: vi.fn(),
@@ -40,7 +41,7 @@ describe('CreateTicket page', () => {
 
   // US-8: forma prikazuje sva obavezna polja
   it('renders all required form fields', () => {
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     expect(screen.getByLabelText(/naslov/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/tip problema/i)).toBeInTheDocument()
@@ -50,7 +51,7 @@ describe('CreateTicket page', () => {
 
   // US-9: dropdown za tip problema prikazuje svih 5 kategorija
   it('renders all 5 problem categories as options', () => {
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     expect(screen.getByRole('option', { name: 'Internet' })).toBeInTheDocument()
     expect(screen.getByRole('option', { name: 'TV' })).toBeInTheDocument()
@@ -61,7 +62,7 @@ describe('CreateTicket page', () => {
 
   // US-9: dropdown za prioritet prikazuje sva 3 nivoa
   it('renders all 3 priority options', () => {
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     expect(screen.getByRole('option', { name: 'Nizak' })).toBeInTheDocument()
     expect(screen.getByRole('option', { name: 'Srednji' })).toBeInTheDocument()
@@ -72,7 +73,7 @@ describe('CreateTicket page', () => {
 
   // US-8: submit bez naslova prikazuje grešku i ne poziva servis
   it('shows validation error when subject is empty', async () => {
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
     fillForm({ subject: '' })
     submit()
 
@@ -84,7 +85,7 @@ describe('CreateTicket page', () => {
 
   // US-10: submit bez opisa prikazuje grešku i ne poziva servis
   it('shows validation error when description is empty', async () => {
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
     fillForm({ description: '' })
     submit()
 
@@ -96,7 +97,7 @@ describe('CreateTicket page', () => {
 
   // US-9: submit bez tipa problema prikazuje grešku i ne poziva servis
   it('shows validation error when problem type is not selected', async () => {
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
     fillForm({ type: '' })
     submit()
 
@@ -108,7 +109,7 @@ describe('CreateTicket page', () => {
 
   // US-9: submit bez prioriteta prikazuje grešku i ne poziva servis
   it('shows validation error when priority is not selected', async () => {
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
     fillForm({ priority: '' })
     submit()
 
@@ -123,7 +124,7 @@ describe('CreateTicket page', () => {
   // US-8: uspješno kreiranje prikazuje poruku potvrde
   it('shows success message after ticket is created', async () => {
     mocks.createTicket.mockResolvedValueOnce({ ticketId: 1 })
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     fillForm()
     submit()
@@ -136,7 +137,7 @@ describe('CreateTicket page', () => {
   // US-8: forma se čisti nakon uspješnog kreiranja
   it('resets form fields after successful ticket creation', async () => {
     mocks.createTicket.mockResolvedValueOnce({ ticketId: 1 })
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     fillForm()
     submit()
@@ -150,7 +151,7 @@ describe('CreateTicket page', () => {
   // US-8: createTicket se poziva sa ispravno formatiranim podacima
   it('calls createTicket with correct payload', async () => {
     mocks.createTicket.mockResolvedValueOnce({ ticketId: 1 })
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     fillForm()
     submit()
@@ -170,7 +171,7 @@ describe('CreateTicket page', () => {
   // US-8: 401 greška prikazuje poruku o neovlaštenom pristupu
   it('shows unauthorized error message on 401 response', async () => {
     mocks.createTicket.mockRejectedValueOnce({ response: { status: 401 } })
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     fillForm()
     submit()
@@ -183,7 +184,7 @@ describe('CreateTicket page', () => {
   // US-8: generalna greška prikazuje poruku o neuspjehu
   it('shows generic error message on unexpected API error', async () => {
     mocks.createTicket.mockRejectedValueOnce(new Error('Network error'))
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     fillForm()
     submit()
@@ -197,7 +198,7 @@ describe('CreateTicket page', () => {
 
   // US-8: dugme "Poništi" briše unesene podatke iz forme
   it('clears form when reset button is clicked', () => {
-    render(<CreateTicket />)
+    render(<MemoryRouter><CreateTicket /></MemoryRouter>)
 
     fireEvent.change(screen.getByLabelText(/naslov/i), { target: { value: 'Test naslov' } })
     fireEvent.click(screen.getByRole('button', { name: /poništi/i }))

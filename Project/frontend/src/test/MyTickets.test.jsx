@@ -196,7 +196,7 @@ describe('MyTickets page', () => {
     renderMyTickets()
 
     await waitFor(() => {
-      expect(screen.getByText(/failed to load tickets/i)).toBeInTheDocument()
+      expect(screen.getByText(/greška pri učitavanju tiketa/i)).toBeInTheDocument()
     })
   })
 })

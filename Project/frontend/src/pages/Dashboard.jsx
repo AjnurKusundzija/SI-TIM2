@@ -13,9 +13,9 @@ import {
   Clock,
   Star,
   ChevronRight,
-  Loader2,
 } from 'lucide-react'
 import Badge from '../components/common/Badge'
+import { timeAgo } from '../utils/formatDate'
 
 // ---------- helpers ----------
 
@@ -41,15 +41,39 @@ function formatRating(rating) {
   return `${rating.toFixed(1)} / 5`
 }
 
-function timeAgo(dateStr) {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const m = Math.floor(diff / 60000)
-  if (m < 1) return 'upravo'
-  if (m < 60) return `prije ${m} min`
-  const h = Math.floor(m / 60)
-  if (h < 24) return `prije ${h}h`
-  const d = Math.floor(h / 24)
-  return `prije ${d}d`
+// ---------- skeleton components ----------
+
+function SkeletonMiniStats() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 animate-pulse">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="bg-white rounded-lg px-4 py-3 shadow-sm border border-gray-100 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-gray-200 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="h-2.5 bg-gray-100 rounded w-14 mb-2" />
+            <div className="h-3.5 bg-gray-200 rounded w-10" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function SkeletonRecentTickets() {
+  return (
+    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden animate-pulse">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0">
+          <div className="flex-1">
+            <div className="h-3.5 bg-gray-200 rounded w-52 mb-1.5" />
+            <div className="h-2.5 bg-gray-100 rounded w-20" />
+          </div>
+          <div className="h-5 bg-gray-200 rounded-full w-20 flex-shrink-0" />
+          <div className="h-5 bg-gray-200 rounded-full w-14 flex-shrink-0" />
+        </div>
+      ))}
+    </div>
+  )
 }
 
 // ---------- sub-components ----------
@@ -62,7 +86,7 @@ function QuickCard({ icon, label, description, to, color }) {
       onClick={() => navigate(to)}
       className="bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow"
     >
-      {/* Mobile: compact row — icon + label + chevron */}
+      {/* Mobile: compact row */}
       <div className="flex sm:hidden items-center gap-3 px-4 py-3">
         <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${color}`}>
           <Icon size={16} className="text-white" />
@@ -71,7 +95,7 @@ function QuickCard({ icon, label, description, to, color }) {
         <ChevronRight size={14} className="text-gray-300 flex-shrink-0" />
       </div>
 
-      {/* sm+: full card — icon + label + description */}
+      {/* sm+: full card */}
       <div className="hidden sm:flex items-center gap-4 p-5">
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>
           <Icon size={22} className="text-white" />
@@ -145,7 +169,6 @@ export default function Dashboard() {
       .finally(() => setLoadingTickets(false))
   }, [isStaff])
 
-  // Quick action cards
   const clientCards = [
     { icon: Ticket, label: 'Moji tiketi', description: 'Pregledajte i pratite vaše tikete', to: '/mytickets', color: 'bg-navy-600' },
     { icon: PlusCircle, label: 'Kreiraj tiket', description: 'Podnesite novi zahtjev za podršku', to: '/create-ticket', color: 'bg-emerald-500' },
@@ -153,12 +176,12 @@ export default function Dashboard() {
 
   const agentCards = [
     { icon: Ticket, label: 'Svi tiketi', description: 'Pregledajte i upravljajte svim tiketima', to: '/tickets', color: 'bg-navy-600' },
-    { icon: Ticket, label: 'Dodijeljeni meni', description: 'Tiketi dodijeljeni vama', to: '/assigned', color: 'bg-blue-500' },
+    { icon: Ticket, label: 'Moji dodijeljeni tiketi', description: 'Tiketi dodijeljeni vama', to: '/assigned', color: 'bg-blue-500' },
     { icon: BarChart2, label: 'Moja statistika', description: 'Detaljan pregled vaših performansi', to: '/statistics', color: 'bg-violet-500' },
   ]
 
   const techCards = [
-    { icon: Ticket, label: 'Dodijeljeni meni', description: 'Tiketi dodijeljeni vama', to: '/assigned', color: 'bg-navy-600' },
+    { icon: Ticket, label: 'Moji dodijeljeni tiketi', description: 'Tiketi dodijeljeni vama', to: '/assigned', color: 'bg-navy-600' },
     { icon: BarChart2, label: 'Moja statistika', description: 'Detaljan pregled vaših performansi', to: '/statistics', color: 'bg-violet-500' },
   ]
 
@@ -174,13 +197,12 @@ export default function Dashboard() {
     ADMINISTRATOR: adminCards,
   }[user?.role] ?? []
 
-  // Condensed stats config
   const miniStats = stats ? [
-    { icon: Ticket,        label: 'Otvoreni',         value: stats.openTicketsCount,                    color: 'bg-blue-500' },
-    { icon: CheckCircle,   label: 'Zatvoreni',         value: stats.closedTicketsCount,                  color: 'bg-emerald-500' },
-    { icon: AlertCircle,   label: 'Čeka zatvaranje',   value: stats.pendingClosureCount,                 color: 'bg-amber-500' },
+    { icon: Ticket,        label: 'Otvoreni',         value: stats.openTicketsCount,                       color: 'bg-blue-500' },
+    { icon: CheckCircle,   label: 'Zatvoreni',         value: stats.closedTicketsCount,                     color: 'bg-emerald-500' },
+    { icon: AlertCircle,   label: 'Čeka zatvaranje',   value: stats.pendingClosureCount,                    color: 'bg-amber-500' },
     { icon: MessageSquare, label: 'Prosj. 1. odgovor', value: formatMinutes(stats.avgFirstResponseMinutes), color: 'bg-violet-500' },
-    { icon: Clock,         label: 'Prosj. rješavanje', value: formatHours(stats.avgResolutionHours),     color: 'bg-navy-600' },
+    { icon: Clock,         label: 'Prosj. rješavanje', value: formatHours(stats.avgResolutionHours),        color: 'bg-navy-600' },
     ...(user?.role === 'AGENT'
       ? [{ icon: Star, label: 'Prosj. ocjena', value: formatRating(stats.avgRating), color: 'bg-yellow-500' }]
       : []),
@@ -216,13 +238,10 @@ export default function Dashboard() {
       {/* Stats + Recent tickets — samo za AGENT i TECHNICIAN */}
       {isStaff && (
         <>
-          {/* Condensed stats */}
           <div>
             <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Moja statistika</h3>
             {loadingStats ? (
-              <div className="flex items-center gap-2 text-gray-400 text-sm py-2">
-                <Loader2 size={16} className="animate-spin" /> Učitavanje...
-              </div>
+              <SkeletonMiniStats />
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {miniStats.map((s) => (
@@ -232,13 +251,10 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Recently updated tickets */}
           <div>
             <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Nedavna aktivnost</h3>
             {loadingTickets ? (
-              <div className="flex items-center gap-2 text-gray-400 text-sm py-2">
-                <Loader2 size={16} className="animate-spin" /> Učitavanje...
-              </div>
+              <SkeletonRecentTickets />
             ) : recentTickets.length === 0 ? (
               <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-6 text-center text-sm text-gray-400">
                 Nema dodijeljenih tiketa.

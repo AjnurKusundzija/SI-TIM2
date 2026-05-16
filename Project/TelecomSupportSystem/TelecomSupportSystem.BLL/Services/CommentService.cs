@@ -30,7 +30,7 @@ namespace TelecomSupportSystem.BLL.Services
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
 
             if (ticket is null)
-                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+                throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             bool hasAccess = role switch
             {
@@ -41,7 +41,7 @@ namespace TelecomSupportSystem.BLL.Services
             };
 
             if (!hasAccess)
-                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+                throw new UnauthorizedAccessException("Nemate pristup ovom tiketu.");
 
             var comments = await _commentRepository.GetByTicketIdAsync(ticketId);
 
@@ -60,12 +60,12 @@ namespace TelecomSupportSystem.BLL.Services
         public async Task<CommentDto> AddCommentAsync(int ticketId, int userId, string role, string content)
         {
             if (content.Length > 1000)
-                throw new ArgumentException("Message exceeds maximum length of 1000 characters.");
+                throw new ArgumentException("Poruka ne može biti duža od 1000 znakova.");
 
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
 
             if (ticket is null)
-                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+                throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             bool hasAccess = role switch
             {
@@ -76,7 +76,7 @@ namespace TelecomSupportSystem.BLL.Services
             };
 
             if (!hasAccess)
-                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+                throw new UnauthorizedAccessException("Nemate pristup ovom tiketu.");
 
             if (role == "CLIENT")
             {
@@ -85,7 +85,9 @@ namespace TelecomSupportSystem.BLL.Services
 
                 foreach (var c in existingComments.OrderByDescending(x => x.DateTime))
                 {
-                    if (c.Author.Role.ToString() == "CLIENT")
+                    if (c.IsSystemMessage) continue;
+
+                    if (c.Author!.Role.ToString() == "CLIENT")
                     {
                         consecutiveClientComments++;
                     }
@@ -97,7 +99,7 @@ namespace TelecomSupportSystem.BLL.Services
 
                 if (consecutiveClientComments >= 3)
                 {
-                    throw new InvalidOperationException("You cannot spam comments! Please wait for an agent to respond.");
+                    throw new InvalidOperationException("Ne možete slati više od 3 uzastopne poruke. Sačekajte odgovor agenta.");
                 }
             }
 
