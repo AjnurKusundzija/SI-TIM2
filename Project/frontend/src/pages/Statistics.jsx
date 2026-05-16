@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { getMyStatistics } from '../services/userService'
@@ -10,6 +11,19 @@ import {
   AlertCircle,
   Loader2,
 } from 'lucide-react'
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from 'recharts'
 
 function StatCard({ icon, label, value, color, description }) {
   const Icon = icon
@@ -33,6 +47,14 @@ function StatCard({ icon, label, value, color, description }) {
   )
 }
 
+StatCard.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  color: PropTypes.string.isRequired,
+  description: PropTypes.string,
+}
+
 function formatMinutes(minutes) {
   if (minutes == null) return null
   if (minutes < 60) return `${Math.round(minutes)} min`
@@ -53,6 +75,45 @@ function formatHours(hours) {
 function formatRating(rating) {
   if (rating == null) return null
   return `${rating.toFixed(1)} / 5`
+}
+
+const DISTRIBUTION_COLORS = {
+  open: '#3b82f6',
+  closed: '#10b981',
+  pending: '#f59e0b',
+}
+
+const CustomTooltip = ({ active, payload }) => {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm text-xs">
+      <p className="font-semibold text-gray-800">{payload[0].name}</p>
+      <p className="text-gray-600">{payload[0].value} tiketa</p>
+    </div>
+  )
+}
+
+const CustomBarTooltip = ({ active, payload, label }) => {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm text-xs">
+      <p className="font-semibold text-gray-800 mb-1">{label}</p>
+      {payload.map((p) => (
+        <p key={p.name} className="text-gray-600">{p.value}</p>
+      ))}
+    </div>
+  )
+}
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array,
+}
+
+CustomBarTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array,
+  label: PropTypes.string,
 }
 
 export default function Statistics() {
@@ -86,7 +147,7 @@ export default function Statistics() {
     )
   }
 
-  const cards = [
+  const statCards = [
     {
       icon: Ticket,
       label: 'Otvoreni tiketi',
@@ -125,7 +186,7 @@ export default function Statistics() {
   ]
 
   if (user?.role === 'AGENT') {
-    cards.push({
+    statCards.push({
       icon: Star,
       label: 'Prosječna ocjena',
       value: formatRating(stats.avgRating),
@@ -135,6 +196,26 @@ export default function Statistics() {
   }
 
   const totalTickets = stats.openTicketsCount + stats.closedTicketsCount + stats.pendingClosureCount
+
+  const distributionData = [
+    { name: 'Otvoreni', value: stats.openTicketsCount, color: DISTRIBUTION_COLORS.open },
+    { name: 'Zatvoreni', value: stats.closedTicketsCount, color: DISTRIBUTION_COLORS.closed },
+    { name: 'Čeka zatvaranje', value: stats.pendingClosureCount, color: DISTRIBUTION_COLORS.pending },
+  ].filter((d) => d.value > 0)
+
+  // Performance bar chart data — in minutes for comparison
+  const perfData = [
+    {
+      name: '1. odgovor',
+      vrijednost: stats.avgFirstResponseMinutes != null ? Math.round(stats.avgFirstResponseMinutes) : null,
+      label: formatMinutes(stats.avgFirstResponseMinutes) ?? '—',
+    },
+    {
+      name: 'Rješavanje',
+      vrijednost: stats.avgResolutionHours != null ? Math.round(stats.avgResolutionHours * 60) : null,
+      label: formatHours(stats.avgResolutionHours) ?? '—',
+    },
+  ].filter((d) => d.vrijednost != null)
 
   return (
     <div className="space-y-6">
@@ -146,33 +227,77 @@ export default function Statistics() {
         </p>
       </div>
 
-      {/* Ukupno tiketa — summary */}
       {totalTickets === 0 ? (
         <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
           <Ticket size={36} className="mx-auto text-gray-300 mb-3" />
-          <p className="text-gray-500 text-sm">Nema dodijeljenih tiketa za prikaz statistike.</p>
+          <p className="text-gray-500 text-sm font-medium">Nema dodijeljenih tiketa</p>
+          <p className="text-gray-400 text-xs mt-1">Statistika će se prikazati kada dobijete dodijeljene tikete.</p>
         </div>
       ) : (
         <>
+          {/* Stat cards — uniform grid */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Opterećenje
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {cards.slice(0, 3).map((card) => (
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Pregled</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {statCards.map((card) => (
                 <StatCard key={card.label} {...card} />
               ))}
             </div>
           </div>
 
+          {/* Charts — side by side */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Performanse
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {cards.slice(3).map((card) => (
-                <StatCard key={card.label} {...card} />
-              ))}
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Grafovi</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Donut chart */}
+              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <p className="text-sm font-semibold text-gray-700 mb-1">Distribucija tiketa</p>
+                <p className="text-xs text-gray-400 mb-3">Ukupno: {totalTickets}</p>
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={distributionData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={52}
+                      outerRadius={80}
+                      paddingAngle={3}
+                      dataKey="value"
+                    >
+                      {distributionData.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend
+                      iconType="circle"
+                      iconSize={8}
+                      formatter={(value) => <span className="text-xs text-gray-600">{value}</span>}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Bar chart */}
+              {perfData.length > 0 ? (
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                  <p className="text-sm font-semibold text-gray-700 mb-1">Vremena odgovora</p>
+                  <p className="text-xs text-gray-400 mb-3">Vrijednosti u minutama</p>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={perfData} barCategoryGap="40%">
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} width={36} />
+                      <Tooltip content={<CustomBarTooltip />} cursor={{ fill: '#f3f4f6' }} />
+                      <Bar dataKey="vrijednost" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-center justify-center text-sm text-gray-400">
+                  Nema dovoljno podataka za grafikon.
+                </div>
+              )}
             </div>
           </div>
         </>

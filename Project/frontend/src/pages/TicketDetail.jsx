@@ -13,6 +13,8 @@ import {
     Wrench,
     XCircle,
     Zap,
+    AlertCircle,
+    Info,
 } from 'lucide-react'
 import * as signalR from '@microsoft/signalr'
 import {
@@ -151,11 +153,11 @@ export default function TicketDetail() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
-    // message je placeholder za SignalR — handleSend će biti spojen na Hub (PB-27)
     const [message, setMessage] = useState('')
     const [isSending, setIsSending] = useState(false)
+    const [sendError, setSendError] = useState(null)
 
-    // US-55, US-56: Stanje modalnog prozora za prosljeđivanje
+    // Forward modal state
     const [forwardModalOpen, setForwardModalOpen] = useState(false)
     const [forwardStep, setForwardStep] = useState('choice') // 'choice' | 'agents' | 'success'
     const [agentScores, setAgentScores] = useState([])
@@ -164,9 +166,13 @@ export default function TicketDetail() {
     const [forwardError, setForwardError] = useState(null)
     const [forwardedTo, setForwardedTo] = useState(null)
 
-    // Closure Workflow States
+    // Closure workflow state
     const [closureNotification, setClosureNotification] = useState(null)
     const [timeLeft, setTimeLeft] = useState('')
+    const [timeLeftMs, setTimeLeftMs] = useState(null)
+
+    // Confirm dialog state
+    const [confirmCloseOpen, setConfirmCloseOpen] = useState(false)
 
     // US-61: Rating states
     const [rating, setRating] = useState(undefined) // undefined = not fetched yet, null = no rating
@@ -221,11 +227,13 @@ export default function TicketDetail() {
     }, [id])
 
     useEffect(() => {
-        if (ticket?.status !== 'CLOSURE_REQUESTED') {
-            return
-        }
-
         const updateTimer = () => {
+            if (ticket?.status !== 'CLOSURE_REQUESTED') {
+                setTimeLeft('')
+                setTimeLeftMs(null)
+                return
+            }
+
             const clientComments = comments.filter(c => c.authorRole === 'CLIENT')
             const lastCommentDate = clientComments.length > 0
                 ? new Date(Math.max(...clientComments.map(c => new Date(c.dateTime))))
@@ -234,6 +242,8 @@ export default function TicketDetail() {
             const expireDate = new Date(lastCommentDate.getTime() + 7 * 24 * 60 * 60 * 1000)
             const now = new Date()
             const diff = expireDate - now
+
+            setTimeLeftMs(diff)
 
             if (diff <= 0) {
                 setTimeLeft('Može se prisilno zatvoriti')
@@ -249,56 +259,49 @@ export default function TicketDetail() {
 
         updateTimer()
         const interval = setInterval(updateTimer, 60000)
-        return () => {
-            clearInterval(interval)
-            setTimeLeft('')
-        }
+        return () => clearInterval(interval)
     }, [ticket, comments])
 
     useEffect(() => {
-        if (!id) return;
+        if (!id) return
 
         const newConnection = new signalR.HubConnectionBuilder()
             .withUrl('/chathub')
             .withAutomaticReconnect()
-            .build();
+            .build()
 
         newConnection.start()
             .then(() => {
-                newConnection.invoke('JoinTicketGroup', id).catch(e => console.error(e));
+                newConnection.invoke('JoinTicketGroup', id).catch(e => console.error(e))
                 newConnection.on('ReceiveComment', (comment) => {
-                    setComments((prev) => [...prev, comment]);
-                });
+                    setComments((prev) => [...prev, comment])
+                })
             })
-            .catch(e => console.error('SignalR Connection Error: ', e));
+            .catch(e => console.error('SignalR Connection Error: ', e))
 
         return () => {
             if (newConnection.state === signalR.HubConnectionState.Connected) {
-                newConnection.invoke('LeaveTicketGroup', id).catch(console.error);
+                newConnection.invoke('LeaveTicketGroup', id).catch(console.error)
             }
-            newConnection.stop();
-        };
-    }, [id]);
+            newConnection.stop()
+        }
+    }, [id])
 
-    // Slanje poruke — implementira se u PB-27 putem SignalR Hub-a
     const handleSend = async () => {
         if (!message.trim() || isSending) return
+        setSendError(null)
         setIsSending(true)
         try {
             await addComment(id, message)
             setMessage('')
         } catch (err) {
             console.error('Failed to send comment', err)
-            alert(err.response?.data || 'Neuspješno slanje poruke.')
+            setSendError(err.response?.data || 'Neuspješno slanje poruke. Pokušajte ponovo.')
         } finally {
             setIsSending(false)
         }
     }
 
-    // Zatvaranje tiketa — implementira se u PB-25
-    //const handleCloseTicket = () => { }
-
-    // US-55, US-56: Otvaranje modalnog prozora za prosljeđivanje
     const handleOpenForward = () => {
         setForwardModalOpen(true)
         setForwardStep('choice')
@@ -316,7 +319,6 @@ export default function TicketDetail() {
         setForwardedTo(null)
     }
 
-    // US-55: Automatsko prosljeđivanje agentu s najvišim score-om
     const handleAutoForward = async () => {
         setForwardLoading(true)
         setForwardError(null)
@@ -333,7 +335,6 @@ export default function TicketDetail() {
         }
     }
 
-    // US-56: Učitavanje liste agenata sa score-ovima
     const handleShowAgents = async () => {
         setForwardLoading(true)
         setForwardError(null)
@@ -348,7 +349,6 @@ export default function TicketDetail() {
         }
     }
 
-    // US-56: Prosljeđivanje odabranom agentu
     const handleForwardToAgent = async () => {
         if (!selectedAgent) return
         setForwardLoading(true)
@@ -366,7 +366,6 @@ export default function TicketDetail() {
         }
     }
 
-    // US-TechnicianForwarding: Automatsko prosljeđivanje tehničaru na lokaciji kreatora
     const handleForwardToTechnician = async () => {
         setForwardLoading(true)
         setForwardError(null)
@@ -385,7 +384,7 @@ export default function TicketDetail() {
 
     // Internal Priority Management
     const [updatingPriority, setUpdatingPriority] = useState(false)
-    const [priorityNotification, setPriorityNotification] = useState(null) // { type: 'success' | 'error', message: string }
+    const [priorityNotification, setPriorityNotification] = useState(null)
 
     const handleUpdateInternalPriority = async (newPriorityValue) => {
         setUpdatingPriority(true)
@@ -393,7 +392,6 @@ export default function TicketDetail() {
         try {
             await updateInternalPriority(Number(id), newPriorityValue)
             setPriorityNotification({ type: 'success', message: 'Interni prioritet je uspješno ažuriran.' })
-            // Osvježi tiket
             const updatedTicket = await getTicketById(Number(id))
             setTicket(updatedTicket)
         } catch (err) {
@@ -401,7 +399,6 @@ export default function TicketDetail() {
             setPriorityNotification({ type: 'error', message: err.response?.data?.message || 'Greška pri ažuriranju prioriteta.' })
         } finally {
             setUpdatingPriority(false)
-            // Sakrij notifikaciju nakon 3 sekunde
             setTimeout(() => setPriorityNotification(null), 3000)
         }
     }
@@ -410,7 +407,6 @@ export default function TicketDetail() {
     const [closureLoading, setClosureLoading] = useState(false)
 
     const handleCloseTicketAction = async () => {
-        if (!window.confirm('Jeste li sigurni da želite zatvoriti ovaj tiket?')) return
         setClosureLoading(true)
         try {
             await closeTicket(Number(id))
@@ -520,17 +516,10 @@ export default function TicketDetail() {
     const forwardModalTitle = {
         choice: 'Proslijedi tiket',
         agents: 'Odaberi agenta',
-        locations: 'Odaberi lokaciju',
         success: 'Tiket proslijeđen',
     }[forwardStep]
 
-    if (loading) {
-        return (
-            <div className="flex justify-center py-16">
-                <div className="w-8 h-8 border-2 border-navy-600 border-t-transparent rounded-full animate-spin" />
-            </div>
-        )
-    }
+    if (loading) return <TicketDetailSkeleton />
 
     if (error || !ticket) {
         return (
@@ -545,9 +534,7 @@ export default function TicketDetail() {
 
     const title = ticket.title || 'Bez naslova'
     const category = ticket.problemCategory
-    const createdDate = ticket.createdDate
-        ? new Date(ticket.createdDate).toLocaleString('bs-BA')
-        : '—'
+    const createdDate = formatDateTime(ticket.createdDate)
 
     const clientName = ticket.clientName || 'Klijent'
     const agentName = ticket.assignedAgentName || 'Nije dodijeljen'
@@ -571,7 +558,7 @@ export default function TicketDetail() {
                 Nazad na tikete
             </Link>
 
-            {/* Detalji tiketa — US-14 */}
+            {/* Ticket details */}
             <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                     <div>
@@ -603,14 +590,14 @@ export default function TicketDetail() {
 
                 {ticket.status !== 'CLOSED' && (
                     <div className="border-t border-gray-100 mt-5 pt-4 flex flex-wrap gap-2">
-                        {/* Akcije za Klijenta */}
+                        {/* Client actions */}
                         {user?.role === 'CLIENT' && (
                             <>
                                 {(ticket.status === 'OPEN' || ticket.status === 'CLOSURE_REQUESTED') && (
                                     <button
                                         type="button"
                                         disabled={closureLoading}
-                                        onClick={handleCloseTicketAction}
+                                        onClick={() => setConfirmCloseOpen(true)}
                                         className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
                                     >
                                         <XCircle size={16} />
@@ -642,7 +629,7 @@ export default function TicketDetail() {
                             </>
                         )}
 
-                        {/* Akcije za Staff */}
+                        {/* Staff actions */}
                         {(user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR') && (
                             <>
                                 {ticket.status === 'OPEN' && (
@@ -656,8 +643,8 @@ export default function TicketDetail() {
                                         Zatraži zatvaranje
                                     </button>
                                 )}
-                                {ticket.status === 'CLOSURE_REQUESTED' && (user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN') && (
-                                    <div className="flex items-center gap-3">
+                                {ticket.status === 'CLOSURE_REQUESTED' && (
+                                    <div className="flex items-center gap-3 flex-wrap">
                                         <button
                                             type="button"
                                             disabled={closureLoading}
@@ -669,9 +656,12 @@ export default function TicketDetail() {
                                             Prisilno zatvori
                                         </button>
                                         {timeLeft && (
-                                            <div className="flex items-center gap-1.5 text-xs font-medium text-amber-600 bg-amber-50 px-3 py-2 rounded-lg border border-amber-100">
+                                            <div className={`flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border ${countdownClass}`}>
                                                 <Clock size={14} />
                                                 <span>{timeLeft}</span>
+                                                {timeLeftMs !== null && timeLeftMs <= 86400000 && (
+                                                    <AlertCircle size={13} className="ml-0.5" />
+                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -691,16 +681,15 @@ export default function TicketDetail() {
                     </div>
                 )}
 
-                {/* Notifikacije za Closure Workflow */}
+                {/* Closure workflow notification */}
                 {closureNotification && (
-                    <div className={`mt-4 p-3 rounded-lg text-xs font-medium animate-in fade-in slide-in-from-top-1 ${closureNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
-                        }`}>
+                    <div className={`mt-4 p-3 rounded-lg text-xs font-medium ${closureNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
                         {closureNotification.message}
                     </div>
                 )}
             </section>
 
-            {/* Interni prioritet — samo za Staff (Agent/Admin/Technician), ali editabilno samo za Agent/Admin */}
+            {/* Internal priority — visible to staff, editable by agent/admin */}
             {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN') && (
                 <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <div className="flex items-center gap-2 mb-4">
@@ -709,8 +698,7 @@ export default function TicketDetail() {
                     </div>
 
                     {priorityNotification && (
-                        <div className={`mb-4 p-3 rounded-lg text-xs font-medium animate-in fade-in slide-in-from-top-1 ${priorityNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
-                            }`}>
+                        <div className={`mb-4 p-3 rounded-lg text-xs font-medium ${priorityNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
                             {priorityNotification.message}
                         </div>
                     )}
@@ -738,9 +726,7 @@ export default function TicketDetail() {
                                 >
                                     <option value="" disabled>Odaberi prioritet...</option>
                                     {INTERNAL_PRIORITIES.map((p) => (
-                                        <option key={p.value} value={p.value}>
-                                            {p.label}
-                                        </option>
+                                        <option key={p.value} value={p.value}>{p.label}</option>
                                     ))}
                                 </select>
                             </div>
@@ -749,7 +735,7 @@ export default function TicketDetail() {
                 </section>
             )}
 
-            {/* Historija komunikacije — US-15 */}
+            {/* Conversation history */}
             <section className="bg-white rounded-xl shadow-sm border border-gray-100">
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                     <MessageCircle size={18} className="text-gray-500" />
@@ -759,73 +745,86 @@ export default function TicketDetail() {
                 </div>
 
                 <div className="p-6 space-y-5">
-                    {allComments.length === 0 ? (
-                        <p className="text-sm text-gray-400 text-center py-4">
-                            Nema poruka u razgovoru.
-                        </p>
-                    ) : (
-                        allComments.map((comment) => {
-                            if (comment.isSystemMessage) {
-                                return (
-                                    <div key={comment.commentId} className="flex items-center gap-3 py-1">
-                                        <div className="flex-1 border-t border-gray-100" />
-                                        <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100 whitespace-nowrap">
-                                            {comment.content}
-                                        </span>
-                                        <div className="flex-1 border-t border-gray-100" />
-                                    </div>
-                                )
-                            }
-
-                            const initials = comment.authorName
-                                .split(' ')
-                                .map((p) => p[0])
-                                .join('')
-                                .slice(0, 2)
-                                .toUpperCase()
-
+                    {allComments.map((comment) => {
+                        if (comment.isSystemMessage) {
                             return (
-                                <div key={comment.commentId} className="flex gap-3">
-                                    <div className="w-9 h-9 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
-                                        {initials}
-                                    </div>
-
-                                    <div className="flex-1">
-                                        <div className="flex flex-wrap items-center justify-between gap-2">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-sm font-semibold text-gray-900">
-                                                    {comment.authorName}
-                                                </span>
-                                                {comment.authorRole && (
-                                                    <Badge value={comment.authorRole} />
-                                                )}
-                                            </div>
-                                            <span className="text-xs text-gray-400">
-                                                {new Date(comment.dateTime).toLocaleString('bs-BA')}
-                                            </span>
-                                        </div>
-
-                                        <p className="text-sm text-gray-600 mt-1 leading-6">
-                                            {comment.content}
-                                        </p>
-                                    </div>
+                                <div key={comment.commentId} className="flex items-center gap-3 py-1">
+                                    <div className="flex-1 border-t border-gray-100" />
+                                    <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100 whitespace-nowrap flex items-center gap-1.5">
+                                        <Info size={11} />
+                                        {comment.content}
+                                    </span>
+                                    <div className="flex-1 border-t border-gray-100" />
                                 </div>
                             )
-                        })
-                    )}
+                        }
 
-                    {/* Unos poruke — spojiće se na SignalR Hub u PB-27 */}
+                        const nameParts = comment.authorName.split(' ')
+                        const initials = (
+                            nameParts.length >= 2
+                                ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`
+                                : comment.authorName.slice(0, 2)
+                        ).toUpperCase()
+
+                        return (
+                            <div key={comment.commentId} className="flex gap-3">
+                                <div className="w-9 h-9 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                                    {initials}
+                                </div>
+
+                                <div className="flex-1">
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-semibold text-gray-900">
+                                                {comment.authorName}
+                                            </span>
+                                            {comment.authorRole && (
+                                                <Badge value={comment.authorRole} />
+                                            )}
+                                        </div>
+                                        <span className="text-xs text-gray-400">
+                                            {formatDateTime(comment.dateTime)}
+                                        </span>
+                                    </div>
+
+                                    <p className="text-sm text-gray-600 mt-1 leading-6">
+                                        {comment.content}
+                                    </p>
+                                </div>
+                            </div>
+                        )
+                    })}
+
+                    {/* Message input */}
                     {ticket.status !== 'CLOSED' && (
-                        <div className="space-y-3 border-t border-gray-100 pt-4">
+                        <div className="space-y-2 border-t border-gray-100 pt-4">
                             <textarea
                                 value={message}
-                                onChange={(e) => setMessage(e.target.value)}
+                                onChange={(e) => {
+                                    if (e.target.value.length <= MAX_COMMENT_LENGTH) {
+                                        setMessage(e.target.value)
+                                        if (sendError) setSendError(null)
+                                    }
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleSend()
+                                }}
                                 rows={3}
-                                placeholder="Unesite vašu poruku..."
+                                placeholder="Unesite vašu poruku... (Ctrl+Enter za slanje)"
                                 className="w-full px-3 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none resize-none"
                             />
 
-                            <div className="flex justify-end">
+                            {sendError && (
+                                <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+                                    <AlertCircle size={13} />
+                                    {sendError}
+                                </div>
+                            )}
+
+                            <div className="flex items-center justify-between">
+                                <span className={`text-xs ${message.length >= MAX_COMMENT_LENGTH ? 'text-red-500 font-medium' : 'text-gray-400'}`}>
+                                    {message.length} / {MAX_COMMENT_LENGTH}
+                                </span>
                                 <button
                                     type="button"
                                     onClick={handleSend}
@@ -959,10 +958,24 @@ export default function TicketDetail() {
                 title={forwardModalTitle}
                 size="md"
             >
+                {/* Step indicator — shown for choice and agents steps */}
+                {(forwardStep === 'choice' || forwardStep === 'agents') && (
+                    <div className="flex items-center gap-1.5 justify-center mb-5">
+                        {['choice', 'agents'].map((step, i) => (
+                            <div key={step} className="flex items-center gap-1.5">
+                                <div className={`w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center ${forwardStep === step ? 'bg-navy-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
+                                    {i + 1}
+                                </div>
+                                {i < 1 && <div className={`w-8 h-0.5 ${forwardStep === 'agents' ? 'bg-navy-400' : 'bg-gray-200'}`} />}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
                 {forwardStep === 'choice' && (
                     <div className="space-y-4">
                         <p className="text-sm text-gray-500">
-                            Odaberite način prosljeđivanja tiketa drugom agentu.
+                            Odaberite način prosljeđivanja tiketa.
                         </p>
 
                         {forwardError && (
@@ -989,7 +1002,7 @@ export default function TicketDetail() {
                                         Proslijedi najboljem agentu
                                     </p>
                                     <p className="text-xs text-gray-500 mt-0.5">
-                                        Sistem automatski bira agenta s najvišim score-om
+                                        Sistem automatski bira agenta s najvišim score-om za ovu kategoriju
                                     </p>
                                 </div>
                             </button>
@@ -1004,10 +1017,10 @@ export default function TicketDetail() {
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-gray-900">
-                                        Odaberi agenta
+                                        Odaberi agenta ručno
                                     </p>
                                     <p className="text-xs text-gray-500 mt-0.5">
-                                        Pregledaj listu agenata i odaberi najprikladnijeg
+                                        Pregledaj listu agenata sortiranu po kompatibilnosti
                                     </p>
                                 </div>
                             </button>
@@ -1051,9 +1064,12 @@ export default function TicketDetail() {
 
                 {forwardStep === 'agents' && (
                     <div className="space-y-4">
-                        <p className="text-sm text-gray-500">
-                            Lista je sortirana po kompatibilnosti s ovim tiketom.
-                        </p>
+                        <div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                            <Info size={14} className="text-blue-500 flex-shrink-0 mt-0.5" />
+                            <p className="text-xs text-blue-700">
+                                Score prikazuje kompatibilnost agenta s kategorijom i historijom tiketa. Viši score = bolji match.
+                            </p>
+                        </div>
 
                         {forwardError && (
                             <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
@@ -1068,22 +1084,19 @@ export default function TicketDetail() {
                         ) : (
                             <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
                                 {agentScores.map((agent) => {
-                                    const initials = agent.fullName
-                                        .split(' ')
-                                        .map((p) => p[0])
-                                        .join('')
-                                        .slice(0, 2)
-                                        .toUpperCase()
+                                    const nameParts = agent.fullName.split(' ')
+                                    const initials = (
+                                        nameParts.length >= 2
+                                            ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`
+                                            : agent.fullName.slice(0, 2)
+                                    ).toUpperCase()
                                     const isSelected = selectedAgent?.userId === agent.userId
 
                                     return (
                                         <button
                                             key={agent.userId}
                                             onClick={() => setSelectedAgent(agent)}
-                                            className={`w-full p-3 border-2 rounded-xl text-left transition-colors ${isSelected
-                                                ? 'border-navy-500 bg-navy-50'
-                                                : 'border-gray-200 hover:border-gray-300'
-                                                }`}
+                                            className={`w-full p-3 border-2 rounded-xl text-left transition-colors ${isSelected ? 'border-navy-500 bg-navy-50' : 'border-gray-200 hover:border-gray-300'}`}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className="w-9 h-9 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
@@ -1105,7 +1118,8 @@ export default function TicketDetail() {
                                                     <span className="text-sm font-bold text-navy-700">
                                                         {agent.scorePercent}%
                                                     </span>
-                                                    <div className="w-16 h-1.5 bg-gray-200 rounded-full mt-1">
+                                                    <p className="text-[10px] text-gray-400 leading-none mt-0.5">poklapanje</p>
+                                                    <div className="w-16 h-1.5 bg-gray-200 rounded-full mt-1.5">
                                                         <div
                                                             className="h-1.5 bg-navy-600 rounded-full"
                                                             style={{ width: `${agent.scorePercent}%` }}
@@ -1141,8 +1155,6 @@ export default function TicketDetail() {
                     </div>
                 )}
 
-
-
                 {forwardStep === 'success' && (
                     <div className="text-center space-y-4 py-4">
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
@@ -1156,7 +1168,7 @@ export default function TicketDetail() {
                                 <p className="text-sm text-gray-500 mt-1">
                                     Dodijeljen:{' '}
                                     <strong className="text-gray-700">{forwardedTo.fullName}</strong>
-                                    {' '}({forwardedTo.scorePercent}% kompatibilnosti)
+                                    {' '}({forwardedTo.scorePercent}% poklapanje)
                                 </p>
                             )}
                         </div>
@@ -1169,6 +1181,18 @@ export default function TicketDetail() {
                     </div>
                 )}
             </Modal>
+
+            {/* Confirm close ticket dialog — replaces window.confirm */}
+            <ConfirmDialog
+                isOpen={confirmCloseOpen}
+                onClose={() => setConfirmCloseOpen(false)}
+                onConfirm={handleCloseTicketAction}
+                title="Zatvori tiket"
+                message="Jeste li sigurni da želite zatvoriti ovaj tiket? Ova akcija se ne može poništiti."
+                confirmText="Zatvori tiket"
+                cancelText="Odustani"
+                variant="danger"
+            />
         </div>
     )
 }

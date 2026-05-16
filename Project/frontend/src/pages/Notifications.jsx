@@ -2,17 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useNotifications } from '../context/NotificationContext'
 import { Bell, CheckCheck } from 'lucide-react'
-
-function timeAgo(dateStr) {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const m = Math.floor(diff / 60000)
-  if (m < 1) return 'upravo'
-  if (m < 60) return `prije ${m} min`
-  const h = Math.floor(m / 60)
-  if (h < 24) return `prije ${h}h`
-  const d = Math.floor(h / 24)
-  return `prije ${d}d`
-}
+import { timeAgo } from '../utils/formatDate'
 
 const typeLabel = {
   TICKET_ASSIGNED: 'Dodijeljen tiket',
@@ -68,7 +58,10 @@ export default function Notifications() {
       {notifications.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-12 text-center">
           <Bell size={32} className="mx-auto text-gray-300 mb-3" />
-          <p className="text-sm text-gray-400">Nemate notifikacija.</p>
+          <p className="text-sm text-gray-500 font-medium">Nemate notifikacija</p>
+          <p className="text-xs text-gray-400 mt-1 max-w-xs mx-auto">
+            Vidjet ćete obavijesti kada agent odgovori, promijeni status ili proslijedi vaš tiket.
+          </p>
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
