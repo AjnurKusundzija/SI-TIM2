@@ -170,19 +170,20 @@ export default function TicketDetail() {
 
     // US-61: Rating states
     const [rating, setRating] = useState(undefined) // undefined = not fetched yet, null = no rating
-    const [ratingModalOpen, setRatingModalOpen] = useState(false)
+    const [ratingModalDismissed, setRatingModalDismissed] = useState(false)
     const [ratingValue, setRatingValue] = useState(0)
     const [ratingComment, setRatingComment] = useState('')
     const [ratingLoading, setRatingLoading] = useState(false)
     const [ratingError, setRatingError] = useState(null)
     const [ratingSuccess, setRatingSuccess] = useState(false)
 
-    // US-61: Auto-otvori modal kada CLIENT otvori zatvoren tiket bez ocjene
-    useEffect(() => {
-        if (ticket?.status === 'CLOSED' && user?.role === 'CLIENT' && rating === null) {
-            setRatingModalOpen(true)
-        }
-    }, [ticket?.status, user?.role, rating])
+    // US-61: Modal je otvoren kada klijent ima zatvoren tiket bez ocjene (izvedena vrijednost, nema useEffect)
+    const ratingModalOpen = (
+        ticket?.status === 'CLOSED' &&
+        user?.role === 'CLIENT' &&
+        rating === null &&
+        !ratingModalDismissed
+    ) || ratingSuccess
 
     const INTERNAL_PRIORITIES = [
         { value: 1, key: 'LOW', label: 'Nizak' },
@@ -849,7 +850,7 @@ export default function TicketDetail() {
                     </div>
                     <button
                         type="button"
-                        onClick={() => setRatingModalOpen(true)}
+                        onClick={() => setRatingModalDismissed(false)}
                         className="flex-shrink-0 px-4 py-2 bg-navy-700 hover:bg-navy-800 text-white text-sm font-medium rounded-lg transition-colors"
                     >
                         Ocijeni uslugu
@@ -880,7 +881,7 @@ export default function TicketDetail() {
             {/* US-61: Modal za ocjenjivanje tiketa (CLIENT) */}
             <Modal
                 isOpen={ratingModalOpen}
-                onClose={() => { setRatingModalOpen(false); setRatingSuccess(false) }}
+                onClose={() => { setRatingModalDismissed(true); setRatingSuccess(false) }}
                 title={ratingSuccess ? 'Hvala!' : 'Ocijenite uslugu'}
                 size="sm"
             >
@@ -897,7 +898,7 @@ export default function TicketDetail() {
                         </div>
                         <button
                             type="button"
-                            onClick={() => { setRatingModalOpen(false); setRatingSuccess(false) }}
+                            onClick={() => { setRatingModalDismissed(true); setRatingSuccess(false) }}
                             className="px-5 py-2 bg-navy-700 hover:bg-navy-800 text-white text-sm font-medium rounded-lg transition-colors"
                         >
                             Zatvori
@@ -933,7 +934,7 @@ export default function TicketDetail() {
                         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                             <button
                                 type="button"
-                                onClick={() => setRatingModalOpen(false)}
+                                onClick={() => setRatingModalDismissed(true)}
                                 className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
                             >
                                 Kasnije
