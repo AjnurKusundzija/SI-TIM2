@@ -115,5 +115,49 @@ namespace TelecomSupportSystem.DAL.Repositories
             _context.Tickets.Update(ticket);
             await _context.SaveChangesAsync();
         }
+
+        // Dashboard: N najrecentnijih tiketa po zadnjoj aktivnosti (komentar ili kreiranje)
+        public async Task<IEnumerable<Ticket>> GetRecentAssignedTicketsAsync(int userId, int count)
+        {
+            var latestAssignedIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId &&
+                             !_context.Set<TicketUser>().Any(tu2 =>
+                                 tu2.TicketId == tu.TicketId &&
+                                 tu2.AssignmentDate > tu.AssignmentDate))
+                .Select(tu => tu.TicketId)
+                .ToListAsync();
+
+            var tickets = await _context.Tickets
+                .Where(t => latestAssignedIds.Contains(t.TicketId))
+                .Include(t => t.Comments)
+                .ToListAsync();
+
+            return tickets
+                .OrderByDescending(t => t.Comments.Any()
+                    ? t.Comments.Max(c => c.DateTime)
+                    : t.CreatedDate)
+                .Take(count)
+                .ToList();
+        }
+
+        // PB-42: Tiketi gdje je korisnik posljednji dodjeljeni (svi statusi), s komentarima i ocjenama
+        public async Task<IEnumerable<Ticket>> GetAssignedTicketsForStatsAsync(int userId)
+        {
+            var latestAssignedIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId &&
+                             !_context.Set<TicketUser>().Any(tu2 =>
+                                 tu2.TicketId == tu.TicketId &&
+                                 tu2.AssignmentDate > tu.AssignmentDate))
+                .Select(tu => tu.TicketId)
+                .ToListAsync();
+
+            return await _context.Tickets
+                .Where(t => latestAssignedIds.Contains(t.TicketId))
+                .Include(t => t.Comments)
+                    .ThenInclude(c => c.Author)
+                .Include(t => t.Rating)
+                .Include(t => t.Creator)
+                .ToListAsync();
+        }
     }
 }

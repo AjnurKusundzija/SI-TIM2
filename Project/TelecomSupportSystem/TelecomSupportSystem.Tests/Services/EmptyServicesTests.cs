@@ -1,5 +1,8 @@
 using FluentAssertions;
+using Moq;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
+using TelecomSupportSystem.DAL.Repositories.Interfaces;
 using Xunit;
 
 namespace TelecomSupportSystem.Tests.Services
@@ -10,11 +13,13 @@ namespace TelecomSupportSystem.Tests.Services
         public void Constructor_ShouldInitializeSuccessfully()
         {
             // Arrange & Act
-            var service = new NotificationService();
+            var service = new NotificationService(
+                new Mock<INotificationRepository>().Object,
+                new Mock<INotificationPusher>().Object);
 
             // Assert
             service.Should().NotBeNull();
-            service.Should().BeAssignableTo<TelecomSupportSystem.BLL.Services.Interfaces.INotificationService>();
+            service.Should().BeAssignableTo<INotificationService>();
         }
     }
 
@@ -38,7 +43,7 @@ namespace TelecomSupportSystem.Tests.Services
         public void Constructor_ShouldInitializeSuccessfully()
         {
             // Arrange & Act
-            var service = new UserService();
+            var service = new UserService(new Mock<ITicketRepository>().Object);
 
             // Assert
             service.Should().NotBeNull();

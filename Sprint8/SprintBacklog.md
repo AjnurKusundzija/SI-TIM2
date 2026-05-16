@@ -14,13 +14,14 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 
 | ID | Naziv zadatka ili storyja | Povezani US | Odgovorna osoba ili osobe | Status | Napomena |
 |---|---|---|---|---|---|
-| SB-01 | PB-49 Notifikacije | US-58, US-59 | Uma | To-Do | Implementacija slanja i prikaza notifikacija za sve role |
+| SB-01 | PB-49 Notifikacije | US-58, US-59 | Uma | Done | Implementacija slanja i prikaza notifikacija za sve role, real-time via SignalR |
 | SB-02 | PB-36 Ažuriranje statusa tiketa | US-60 | Ajnur | To-Do | Tehničar mijenja status tiketa koji mu je dodijeljen |
 | SB-03 | PB-26 Ocjenjivanje tiketa | US-61 | Ajnur | To-Do | Korisnik ocjenjuje kvalitet rješenja nakon zatvaranja tiketa |
-| SB-04 | PB-42 Statistika agenta i tehničara | US-62, US-63 | Uma | To-Do | Prikaz lične statistike rada na profilnoj stranici |
+| SB-04 | PB-42 Statistika agenta i tehničara | US-62, US-63 | Uma | Done | Prikaz lične statistike rada na dashboardu |
 | SB-05 | PB-20 Upravljanje korisničkim profilom | US-64, US-65 | Merisa | To-Do | Korisnik mijenja email i lozinku svog profila |
 | SB-06 | PB-34 Pregled korisničkih profila (agent) | US-66, US-67 | Merisa | To-Do | Agent pregledava profile korisnika i historiju tiketa |
 | SB-07 | PB-21 Prikaz paketa i pretplata | US-68 | Eldar | To-Do | Korisnik vidi svoje aktivne pakete i pretplate |
+| SB-08 | Sistemske poruke u chatu pri prosljeđivanju tiketa | US-69 | Uma | Done | Proširenje PB-31: automatska poruka u chatu + real-time broadcast kada se tiket proslijedi |
 
 ---
 
@@ -36,10 +37,13 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 **Acceptance Criteria:**
 - Kada je tiket dodijeljen agentu ili tehničaru, sistem mora automatski kreirati notifikaciju tipa `TICKET_ASSIGNED` za tog korisnika
 - Kada je tiket proslijeđen drugom agentu ili tehničaru, sistem mora kreirati notifikaciju tipa `TICKET_FORWARDED` za novog vlasnika tiketa
+- Kada je tiket proslijeđen, sistem mora kreirati notifikaciju tipa `TICKET_FORWARDED` i za kreatora tiketa (klijenta), kako bi bio obaviješten o promjeni odgovorne osobe
 - Kada agent ili tehničar pošalje poruku na tiketu, sistem mora kreirati notifikaciju tipa `TICKET_RESPONSE` za kreatora tiketa
 - Kada korisnik pošalje poruku na tiketu, sistem mora kreirati notifikaciju tipa `TICKET_RESPONSE` za trenutnog vlasnika tiketa
 - Kada se tiket zatvori, sistem mora kreirati notifikaciju tipa `TICKET_CLOSED` za kreatora tiketa
 - Kada tehničar promijeni status tiketa, sistem mora kreirati notifikaciju tipa `STATUS_CHANGED` za kreatora tiketa
+- Notifikacije moraju biti isporučene u realnom vremenu putem SignalR konekcije, bez potrebe za osvježavanjem stranice
+- Svaka notifikacija mora sadržavati referencu na odgovarajući tiket (`TicketId`) kako bi redirect bio moguć
 - Sistem ne smije kreirati notifikaciju za korisnika koji je sam izvršio tu akciju
 
 ---
@@ -48,10 +52,12 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 *Kao korisnik, agent ili tehničar, želim da upravljam svojim notifikacijama i označim ih kao pročitane, kako bih imao jasan pregled nepročitanih obavještenja.*
 
 **Acceptance Criteria:**
-- Kada je korisnik prijavljen u sistem, sistem mora prikazivati broj nepročitanih notifikacija u vidu badge-a
+- Kada je korisnik prijavljen u sistem, sistem mora prikazivati broj nepročitanih notifikacija u vidu badge-a u zaglavlju
 - Kada korisnik otvori pregled notifikacija, sistem mora prikazati sve notifikacije sortirane po datumu, od najnovijih
-- Kada korisnik klikne na notifikaciju, sistem mora označiti notifikaciju kao pročitanu i preusmjeriti ga na odgovarajući tiket
+- Kada korisnik klikne na notifikaciju, sistem mora označiti notifikaciju kao pročitanu i preusmjeriti ga na odgovarajući tiket (klijent na `/mytickets/:id`, agent/tehničar na `/tickets/:id`)
 - Sistem mora omogućiti označavanje svih notifikacija kao pročitane odjednom
+- Sistem mora prikazivati notifikacije u realnom vremenu — nova notifikacija se dodaje na vrh liste bez osvježavanja stranice
+- Sistem mora prikazivati link "Notifikacije" u bočnoj navigaciji s brojem nepročitanih
 - Sistem ne smije prikazivati notifikacije drugih korisnika
 - Kada korisnik nema notifikacija, sistem mora prikazati odgovarajuću poruku
 
@@ -188,6 +194,20 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 - Kada korisnik nema aktivnih paketa, sistem mora prikazati odgovarajuću poruku
 - Sistem ne smije prikazivati pakete i pretplate drugih korisnika
 - Agenti i tehničari ne smiju imati pristup ovoj sekciji za vlastiti nalog
+
+---
+
+## PB-31 (proširenje) — Sistemske poruke u chatu pri prosljeđivanju
+
+### US-69
+*Kao korisnik, želim da vidim u chatu tiketa poruku koja me obavještava kada je tiket proslijeđen drugoj osobi, kako bih imao jasan pregled toka rješavanja bez potrebe za zasebnom provjerom.*
+
+**Acceptance Criteria:**
+- Kada agent proslijedi tiket drugom agentu, sistem mora automatski dodati sistemsku poruku u chat tiketa u formatu: `"Tiket je proslijeđen agentu: Ime Prezime"`
+- Kada agent proslijedi tiket tehničaru, sistem mora automatski dodati sistemsku poruku u chat tiketa u formatu: `"Tiket je proslijeđen tehničaru: Ime Prezime"`
+- Sistemska poruka mora biti vidljiva svim učesnicima (klijent, agent, tehničar, admin) u realnom vremenu bez osvježavanja stranice
+- Sistemska poruka mora biti vizualno različita od regularnih poruka — prikazana kao centrirana pill linija, bez avatara i bez oznake autora
+- Sistemska poruka ne smije biti prikazana kao poruka korisnika niti smije imati polje za autora
 
 ---
 

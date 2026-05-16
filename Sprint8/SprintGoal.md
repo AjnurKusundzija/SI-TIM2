@@ -29,10 +29,11 @@ Dodatno, sprint uključuje proširenje profilnih stranica agenta i tehničara sa
 
 ## Očekivani deliverable-i
 
-- PB-49 Notifikacije — implementiran notifikacijski sistem za sve role
+- PB-49 Notifikacije — implementiran notifikacijski sistem za sve role s real-time SignalR isporukom
+- PB-42 Statistika agenta i tehničara — lična statistika na profilnoj stranici i dashboardu
+- SB-08 Sistemske poruke u chatu pri prosljeđivanju tiketa (proširenje PB-31)
 - PB-36 Ažuriranje statusa tiketa — tehničar mijenja status dodijeljenih tiketa
 - PB-26 Ocjenjivanje tiketa — korisnik ocjenjuje zatvoreni tiket (1–5, opcionalni komentar)
-- PB-42 Statistika agenta i tehničara — lična statistika na profilnoj stranici
 - PB-20 Upravljanje korisničkim profilom — promjena email adrese i lozinke
 - PB-34 Pregled korisničkih profila (agent) — agent vidi profil, historiju tiketa i pakete korisnika
 - PB-21 Prikaz paketa i pretplata — korisnik vidi svoje aktivne pakete i pretplate

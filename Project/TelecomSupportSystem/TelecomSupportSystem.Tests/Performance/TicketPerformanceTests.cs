@@ -3,11 +3,13 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System.Security.Claims;
 using TelecomSupportSystem.API.Controllers;
 using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
@@ -29,7 +31,7 @@ namespace TelecomSupportSystem.Tests.Performance
 
         private static TicketController CreateController(ApplicationDbContext context, int userId, string role = "CLIENT")
         {
-            var controller = new TicketController(new TicketService(new TicketRepository(context), new TeamRepository(context), new UserRepository(context)));
+            var controller = new TicketController(new TicketService(new TicketRepository(context), new TeamRepository(context), new UserRepository(context), new Mock<INotificationService>().Object, new Mock<ICommentService>().Object));
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, userId.ToString()),

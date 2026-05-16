@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Moq;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
@@ -13,11 +14,12 @@ namespace TelecomSupportSystem.Tests.Tickets
         private readonly Mock<ITicketRepository> _repoMock = new();
         private readonly Mock<ITeamRepository> _teamRepoMock = new();
         private readonly Mock<IUserRepository> _userRepoMock = new();
+        private readonly Mock<INotificationService> _notificationServiceMock = new();
         private readonly TicketService _service;
 
         public AllTicketsServiceTests()
         {
-            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object);
+            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object, new Mock<ICommentService>().Object);
         }
 
         private static Ticket MakeTicket(int id = 1, int creatorId = 5) => new()

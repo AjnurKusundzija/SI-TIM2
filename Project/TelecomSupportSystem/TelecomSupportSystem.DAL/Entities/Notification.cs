@@ -14,6 +14,7 @@ namespace TelecomSupportSystem.DAL.Entities
         public DateTime SentDate { get; set; }
         public bool IsRead { get; set; }
         public int UserId { get; set; }
+        public int? TicketId { get; set; }
 
         public User User { get; set; } = null!;
     }

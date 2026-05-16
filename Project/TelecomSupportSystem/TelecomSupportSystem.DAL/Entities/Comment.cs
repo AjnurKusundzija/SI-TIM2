@@ -11,10 +11,11 @@ namespace TelecomSupportSystem.DAL.Entities
         public string Content { get; set; } = string.Empty;
         public DateTime DateTime { get; set; }
         public bool IsInternal { get; set; }
-        public int AuthorId { get; set; }
+        public bool IsSystemMessage { get; set; }
+        public int? AuthorId { get; set; }
         public int TicketId { get; set; }
 
-        public User Author { get; set; } = null!;
+        public User? Author { get; set; }
         public Ticket Ticket { get; set; } = null!;
     }
 }
