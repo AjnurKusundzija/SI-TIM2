@@ -77,6 +77,12 @@ export async function updateInternalPriority(ticketId, priority) {
   return response.data
 }
 
+// PB-36 / US-60: Tehničar mijenja status tiketa koji mu je dodijeljen
+export async function updateTicketStatus(ticketId, status) {
+  const response = await api.post(`/tickets/${ticketId}/status`, { status })
+  return response.data
+}
+
 // Closure Workflow
 export async function closeTicket(ticketId) {
   const response = await api.post(`/tickets/${ticketId}/close`)
