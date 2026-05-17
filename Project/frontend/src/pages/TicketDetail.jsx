@@ -33,6 +33,7 @@ import {
     forceCloseTicket,
     getTicketRating,
     createTicketRating,
+    updateTicketStatus,
 } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
@@ -235,6 +236,35 @@ export default function TicketDetail() {
         rating === null &&
         !ratingModalDismissed
     ) || ratingSuccess
+
+    // PB-36 / US-60: Status promjena (tehničar)
+    const TECHNICIAN_STATUSES = [
+        { value: 'OPEN', label: 'U toku (Otvoren)' },
+        { value: 'CLOSURE_REQUESTED', label: 'Čeka zatvaranje' },
+    ]
+    const [statusUpdating, setStatusUpdating] = useState(false)
+    const [statusNotification, setStatusNotification] = useState(null)
+
+    const handleUpdateTicketStatus = async (newStatus) => {
+        if (!newStatus || newStatus === ticket?.status) return
+        setStatusUpdating(true)
+        setStatusNotification(null)
+        try {
+            await updateTicketStatus(Number(id), newStatus)
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+            setStatusNotification({ type: 'success', message: 'Status tiketa je uspješno ažuriran.' })
+        } catch (err) {
+            console.error('Failed to update ticket status', err)
+            setStatusNotification({
+                type: 'error',
+                message: err.response?.data?.poruka || 'Greška pri ažuriranju statusa tiketa.',
+            })
+        } finally {
+            setStatusUpdating(false)
+            setTimeout(() => setStatusNotification(null), 3000)
+        }
+    }
 
     const INTERNAL_PRIORITIES = [
         { value: 1, key: 'LOW', label: 'Nizak' },
@@ -727,6 +757,45 @@ export default function TicketDetail() {
                                     </button>
                                 )}
                             </>
+                        )}
+                    </div>
+                )}
+
+                {/* PB-36 / US-60: Tehničar mijenja status tiketa koji mu je dodijeljen */}
+                {user?.role === 'TECHNICIAN'
+                    && ticket.status !== 'CLOSED'
+                    && ticket.assignedAgentId === user?.userId && (
+                    <div className="border-t border-gray-100 mt-5 pt-4">
+                        <div className="flex flex-col sm:flex-row sm:items-end gap-3">
+                            <div className="flex-1">
+                                <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">
+                                    Promijeni status tiketa
+                                </p>
+                                <select
+                                    aria-label="Promijeni status tiketa"
+                                    disabled={statusUpdating}
+                                    value={ticket.status || ''}
+                                    onChange={(e) => handleUpdateTicketStatus(e.target.value)}
+                                    className="w-full sm:w-72 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500 disabled:opacity-50"
+                                >
+                                    {TECHNICIAN_STATUSES.map((s) => (
+                                        <option key={s.value} value={s.value}>{s.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        {statusNotification && (
+                            <div
+                                role="status"
+                                className={`mt-3 p-3 rounded-lg text-xs font-medium ${
+                                    statusNotification.type === 'success'
+                                        ? 'bg-green-50 text-green-700 border border-green-100'
+                                        : 'bg-red-50 text-red-700 border border-red-100'
+                                }`}
+                            >
+                                {statusNotification.message}
+                            </div>
                         )}
                     </div>
                 )}

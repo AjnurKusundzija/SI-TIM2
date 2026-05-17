@@ -88,3 +88,21 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Sta je tim odbacio | Prijedloge za anonimno ocjenjivanje i posebnu stranicu za sve ocjene, jer nisu dio trenutnog scope-a PB-26. Odbaceno je i omogucavanje izmjene ocjene nakon slanja, zbog acceptance kriterija da isti tiket ne smije biti ocijenjen vise puta. |
 | Rizici, problemi ili greske koje su uocene | Potrebno je pazljivo validirati vlasnistvo tiketa i status `Closed`, jer bi propust omogucio ocjenjivanje tudjih ili nezatvorenih tiketa. Postoji rizik od duplog slanja forme na frontendu, pa backend validacija jedinstvene ocjene ostaje obavezna zastita. |
 | Ko je koristio alat | Ajnur Kusundzija |
+
+---
+
+## Unos #5
+
+| Polje | Detalji |
+|---|---|
+| Datum | 17.05.2026 |
+| Sprint broj | Sprint 8 |
+| Alat koji je koristen | Claude Code (claude-opus-4-7) |
+| Svrha koristenja | Implementacija PB-36 / US-60: Azuriranje statusa tiketa od strane tehnicara |
+| Kratak opis zadatka ili upita | Implementirati backend i frontend tako da tehnicar moze promijeniti status tiketa koji mu je dodijeljen, uz postovanje pravila pristupa (samo dodijeljeni tehnicar, samo otvoreni tiketi, predefinisani dozvoljeni statusi), generisanje `STATUS_CHANGED` notifikacije za kreatora tiketa i prikaz potvrde uspjeha — bez narusavanja postojecih tokova (closure workflow, forwarding, notifikacije). |
+| Sta je AI predlozio ili generisao | Backend: novi `UpdateTicketStatusDto` (TicketStatus enum), prosirenje `ITicketService` i `TicketService` metodom `UpdateTicketStatusAsync(ticketId, newStatus, userId, role)` sa svim biznis pravilima (role == TECHNICIAN, posljednji assignee == current user, ticket != CLOSED, novi status u dozvoljenoj listi `{OPEN, CLOSURE_REQUESTED}`, no-op kada je isti status, postavljanje `ClosureRequested*` polja pri prelasku na CLOSURE_REQUESTED, postavljanje `ClosureRequestStatus = REJECTED` pri povratku na OPEN), novi endpoint `POST /api/tickets/{id}/status` u `TicketController`-u koji mapira izuzetke na 404/403/400, prosirenje `TicketDetailDto` sa `AssignedAgentId` (potrebno da frontend zna treba li prikazati kontrolu), 13 jedinicnih testova u `TicketStatusUpdateTests.cs` (servis: uspjesna promjena + notifikacija, zabrana neasignuee/closed/non-technician/non-allowed-status, KeyNotFound, no-op, REJECTED tranzicija; kontroler: 200/403/400/404/401 mapiranja). Frontend: `updateTicketStatus` u `ticketService.js`, mali dropdown blok u `TicketDetail.jsx` koji se prikazuje samo kada je `user.role === 'TECHNICIAN' && ticket.status !== 'CLOSED' && ticket.assignedAgentId === user.userId`, inline success/error poruka, osvjezavanje stanja tiketa bez full reloada. |
+| Sta je tim prihvatio | Cjelokupnu backend arhitekturu (DTO, servisnu metodu sa svim validacijama, kontroler endpoint, prosirenje TicketDetailDto sa AssignedAgentId), sve testove, frontend dropdown UI i logiku osvjezavanja stanja. |
+| Sta je tim izmijenio | Nista strukturalno — implementacija je prihvacena nakon ručne provjere end-to-end toka kroz UI (klijent kreira tiket → agent prosljedjuje tehnicaru → tehnicar mijenja status → klijent dobija STATUS_CHANGED notifikaciju). |
+| Sta je tim odbacio | Prijedlog da se prosiri `TicketStatus` enum sa dodatnim vrijednostima tipa `IN_PROGRESS`/`PENDING` — odbaceno jer bi zahtijevalo EF migraciju, novu logiku u svim postojecim filterima/statistikama i nije nuzno za AC. Takodjer odbaceno dozvoljavanje tehnicaru da direktno postavi `CLOSED` — zatvaranje u ovom sistemu mora ici kroz client-confirm tok (`request-closure` → `accept-closure`). |
+| Rizici, problemi ili greske koje su uocene | UI guard (`assignedAgentId === user.userId`) sakriva kontrolu od tehnicara koji nisu trenutni assignee, ali backend takodjer provjerava — bez backend provjere kontrola bi se mogla zaobici direktnim API pozivom. Postojeci `GetTicketByIdAsync` za TECHNICIAN-a dozvoljava pristup ako je IKAD bio dodijeljen (`Assignments.Any(a => a.UserId == userId)`), sto znaci da bivsi assignee moze otvoriti detalj, ali nasa provjera "posljednji assignee" u `UpdateTicketStatusAsync` ispravno odbija takvog korisnika. Zabilezeni postojeci CS8602 warning u `TicketService.cs:271` i nedostatak assignee-provjere u `CloseTicketAsync` — oba su van scope-a US-60. |
+| Ko je koristio alat | Ajnur Kusundzija |

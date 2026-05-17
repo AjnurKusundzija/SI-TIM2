@@ -20,5 +20,6 @@ namespace TelecomSupportSystem.BLL.DTOs.Tickets
 
         public string ClientName { get; set; } = string.Empty;
         public string AssignedAgentName { get; set; } = string.Empty;
+        public int? AssignedAgentId { get; set; }
     }
 }

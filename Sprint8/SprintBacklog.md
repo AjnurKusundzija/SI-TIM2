@@ -15,7 +15,7 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 | ID | Naziv zadatka ili storyja | Povezani US | Odgovorna osoba ili osobe | Status | Napomena |
 |---|---|---|---|---|---|
 | SB-01 | PB-49 Notifikacije | US-58, US-59 | Uma | Done | Implementacija slanja i prikaza notifikacija za sve role, real-time via SignalR |
-| SB-02 | PB-36 Ažuriranje statusa tiketa | US-60 | Ajnur | To-Do | Tehničar mijenja status tiketa koji mu je dodijeljen |
+| SB-02 | PB-36 Ažuriranje statusa tiketa | US-60 | Ajnur | Done | Tehničar mijenja status tiketa koji mu je dodijeljen |
 | SB-03 | PB-26 Ocjenjivanje tiketa | US-61 | Ajnur | Done | Korisnik ocjenjuje kvalitet rješenja nakon zatvaranja tiketa |
 | SB-04 | PB-42 Statistika agenta i tehničara | US-62, US-63 | Uma | Done | Prikaz lične statistike rada na dashboardu |
 | SB-05 | PB-20 Upravljanje korisničkim profilom | US-64, US-65 | Merisa | To-Do | Korisnik mijenja email i lozinku svog profila |
