@@ -25,7 +25,6 @@ export default function Profile() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordStatus, setPasswordStatus] = useState(null)
   const [passwordError, setPasswordError] = useState(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function loadProfile() {
@@ -35,8 +34,6 @@ export default function Profile() {
         setNewEmail(data.email)
       } catch (error) {
         setEmailError(getErrorMessage(error))
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -48,6 +45,20 @@ export default function Profile() {
     setEmailStatus(null)
     setEmailError(null)
 
+    // 1. Provjera da li je polje prazno
+    if (!newEmail.trim()) {
+      setEmailError("Email je obavezan.")
+      return
+    }
+
+    // 2. Provjera formata (mora imati @ i završavati na .com)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/
+    if (!emailRegex.test(newEmail)) {
+      setEmailError("Neispravan format email adrese. Mora sadržavati '@' i završavati se sa '.com'.")
+      return
+    }
+
+    // 3. Slanje na backend (provjera zauzetosti u bazi)
     try {
       await updateEmail(newEmail)
       setEmailStatus('Email je uspješno ažuriran.')
@@ -110,10 +121,7 @@ export default function Profile() {
                 <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Email</p>
                 <p>{profile.email}</p>
               </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Uloga</p>
-                <p>{profile.role}</p>
-              </div>
+              {/* ULOGA JE USPJEŠNO UKLONJENA ODAVDE */}
               {profile.phone && (
                 <div>
                   <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Telefon</p>
