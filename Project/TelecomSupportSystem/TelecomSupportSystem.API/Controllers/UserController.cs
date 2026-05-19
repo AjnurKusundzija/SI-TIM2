@@ -121,5 +121,35 @@ namespace TelecomSupportSystem.API.Controllers
             var tickets = await _userService.GetRecentAssignedTicketsAsync(userId);
             return Ok(tickets);
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetUserProfile(int id)
+        {
+            var requestorIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (requestorIdClaim is null || !int.TryParse(requestorIdClaim, out int requestorId) || role is null)
+                return Unauthorized();
+
+            if (role == "CLIENT" && id != requestorId)
+                return Forbid();
+
+            if (role != "CLIENT" && role != "AGENT" && role != "TECHNICIAN" && role != "ADMINISTRATOR")
+                return Forbid();
+
+            try
+            {
+                var profile = await _userService.GetUserProfileAsync(id, requestorId, role);
+                return Ok(profile);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
     }
 }

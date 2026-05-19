@@ -18,6 +18,11 @@ export async function getMyProfile() {
   return response.data
 }
 
+export async function getUserProfile(userId) {
+  const response = await api.get(`/users/${userId}`)
+  return response.data
+}
+
 export async function updateEmail(email) {
   const response = await api.put('/users/me/email', { email })
   return response.data

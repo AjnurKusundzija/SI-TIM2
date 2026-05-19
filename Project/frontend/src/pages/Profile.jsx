@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { Eye, EyeOff } from 'lucide-react'
 import { getMyProfile, updateEmail, updatePassword } from '../services/userService'
 
 function getErrorMessage(error) {
@@ -15,6 +16,7 @@ export default function Profile() {
     lastName: user?.lastName || '',
     email: user?.email || '',
     phone: '',
+    location: '',
     role: user?.role || '',
   })
   const [newEmail, setNewEmail] = useState(user?.email || '')
@@ -25,6 +27,9 @@ export default function Profile() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordStatus, setPasswordStatus] = useState(null)
   const [passwordError, setPasswordError] = useState(null)
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   useEffect(() => {
     async function loadProfile() {
@@ -121,11 +126,16 @@ export default function Profile() {
                 <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Email</p>
                 <p>{profile.email}</p>
               </div>
-              {/* ULOGA JE USPJEŠNO UKLONJENA ODAVDE */}
               {profile.phone && (
                 <div>
                   <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Telefon</p>
                   <p>{profile.phone}</p>
+                </div>
+              )}
+              {profile.location && (
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Lokacija</p>
+                  <p>{profile.location}</p>
                 </div>
               )}
             </div>
@@ -166,35 +176,65 @@ export default function Profile() {
           <form onSubmit={handlePasswordSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-slate-700">Trenutna lozinka</label>
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-200"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showCurrentPassword ? 'text' : 'password'}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 pr-10 text-sm focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-200"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="absolute right-3 top-3 text-slate-500 hover:text-slate-700 transition-colors"
+                  aria-label={showCurrentPassword ? 'Sakrij lozinku' : 'Prikaži lozinku'}
+                >
+                  {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700">Nova lozinka</label>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-200"
-                minLength={8}
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showNewPassword ? 'text' : 'password'}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 pr-10 text-sm focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-200"
+                  minLength={8}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-3 text-slate-500 hover:text-slate-700 transition-colors"
+                  aria-label={showNewPassword ? 'Sakrij lozinku' : 'Prikaži lozinku'}
+                >
+                  {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700">Potvrdite novu lozinku</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-200"
-                minLength={8}
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 pr-10 text-sm focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-200"
+                  minLength={8}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-3 text-slate-500 hover:text-slate-700 transition-colors"
+                  aria-label={showConfirmPassword ? 'Sakrij lozinku' : 'Prikaži lozinku'}
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             {passwordError && (
               <p className="text-sm text-red-600">{passwordError}</p>

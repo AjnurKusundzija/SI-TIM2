@@ -654,9 +654,19 @@ export default function TicketDetail() {
                 </div>
 
                 <div className="border-t border-gray-100 mt-6 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-500">
-                    <div className="flex items-center gap-2">
-                        <User size={16} />
-                        <span>Kreirao: <strong className="text-gray-700">{clientName}</strong></span>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <div className="flex items-center gap-2">
+                            <User size={16} />
+                            <span>Kreirao: <strong className="text-gray-700">{clientName}</strong></span>
+                        </div>
+                        {ticket.creatorId > 0 && (user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR') && (
+                            <Link
+                                to={`/users/${ticket.creatorId}`}
+                                className="text-sm text-navy-700 hover:text-navy-900 underline"
+                            >
+                                Pogledaj profil korisnika
+                            </Link>
+                        )}
                     </div>
                     <div className="flex items-center gap-2">
                         <Tag size={16} />
@@ -715,8 +725,12 @@ export default function TicketDetail() {
                                 {ticket.status === 'OPEN' && (
                                     <button
                                         type="button"
-                                        disabled={closureLoading}
+                                        disabled={closureLoading || !(user?.role === 'ADMINISTRATOR' || ticket.assignedAgentId === user?.userId)}
                                         onClick={handleRequestClosure}
+                                        title={!(user?.role === 'ADMINISTRATOR' || ticket.assignedAgentId === user?.userId)
+                                            ? 'Samo dodijeljeni agent ili tehničar može zatražiti zatvaranje'
+                                            : undefined
+                                        }
                                         className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
                                     >
                                         <Clock size={16} />
@@ -749,8 +763,10 @@ export default function TicketDetail() {
                                 {user?.role === 'AGENT' && ticket.status === 'OPEN' && (
                                     <button
                                         type="button"
+                                        disabled={closureLoading || ticket.assignedAgentId !== user?.userId}
                                         onClick={handleOpenForward}
-                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors"
+                                        title={ticket.assignedAgentId !== user?.userId ? 'Samo dodijeljeni agent može proslijediti tiket' : undefined}
+                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
                                     >
                                         <ArrowRightLeft size={16} />
                                         Proslijedi tiket
