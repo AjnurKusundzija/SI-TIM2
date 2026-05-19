@@ -27,6 +27,7 @@ vi.mock('../services/ticketService', () => ({
   getAgentScores: vi.fn(),
   forwardTicketToTechnician: vi.fn(),
   updateInternalPriority: vi.fn(),
+  updateTicketStatus: vi.fn(),
 }))
 
 vi.mock('../context/AuthContext', () => ({
@@ -75,6 +76,9 @@ const FAKE_TICKET = {
   createdDate: '2026-05-01T10:00:00Z',
   clientName: 'Merjem Omerović',
   assignedAgentName: 'Selma Mujić',
+  assignedAgentId: 2,
+  assignedTechnicianName: 'Adnan Hasić',
+  assignedTechnicianId: 7,
 }
 
 const FAKE_COMMENTS = [
@@ -123,6 +127,15 @@ describe('TicketDetail page — PB-24, PB-27', () => {
 
     await waitFor(() => expect(screen.queryAllByText('Merjem Omerović')).not.toHaveLength(0))
     expect(screen.queryAllByText('Selma Mujić')).not.toHaveLength(0)
+  })
+
+  it('shows assigned technician below the assigned agent', async () => {
+    mocks.getTicketById.mockResolvedValueOnce(FAKE_TICKET)
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    renderTicketDetail(AGENT_USER)
+
+    await waitFor(() => expect(screen.queryAllByText('Selma Mujić')).not.toHaveLength(0))
+    expect(screen.queryAllByText('Adnan Hasić')).not.toHaveLength(0)
   })
 
   // PB-24 / US-15: historija komentara se prikazuje

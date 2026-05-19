@@ -164,7 +164,7 @@ export default function Statistics() {
     },
     {
       icon: AlertCircle,
-      label: 'Čeka zatvaranje',
+      label: 'Čeka se',
       value: stats.pendingClosureCount,
       color: 'bg-amber-500',
       description: 'Tiketi na čekanju potvrde',
@@ -200,7 +200,7 @@ export default function Statistics() {
   const distributionData = [
     { name: 'Otvoreni', value: stats.openTicketsCount, color: DISTRIBUTION_COLORS.open },
     { name: 'Zatvoreni', value: stats.closedTicketsCount, color: DISTRIBUTION_COLORS.closed },
-    { name: 'Čeka zatvaranje', value: stats.pendingClosureCount, color: DISTRIBUTION_COLORS.pending },
+    { name: 'Čeka se', value: stats.pendingClosureCount, color: DISTRIBUTION_COLORS.pending },
   ].filter((d) => d.value > 0)
 
   // Performance bar chart data — in minutes for comparison

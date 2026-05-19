@@ -54,52 +54,76 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .ToListAsync();
         }
 
+        private async Task<List<int>> GetActiveAssignedTicketIdsAsync(int userId)
+        {
+            var ticketIds = await _context.Set<TicketUser>()
+                .Where(tu => tu.UserId == userId)
+                .Select(tu => tu.TicketId)
+                .Distinct()
+                .ToListAsync();
+
+            if (ticketIds.Count == 0)
+                return new List<int>();
+
+            var assignments = await _context.Set<TicketUser>()
+                .Where(tu => ticketIds.Contains(tu.TicketId))
+                .AsNoTracking()
+                .ToListAsync();
+
+            return assignments
+                .GroupBy(tu => tu.TicketId)
+                .Where(group =>
+                {
+                    var ordered = group
+                        .OrderBy(tu => tu.AssignmentDate)
+                        .ThenBy(tu => tu.AssignmentId)
+                        .ToList();
+
+                    var latest = ordered.LastOrDefault();
+                    if (latest is null)
+                        return false;
+
+                    if (latest.UserId == userId)
+                        return true;
+
+                    if (latest.AssignmentType != AssignmentType.FORWARDED_TO_TECHNICIAN)
+                        return false;
+
+                    var previous = ordered.Count > 1 ? ordered[^2] : null;
+                    return previous?.UserId == userId;
+                })
+                .Select(group => group.Key)
+                .ToList();
+        }
+
         public async Task<IEnumerable<Ticket>> GetByAssigneeIdAsync(int userId)
         {
-            var latestAssignedIds = await _context.Set<TicketUser>()
-                .Where(tu => tu.UserId == userId &&
-                             !_context.Set<TicketUser>().Any(tu2 =>
-                                 tu2.TicketId == tu.TicketId &&
-                                 tu2.AssignmentDate > tu.AssignmentDate))
-                .Select(tu => tu.TicketId)
-                .ToListAsync();
+            var activeAssignedIds = await GetActiveAssignedTicketIdsAsync(userId);
 
             return await _context.Tickets
-                .Where(t => latestAssignedIds.Contains(t.TicketId))
+                .Where(t => activeAssignedIds.Contains(t.TicketId))
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }
 
-        // US-53: Otvoreni tiketi gdje je POSLJEDNJA dodjela na korisnika
+        // US-53: Otvoreni tiketi gdje je korisnik aktivno dodijeljen
         public async Task<IEnumerable<Ticket>> GetOpenAssignedTicketsAsync(int userId)
         {
-            var latestAssignedIds = await _context.Set<TicketUser>()
-                .Where(tu => tu.UserId == userId &&
-                             !_context.Set<TicketUser>().Any(tu2 =>
-                                 tu2.TicketId == tu.TicketId &&
-                                 tu2.AssignmentDate > tu.AssignmentDate))
-                .Select(tu => tu.TicketId)
-                .ToListAsync();
+            var activeAssignedIds = await GetActiveAssignedTicketIdsAsync(userId);
 
             return await _context.Tickets
-                .Where(t => latestAssignedIds.Contains(t.TicketId) && t.Status == TicketStatus.OPEN)
+                .Where(t => activeAssignedIds.Contains(t.TicketId) && t.Status == TicketStatus.OPEN)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }
 
-        // US-54: Zatvoreni tiketi gdje je POSLJEDNJA dodjela bila na korisnika
+        // US-54: Zatvoreni tiketi gdje je korisnik aktivno dodijeljen
         public async Task<IEnumerable<Ticket>> GetClosedAssignedTicketsAsync(int userId)
         {
-            var latestAssignedIds = await _context.Set<TicketUser>()
-                .Where(tu => tu.UserId == userId &&
-                             !_context.Set<TicketUser>().Any(tu2 =>
-                                 tu2.TicketId == tu.TicketId &&
-                                 tu2.AssignmentDate > tu.AssignmentDate))
-                .Select(tu => tu.TicketId)
-                .ToListAsync();
+            var activeAssignedIds = await GetActiveAssignedTicketIdsAsync(userId);
 
             return await _context.Tickets
-                .Where(t => latestAssignedIds.Contains(t.TicketId) && t.Status == TicketStatus.CLOSED)
+                .Where(t => activeAssignedIds.Contains(t.TicketId) && t.Status == TicketStatus.CLOSED)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }
@@ -119,16 +143,10 @@ namespace TelecomSupportSystem.DAL.Repositories
         // Dashboard: N najrecentnijih tiketa po zadnjoj aktivnosti (komentar ili kreiranje)
         public async Task<IEnumerable<Ticket>> GetRecentAssignedTicketsAsync(int userId, int count)
         {
-            var latestAssignedIds = await _context.Set<TicketUser>()
-                .Where(tu => tu.UserId == userId &&
-                             !_context.Set<TicketUser>().Any(tu2 =>
-                                 tu2.TicketId == tu.TicketId &&
-                                 tu2.AssignmentDate > tu.AssignmentDate))
-                .Select(tu => tu.TicketId)
-                .ToListAsync();
+            var activeAssignedIds = await GetActiveAssignedTicketIdsAsync(userId);
 
             var tickets = await _context.Tickets
-                .Where(t => latestAssignedIds.Contains(t.TicketId))
+                .Where(t => activeAssignedIds.Contains(t.TicketId))
                 .Include(t => t.Comments)
                 .ToListAsync();
 
@@ -140,19 +158,13 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .ToList();
         }
 
-        // PB-42: Tiketi gdje je korisnik posljednji dodjeljeni (svi statusi), s komentarima i ocjenama
+        // PB-42: Tiketi gdje je korisnik aktivno dodijeljen (svi statusi), s komentarima i ocjenama
         public async Task<IEnumerable<Ticket>> GetAssignedTicketsForStatsAsync(int userId)
         {
-            var latestAssignedIds = await _context.Set<TicketUser>()
-                .Where(tu => tu.UserId == userId &&
-                             !_context.Set<TicketUser>().Any(tu2 =>
-                                 tu2.TicketId == tu.TicketId &&
-                                 tu2.AssignmentDate > tu.AssignmentDate))
-                .Select(tu => tu.TicketId)
-                .ToListAsync();
+            var activeAssignedIds = await GetActiveAssignedTicketIdsAsync(userId);
 
             return await _context.Tickets
-                .Where(t => latestAssignedIds.Contains(t.TicketId))
+                .Where(t => activeAssignedIds.Contains(t.TicketId))
                 .Include(t => t.Comments)
                     .ThenInclude(c => c.Author)
                 .Include(t => t.Rating)

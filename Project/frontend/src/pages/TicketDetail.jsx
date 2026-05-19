@@ -240,7 +240,7 @@ export default function TicketDetail() {
     // PB-36 / US-60: Status promjena (tehničar)
     const TECHNICIAN_STATUSES = [
         { value: 'OPEN', label: 'U toku (Otvoren)' },
-        { value: 'CLOSURE_REQUESTED', label: 'Čeka zatvaranje' },
+        { value: 'CLOSURE_REQUESTED', label: 'Čeka se' },
     ]
     const [statusUpdating, setStatusUpdating] = useState(false)
     const [statusNotification, setStatusNotification] = useState(null)
@@ -618,6 +618,10 @@ export default function TicketDetail() {
 
     const clientName = ticket.clientName || 'Klijent'
     const agentName = ticket.assignedAgentName || 'Nije dodijeljen'
+    const technicianName = ticket.assignedTechnicianName || ''
+    const isAssignedStaff = user?.role === 'ADMINISTRATOR'
+        || ticket.assignedAgentId === user?.userId
+        || ticket.assignedTechnicianId === user?.userId
 
     const initialComment = {
         commentId: 'initial',
@@ -668,9 +672,17 @@ export default function TicketDetail() {
                             </Link>
                         )}
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Tag size={16} />
-                        <span>Agent: <strong className="text-gray-700">{agentName}</strong></span>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                            <Tag size={16} />
+                            <span>Agent: <strong className="text-gray-700">{agentName}</strong></span>
+                        </div>
+                        {technicianName && (
+                            <div className="flex items-center gap-2">
+                                <Wrench size={16} />
+                                <span>Tehničar: <strong className="text-gray-700">{technicianName}</strong></span>
+                            </div>
+                        )}
                     </div>
                     <div className="flex items-center gap-2">
                         <Clock size={16} />
@@ -725,9 +737,9 @@ export default function TicketDetail() {
                                 {ticket.status === 'OPEN' && (
                                     <button
                                         type="button"
-                                        disabled={closureLoading || !(user?.role === 'ADMINISTRATOR' || ticket.assignedAgentId === user?.userId)}
+                                        disabled={closureLoading || !isAssignedStaff}
                                         onClick={handleRequestClosure}
-                                        title={!(user?.role === 'ADMINISTRATOR' || ticket.assignedAgentId === user?.userId)
+                                        title={!isAssignedStaff
                                             ? 'Samo dodijeljeni agent ili tehničar može zatražiti zatvaranje'
                                             : undefined
                                         }
@@ -741,10 +753,13 @@ export default function TicketDetail() {
                                     <div className="flex items-center gap-3 flex-wrap">
                                         <button
                                             type="button"
-                                            disabled={closureLoading}
+                                            disabled={closureLoading || !isAssignedStaff}
                                             onClick={handleForceClose}
                                             className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
-                                            title="Moguće tek nakon 7 dana bez odgovora klijenta"
+                                            title={!isAssignedStaff
+                                                ? 'Samo dodijeljeni agent ili tehničar može prisilno zatvoriti tiket'
+                                                : 'Moguće tek nakon 7 dana bez odgovora klijenta'
+                                            }
                                         >
                                             <Zap size={16} />
                                             Prisilno zatvori
@@ -780,7 +795,7 @@ export default function TicketDetail() {
                 {/* PB-36 / US-60: Tehničar mijenja status tiketa koji mu je dodijeljen */}
                 {user?.role === 'TECHNICIAN'
                     && ticket.status !== 'CLOSED'
-                    && ticket.assignedAgentId === user?.userId && (
+                    && ticket.assignedTechnicianId === user?.userId && (
                     <div className="border-t border-gray-100 mt-5 pt-4">
                         <div className="flex flex-col sm:flex-row sm:items-end gap-3">
                             <div className="flex-1">

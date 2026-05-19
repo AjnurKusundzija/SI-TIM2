@@ -18,10 +18,11 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 | SB-02 | PB-36 Ažuriranje statusa tiketa | US-60 | Ajnur | Done | Tehničar mijenja status tiketa koji mu je dodijeljen |
 | SB-03 | PB-26 Ocjenjivanje tiketa | US-61 | Ajnur | Done | Korisnik ocjenjuje kvalitet rješenja nakon zatvaranja tiketa |
 | SB-04 | PB-42 Statistika agenta i tehničara | US-62, US-63 | Uma | Done | Prikaz lične statistike rada na dashboardu |
-| SB-05 | PB-20 Upravljanje korisničkim profilom | US-64, US-65 | Merisa | To-Do | Korisnik mijenja email i lozinku svog profila |
-| SB-06 | PB-34 Pregled korisničkih profila (agent) | US-66, US-67 | Merisa | To-Do | Agent pregledava profile korisnika i historiju tiketa |
-| SB-07 | PB-21 Prikaz paketa i pretplata | US-68 | Eldar | To-Do | Korisnik vidi svoje aktivne pakete i pretplate |
+| SB-05 | PB-20 Upravljanje korisničkim profilom | US-64, US-65 | Merisa | Done | Korisnik mijenja email i lozinku svog profila |
+| SB-06 | PB-34 Pregled korisničkih profila (agent) | US-66, US-67 | Merisa | Done | Agent pregledava profile korisnika i historiju tiketa |
+| SB-07 | PB-21 Prikaz paketa i pretplata | US-68 | Eldar | Done | Korisnik vidi svoje aktivne pakete i pretplate |
 | SB-08 | Sistemske poruke u chatu pri prosljeđivanju tiketa | US-69 | Uma | Done | Proširenje PB-31: automatska poruka u chatu + real-time broadcast kada se tiket proslijedi |
+| SB-09 | Zajednička dodjela tiketa agentu i tehničaru nakon prosljeđivanja | US-70 | Uma | Done | Agent ostaje aktivno dodijeljen nakon prosljeđivanja tehničaru; tiket je vidljiv i agentu i tehničaru |
 
 ---
 
@@ -42,9 +43,14 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 - Kada korisnik pošalje poruku na tiketu, sistem mora kreirati notifikaciju tipa `TICKET_RESPONSE` za trenutnog vlasnika tiketa
 - Kada se tiket zatvori, sistem mora kreirati notifikaciju tipa `TICKET_CLOSED` za kreatora tiketa
 - Kada tehničar promijeni status tiketa, sistem mora kreirati notifikaciju tipa `STATUS_CHANGED` za kreatora tiketa
+- Kada klijent prihvati zatvaranje tiketa, sistem mora kreirati notifikaciju tipa `TICKET_CLOSED` za sve aktivno dodijeljene staff korisnike na tiketu
+- Kada klijent odbije zatvaranje tiketa, sistem mora kreirati notifikaciju tipa `STATUS_CHANGED` za sve aktivno dodijeljene staff korisnike na tiketu
+- Kada aktivno dodijeljeni agent ili tehničar prisilno zatvori tiket nakon isteka roka, sistem mora kreirati notifikaciju tipa `TICKET_CLOSED` za kreatora tiketa
+- Kada je tiket proslijeđen tehničaru, aktivno dodijeljeni staff uključuje i agenta koji je proslijedio tiket i tehničara kojem je tiket proslijeđen
 - Notifikacije moraju biti isporučene u realnom vremenu putem SignalR konekcije, bez potrebe za osvježavanjem stranice
 - Svaka notifikacija mora sadržavati referencu na odgovarajući tiket (`TicketId`) kako bi redirect bio moguć
 - Sistem ne smije kreirati notifikaciju za korisnika koji je sam izvršio tu akciju
+- Sistem ne smije duplirati notifikacije istom staff korisniku ako se u historiji dodjela pojavljuje više puta
 
 ---
 
@@ -70,11 +76,13 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 
 **Acceptance Criteria:**
 - Kada je tehničar prijavljen u sistem i pregleda tiket koji mu je dodijeljen, sistem mora prikazati opciju za promjenu statusa
-- Sistem mora ponuditi predefinisane statuse koji su dostupni tehničaru za promjenu
+- Sistem mora ponuditi predefinisane statuse koji su dostupni tehničaru za promjenu (`OPEN` i `CLOSURE_REQUESTED`, prikazano u UI kao "U toku (Otvoren)" i "Čeka se")
 - Kada tehničar promijeni status tiketa, sistem mora sačuvati promjenu i prikazati ažurirani status
 - Kada tehničar uspješno promijeni status, sistem mora generisati notifikaciju tipa `STATUS_CHANGED` za kreatora tiketa
 - Sistem ne smije dozvoliti tehničaru promjenu statusa tiketa koji mu nije dodijeljen
+- Sistem mora provjeravati dodjelu preko tehničarske dodjele (`AssignedTechnicianId`), a ne preko agentske dodjele
 - Kada je tiket već zatvoren, sistem ne smije dozvoliti promjenu statusa
+- Kada tehničar postavi tiket u status `CLOSURE_REQUESTED`, tiket mora ostati vidljiv agentu u listi dodijeljenih tiketa
 - Sistem mora prikazati potvrdu uspješne promjene statusa
 
 ---
@@ -106,6 +114,8 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 - Sistem mora prikazati broj trenutno otvorenih (aktivnih) tiketa dodijeljenih agentu
 - Sistem mora prikazati ukupan broj zatvorenih tiketa dodijeljenih agentu
 - Sistem mora prikazati broj tiketa koji su u statusu čekanja na zatvaranje
+- Tiketi proslijeđeni tehničaru moraju se i dalje računati u statistiku agenta koji je aktivno ostao dodijeljen na tiketu
+- Tiketi u statusu `CLOSURE_REQUESTED` ("Čeka se") moraju se računati u broj tiketa koji čekaju zatvaranje
 - Sistem mora prikazati prosječno vrijeme prvog odgovora agenta (od kreiranja tiketa do prve poruke agenta)
 - Sistem mora prikazati prosječno vrijeme rješavanja tiketa (od kreiranja do zatvaranja)
 - Sistem mora prikazati prosječnu ocjenu korisnika na osnovu zatvorenih tiketa
@@ -121,6 +131,7 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 - Kada je tehničar prijavljen i otvori svoju profilnu stranicu, sistem mora prikazati sekciju s ličnom statistikom
 - Sistem mora prikazati broj trenutno otvorenih (aktivnih) tiketa dodijeljenih tehničaru
 - Sistem mora prikazati ukupan broj zatvorenih tiketa dodijeljenih tehničaru
+- Sistem mora prikazati broj tiketa koji su u statusu čekanja na zatvaranje za tehničara
 - Sistem mora prikazati prosječno vrijeme prvog odgovora tehničara
 - Sistem mora prikazati prosječno vrijeme rješavanja tiketa
 - Kada tehničar nema nijedan tiket, sistem mora prikazati odgovarajuće poruke umjesto numeričkih vrijednosti
@@ -208,6 +219,25 @@ Implementirati sistem notifikacija koji obavještava korisnike o događajima na 
 - Sistemska poruka mora biti vidljiva svim učesnicima (klijent, agent, tehničar, admin) u realnom vremenu bez osvježavanja stranice
 - Sistemska poruka mora biti vizualno različita od regularnih poruka — prikazana kao centrirana pill linija, bez avatara i bez oznake autora
 - Sistemska poruka ne smije biti prikazana kao poruka korisnika niti smije imati polje za autora
+
+---
+
+## PB-31 / PB-36 / PB-42 (proširenje) — Zajednička dodjela agentu i tehničaru
+
+### US-70
+*Kao agent, želim da tiket koji proslijedim tehničaru ostane dodijeljen i meni i tehničaru, kako bih mogao nastaviti pratiti rješavanje tiketa i vidjeti ga u svojim dodijeljenim tiketima i statistikama.*
+
+**Acceptance Criteria:**
+- Kada agent proslijedi tiket tehničaru, sistem mora zadržati agenta kao aktivno dodijeljenu osobu na tiketu
+- Kada agent proslijedi tiket tehničaru, sistem mora dodati tehničara kao aktivno dodijeljenu osobu na tiketu
+- Kada agent otvori listu dodijeljenih tiketa, tiket proslijeđen tehničaru mora biti prikazan i agentu
+- Kada tehničar otvori listu dodijeljenih tiketa, isti tiket mora biti prikazan i tehničaru
+- Kada tehničar postavi status tiketa na `CLOSURE_REQUESTED` ("Čeka se"), tiket mora ostati prikazan agentu u dodijeljenim tiketima
+- Lista dodijeljenih tiketa ne smije po defaultu sakriti tikete u statusu "Čeka se"
+- Detalji tiketa moraju prikazati odvojene vrijednosti `Agent: Ime Prezime` i ispod toga `Tehničar: Ime Prezime` kada je tiket proslijeđen tehničaru
+- Aktivno dodijeljeni agent i aktivno dodijeljeni tehničar moraju moći učestvovati u closure workflowu u skladu s pravilima sistema
+- Kada se tiket proslijedi drugom agentu, prethodni agent više ne smije ostati aktivno dodijeljen osim ako je posljednja dodjela prosljeđivanje tehničaru
+- Statistika agenta mora uključiti tikete koji su proslijeđeni tehničaru, ali su i dalje aktivno vezani za tog agenta
 
 ---
 
