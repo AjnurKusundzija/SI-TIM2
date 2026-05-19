@@ -269,7 +269,7 @@ namespace TelecomSupportSystem.BLL.Services
 
             // Provjera 7 dana od zadnjeg komentara klijenta
             var lastClientComment = ticket.Comments
-                .Where(c => c.Author.Role == Role.CLIENT)
+                .Where(c => c.Author != null && c.Author.Role == Role.CLIENT)
                 .OrderByDescending(c => c.DateTime)
                 .FirstOrDefault();
 

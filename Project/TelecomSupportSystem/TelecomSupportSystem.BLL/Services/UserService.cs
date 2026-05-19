@@ -32,7 +32,7 @@ namespace TelecomSupportSystem.BLL.Services
                 .Select(t =>
                 {
                     var firstStaffComment = t.Comments
-                        .Where(c => c.Author.Role != Role.CLIENT)
+                            .Where(c => c.Author != null && c.Author.Role != Role.CLIENT)
                         .OrderBy(c => c.DateTime)
                         .FirstOrDefault();
                     if (firstStaffComment == null) return (double?)null;
