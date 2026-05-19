@@ -15,6 +15,7 @@ import Faq from './pages/Faq'
 import TicketDetail from './pages/TicketDetail'
 import Statistics from './pages/Statistics'
 import Notifications from './pages/Notifications'
+import Profile from './pages/Profile'
 
 function AppRoutes() {
   const { user } = useAuth()
@@ -44,6 +45,7 @@ function AppRoutes() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
       <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />
