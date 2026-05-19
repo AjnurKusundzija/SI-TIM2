@@ -146,8 +146,10 @@ namespace TelecomSupportSystem.BLL.Services
                 ClientName        = $"{ticket.Creator.FirstName} {ticket.Creator.LastName}",
                 AssignedAgentName = agentAssignment is not null
                     ? $"{agentAssignment.User.FirstName} {agentAssignment.User.LastName}"
-                    : string.Empty,
-                AssignedAgentId = agentAssignment?.UserId,
+                    : technicianAssignment is not null
+                        ? $"{technicianAssignment.User.FirstName} {technicianAssignment.User.LastName}"
+                        : string.Empty,
+                AssignedAgentId = agentAssignment?.UserId ?? technicianAssignment?.UserId,
                 AssignedTechnicianName = technicianAssignment is not null
                     ? $"{technicianAssignment.User.FirstName} {technicianAssignment.User.LastName}"
                     : string.Empty,
