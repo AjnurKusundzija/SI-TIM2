@@ -3,6 +3,7 @@ namespace TelecomSupportSystem.BLL.DTOs.Tickets
     public class TicketDetailDto
     {
         public int TicketId { get; set; }
+        public int CreatorId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;

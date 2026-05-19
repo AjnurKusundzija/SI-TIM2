@@ -45,7 +45,8 @@ namespace TelecomSupportSystem.Tests.Services
             // Arrange & Act
             var service = new UserService(
                 new Mock<ITicketRepository>().Object,
-                new Mock<IUserRepository>().Object);
+                new Mock<IUserRepository>().Object,
+                new Mock<IPackageService>().Object);
 
             // Assert
             service.Should().NotBeNull();

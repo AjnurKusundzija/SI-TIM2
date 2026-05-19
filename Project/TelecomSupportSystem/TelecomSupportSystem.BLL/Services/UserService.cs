@@ -1,4 +1,6 @@
-﻿using TelecomSupportSystem.BLL.DTOs.Users;
+﻿using TelecomSupportSystem.BLL.DTOs;
+using TelecomSupportSystem.BLL.DTOs.Packages;
+using TelecomSupportSystem.BLL.DTOs.Users;
 using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
@@ -10,11 +12,13 @@ namespace TelecomSupportSystem.BLL.Services
     {
         private readonly ITicketRepository _ticketRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IPackageService _packageService;
 
-        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository)
+        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository, IPackageService packageService)
         {
             _ticketRepository = ticketRepository;
             _userRepository = userRepository;
+            _packageService = packageService;
         }
 
         public async Task<AgentStatisticsDto> GetMyStatisticsAsync(int userId, string role)
@@ -32,7 +36,7 @@ namespace TelecomSupportSystem.BLL.Services
                 .Select(t =>
                 {
                     var firstStaffComment = t.Comments
-                        .Where(c => c.Author.Role != Role.CLIENT)
+                            .Where(c => c.Author != null && c.Author.Role != Role.CLIENT)
                         .OrderBy(c => c.DateTime)
                         .FirstOrDefault();
                     if (firstStaffComment == null) return (double?)null;
@@ -96,9 +100,20 @@ namespace TelecomSupportSystem.BLL.Services
 
         public async Task<UserProfileDto> GetMyProfileAsync(int userId)
         {
+            return await GetUserProfileAsync(userId, userId, "CLIENT");
+        }
+
+        public async Task<UserProfileDto> GetUserProfileAsync(int userId, int requestingUserId, string role)
+        {
+            if (role == "CLIENT" && userId != requestingUserId)
+                throw new UnauthorizedAccessException("Nemate pristup ovom profilu.");
+
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
                 throw new KeyNotFoundException("Korisnik nije pronađen.");
+
+            var tickets = await _ticketRepository.GetByCreatorIdAsync(userId);
+            var packages = await _packageService.GetMyPackagesAsync(userId);
 
             return new UserProfileDto
             {
@@ -107,7 +122,21 @@ namespace TelecomSupportSystem.BLL.Services
                 LastName = user.LastName,
                 Email = user.Email,
                 Phone = user.Phone,
-                Role = user.Role.ToString()
+                Role = user.Role.ToString(),
+                Location = user.Location.ToString(),
+                TicketHistory = tickets.Select(t => new MyTicketDto
+                {
+                    TicketId = t.TicketId,
+                    Title = t.Title,
+                    Description = t.Description,
+                    Status = t.Status.ToString(),
+                    Priority = t.Priority.ToString(),
+                    ProblemCategory = t.ProblemCategory.ToString(),
+                    CreatedDate = t.CreatedDate,
+                    ClosedDate = t.ClosedDate,
+                    InternalPriority = t.InternalPriority?.ToString()
+                }).ToList(),
+                ActivePackages = packages.ToList()
             };
         }
 

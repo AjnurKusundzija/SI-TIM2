@@ -78,6 +78,7 @@ namespace TelecomSupportSystem.BLL.Services
             return new TicketDetailDto
             {
                 TicketId          = ticket.TicketId,
+                CreatorId         = ticket.CreatorId,
                 Title             = ticket.Title,
                 Description       = ticket.Description,
                 Status            = ticket.Status.ToString(),
@@ -198,11 +199,21 @@ namespace TelecomSupportSystem.BLL.Services
             if (role is not ("AGENT" or "TECHNICIAN" or "ADMINISTRATOR"))
                 throw new UnauthorizedAccessException("Samo osoblje može zatražiti zatvaranje tiketa.");
 
-            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
                 ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             if (ticket.Status != TicketStatus.OPEN)
                 throw new InvalidOperationException("Zahtjev za zatvaranje se može poslati samo za otvorene tikete.");
+
+            if (role is "AGENT" or "TECHNICIAN")
+            {
+                var latestAssignment = ticket.Assignments
+                    .OrderByDescending(a => a.AssignmentDate)
+                    .FirstOrDefault();
+
+                if (latestAssignment?.UserId != userId)
+                    throw new UnauthorizedAccessException("Možete zatražiti zatvaranje samo za tiket koji je vama dodijeljen.");
+            }
 
             ticket.Status = TicketStatus.CLOSURE_REQUESTED;
             ticket.ClosureRequestedDate = DateTime.Now;
@@ -269,7 +280,7 @@ namespace TelecomSupportSystem.BLL.Services
 
             // Provjera 7 dana od zadnjeg komentara klijenta
             var lastClientComment = ticket.Comments
-                .Where(c => c.Author.Role == Role.CLIENT)
+                .Where(c => c.Author != null && c.Author.Role == Role.CLIENT)
                 .OrderByDescending(c => c.DateTime)
                 .FirstOrDefault();
 

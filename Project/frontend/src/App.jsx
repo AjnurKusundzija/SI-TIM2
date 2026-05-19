@@ -18,6 +18,7 @@ import Notifications from './pages/Notifications'
 import Packages from './pages/Packages'
 import PackageDetail from './pages/PackageDetail'
 import Profile from './pages/Profile'
+import UserProfile from './pages/UserProfile'
 
 
 function AppRoutes() {
@@ -51,7 +52,7 @@ function AppRoutes() {
 
         <Route path="/packages" element={<Packages />} />
         <Route path="/packages/:id" element={<PackageDetail />} />
-
+        <Route path="/users/:id" element={<UserProfile />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
 
