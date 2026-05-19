@@ -13,11 +13,13 @@ import {
   BarChart2,
   Bell,
   Package,
+  User,
 } from 'lucide-react';
 
 const navConfig = {
   CLIENT: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/profile', label: 'Profil', icon: User },
     { to: '/mytickets', label: 'Moji tiketi', icon: Ticket },
     { to: '/create-ticket', label: 'Kreiraj tiket', icon: PlusCircle },
     { to: '/packages', label: 'Moji paketi', icon: Package },
@@ -26,6 +28,7 @@ const navConfig = {
   ],
   AGENT: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/profile', label: 'Profil', icon: User },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
     { to: '/assigned', label: 'Dodijeljeni meni', icon: Ticket },
     { to: '/statistics', label: 'Moja statistika', icon: BarChart2 },
@@ -34,12 +37,14 @@ const navConfig = {
   ],
   TECHNICIAN: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/profile', label: 'Profil', icon: User },
     { to: '/assigned', label: 'Dodijeljeni meni', icon: Ticket },
     { to: '/statistics', label: 'Moja statistika', icon: BarChart2 },
     { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
   ADMINISTRATOR: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/profile', label: 'Profil', icon: User },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
     { to: '/notifications', label: 'Notifikacije', icon: Bell },

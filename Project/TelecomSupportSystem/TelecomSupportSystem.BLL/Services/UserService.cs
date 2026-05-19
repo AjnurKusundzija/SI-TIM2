@@ -9,10 +9,12 @@ namespace TelecomSupportSystem.BLL.Services
     public class UserService : IUserService
     {
         private readonly ITicketRepository _ticketRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(ITicketRepository ticketRepository)
+        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository)
         {
             _ticketRepository = ticketRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<AgentStatisticsDto> GetMyStatisticsAsync(int userId, string role)
@@ -90,6 +92,51 @@ namespace TelecomSupportSystem.BLL.Services
                     ? t.Comments.Max(c => c.DateTime)
                     : t.CreatedDate
             });
+        }
+
+        public async Task<UserProfileDto> GetMyProfileAsync(int userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new KeyNotFoundException("Korisnik nije pronađen.");
+
+            return new UserProfileDto
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Phone,
+                Role = user.Role.ToString()
+            };
+        }
+
+        public async Task UpdateEmailAsync(int userId, UpdateEmailDto dto)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new KeyNotFoundException("Korisnik nije pronađen.");
+
+            var normalizedEmail = dto.Email.Trim();
+            var existing = await _userRepository.GetByEmailAsync(normalizedEmail);
+            if (existing != null && existing.UserId != userId)
+                throw new InvalidOperationException("Email adresa je već zauzeta.");
+
+            user.Email = normalizedEmail;
+            await _userRepository.UpdateAsync(user);
+        }
+
+        public async Task UpdatePasswordAsync(int userId, UpdatePasswordDto dto)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new KeyNotFoundException("Korisnik nije pronađen.");
+
+            if (!BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.PasswordHash))
+                throw new UnauthorizedAccessException("Pogrešna trenutna lozinka.");
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            await _userRepository.UpdateAsync(user);
         }
     }
 }

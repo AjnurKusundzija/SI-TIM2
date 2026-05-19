@@ -6,6 +6,8 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
     public interface IUserRepository
     {
         Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByIdAsync(int userId);
+        Task UpdateAsync(User user);
 
         // US-25: Dohvata dostupne agente u timu za automatsku dodjelu tiketa
         Task<IEnumerable<User>> GetAvailableAgentsByTeamIdAsync(int teamId);
