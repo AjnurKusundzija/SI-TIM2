@@ -43,7 +43,9 @@ namespace TelecomSupportSystem.Tests.Services
         public void Constructor_ShouldInitializeSuccessfully()
         {
             // Arrange & Act
-            var service = new UserService(new Mock<ITicketRepository>().Object);
+            var service = new UserService(
+                new Mock<ITicketRepository>().Object,
+                new Mock<IUserRepository>().Object);
 
             // Assert
             service.Should().NotBeNull();
