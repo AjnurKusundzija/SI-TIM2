@@ -129,6 +129,7 @@ builder.Services.AddScoped<IChatPusher, ChatPusher>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFaqService, FaqService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<IPackageService, PackageService>();
 
 var app = builder.Build();
 
@@ -448,6 +449,132 @@ if (app.Environment.IsDevelopment())
                 db.SaveChanges();
             }
         }
+    }
+
+    // US-6, US-7: Seed paketa i pretplata za testne korisnike (CLIENT, John Doe)
+    if (!db.SubscriptionPackages.Any())
+    {
+        var clientId = db.Users.First(u => u.Email == "client@test.com").UserId;
+        var johnId   = db.Users.First(u => u.Email == "john@test.com").UserId;
+
+        var now = DateTime.UtcNow;
+
+        var packages = new List<SubscriptionPackage>
+        {
+            // ── CLIENT: mix zasebnih i kombinovanih paketa ────────────────────
+            new SubscriptionPackage
+            {
+                UserId             = clientId,
+                PackageName        = "Internet Standard 200 Mbps",
+                PackageType        = PackageType.INTERNET,
+                PackageStatus      = PackageStatus.ACTIVE,
+                MonthlyPrice       = 39.90m,
+                PackageDescription = "Optički internet idealan za porodicu — stabilna brzina i niska latencija.",
+                StartDate          = now.AddMonths(-6),
+                EndDate            = now.AddMonths(6),
+                Features = new List<PackageFeature>
+                {
+                    new PackageFeature { Name = "Brzina preuzimanja", Value = "200", Unit = "Mbps", Description = "Maksimalna brzina preuzimanja." },
+                    new PackageFeature { Name = "Brzina slanja",      Value = "50",  Unit = "Mbps", Description = "Maksimalna brzina slanja." },
+                    new PackageFeature { Name = "WiFi ruter",         Value = "Uključen", Unit = "", Description = "Besplatan WiFi 6 ruter." },
+                }
+            },
+            new SubscriptionPackage
+            {
+                UserId             = clientId,
+                PackageName        = "TV Premium",
+                PackageType        = PackageType.TV,
+                PackageStatus      = PackageStatus.ACTIVE,
+                MonthlyPrice       = 24.90m,
+                PackageDescription = "Bogata ponuda kanala uključujući sport i film pakete.",
+                StartDate          = now.AddMonths(-3),
+                EndDate            = now.AddMonths(9),
+                Features = new List<PackageFeature>
+                {
+                    new PackageFeature { Name = "Broj kanala",   Value = "120", Unit = "kanala", Description = "Ukupan broj dostupnih kanala." },
+                    new PackageFeature { Name = "HD kanali",     Value = "60",  Unit = "kanala", Description = "Kanali u HD rezoluciji." },
+                    new PackageFeature { Name = "Sport paket",   Value = "Uključen", Unit = "", Description = "Arena Sport, Sport Klub." },
+                    new PackageFeature { Name = "Film paket",    Value = "Uključen", Unit = "", Description = "HBO, Pickbox, Cinemax." },
+                }
+            },
+            new SubscriptionPackage
+            {
+                UserId             = clientId,
+                PackageName        = "All-in-One paket",
+                PackageType        = PackageType.BUNDLE,
+                PackageStatus      = PackageStatus.ACTIVE,
+                MonthlyPrice       = 79.90m,
+                PackageDescription = "Sve u jednom — najbrži internet, kompletna TV ponuda i mobilni broj.",
+                StartDate          = now.AddMonths(-1),
+                EndDate            = now.AddMonths(11),
+                Features = new List<PackageFeature>
+                {
+                    new PackageFeature { Name = "Internet brzina preuzimanja", Value = "500", Unit = "Mbps", Description = "Brzina preuzimanja u kombinovanom paketu." },
+                    new PackageFeature { Name = "Internet brzina slanja",      Value = "100", Unit = "Mbps", Description = "Brzina slanja u kombinovanom paketu." },
+                    new PackageFeature { Name = "TV broj kanala",              Value = "80",  Unit = "kanala", Description = "Broj TV kanala." },
+                    new PackageFeature { Name = "Mobilni podaci",              Value = "20",  Unit = "GB",     Description = "Mjesečni mobilni internet." },
+                    new PackageFeature { Name = "Mobilni minuti",              Value = "300", Unit = "min",    Description = "Minute prema svim mrežama." },
+                    new PackageFeature { Name = "SMS poruke",                  Value = "200", Unit = "SMS",    Description = "Besplatne SMS poruke mjesečno." },
+                }
+            },
+
+            // ── JOHN DOE: zasebni i kombinovani paketi ────────────────────────
+            new SubscriptionPackage
+            {
+                UserId             = johnId,
+                PackageName        = "Internet Premium 1 Gbps",
+                PackageType        = PackageType.INTERNET,
+                PackageStatus      = PackageStatus.ACTIVE,
+                MonthlyPrice       = 59.90m,
+                PackageDescription = "Gigabitni optički internet za najzahtjevnije korisnike.",
+                StartDate          = now.AddMonths(-12),
+                EndDate            = now.AddMonths(12),
+                Features = new List<PackageFeature>
+                {
+                    new PackageFeature { Name = "Brzina preuzimanja", Value = "1000", Unit = "Mbps", Description = "Gigabitna brzina preuzimanja." },
+                    new PackageFeature { Name = "Brzina slanja",      Value = "200",  Unit = "Mbps", Description = "Brzina slanja." },
+                    new PackageFeature { Name = "Statička IP adresa", Value = "Uključena", Unit = "", Description = "Besplatna statička IPv4 adresa." },
+                }
+            },
+            new SubscriptionPackage
+            {
+                UserId             = johnId,
+                PackageName        = "Mobilni L",
+                PackageType        = PackageType.MOBILE,
+                PackageStatus      = PackageStatus.ACTIVE,
+                MonthlyPrice       = 29.90m,
+                PackageDescription = "Neograničeni mobilni razgovori, SMS i veliki paket mobilnih podataka.",
+                StartDate          = now.AddMonths(-4),
+                EndDate            = now.AddMonths(8),
+                Features = new List<PackageFeature>
+                {
+                    new PackageFeature { Name = "Mobilni podaci", Value = "Neograničeno", Unit = "", Description = "Neograničena količina mobilnih podataka." },
+                    new PackageFeature { Name = "Mobilni minuti", Value = "Neograničeno", Unit = "", Description = "Neograničeni razgovori." },
+                    new PackageFeature { Name = "SMS poruke",     Value = "Neograničeno", Unit = "", Description = "Neograničene SMS poruke." },
+                }
+            },
+            new SubscriptionPackage
+            {
+                UserId             = johnId,
+                PackageName        = "Duo paket — Internet + TV",
+                PackageType        = PackageType.BUNDLE,
+                PackageStatus      = PackageStatus.ACTIVE,
+                MonthlyPrice       = 54.90m,
+                PackageDescription = "Brz internet u kombinaciji s kvalitetnom TV ponudom.",
+                StartDate          = now.AddMonths(-2),
+                EndDate            = now.AddMonths(10),
+                Features = new List<PackageFeature>
+                {
+                    new PackageFeature { Name = "Internet brzina preuzimanja", Value = "200", Unit = "Mbps",   Description = "Brzina preuzimanja u Duo paketu." },
+                    new PackageFeature { Name = "Internet brzina slanja",      Value = "50",  Unit = "Mbps",   Description = "Brzina slanja u Duo paketu." },
+                    new PackageFeature { Name = "TV broj kanala",              Value = "60",  Unit = "kanala", Description = "Broj uključenih TV kanala." },
+                    new PackageFeature { Name = "Sport paket",                 Value = "Uključen", Unit = "",  Description = "Arena Sport, Sport Klub." },
+                }
+            },
+        };
+
+        db.SubscriptionPackages.AddRange(packages);
+        db.SaveChanges();
     }
 }
 
