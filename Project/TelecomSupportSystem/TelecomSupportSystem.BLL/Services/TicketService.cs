@@ -94,7 +94,63 @@ namespace TelecomSupportSystem.BLL.Services
                 AssignedAgentName = agentAssignment is not null
                     ? $"{agentAssignment.User.FirstName} {agentAssignment.User.LastName}"
                     : string.Empty,
+                AssignedAgentId = agentAssignment?.UserId,
             };
+        }
+
+        // PB-36 / US-60: Tehničar mijenja status tiketa koji mu je dodijeljen.
+        // Dozvoljeni ciljni statusi za tehničara: OPEN, CLOSURE_REQUESTED.
+        // Direktno zatvaranje (CLOSED) ide kroz client-confirm tok (request-closure / accept-closure),
+        // pa ovdje nije dozvoljeno da tehničar postavi CLOSED.
+        private static readonly TicketStatus[] TechnicianAllowedStatuses =
+            { TicketStatus.OPEN, TicketStatus.CLOSURE_REQUESTED };
+
+        public async Task UpdateTicketStatusAsync(int ticketId, TicketStatus newStatus, int userId, string role)
+        {
+            if (role != "TECHNICIAN")
+                throw new UnauthorizedAccessException("Samo tehničar može mijenjati status tiketa.");
+
+            if (!TechnicianAllowedStatuses.Contains(newStatus))
+                throw new InvalidOperationException("Odabrani status nije dozvoljen za tehničara.");
+
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            if (ticket.Status == TicketStatus.CLOSED)
+                throw new InvalidOperationException("Status zatvorenog tiketa se ne može mijenjati.");
+
+            var latestAssignment = ticket.Assignments
+                .OrderByDescending(a => a.AssignmentDate)
+                .FirstOrDefault();
+
+            if (latestAssignment?.UserId != userId)
+                throw new UnauthorizedAccessException("Možete mijenjati status samo tiketa koji su vama dodijeljeni.");
+
+            if (ticket.Status == newStatus)
+                return;
+
+            var previousStatus = ticket.Status;
+            ticket.Status = newStatus;
+
+            if (newStatus == TicketStatus.CLOSURE_REQUESTED)
+            {
+                ticket.ClosureRequestedDate = DateTime.Now;
+                ticket.ClosureRequestedById = userId;
+                ticket.ClosureRequestStatus = ClosureRequestStatus.PENDING;
+            }
+            else if (newStatus == TicketStatus.OPEN && previousStatus == TicketStatus.CLOSURE_REQUESTED)
+            {
+                ticket.ClosureRequestStatus = ClosureRequestStatus.REJECTED;
+            }
+
+            await _ticketRepository.UpdateAsync(ticket);
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Promjena statusa tiketa",
+                $"Status vašeg tiketa \"{ticket.Title}\" je promijenjen na '{newStatus}'.",
+                NotificationType.STATUS_CHANGED,
+                ticket.TicketId);
         }
 
         public async Task UpdateInternalPriorityAsync(int ticketId, InternalPriority priority, int userId, string role)

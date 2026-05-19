@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TelecomSupportSystem.DAL.Entities.Enums;
@@ -14,6 +14,8 @@ namespace TelecomSupportSystem.DAL.Entities
         public decimal MonthlyPrice { get; set; }
         public string PackageDescription { get; set; } = string.Empty;
         public int UserId { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public User User { get; set; } = null!;
         public ICollection<PackageFeature> Features { get; set; } = new List<PackageFeature>();

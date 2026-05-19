@@ -17,12 +17,15 @@ const variants = {
   MOBILE_NETWORK: 'bg-pink-100 text-pink-800',
   BILLING: 'bg-orange-100 text-orange-800',
   TECHNICAL_SUPPORT: 'bg-teal-100 text-teal-800',
+  // Package type badges
+  MOBILE: 'bg-pink-100 text-pink-800',
+  BUNDLE: 'bg-amber-100 text-amber-800',
   // Role badges
   CLIENT: 'bg-sky-100 text-sky-800',
   AGENT: 'bg-violet-100 text-violet-800',
   TECHNICIAN: 'bg-lime-100 text-lime-800',
   ADMINISTRATOR: 'bg-rose-100 text-rose-800',
-  // Account status
+  // Account / package status
   ACTIVE: 'bg-emerald-100 text-emerald-800',
   INACTIVE: 'bg-red-100 text-red-800',
   // Default
@@ -47,9 +50,12 @@ const labels = {
   AGENT: 'AGENT',
   TECHNICIAN: 'TEHNICAR',
   ADMINISTRATOR: 'ADMINISTRATOR',
-  // Account status
+  // Account / package status
   ACTIVE: 'AKTIVAN',
   INACTIVE: 'NEAKTIVAN',
+  // Package types
+  MOBILE: 'Mobilni',
+  BUNDLE: 'Kombinovani',
 };
 
 export default function Badge({ value, className = '' }) {
