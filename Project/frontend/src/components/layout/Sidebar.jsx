@@ -12,6 +12,7 @@ import {
   HelpCircle,
   BarChart2,
   Bell,
+  Package,
   User,
 } from 'lucide-react';
 
@@ -21,6 +22,7 @@ const navConfig = {
     { to: '/profile', label: 'Profil', icon: User },
     { to: '/mytickets', label: 'Moji tiketi', icon: Ticket },
     { to: '/create-ticket', label: 'Kreiraj tiket', icon: PlusCircle },
+    { to: '/packages', label: 'Moji paketi', icon: Package },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
     { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
