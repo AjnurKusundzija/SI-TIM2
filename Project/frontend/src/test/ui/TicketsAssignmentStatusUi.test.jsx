@@ -61,7 +61,9 @@ describe('Tickets UI - assignment status display', () => {
 
     await waitFor(() => expect(screen.queryAllByText('Dodijeljeni otvoreni tiket')).not.toHaveLength(0))
 
+    expect(screen.queryAllByText('Tiket ceka zatvaranje')).not.toHaveLength(0)
     expect(screen.queryAllByText('OTVOREN')).not.toHaveLength(0)
+    expect(screen.queryAllByText('ČEKA SE')).not.toHaveLength(0)
     expect(screen.queryAllByText('KRITICAN')).not.toHaveLength(0)
     expect(mocks.getAllTickets).toHaveBeenCalledWith(true)
   })

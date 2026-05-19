@@ -200,7 +200,7 @@ export default function Dashboard() {
   const miniStats = stats ? [
     { icon: Ticket,        label: 'Otvoreni',         value: stats.openTicketsCount,                       color: 'bg-blue-500' },
     { icon: CheckCircle,   label: 'Zatvoreni',         value: stats.closedTicketsCount,                     color: 'bg-emerald-500' },
-    { icon: AlertCircle,   label: 'Čeka zatvaranje',   value: stats.pendingClosureCount,                    color: 'bg-amber-500' },
+    { icon: AlertCircle,   label: 'Čeka se',           value: stats.pendingClosureCount,                    color: 'bg-amber-500' },
     { icon: MessageSquare, label: 'Prosj. 1. odgovor', value: formatMinutes(stats.avgFirstResponseMinutes), color: 'bg-violet-500' },
     { icon: Clock,         label: 'Prosj. rješavanje', value: formatHours(stats.avgResolutionHours),        color: 'bg-navy-600' },
     ...(user?.role === 'AGENT'

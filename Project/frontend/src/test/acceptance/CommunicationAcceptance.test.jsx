@@ -26,6 +26,7 @@ vi.mock('../../services/ticketService', () => ({
   getAgentScores: vi.fn(),
   forwardTicketToTechnician: vi.fn(),
   updateInternalPriority: vi.fn(),
+  updateTicketStatus: vi.fn(),
 }))
 
 vi.mock('../../context/AuthContext', () => ({

@@ -91,16 +91,29 @@ namespace TelecomSupportSystem.Tests.Tickets
         public async Task GetTicketByIdAsync_ShouldMapAllFieldsToDto()
         {
             var agentUser = MakeUser(10, "Selma", "Mujić", Role.AGENT);
+            var technicianUser = MakeUser(11, "Adnan", "Hasić", Role.TECHNICIAN);
+            var baseDate = DateTime.UtcNow.AddMinutes(-10);
             var assignment = new TicketUser
             {
                 AssignmentId = 1,
                 TicketId = 1,
                 UserId = agentUser.UserId,
                 User = agentUser,
-                AssignmentDate = DateTime.UtcNow,
-                TeamId = 0
+                AssignmentDate = baseDate,
+                TeamId = 0,
+                AssignmentType = AssignmentType.AUTOMATIC
             };
-            var ticket = MakeTicket(id: 1, creatorId: 5, assignments: new List<TicketUser> { assignment });
+            var technicianAssignment = new TicketUser
+            {
+                AssignmentId = 2,
+                TicketId = 1,
+                UserId = technicianUser.UserId,
+                User = technicianUser,
+                AssignmentDate = baseDate.AddMinutes(1),
+                TeamId = 0,
+                AssignmentType = AssignmentType.FORWARDED_TO_TECHNICIAN
+            };
+            var ticket = MakeTicket(id: 1, creatorId: 5, assignments: new List<TicketUser> { assignment, technicianAssignment });
 
             _repoMock.Setup(r => r.GetByIdWithDetailsAsync(1)).ReturnsAsync(ticket);
 
@@ -113,6 +126,9 @@ namespace TelecomSupportSystem.Tests.Tickets
             dto.ProblemCategory.Should().Be(ProblemCategory.INTERNET.ToString());
             dto.ClientName.Should().Be("Merjem Omerović");
             dto.AssignedAgentName.Should().Be("Selma Mujić");
+            dto.AssignedAgentId.Should().Be(10);
+            dto.AssignedTechnicianName.Should().Be("Adnan Hasić");
+            dto.AssignedTechnicianId.Should().Be(11);
         }
     }
 }

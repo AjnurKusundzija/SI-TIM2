@@ -7,7 +7,7 @@ import EmptyState from '../components/common/EmptyState'
 import Badge from '../components/common/Badge'
 
 const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok' }
-const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', CLOSURE_REQUESTED: 'Čeka zatvaranje' }
+const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', CLOSURE_REQUESTED: 'Čeka se' }
 const TYPE_LABELS = {
     INTERNET: 'Internet',
     TV: 'TV',

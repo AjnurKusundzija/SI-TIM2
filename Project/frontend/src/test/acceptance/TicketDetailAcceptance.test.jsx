@@ -12,6 +12,19 @@ vi.mock('../../services/ticketService', () => ({
   getTicketById: mocks.getTicketById,
   getTicketComments: mocks.getTicketComments,
   addComment: vi.fn(),
+  getTicketRating: vi.fn().mockResolvedValue(null),
+  createTicketRating: vi.fn(),
+  closeTicket: vi.fn(),
+  requestTicketClosure: vi.fn(),
+  acceptTicketClosure: vi.fn(),
+  rejectTicketClosure: vi.fn(),
+  forceCloseTicket: vi.fn(),
+  autoForwardTicket: vi.fn(),
+  forwardTicketToAgent: vi.fn(),
+  getAgentScores: vi.fn(),
+  forwardTicketToTechnician: vi.fn(),
+  updateInternalPriority: vi.fn(),
+  updateTicketStatus: vi.fn(),
 }))
 
 vi.mock('../../context/AuthContext', () => ({

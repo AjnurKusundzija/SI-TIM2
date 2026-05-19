@@ -87,4 +87,36 @@ Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i pra
 
 ---
 
+## Odluka #6
+
+| Polje | Detalji |
+|---|---|
+| **ID odluke** | ODL-S8-6 |
+| **Datum** | 19.05.2026 |
+| **Kratak naziv odluke** | Prosljeđivanje tehničaru ne uklanja agenta kao aktivnog assigneeja |
+| **Opis problema ili pitanja** | Postojeća logika je tretirala posljednju dodjelu kao jedinog aktivnog vlasnika tiketa. Kada agent proslijedi tiket tehničaru, tehničar postaje posljednji assignee, pa agent više nije vidio tiket u dodijeljenim tiketima, nije vidio "Čeka se" tiket u svom toku rada i taj tiket nije ulazio u agentovu statistiku. |
+| **Razmatrane opcije** | 1. Zadržati "posljednja dodjela je jedini vlasnik" pravilo. <br> 2. Uvesti zasebnu tabelu/flag za aktivne assigneeje. <br> 3. Tretirati `FORWARDED_TO_TECHNICIAN` kao poseban slučaj u kojem ostaju aktivni i prethodni agent i novi tehničar. |
+| **Odabrana opcija** | 3. `FORWARDED_TO_TECHNICIAN` zadržava prethodnog agenta kao aktivnog assigneeja i dodaje tehničara kao drugog aktivnog assigneeja. |
+| **Razlog izbora** | Ova opcija najbolje odgovara poslovnom toku: agent ostaje odgovoran za praćenje tiketa, dok tehničar rješava terenski dio. Implementaciono ne zahtijeva novu migraciju niti promjenu modela podataka, nego samo jasnije tumačenje historije dodjela. |
+| **Posljedice odluke** | Repozitorijski upiti za dodijeljene tikete, nedavne tikete i statistiku koriste zajedničku logiku aktivnih assigneeja. Detalji tiketa prikazuju odvojeno `Agent` i `Tehničar`. Forward na drugog agenta i dalje prebacuje vlasništvo na novog agenta i ne zadržava prethodnog agenta aktivnim. |
+| **Status odluke** | aktivna |
+
+---
+
+## Odluka #7
+
+| Polje | Detalji |
+|---|---|
+| **ID odluke** | ODL-S8-7 |
+| **Datum** | 19.05.2026 |
+| **Kratak naziv odluke** | Closure workflow obavještava sve aktivno dodijeljene učesnike |
+| **Opis problema ili pitanja** | Notifikacije su postojale za promjenu statusa i zatvaranje tiketa, ali closure workflow nije potpuno pokrivao staff korisnike. Kada klijent prihvati ili odbije zatvaranje, agent i tehničar moraju znati da li je tiket završen ili se obrada nastavlja. |
+| **Razmatrane opcije** | 1. Slati notifikaciju samo klijentu ili samo korisniku koji je zadnji dodijeljen. <br> 2. Slati notifikaciju svim korisnicima iz kompletne historije dodjela. <br> 3. Slati notifikaciju samo aktivno dodijeljenim staff korisnicima, uz posebno pravilo za agent+tehničar dodjelu. |
+| **Odabrana opcija** | 3. Notifikacije se šalju aktivno dodijeljenim staff korisnicima; kod prisilnog zatvaranja notifikacija ide klijentu. |
+| **Razlog izbora** | Aktivni assigneeji su jedini korisnici koji trenutno imaju operativnu odgovornost za tiket. Slanje cijeloj historiji dodjela bi stvaralo šum, dok slanje samo posljednjem assigneeju propušta agenta koji i dalje prati tiket nakon prosljeđivanja tehničaru. |
+| **Posljedice odluke** | `AcceptClosureAsync` šalje `TICKET_CLOSED` aktivnom staffu, `RejectClosureAsync` šalje `STATUS_CHANGED` aktivnom staffu, a `ForceCloseAsync` šalje `TICKET_CLOSED` klijentu. Agent/tehničar koji nije aktivno dodijeljen ne može prisilno zatvoriti tiket; administrator zadržava privilegiju prema postojećem role modelu. |
+| **Status odluke** | aktivna |
+
+---
+
 Napomena: Ovaj Decision Log je živi dokument i ažurira se kroz sprintove.

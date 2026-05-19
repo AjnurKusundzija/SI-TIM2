@@ -106,3 +106,21 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Sta je tim odbacio | Prijedlog da se prosiri `TicketStatus` enum sa dodatnim vrijednostima tipa `IN_PROGRESS`/`PENDING` — odbaceno jer bi zahtijevalo EF migraciju, novu logiku u svim postojecim filterima/statistikama i nije nuzno za AC. Takodjer odbaceno dozvoljavanje tehnicaru da direktno postavi `CLOSED` — zatvaranje u ovom sistemu mora ici kroz client-confirm tok (`request-closure` → `accept-closure`). |
 | Rizici, problemi ili greske koje su uocene | UI guard (`assignedAgentId === user.userId`) sakriva kontrolu od tehnicara koji nisu trenutni assignee, ali backend takodjer provjerava — bez backend provjere kontrola bi se mogla zaobici direktnim API pozivom. Postojeci `GetTicketByIdAsync` za TECHNICIAN-a dozvoljava pristup ako je IKAD bio dodijeljen (`Assignments.Any(a => a.UserId == userId)`), sto znaci da bivsi assignee moze otvoriti detalj, ali nasa provjera "posljednji assignee" u `UpdateTicketStatusAsync` ispravno odbija takvog korisnika. Zabilezeni postojeci CS8602 warning u `TicketService.cs:271` i nedostatak assignee-provjere u `CloseTicketAsync` — oba su van scope-a US-60. |
 | Ko je koristio alat | Ajnur Kusundzija |
+
+---
+
+## Unos #6
+
+| Polje | Detalji |
+|---|---|
+| Datum | 19.05.2026 |
+| Sprint broj | Sprint 8 |
+| Alat koji je koristen | OpenAI Codex (GPT-5) |
+| Svrha koristenja | Refinement i implementacija zajedničke dodjele agent+tehničar, closure notifikacija i ažuriranje Sprint 8 dokumentacije |
+| Kratak opis zadatka ili upita | Ispraviti logiku dodjele tako da tiket nakon prosljeđivanja tehničaru ostaje dodijeljen i agentu i tehničaru; omogućiti agentu da vidi tiket u dodijeljenim tiketima kada tehničar postavi status "Čeka se"; prikazati u detaljima tiketa odvojeno `Agent` i `Tehničar`; uključiti taj status u statistiku agenta; dodati notifikacije aktivno dodijeljenom staffu kada klijent prihvati ili odbije zatvaranje, te klijentu kada assigned staff prisilno zatvori tiket. |
+| Sta je AI predlozio ili generisao | Backend: zajedničku helper logiku za aktivne assigneeje u `TicketRepository` i `TicketService`, pravilo da `FORWARDED_TO_TECHNICIAN` zadržava prethodnog agenta kao aktivnog assigneeja, proširenje `TicketDetailDto` sa `AssignedTechnicianName` i `AssignedTechnicianId`, mapiranje odvojenih agent/tehničar vrijednosti, closure notifikacije u `AcceptClosureAsync` i `RejectClosureAsync`, dodatnu provjeru da agent/tehničar mora biti aktivno dodijeljen za `ForceCloseAsync`. Frontend: uklanjanje defaultnog `OPEN` filtera na dodijeljenim tiketima, prikaz `Tehničar` ispod `Agent`, usklađivanje labela statusa na "Čeka se", i disable force-close akcije za staff koji nije aktivno dodijeljen. Testovi: novi `TicketClosureServiceTests`, dopune `AllTicketsRepositoryTests`, `TicketDetailServiceTests`, `TicketDetail.test.jsx` i `TicketsAssignmentStatusUi.test.jsx`. Dokumentacija: dopune `SprintBacklog`, `DecisionLog`, `AIUsageLog` i `ProofOfTesting`. |
+| Sta je tim prihvatio | Pravilo aktivne zajedničke dodjele za agent+tehničar, bez nove migracije baze; slanje closure notifikacija samo aktivno dodijeljenom staffu; prikaz odvojenih imena agenta i tehničara u UI; uključivanje "Čeka se" tiketa u agentovu listu dodijeljenih tiketa i statistiku. |
+| Sta je tim izmijenio | Terminologija u UI i dokumentaciji usklađena je na "Čeka se". Acceptance kriteriji su dodatno razdvojeni u US-70 za zajedničku dodjelu i US-71 za closure notifikacije radi lakšeg praćenja. |
+| Sta je tim odbacio | Odbijena je opcija dodavanja nove tabele/kolone za aktivne assigneeje jer postojeća historija dodjela može jednoznačno podržati pravilo bez migracije. Odbijeno je i slanje notifikacija svim korisnicima iz kompletne historije dodjela jer bi stvaralo nepotreban šum. |
+| Rizici, problemi ili greske koje su uocene | Prvi pokušaj backend testiranja u sandboxu pao je zbog MSBuild named-pipe ograničenja (`SocketException: Permission denied`); testovi su ponovo pokrenuti uz odobreno izvršavanje izvan sandboxa. Tok "posljednja dodjela" je morao ostati važeći za forward na drugog agenta, dok je samo forward na tehničara poseban slučaj. |
+| Ko je koristio alat | Uma Mahmutović |
