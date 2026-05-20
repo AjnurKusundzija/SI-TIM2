@@ -5,7 +5,6 @@ import { getMyStatistics, getMyRecentTickets } from '../services/userService'
 import {
   Ticket,
   PlusCircle,
-  LayoutDashboard,
   BarChart2,
   CheckCircle,
   AlertCircle,
@@ -15,6 +14,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import Badge from '../components/common/Badge'
+import AdminDashboardSection from '../components/admin/AdminDashboardSection'
 import { timeAgo } from '../utils/formatDate'
 
 // ---------- helpers ----------
@@ -148,6 +148,7 @@ function RecentTicketRow({ ticket }) {
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const isAdmin = user?.role === 'ADMINISTRATOR'
   const isStaff = user?.role === 'AGENT' || user?.role === 'TECHNICIAN'
 
   const [stats, setStats] = useState(null)
@@ -185,16 +186,10 @@ export default function Dashboard() {
     { icon: BarChart2, label: 'Moja statistika', description: 'Detaljan pregled vaših performansi', to: '/statistics', color: 'bg-violet-500' },
   ]
 
-  const adminCards = [
-    { icon: Ticket, label: 'Svi tiketi', description: 'Pregledajte i upravljajte tiketima', to: '/tickets', color: 'bg-navy-600' },
-    { icon: LayoutDashboard, label: 'FAQ', description: 'Upravljajte često postavljanim pitanjima', to: '/faq', color: 'bg-emerald-500' },
-  ]
-
   const cards = {
     CLIENT: clientCards,
     AGENT: agentCards,
     TECHNICIAN: techCards,
-    ADMINISTRATOR: adminCards,
   }[user?.role] ?? []
 
   const miniStats = stats ? [
@@ -225,15 +220,18 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Quick actions */}
-      <div>
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Brze akcije</h3>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
-          {cards.map((card) => (
-            <QuickCard key={card.to} {...card} />
-          ))}
+      {isAdmin && <AdminDashboardSection mode="metrics" />}
+
+      {!isAdmin && cards.length > 0 && (
+        <div>
+          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Brze akcije</h3>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+            {cards.map((card) => (
+              <QuickCard key={card.to} {...card} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Stats + Recent tickets — samo za AGENT i TECHNICIAN */}
       {isStaff && (

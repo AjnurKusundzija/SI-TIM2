@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getAllTickets } from '../services/ticketService'
 import { useAuth } from '../context/AuthContext'
 import { Search, Ticket } from 'lucide-react'
@@ -58,17 +58,29 @@ function SkeletonTable({ hasInternalPriority }) {
   )
 }
 
+const STALE_DAYS = 7
+
 export default function Tickets({ assignedOnly = false }) {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const isStaff = user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN'
+
+  const drillStatus = searchParams.get('status')
+  const drillCategory = searchParams.get('problemCategory')
+  const drillFrom = searchParams.get('from')
+  const drillTo = searchParams.get('to')
+  const drillSnapshot = searchParams.get('snapshot') === 'true'
+  const drillUnassigned = searchParams.get('unassigned') === 'true'
+  const drillStale = searchParams.get('stale') === 'true'
+  const hasDrillDown = !!(drillStatus || drillCategory || drillFrom || drillUnassigned || drillStale)
 
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState('ALL')
-  const [typeFilter, setTypeFilter] = useState('ALL')
+  const [statusFilter, setStatusFilter] = useState(drillStatus ?? 'ALL')
+  const [typeFilter, setTypeFilter] = useState(drillCategory ?? 'ALL')
   const [priorityFilter, setPriorityFilter] = useState('ALL')
 
   useEffect(() => {
@@ -79,20 +91,48 @@ export default function Tickets({ assignedOnly = false }) {
   }, [assignedOnly])
 
   const filtered = useMemo(() => {
+    const fromMs = drillFrom && !drillSnapshot ? new Date(drillFrom).getTime() : null
+    const toMs = drillTo && !drillSnapshot ? new Date(drillTo).getTime() : null
+    const staleBefore = Date.now() - STALE_DAYS * 86400000
+
     return tickets.filter((t) => {
       if (statusFilter !== 'ALL' && t.status !== statusFilter) return false
       if (typeFilter !== 'ALL' && t.problemCategory !== typeFilter) return false
       if (priorityFilter !== 'ALL' && t.priority !== priorityFilter) return false
+      if (fromMs != null || toMs != null) {
+        const created = new Date(t.createdDate).getTime()
+        if (fromMs != null && created < fromMs) return false
+        if (toMs != null && created > toMs) return false
+      }
+      if (drillUnassigned && (t.status !== 'OPEN' || t.hasAssignment)) return false
+      if (drillStale) {
+        const created = new Date(t.createdDate).getTime()
+        const isStaleStatus = t.status === 'OPEN' || t.status === 'CLOSURE_REQUESTED'
+        if (!isStaleStatus || created > staleBefore) return false
+      }
       if (search) {
         const s = search.toLowerCase()
         if (!t.title?.toLowerCase().includes(s) && !t.subject?.toLowerCase().includes(s)) return false
       }
       return true
     })
-  }, [tickets, search, statusFilter, typeFilter, priorityFilter])
+  }, [tickets, search, statusFilter, typeFilter, priorityFilter, drillFrom, drillTo, drillSnapshot, drillUnassigned, drillStale])
 
   return (
     <div className="space-y-4">
+      {hasDrillDown && (
+        <div className="flex flex-wrap items-center justify-between gap-2 bg-navy-50 border border-navy-100 rounded-lg px-4 py-3 text-sm text-navy-800">
+          <span>Prikaz filtriran iz admin dashboarda.</span>
+          <button
+            type="button"
+            onClick={() => navigate('/tickets')}
+            className="text-navy-600 font-medium hover:underline"
+          >
+            Ukloni filtere
+          </button>
+        </div>
+      )}
+
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="relative flex-1 w-full sm:max-w-xs">

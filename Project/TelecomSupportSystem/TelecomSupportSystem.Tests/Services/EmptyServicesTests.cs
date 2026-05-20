@@ -29,7 +29,7 @@ namespace TelecomSupportSystem.Tests.Services
         public void Constructor_ShouldInitializeSuccessfully()
         {
             // Arrange & Act
-            var service = new ReportService();
+            var service = new ReportService(new Mock<IReportRepository>().Object);
 
             // Assert
             service.Should().NotBeNull();

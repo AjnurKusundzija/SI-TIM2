@@ -402,7 +402,8 @@ namespace TelecomSupportSystem.BLL.Services
                 InternalPriority = t.InternalPriority?.ToString(),
                 ProblemCategory = t.ProblemCategory.ToString(),
                 CreatedDate     = t.CreatedDate,
-                ClosedDate      = t.ClosedDate
+                ClosedDate      = t.ClosedDate,
+                HasAssignment   = t.Assignments.Count > 0,
             });
         }
 

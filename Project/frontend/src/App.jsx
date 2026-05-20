@@ -19,6 +19,7 @@ import Packages from './pages/Packages'
 import PackageDetail from './pages/PackageDetail'
 import Profile from './pages/Profile'
 import UserProfile from './pages/UserProfile'
+import Reports from './pages/Reports'
 
 
 function AppRoutes() {
@@ -47,6 +48,14 @@ function AppRoutes() {
         <Route path="/assigned" element={<AssignedTickets />} />
         <Route path="/create-ticket" element={<CreateTicket />} />
         <Route path="/faq" element={<Faq />} />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute allowedRoles={['ADMINISTRATOR']}>
+              <Reports />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/notifications" element={<Notifications />} />
 

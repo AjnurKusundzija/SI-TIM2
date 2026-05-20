@@ -67,7 +67,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Done        | Sprint 6    |
 | [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente | Feature | 1    |     M     | Done        | Sprint 7    |
 | [PB-49](#pb-49) | Notifikacije                             | Feature        |     1     |     L     | Done        | Sprint 8    |
-| [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature | 2  |     S     | Backlog     | Sprint 11   |
+| [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature | 2  |     S     | Done        | Sprint 9    |
 
 ---
 
@@ -675,7 +675,8 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** S
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
+- **Status:** Done
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** `ReportType.FIRST_RESPONSE`, on-demand izvještaj s bucketima (sedmica→dan, mjesec→sedmica, godina→mjesec), trend na dashboardu (`firstResponseByPeriod`), helper `FirstResponseReportHelper`.
 
 ---

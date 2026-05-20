@@ -6,7 +6,8 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ### Legenda za oznake
 
-- **Statusi za backlog:** Backlog, To-Do, In Progress, Testing, Done
+- **Statusi za backlog:** Backlog, To-Do, In Progress, Testing, **Partial**, Done
+- **Partial:** admin/MVP je implementiran u kodu, ali acceptance kriteriji PB stavke nisu u potpunosti ispunjeni (vidi napomenu kod stavke)
 - **Procjena složenosti:** XS, S, M, L, XL
 - **Oznaka prioriteta:** 1, 2, 3, 4, 5 (1 je najbitnije, 5 je najmanje bitno)
 - **Tipovi stavki:** Feature, Bug, Dokumentacija, Research, Technical Task
@@ -16,62 +17,79 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 ## Tabelarni prikaz Backloga
 
 
-| ID              | Naziv stavke                             | Tip stavke     | Prioritet | Složenost | Status  | Sprint      |
-| :-------------- | :--------------------------------------- | :------------- | :-------: | :-------: | :------ | :---------- |
-| [PB-01](#pb-01) | Team Charter                             | Dokumentacija  |     1     |     S     | Done        | Sprint 1    |
-| [PB-02](#pb-02) | Product Vision                           | Dokumentacija  |     1     |     M     | Done        | Sprint 1    |
-| [PB-03](#pb-03) | Stakeholder Map                          | Dokumentacija  |     1     |     S     | Done        | Sprint 1    |
-| [PB-04](#pb-04) | Product Backlog                          | Dokumentacija  |     1     |     M     | Done        | Sprint 1    |
-| [PB-05](#pb-05) | Acceptance Criteria                      | Dokumentacija  |     2     |     S     | Done        | Sprint 2    |
-| [PB-06](#pb-06) | User Stories                             | Dokumentacija  |     1     |     XS    | Done        | Sprint 2    |
-| [PB-07](#pb-07) | NFR zahtjevi                             | Dokumentacija  |     2     |     M     | Done        | Sprint 2    |
-| [PB-08](#pb-08) | Risk Register                            | Dokumentacija  |     1     |     M     | Done        | Sprint 3    |
-| [PB-09](#pb-09) | Domain Model                             | Dokumentacija  |     2     |     M     | Done        | Sprint 3    |
-| [PB-10](#pb-10) | Use Case Model                           | Dokumentacija  |     1     |     M     | Done        | Sprint 3    |
-| [PB-11](#pb-11) | Architecture Overview                    | Dokumentacija  |     1     |     L     | Done        | Sprint 3    |
-| [PB-12](#pb-12) | Test Strategy                            | Dokumentacija  |     1     |     M     | Done        | Sprint 3    |
-| [PB-13](#pb-13) | Definition of Done                       | Dokumentacija  |     3     |     M     | Done        | Sprint 4    |
-| [PB-14](#pb-14) | Initial Release Plan                     | Dokumentacija  |     2     |     S     | Done        | Sprint 4    |
-| [PB-15](#pb-15) | Osnovni skeleton projekta                | Technical Task |     1     |     S     | Done        | Sprint 4    |
-| [PB-16](#pb-16) | Inicijalna struktura repozitorija        | Technical Task |     1     |     L     | Done        | Sprint 4    |
-| [PB-17](#pb-17) | AI Usage Log                             | Dokumentacija  |     3     |     XS    | Done        | Sprint 5    |
-| [PB-18](#pb-18) | Decision Log                             | Dokumentacija  |     2     |     XS    | Done        | Sprint 5    |
-| [PB-19](#pb-19) | Login korisnika                          | Feature        |     1     |     L     | Done        | Sprint 5    |
-| [PB-20](#pb-20) | Upravljanje korisničkim profilom         | Feature        |     2     |     M     | Done        | Sprint 8    |
-| [PB-21](#pb-21) | Prikaz paketa i pretplata                | Feature        |     4     |     M     | Done        | Sprint 8    |
-| [PB-22](#pb-22) | Kreiranje novog tiketa                   | Feature        |     1     |     M     | Done        | Sprint 5    |
-| [PB-23](#pb-23) | Pregled vlastitih tiketa                 | Feature        |     1     |     S     | Done        | Sprint 5    |
-| [PB-24](#pb-24) | Detaljan prikaz tiketa                   | Feature        |     1     |     M     | Done        | Sprint 6    |
-| [PB-25](#pb-25) | Zatvaranje tiketa                        | Feature        |     1     |     L     | Done        | Sprint 7    |
-| [PB-26](#pb-26) | Ocjenjivanje tiketa                      | Feature        |     5     |     S     | Done        | Sprint 8    |
-| [PB-27](#pb-27) | Komunikacija kroz tiket                  | Feature        |     1     |     M     | Done        | Sprint 6    |
-| [PB-28](#pb-28) | Upravljanje prioritetima tiketa          | Feature        |     2     |     M     | Done        | Sprint 7    |
-| [PB-29](#pb-29) | Preraspodjela agenata po timovima        | Feature        |     1     |     M     | Backlog     | Sprint 10   |
-| [PB-30](#pb-30) | Automatska dodjela tiketa                | Feature        |     3     |     XS    | Done        | Sprint 7    |
-| [PB-31](#pb-31) | Prosljeđivanje tiketa                    | Feature        |     2     |     M     | Done        | Sprint 7    |
-| [PB-32](#pb-32) | Pregled svih tiketa                      | Feature        |     1     |     M     | Done        | Sprint 6    |
-| [PB-33](#pb-33) | Pretraživanje i filtriranje tiketa       | Feature        |     1     |     M     | Done        | Sprint 7    |
-| [PB-34](#pb-34) | Pregled i uređivanje korisničkih profila | Feature        |     2     |     M     | Done        | Sprint 8    |
-| [PB-35](#pb-35) | Pregled dodijeljenih tiketa (tehničari)  | Feature        |     1     |     S     | Done        | Sprint 7    |
-| [PB-36](#pb-36) | Ažuriranje statusa tiketa                | Feature        |     1     |     S     | Done        | Sprint 8    |
-| [PB-37](#pb-37) | Tehničar vidi osnovne informacije        | Feature        |     2     |     S     | Done        | Sprint 7    |
-| [PB-38](#pb-38) | Izvještaj o broju tiketa                 | Feature        |     1     |     M     | Backlog     | Sprint 11   |
-| [PB-39](#pb-39) | Izvještaj po statusu tiketa              | Feature        |     5     |     M     | Backlog     | Sprint 11   |
-| [PB-40](#pb-40) | Izvještaj po tipu problema               | Feature        |     3     |     S     | Backlog     | Sprint 11   |
-| [PB-41](#pb-41) | Prosječno vrijeme rješavanja tiketa      | Feature        |     1     |     M     | Backlog     | Sprint 11   |
-| [PB-42](#pb-42) | Statistika agenta i tehničara            | Feature        |     2     |     M     | Done        | Sprint 8    |
-| [PB-43](#pb-43) | Izvještaj o opterećenju agenata          | Feature        |     2     |     M     | Backlog     | Sprint 11   |
-| [PB-44](#pb-44) | Izvještaj o ocjenama korisnika           | Feature        |     2     |     S     | Backlog     | Sprint 11   |
-| [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama    | Feature        |     1     |     L     | To-Do       | Sprint 9    |
-| [PB-46](#pb-46) | Export izvještaja                        | Feature        |     5     |     S     | Backlog     | Sprint 11   |
-| [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Done        | Sprint 6    |
-| [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente | Feature | 1    |     M     | Done        | Sprint 7    |
-| [PB-49](#pb-49) | Notifikacije                             | Feature        |     1     |     L     | Done        | Sprint 8    |
-| [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature | 2  |     S     | Backlog     | Sprint 11   |
-| [PB-51](#pb-51) | Upravljanje korisničkim nalozima         | Feature        |     1     |     L     | To-Do       | Sprint 9    |
-| [PB-52](#pb-52) | Upravljanje katalogom paketa i pretplata | Feature        |     2     |     M     | To-Do       | Sprint 9    |
-| [PB-53](#pb-53) | Pregled audit log-a aktivnosti           | Feature        |     2     |     M     | To-Do       | Sprint 9    |
-| [PB-56](#pb-56) | Prilozi na tiketima                      | Feature        |     1     |     M     | To-Do       | Sprint 9    |
+| ID              | Naziv stavke                                       | Tip stavke     | Prioritet | Složenost | Status  | Sprint    |
+| --------------- | -------------------------------------------------- | -------------- | --------- | --------- | ------- | --------- |
+| [PB-01](#pb-01) | Team Charter                                       | Dokumentacija  | 1         | S         | Done    | Sprint 1  |
+| [PB-02](#pb-02) | Product Vision                                     | Dokumentacija  | 1         | M         | Done    | Sprint 1  |
+| [PB-03](#pb-03) | Stakeholder Map                                    | Dokumentacija  | 1         | S         | Done    | Sprint 1  |
+| [PB-04](#pb-04) | Product Backlog                                    | Dokumentacija  | 1         | M         | Done    | Sprint 1  |
+| [PB-05](#pb-05) | Acceptance Criteria                                | Dokumentacija  | 2         | S         | Done    | Sprint 2  |
+| [PB-06](#pb-06) | User Stories                                       | Dokumentacija  | 1         | XS        | Done    | Sprint 2  |
+| [PB-07](#pb-07) | NFR zahtjevi                                       | Dokumentacija  | 2         | M         | Done    | Sprint 2  |
+| [PB-08](#pb-08) | Risk Register                                      | Dokumentacija  | 1         | M         | Done    | Sprint 3  |
+| [PB-09](#pb-09) | Domain Model                                       | Dokumentacija  | 2         | M         | Done    | Sprint 3  |
+| [PB-10](#pb-10) | Use Case Model                                     | Dokumentacija  | 1         | M         | Done    | Sprint 3  |
+| [PB-11](#pb-11) | Architecture Overview                              | Dokumentacija  | 1         | L         | Done    | Sprint 3  |
+| [PB-12](#pb-12) | Test Strategy                                      | Dokumentacija  | 1         | M         | Done    | Sprint 3  |
+| [PB-13](#pb-13) | Definition of Done                                 | Dokumentacija  | 3         | M         | Done    | Sprint 4  |
+| [PB-14](#pb-14) | Initial Release Plan                               | Dokumentacija  | 2         | S         | Done    | Sprint 4  |
+| [PB-15](#pb-15) | Osnovni skeleton projekta                          | Technical Task | 1         | S         | Done    | Sprint 4  |
+| [PB-16](#pb-16) | Inicijalna struktura repozitorija                  | Technical Task | 1         | L         | Done    | Sprint 4  |
+| [PB-17](#pb-17) | AI Usage Log                                       | Dokumentacija  | 3         | XS        | Done    | Sprint 5  |
+| [PB-18](#pb-18) | Decision Log                                       | Dokumentacija  | 2         | XS        | Done    | Sprint 5  |
+| [PB-19](#pb-19) | Login korisnika                                    | Feature        | 1         | L         | Done    | Sprint 5  |
+| [PB-20](#pb-20) | Upravljanje korisničkim profilom                   | Feature        | 2         | M         | Done    | Sprint 8  |
+| [PB-21](#pb-21) | Prikaz paketa i pretplata                          | Feature        | 4         | M         | Done    | Sprint 8  |
+| [PB-22](#pb-22) | Kreiranje novog tiketa                             | Feature        | 1         | M         | Done    | Sprint 5  |
+| [PB-23](#pb-23) | Pregled vlastitih tiketa                           | Feature        | 1         | S         | Done    | Sprint 5  |
+| [PB-24](#pb-24) | Detaljan prikaz tiketa                             | Feature        | 1         | M         | Done    | Sprint 6  |
+| [PB-25](#pb-25) | Zatvaranje tiketa                                  | Feature        | 1         | L         | Done    | Sprint 7  |
+| [PB-26](#pb-26) | Ocjenjivanje tiketa                                | Feature        | 5         | S         | Done    | Sprint 8  |
+| [PB-27](#pb-27) | Komunikacija kroz tiket                            | Feature        | 1         | M         | Done    | Sprint 6  |
+| [PB-28](#pb-28) | Upravljanje prioritetima tiketa                    | Feature        | 2         | M         | Done    | Sprint 7  |
+| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Backlog | Sprint 10 |
+| [PB-30](#pb-30) | Automatska dodjela tiketa                          | Feature        | 3         | XS        | Done    | Sprint 7  |
+| [PB-31](#pb-31) | Prosljeđivanje tiketa                              | Feature        | 2         | M         | Done    | Sprint 7  |
+| [PB-32](#pb-32) | Pregled svih tiketa                                | Feature        | 1         | M         | Done    | Sprint 6  |
+| [PB-33](#pb-33) | Pretraživanje i filtriranje tiketa                 | Feature        | 1         | M         | Done    | Sprint 7  |
+| [PB-34](#pb-34) | Pregled i uređivanje korisničkih profila           | Feature        | 2         | M         | Done    | Sprint 8  |
+| [PB-35](#pb-35) | Pregled dodijeljenih tiketa (tehničari)            | Feature        | 1         | S         | Done    | Sprint 7  |
+| [PB-36](#pb-36) | Ažuriranje statusa tiketa                          | Feature        | 1         | S         | Done    | Sprint 8  |
+| [PB-37](#pb-37) | Tehničar vidi osnovne informacije                  | Feature        | 2         | S         | Done    | Sprint 7  |
+| [PB-38](#pb-38) | Izvještaj o broju tiketa                           | Feature        | 1         | M         | Partial | Sprint 9  |
+| [PB-39](#pb-39) | Izvještaj po statusu tiketa                        | Feature        | 5         | M         | Partial | Sprint 9  |
+| [PB-40](#pb-40) | Izvještaj po tipu problema                         | Feature        | 3         | S         | Partial | Sprint 9  |
+| [PB-41](#pb-41) | Prosječno vrijeme rješavanja tiketa                | Feature        | 1         | M         | Partial | Sprint 9  |
+| [PB-42](#pb-42) | Statistika agenta i tehničara                      | Feature        | 2         | M         | Done    | Sprint 8  |
+| [PB-43](#pb-43) | Izvještaj o opterećenju agenata                    | Feature        | 2         | M         | Partial | Sprint 9  |
+| [PB-44](#pb-44) | Izvještaj o ocjenama korisnika                     | Feature        | 2         | S         | Partial | Sprint 9  |
+| [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama              | Feature        | 1         | L         | Done    | Sprint 9  |
+| [PB-46](#pb-46) | Export izvještaja                                  | Feature        | 5         | S         | Backlog | Sprint 11 |
+| [PB-47](#pb-47) | FAQ segment                                        | Feature        | 3         | S         | Done    | Sprint 6  |
+| [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente    | Feature        | 1         | M         | Done    | Sprint 7  |
+| [PB-49](#pb-49) | Notifikacije                                       | Feature        | 1         | L         | Done    | Sprint 8  |
+| [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature        | 2         | S         | Partial | Sprint 9  |
+
+
+---
+
+## Modul izvještaja — šta preostaje za zatvaranje svih PB-ova
+
+
+| PB        | Preostalo za puni **Done**                                                                                                                                                                   |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **PB-38** | Trend/grupisanje po danu, sedmici, mjesecu i godini (ne samo ukupan broj u odabranom periodu); opcionalno US-42 za tehničara (samo vlastiti tiketi) ako se u scope-u drži originalni backlog |
+| **PB-39** | Eksplicitan admin izvještaj/testovi prihvatni; US-44 za tehničara (vlastiti tiketi) ako je u scope-u                                                                                         |
+| **PB-40** | US-46 za tehničara (vlastiti tiketi) ako je u scope-u                                                                                                                                        |
+| **PB-41** | Zaseban on-demand izvještaj tipa „prosječno rješavanje“ (trenutno samo KPI na dashboardu); US-48 za tehničara ako je u scope-u                                                               |
+| **PB-43** | Razbreak riješenih tiketa po **danu | sedmici | mjesecu** po agentu (trenutno samo ukupan broj po agentu u periodu)                                                                          |
+| **PB-44** | Proširena analiza ocjena (npr. trend, filteri) ako zahtijeva AC; inače formalno zatvoriti nakon test plana                                                                                   |
+| **PB-45** | Formalno testiranje/prihvat (US-71–US-86); **PB-46** nije dio PB-45 ali blokira „kompletan“ modul                                                                                            |
+| **PB-46** | Implementacija CSV exporta za generisane izvještaje                                                                                                                                          |
+| **PB-50** | On-demand izvještaj / trend po pod-periodima (dnevno, sedmično, mjesečno), ne samo agregat na dashboardu                                                                                     |
+
+
+**Napomena:** Paralelni izvještaji za **tehničara** (US-42, US-44, US-46, US-48) nisu implementirani — po dogovoru u Sprint 9 admin modul je isključivo za `ADMINISTRATOR`. Ako ih ne planirate, označite ih kao *out of scope* u User Stories, ne kao preostali razvoj PB-38–41.
 
 ---
 
@@ -532,8 +550,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
+- **Status:** Partial
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano za admina: ukupan broj tiketa u globalnom periodu (KPI + on-demand `TICKET_COUNT` preko `POST /api/reports/generate`). Nije implementirano: vremenski trend (bucketi dan/sedmica/mjesec/godina unutar izvještaja). US-42 (tehničar) nije urađen.
 
 ---
 
@@ -544,9 +563,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 5
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
-- **Napomena:** Ovaj izvještaj gubi smisao za veće vremenske opsege.
+- **Status:** Partial
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano za admina: `statusBreakdown` na dashboardu, pie chart, on-demand `TICKET_STATUS`, upozorenje za veliki period. US-44 (tehničar) nije urađen. Ovaj izvještaj gubi smisao za veće vremenske opsege.
 
 ---
 
@@ -557,8 +576,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 3
 - **Procjena složenosti ili napora:** S
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
+- **Status:** Partial
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano za admina: top kategorije na dashboardu, bar chart, on-demand `PROBLEM_TYPE`. US-46 (tehničar) nije urađen.
 
 ---
 
@@ -569,8 +589,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
+- **Status:** Partial
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano za admina: KPI `avgResolutionHours` na dashboardu (samo zatvoreni tiketi u periodu). Nije implementiran zaseban tip izvještaja u `ReportType`. US-48 (tehničar) nije urađen.
 
 ---
 
@@ -594,8 +615,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
+- **Status:** Partial
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano za admina: ukupan broj riješenih po agentu/tehničaru u periodu (`TEAM_WORKLOAD`, top lista na dashboardu). Nije implementirano: razbreak po danu, sedmici i mjesecu unutar izvještaja.
 
 ---
 
@@ -606,8 +628,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** S
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
+- **Status:** Partial
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano za admina: KPI prosječne ocjene, on-demand `USER_RATINGS` (prosjek, broj, distribucija po zvjezdicama). Nije implementirana napredna analiza/trend kroz vrijeme.
 
 ---
 
@@ -618,9 +641,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
-- **Status:** To-Do
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Razrađeno kroz US-71, US-72
+- **Napomena:** Implementirano: proširenje `/dashboard` za `ADMINISTRATOR`, `GET /api/admin/dashboard`, globalni filter (sedmica/mjesec/godina/custom), KPI kartice, grafovi, on-demand izvještaji (`POST /api/reports/generate`), drill-down na `/tickets`, disabled Export (čeka PB-46). Preostaje: formalno prihvatno testiranje (US-71–US-86), performans test < 5 s na većem datasetu.
 
 ---
 
@@ -633,6 +656,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** S
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 11
+- **Napomena:** Na dashboardu postoji samo disabled dugme „Export“ (placeholder). CSV generisanje i preuzimanje nije implementirano.
 
 ---
 
@@ -680,59 +704,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** S
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
-
----
-
-### PB-51
-
-- **Naziv Stavke:** Upravljanje korisničkim nalozima
-- **Opis:** Implementirati feature gdje administrator može kreirati nove korisničke naloge (klijenti, agenti, tehničari), uređivati podatke postojećih korisnika, te deaktivirati/reaktivirati naloge bez gubitka historijskih podataka
-- **Tip Stavke:** Feature
-- **Prioritet:** 1
-- **Procjena složenosti ili napora:** L
-- **Status:** To-Do
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Razrađeno kroz US-73, US-74, US-75
+- **Napomena:** Implementirano: agregat `avgFirstResponseMinutes` na admin dashboardu (`TicketMetricsHelper`, cijeli sistem u odabranom periodu). Nije implementirano: zaseban on-demand izvještaj ni podaci po pod-periodima (dan/sedmica/mjesec).
 
 ---
 
-### PB-52
-
-- **Naziv Stavke:** Upravljanje katalogom paketa i pretplata
-- **Opis:** Implementirati feature gdje administrator definiše i uređuje katalog paketa (Internet, TV, mobilni) koje firma nudi, te dodjeljuje i ukida pretplate klijentima
-- **Tip Stavke:** Feature
-- **Prioritet:** 2
-- **Procjena složenosti ili napora:** M
-- **Status:** To-Do
-- **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Razrađeno kroz US-76, US-77
-
----
-
-### PB-53
-
-- **Naziv Stavke:** Pregled audit log-a aktivnosti
-- **Opis:** Implementirati feature za evidenciju i pregled ključnih akcija u sistemu (prijava, kreiranje/zatvaranje tiketa, izmjene korisničkih naloga, izmjene paketa i pretplata) sa mogućnošću filtriranja po tipu akcije, korisniku i vremenskom periodu
-- **Tip Stavke:** Feature
-- **Prioritet:** 2
-- **Procjena složenosti ili napora:** M
-- **Status:** To-Do
-- **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Razrađeno kroz US-78, US-79
-
----
-
-### PB-56
-
-- **Naziv Stavke:** Prilozi na tiketima
-- **Opis:** Implementirati feature gdje korisnik, agent ili tehničar mogu priložiti slike (PNG, JPG, JPEG) i dokumente (PDF, DOCX, TXT) uz tiket ili poruku, sa pregledom i preuzimanjem priloga u detaljnom prikazu tiketa
-- **Tip Stavke:** Feature
-- **Prioritet:** 1
-- **Procjena složenosti ili napora:** M
-- **Status:** To-Do
-- **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Razrađeno kroz US-80, US-81
-
----

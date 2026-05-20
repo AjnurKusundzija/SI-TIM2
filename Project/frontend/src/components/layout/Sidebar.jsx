@@ -45,6 +45,7 @@ const navConfig = {
   ADMINISTRATOR: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/profile', label: 'Profil', icon: User },
+    { to: '/reports', label: 'Izvještaji', icon: BarChart2 },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
     { to: '/notifications', label: 'Notifikacije', icon: Bell },
