@@ -50,6 +50,7 @@ namespace TelecomSupportSystem.DAL.Repositories
         public async Task<IEnumerable<Ticket>> GetAllAsync()
         {
             return await _context.Tickets
+                .Include(t => t.Assignments)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }

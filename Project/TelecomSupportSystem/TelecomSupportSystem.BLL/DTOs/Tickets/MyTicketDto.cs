@@ -12,5 +12,6 @@ namespace TelecomSupportSystem.BLL.DTOs
         public string ProblemCategory { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime? ClosedDate { get; set; }
+        public bool HasAssignment { get; set; }
     }
 }

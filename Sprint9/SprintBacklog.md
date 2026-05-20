@@ -14,11 +14,12 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 
 | ID | Naziv zadatka ili storyja | Povezani US | Odgovorna osoba ili osobe | Status | Napomena |
 |---|---|---|---|---|---|
-| SB-01 | PB-45 Admin Dashboard sa ključnim metrikama | US-71, US-72 | Merisa | To-Do | Prikaz ključnih metrika sistema i navigacija ka admin sekcijama |
+| SB-01 | PB-45 Admin Dashboard sa ključnim metrikama | US-71, US-72, US-82 – US-86 | Uma | Done | Metrike na `/dashboard`; generisanje na `/reports` |
+| SB-00 | PB-50 Prosječno vrijeme prvog odgovora (admin) | US-87, US-88 | Uma | Done | On-demand `FIRST_RESPONSE` + trend po pod-periodima na `/reports` |
 | SB-02 | PB-51 Upravljanje korisničkim nalozima | US-73, US-74, US-75 | Ajdin | To-Do | CRUD operacije nad nalozima agenata, tehničara i klijenata |
 | SB-03 | PB-52 Upravljanje katalogom paketa i pretplata | US-76, US-77 | Eldar | To-Do | Admin definiše pakete i dodjeljuje pretplate klijentima |
 | SB-04 | PB-53 Pregled audit log-a aktivnosti | US-78, US-79 | Hana, Lamija | To-Do | Praćenje ključnih akcija u sistemu sa filtriranjem |
-| SB-05 | PB-56 Prilozi na tiketima | US-80, US-81 | Uma | To-Do | Upload i preuzimanje priloga (slike, dokumenti) na tiketima |
+| SB-05 | PB-56 Prilozi na tiketima | US-80, US-81 | Merisa | To-Do | Upload i preuzimanje priloga (slike, dokumenti) na tiketima |
 
 ---
 
@@ -29,30 +30,112 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 ## PB-45 Admin Dashboard sa ključnim metrikama
 
 ### US-71
-*Kao administrator, želim da imam centralni dashboard sa pregledom ključnih metrika sistema, kako bih u svakom trenutku imao jasan uvid u stanje sistema bez potrebe za otvaranjem više stranica.*
+*Kao administrator, želim da na dashboardu vidim centralni pregled ključnih metrika cijelog sistema, kako bih imao operativni uvid u stanje helpdeska.*
 
 **Acceptance Criteria:**
-- Kada je administrator prijavljen u sistem, sistem mora prikazati admin dashboard kao prvu stranicu nakon logina
-- Sistem mora prikazati ukupan broj korisnika u sistemu razvrstanih po rolama (klijent, agent, tehničar, admin)
-- Sistem mora prikazati broj trenutno otvorenih tiketa
-- Sistem mora prikazati broj tiketa zatvorenih u posljednjih 7 dana
-- Sistem mora prikazati broj tiketa u statusu "Čeka se" (`CLOSURE_REQUESTED`)
-- Sistem mora prikazati broj nedodijeljenih tiketa
-- Sistem mora prikazati prosječnu ocjenu zatvorenih tiketa za posljednjih 30 dana
-- Kada ne postoje podaci za određenu metriku, sistem mora prikazati odgovarajuću poruku umjesto numeričke vrijednosti
-- Sistem ne smije dozvoliti pristup dashboardu korisnicima koji nemaju admin rolu
-- Metrike se moraju automatski osvježavati pri svakom otvaranju dashboarda
+- Kada je prijavljen `ADMINISTRATOR`, sistem mora na `/dashboard` prikazati: vremenski period, ključne metrike (KPI), aktivne korisnike po rolama i grafove
+- Kada korisnik nije administrator, sistem ne smije prikazati admin metrike niti pozivati `GET /api/admin/dashboard`
+- Sidebar stavka „Izvještaji“ vodi na `/reports` (zasebno od metrika)
+- Sistem mora učitati podatke preko `GET /api/admin/dashboard` (live upit na bazu) pri otvaranju ili promjeni filtera
+- Sistem mora prikazati sve must-have KPI kartice: ukupan broj tiketa (u odabranom periodu), distribucija po statusu, prosječno vrijeme rješavanja, prosječno vrijeme prvog odgovora (PB-50), prosječna ocjena korisnika, opterećenje agenata (sažetak), top tipovi problema (sažetak)
+- Sistem mora prikazati operativne metrike: broj aktivnih korisnika po rolama, broj otvorenih tiketa, tiketi u `CLOSURE_REQUESTED`, nedodijeljeni tiketi, tiketi stariji od definisanog praga (ako je konfigurisan)
+- U izračun ulaze tiketi u svim postojećim statusima (`OPEN`, `CLOSED`, `CLOSURE_REQUESTED`); sistem ne uvodi status `CANCELLED` niti isključuje tikete iz agregata na osnovu nepostojećeg statusa
+- Kada za karticu nema podataka u odabranom periodu, sistem mora prikazati poruku (ne numeričku vrijednost „0“ osim ako je stvarno nula)
+- Dashboard mora koristiti isti vizuelni jezik kao `/statistics` (kartice, Recharts)
+- Učitavanje dashboard metrika mora biti završeno u &lt; 5 sekundi za tipičan dataset tima
 
 ---
 
 ### US-72
-*Kao administrator, želim da iz dashboarda mogu brzo navigirati ka pojedinačnim admin sekcijama, kako bih efikasno upravljao sistemom.*
+*Kao administrator, želim da jednim globalnim vremenskim filterom filtriram metrike na dashboardu i izvještaje na stranici Izvještaji, kako bih analizirao isti period.*
 
 **Acceptance Criteria:**
-- Sistem mora prikazati navigacijske kartice ili linkove ka sekcijama: Upravljanje korisnicima, Upravljanje paketima, Audit log, Pregled tiketa
-- Kada admin klikne na karticu, sistem ga mora preusmjeriti na odgovarajuću sekciju
-- Sistem mora prikazati link ka detaljnijim izvještajima (koji će biti implementirani u Sprint 11)
+- Sistem mora prikazati globalni filter „Vremenski period“ na `/dashboard` (s dugmetom Primijeni za metrike)
+- Sistem mora prikazati globalni filter „Vremenski period“ na `/reports` (za generisanje izvještaja)
+- Sistem mora omogućiti brze periode: sedmica, mjesec, godina
+- Sistem mora omogućiti custom raspon (od datuma — do datuma)
+- Kada administrator promijeni filter, sve KPI kartice, grafovi i on-demand izvještaji moraju se osvježiti za isti period
+- Kada je custom raspon nevalidan (kraj prije početka), sistem mora prikazati poruku greške i ne smije pozvati API
+
+---
+
+### US-82
+*Kao administrator, želim da na dashboardu odmah vidim grafove ključnih metrika, kako bih brzo uočio trendove i neravnoteže.*
+
+**Acceptance Criteria:**
+- Sistem mora prikazati grafove na `/dashboard` (ne na `/reports`)
+- Za svaku metriku sistem mora koristiti kombinaciju prikaza: KPI kartica + grafikon i/ili tabela, prema tipu podatka
+- Grafovi moraju poštovati globalni vremenski filter
+- Kada nema dovoljno podataka za grafikon, sistem mora prikazati poruku umjesto praznog grafa
+
+---
+
+### US-83
+*Kao administrator, želim da na stranici Izvještaji generišem bilo koji dostupni izvještaj za odabrani period, kako bih detaljno analizirao podatke.*
+
+**Acceptance Criteria:**
+- Stranica `/reports` sadrži isključivo vremenski period i sekciju generisanja izvještaja (bez KPI kartica i grafova)
+- Sistem mora omogućiti on-demand generisanje za sve tipove iz `ReportType`: `TICKET_COUNT`, `TICKET_STATUS`, `PROBLEM_TYPE`, `TEAM_WORKLOAD`, `USER_RATINGS`, `FIRST_RESPONSE` (PB-50)
+- Generisanje koristi globalni vremenski filter sa `/reports`
+- Za izvještaj po statusu (`TICKET_STATUS`), kada je odabran veliki vremenski opseg, sistem mora prikazati upozorenje administratoru da interpretacija postotaka može biti nepouzdana
+- Kada izvještaj nema podataka za period, sistem mora prikazati poruku
+- Podaci u izvještaju moraju odgovarati stvarnom stanju u bazi (live upit)
+
+---
+
+### US-84
+*Kao administrator, želim da iz metrike ili grafa mogu otvoriti listu povezanih tiketa (drill-down), kako bih od agregata prešao na konkretne slučajeve.*
+
+**Acceptance Criteria:**
+- Kada administrator klikne na KPI karticu, segment grafa ili red u tabeli izvještaja, sistem mora navigirati na filtriranu listu tiketa (`/tickets`) s primijenjenim filterima (status, tip problema, period, agent — prema kontekstu klika)
+- Drill-down mora poštovati globalni vremenski filter (s dashboarda ili iz generisanog izvještaja)
+- Kada drill-down nema rezultata, sistem mora prikazati poruku na listi tiketa
+
+---
+
+### US-85
+*Kao administrator, želim da vidim dugme za export izvještaja, kako bih znao da će ta funkcionalnost biti dostupna u narednoj fazi.*
+
+**Acceptance Criteria:**
+- Sistem mora prikazati dugme „Export“ na sekciji izvještaja
+- Dugme mora biti disabled (bez funkcionalnosti) do implementacije PB-46
+- Pored disabled dugmeta sistem može prikazati kratku napomenu da je export planiran (PB-46)
+
+---
+
+### US-86
+*Kao administrator, želim da KPI kartice na dashboardu budu pripremljene za prikaz podataka čim backend izvještaji budu spremni.*
+
+**Acceptance Criteria:**
+- PB-45 isporučuje layout svih must-have KPI kartica i placeholder stanja na `/dashboard`
+- Logika izračuna za svaku karticu/izvještaj implementira se u odgovarajućem PB-u (PB-38, PB-39, PB-40, PB-41, PB-43, PB-44, PB-50) i povezuje se preko `GET /api/admin/dashboard` i `POST /api/reports/generate`
 - Kartice moraju biti vizualno konzistentne sa ostatkom aplikacije
+
+---
+
+## PB-50 Prosječno vrijeme prvog odgovora (admin izvještaj)
+
+### US-87
+*Kao administrator, želim da na stranici Izvještaji vidim prosječno vrijeme prvog odgovora na tikete za odabrani period, kako bih procijenio responzivnost tima.*
+
+**Acceptance Criteria:**
+- Na `/dashboard` KPI kartica „Prosj. 1. odgovor“ prikazuje agregat za cijeli sistem u odabranom periodu
+- Izračun koristi vrijeme od kreiranja tiketa do prvog komentara osoblja (agent/tehničar), ne klijenta
+- Kada nema tiketa s odgovorom u periodu, sistem prikazuje poruku (ne lažnu nulu)
+- Podaci dolaze live iz baze (`GET /api/admin/dashboard`)
+
+---
+
+### US-88
+*Kao administrator, želim da generišem izvještaj o prosječnom vremenu prvog odgovora s razbreakom po pod-periodima, kako bih uočio trend kroz sedmicu, mjesec ili godinu.*
+
+**Acceptance Criteria:**
+- Administrator može odabrati izvještaj „Prosj. prvi odgovor“ (`FIRST_RESPONSE`) u sekciji generisanja na `/reports`
+- Izvještaj prikazuje: prosjek u periodu, broj tiketa s odgovorom / ukupno, tabelu po pod-periodima
+- Granularnost bucket-a: sedmica → po danu, mjesec → po sedmici, godina → po mjesecu, custom → automatski
+- Trend prvog odgovora po pod-periodima dostupan je kroz on-demand izvještaj `FIRST_RESPONSE` na `/reports` (ne kao graf na dashboardu)
+- Generisanje koristi `POST /api/reports/generate` i globalni vremenski filter sa `/reports`
+- Samo `ADMINISTRATOR` ima pristup
 
 ---
 
