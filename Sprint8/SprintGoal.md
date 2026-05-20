@@ -2,13 +2,40 @@
 
 ## Sprint cilj
 
-Cilj sprinta je implementirati sistem notifikacija koji pravovremeno obavještava sve uloge o događajima na tiketima, proširiti korisničko iskustvo kroz upravljanje profilom i pregled paketa te pretplata, omogućiti agentima i tehničarima uvid u vlastitu statistiku rada, te implementirati ocjenjivanje tiketa i ažuriranje statusa tiketa od strane tehničara.
+Cilj sprinta je implementirati sistem notifikacija koji pravovremeno obavještava sve korisničke role o događajima na tiketima, proširiti korisničko iskustvo kroz upravljanje profilom i pregled paketa te pretplata, omogućiti agentima i tehničarima uvid u vlastitu statistiku rada, te implementirati ocjenjivanje tiketa i ažuriranje statusa tiketa od strane tehničara.
 
-Sprint je fokusiran na zaokruživanje korisničkog i tehničarskog iskustva unutar sistema — korisnik dobiva mogućnost ocjenjivanja usluge i upravljanja vlastitim profilom, tehničar može ažurirati status dodijeljenih tiketa, a svi korisnici sistema dobivaju obavještenja o relevantnim promjenama bez potrebe za ručnim praćenjem.
+Sprint je fokusiran na zaokruživanje korisničkog i tehničarskog iskustva unutar sistema podrške kako bi aplikacija postala funkcionalno kompletnija i bliža realnim poslovnim procesima customer support sistema. Poseban fokus stavljen je na unapređenje komunikacije između korisnika, agenata i tehničara kroz sistem notifikacija i proširenje postojećeg ticket workflow-a dodatnim funkcionalnostima koje omogućavaju bolju organizaciju rada i kvalitetnije korisničko iskustvo.
 
-Poseban fokus stavljen je na implementaciju notifikacijskog modula čija je infrastruktura pripremljena u Sprint 7, ali čija poslovna logika i frontend prikaz nisu bili implementirani. Sprint 8 donosi kompletnu implementaciju generisanja, prikaza i upravljanja notifikacijama za sve korisničke role.
+Korisnik kroz Sprint 8 dobija mogućnost ocjenjivanja usluge nakon zatvaranja tiketa, pregled aktivnih paketa i pretplata, upravljanje vlastitim profilom i primanje pravovremenih obavještenja o svim relevantnim promjenama unutar sistema bez potrebe za ručnim praćenjem statusa prijava. Time se unapređuje transparentnost rada sistema i povećava kvalitet interakcije između korisnika i support tima.
 
-Dodatno, sprint uključuje proširenje profilnih stranica agenta i tehničara sa ličnom statistikom rada (broj tiketa, prosječna vremena, ocjene), što postavlja temelj za izvještajni modul planiran za Sprint 11.
+Tehničari i agenti kroz ovaj sprint dobivaju dodatne workflow funkcionalnosti koje uključuju ažuriranje statusa tiketa, pregled detaljnijih korisničkih informacija i historije prijava, kao i uvid u vlastitu statistiku rada kroz profilnu stranicu i dashboard prikaze. Statistički modul uključuje pregled broja aktivnih i zatvorenih tiketa, prosječnog vremena prvog odgovora, prosječnog vremena rješavanja problema i korisničkih ocjena, čime se postavlja osnova za budući izvještajni i analitički sistem planiran za naredne sprintove.
+
+Poseban fokus stavljen je na implementaciju notifikacijskog modula čija je infrastruktura pripremljena u Sprintu 7, ali čija poslovna logika i frontend prikaz nisu bili implementirani. Sprint 8 donosi kompletnu implementaciju generisanja, prikaza i upravljanja notifikacijama za sve korisničke role koristeći SignalR real-time komunikaciju i backend event logiku povezanu sa ticket workflow sistemom.
+
+Implementacijom notifikacijskog sistema omogućava se:
+- automatsko obavještavanje korisnika kada agent odgovori na tiket,
+- obavještavanje agenata i tehničara o novododijeljenim tiketima,
+- generisanje notifikacija pri promjeni statusa tiketa,
+- prikaz badge indikatora za nepročitane notifikacije,
+- pregled historije notifikacija i označavanje notifikacija kao pročitanih.
+
+Sprint također uključuje proširenje postojećeg chat i komunikacijskog sistema kroz sistemske poruke pri prosljeđivanju tiketa i generisanju workflow aktivnosti. Time se unapređuje pregled historije aktivnosti nad tiketima i omogućava kvalitetnije praćenje rada agenata i tehničara unutar sistema.
+
+Poseban fokus stavljen je i na unapređenje lifecycle upravljanja tiketima kroz mogućnost ažuriranja statusa tiketa od strane tehničara, validaciju dozvoljenih tranzicija statusa i automatsko generisanje odgovarajućih workflow događaja i notifikacija. Cilj ovih funkcionalnosti je unaprijediti organizaciju rada support sistema i omogućiti preciznije praćenje stanja korisničkih prijava.
+
+Dodatni cilj sprinta jeste implementacija funkcionalnosti ocjenjivanja zatvorenih tiketa kako bi korisnici mogli dati povratnu informaciju o kvalitetu rada agenata i tehničara. Implementacijom sistema ocjenjivanja omogućava se dugoročno praćenje kvaliteta support procesa i prikupljanje podataka potrebnih za buduće izvještaje i analitiku sistema.
+
+Sprint također obuhvata unapređenje sigurnosti i organizacije korisničkih podataka kroz implementaciju funkcionalnosti za promjenu email adrese i lozinke korisnika, validaciju pristupa podacima prema korisničkim rolama i stabilizaciju autorizacijskog sistema za nove funkcionalnosti uvedene u ovom sprintu.
+
+Kroz funkcionalnosti pregleda korisničkih profila agentima se omogućava pregled korisničkih podataka, historije tiketa i aktivnih paketa korisnika, čime se unapređuje efikasnost komunikacije sa korisnicima i omogućava kvalitetnija analiza prethodnih problema i zahtjeva.
+
+Sprint dodatno uključuje proširenje funkcionalnosti pregleda paketa i pretplata za korisnike kako bi korisnici imali centralizovan pregled aktivnih usluga, statusa pretplate i osnovnih informacija vezanih za njihove pakete unutar sistema.
+
+Pored implementacije novih funkcionalnosti, sprint obuhvata refaktorisanje frontend komponenti, proširenje backend API endpointa, optimizaciju organizacije workflow logike i dodatnu stabilizaciju frontend-backend komunikacije kako bi sistem ostao skalabilan i spreman za naredna proširenja.
+
+Poseban fokus sprinta stavljen je na kvalitet implementacije i testiranja novih funkcionalnosti. Sprint uključuje implementaciju dodatnih unit testova, validaciju novih workflow scenarija, testiranje autorizacije po korisničkim rolama i stabilizaciju notifikacijskog i statističkog sistema.
+
+Kroz Sprint 8 tim radi na završavanju ključnih korisničkih i tehničarskih funkcionalnosti ticket sistema i pripremi infrastrukture za naredne sprintove koji uključuju naprednije dashboard funkcionalnosti, AI recommendation module, administratorske izvještaje, napredniju analitiku i dodatna proširenja support workflow sistema.
 
 ---
 
@@ -69,4 +96,12 @@ Review uključuje provjeru:
 - Koordinacija implementacije notifikacijskog sistema
 - Dogovor oko redefinisanja PB-42
 - Review sastanci za backend i frontend integraciju
-
+- Sastanci vezani za SignalR notifikacijsku infrastrukturu
+- Koordinacija implementacije statističkog modula
+- Review sastanci za profile i autorizaciju korisnika
+- Tehnički sastanci za organizaciju API endpointa i event logike
+- Dogovor oko strukture notifikacija i workflow događaja
+- Sastanci vezani za planiranje testiranja novih funkcionalnosti
+- Koordinacija implementacije ocjenjivanja tiketa i status workflow-a
+- Review sastanci za statistiku i dashboard prikaze
+- Koordinacija implementacije profilnih i korisničkih funkcionalnosti
