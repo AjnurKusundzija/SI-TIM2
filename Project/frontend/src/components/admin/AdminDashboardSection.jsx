@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types'
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getAdminDashboard, generateReport } from '../../services/adminService'
+import PropTypes from "prop-types";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAdminDashboard, generateReport } from "../../services/adminService";
 import {
   Ticket,
   CheckCircle,
@@ -12,7 +12,7 @@ import {
   BarChart2,
   Loader2,
   Download,
-} from 'lucide-react'
+} from "lucide-react";
 import {
   ResponsiveContainer,
   PieChart,
@@ -25,67 +25,75 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-} from 'recharts'
+} from "recharts";
 
 const STATUS_COLORS = {
-  OPEN: '#3b82f6',
-  CLOSED: '#10b981',
-  CLOSURE_REQUESTED: '#f59e0b',
-}
+  OPEN: "#3b82f6",
+  CLOSED: "#10b981",
+  CLOSURE_REQUESTED: "#f59e0b",
+};
 
 const STATUS_LABELS = {
-  OPEN: 'Otvoreni',
-  CLOSED: 'Zatvoreni',
-  CLOSURE_REQUESTED: 'Čeka se',
-}
+  OPEN: "Otvoreni",
+  CLOSED: "Zatvoreni",
+  CLOSURE_REQUESTED: "Čeka se",
+};
 
 const PROBLEM_LABELS = {
-  INTERNET: 'Internet',
-  TV: 'TV',
-  MOBILE_NETWORK: 'Mobilna mreža',
-  BILLING: 'Računi',
-  TECHNICAL_SUPPORT: 'Tehnička podrška',
-}
+  INTERNET: "Internet",
+  TV: "TV",
+  MOBILE_NETWORK: "Mobilna mreža",
+  BILLING: "Računi",
+  TECHNICAL_SUPPORT: "Tehnička podrška",
+};
 
 const REPORT_TYPES = [
-  { value: 'TICKET_COUNT', label: 'Broj tiketa' },
-  { value: 'TICKET_STATUS', label: 'Status tiketa' },
-  { value: 'PROBLEM_TYPE', label: 'Tip problema' },
-  { value: 'TEAM_WORKLOAD', label: 'Opterećenje agenata' },
-  { value: 'USER_RATINGS', label: 'Ocjene korisnika' },
-  { value: 'FIRST_RESPONSE', label: 'Prosj. prvi odgovor' },
-]
+  { value: "TICKET_COUNT", label: "Broj tiketa" },
+  { value: "TICKET_STATUS", label: "Status tiketa" },
+  { value: "PROBLEM_TYPE", label: "Tip problema" },
+  { value: "TEAM_WORKLOAD", label: "Opterećenje agenata" },
+  { value: "USER_RATINGS", label: "Ocjene korisnika" },
+  { value: "FIRST_RESPONSE", label: "Prosj. prvi odgovor" },
+];
 
 function formatMinutes(minutes) {
-  if (minutes == null) return null
-  if (minutes < 60) return `${Math.round(minutes)} min`
-  const h = Math.floor(minutes / 60)
-  const m = Math.round(minutes % 60)
-  return m > 0 ? `${h}h ${m}m` : `${h}h`
+  if (minutes == null) return null;
+  if (minutes < 60) return `${Math.round(minutes)} min`;
+  const h = Math.floor(minutes / 60);
+  const m = Math.round(minutes % 60);
+  return m > 0 ? `${h}h ${m}m` : `${h}h`;
 }
 
 function formatHours(hours) {
-  if (hours == null) return null
-  if (hours < 1) return `${Math.round(hours * 60)} min`
-  if (hours < 24) return `${hours.toFixed(1)}h`
-  const d = Math.floor(hours / 24)
-  const h = Math.round(hours % 24)
-  return h > 0 ? `${d}d ${h}h` : `${d}d`
+  if (hours == null) return null;
+  if (hours < 1) return `${Math.round(hours * 60)} min`;
+  if (hours < 24) return `${hours.toFixed(1)}h`;
+  const d = Math.floor(hours / 24);
+  const h = Math.round(hours % 24);
+  return h > 0 ? `${d}d ${h}h` : `${d}d`;
 }
 
 function formatRating(rating) {
-  if (rating == null) return null
-  return `${rating.toFixed(1)} / 5`
+  if (rating == null) return null;
+  return `${rating.toFixed(1)} / 5`;
 }
 
 function toDateInputValue(date) {
-  return date.toISOString().slice(0, 10)
+  return date.toISOString().slice(0, 10);
 }
 
-function StatCard({ icon, label, value, color, description, onClick, emptyMessage }) {
-  const Icon = icon
-  const display = value ?? null
-  const isEmpty = display === null && emptyMessage
+function StatCard({
+  icon,
+  label,
+  value,
+  color,
+  description,
+  onClick,
+  emptyMessage,
+}) {
+  const Icon = icon;
+  const display = value ?? null;
+  const isEmpty = display === null && emptyMessage;
 
   return (
     <button
@@ -93,7 +101,9 @@ function StatCard({ icon, label, value, color, description, onClick, emptyMessag
       onClick={onClick}
       disabled={!onClick}
       className={`bg-white rounded-xl p-5 shadow-sm border border-gray-100 text-left w-full ${
-        onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : 'cursor-default'
+        onClick
+          ? "cursor-pointer hover:shadow-md transition-shadow"
+          : "cursor-default"
       }`}
     >
       <div className="flex items-start justify-between">
@@ -108,12 +118,14 @@ function StatCard({ icon, label, value, color, description, onClick, emptyMessag
             <p className="text-xs text-gray-400 mt-1">{description}</p>
           )}
         </div>
-        <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${color}`}>
+        <div
+          className={`w-11 h-11 rounded-xl flex items-center justify-center ${color}`}
+        >
           <Icon size={20} className="text-white" />
         </div>
       </div>
     </button>
-  )
+  );
 }
 
 StatCard.propTypes = {
@@ -124,158 +136,185 @@ StatCard.propTypes = {
   description: PropTypes.string,
   onClick: PropTypes.func,
   emptyMessage: PropTypes.string,
-}
+};
 
 function SkeletonGrid() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 animate-pulse">
       {Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="bg-white rounded-xl h-24 border border-gray-100" />
+        <div
+          key={i}
+          className="bg-white rounded-xl h-24 border border-gray-100"
+        />
       ))}
     </div>
-  )
+  );
 }
 
 const ChartTooltip = ({ active, payload }) => {
-  if (!active || !payload?.length) return null
+  if (!active || !payload?.length) return null;
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm text-xs">
       <p className="font-semibold text-gray-800">{payload[0].name}</p>
       <p className="text-gray-600">{payload[0].value}</p>
     </div>
-  )
-}
+  );
+};
 
 ChartTooltip.propTypes = {
   active: PropTypes.bool,
   payload: PropTypes.array,
-}
+};
 
-export default function AdminDashboardSection({ mode = 'metrics' }) {
-  const showMetrics = mode === 'metrics'
-  const showReports = mode === 'reports'
-  const navigate = useNavigate()
-  const [period, setPeriod] = useState('month')
-  const [customFrom, setCustomFrom] = useState(toDateInputValue(new Date(Date.now() - 30 * 86400000)))
-  const [customTo, setCustomTo] = useState(toDateInputValue(new Date()))
-  const [periodError, setPeriodError] = useState(null)
+export default function AdminDashboardSection({ mode = "metrics" }) {
+  const showMetrics = mode === "metrics";
+  const showReports = mode === "reports";
+  const navigate = useNavigate();
+  const [period, setPeriod] = useState("month");
+  const [customFrom, setCustomFrom] = useState(() =>
+    toDateInputValue(new Date(Date.now() - 30 * 86400000)),
+  );
+  const [customTo, setCustomTo] = useState(() => toDateInputValue(new Date()));
+  const [periodError, setPeriodError] = useState(null);
 
-  const [dashboard, setDashboard] = useState(null)
-  const [loading, setLoading] = useState(showMetrics)
-  const [error, setError] = useState(null)
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(showMetrics);
+  const [error, setError] = useState(null);
 
-  const [reportType, setReportType] = useState('TICKET_COUNT')
-  const [reportResult, setReportResult] = useState(null)
-  const [reportLoading, setReportLoading] = useState(false)
+  const [reportType, setReportType] = useState("TICKET_COUNT");
+  const [reportResult, setReportResult] = useState(null);
+  const [reportLoading, setReportLoading] = useState(false);
 
   const buildQuery = useCallback(() => {
-    const q = { period }
-    if (period === 'custom') {
-      q.from = new Date(`${customFrom}T00:00:00`).toISOString()
-      q.to = new Date(`${customTo}T23:59:59`).toISOString()
+    const q = { period };
+    if (period === "custom") {
+      q.from = new Date(`${customFrom}T00:00:00`).toISOString();
+      q.to = new Date(`${customTo}T23:59:59`).toISOString();
     }
-    return q
-  }, [period, customFrom, customTo])
+    return q;
+  }, [period, customFrom, customTo]);
 
-  const drillDown = useCallback((extra = {}) => {
-    const params = new URLSearchParams({ ...buildQuery(), ...extra })
-    navigate(`/tickets?${params.toString()}`)
-  }, [navigate, buildQuery])
+  const drillDown = useCallback(
+    (extra = {}) => {
+      const params = new URLSearchParams({ ...buildQuery(), ...extra });
+      navigate(`/tickets?${params.toString()}`);
+    },
+    [navigate, buildQuery],
+  );
 
   const loadDashboard = useCallback(async () => {
-    if (period === 'custom' && customFrom > customTo) {
-      setPeriodError('Datum kraja mora biti nakon datuma početka.')
-      return
-    }
-    setPeriodError(null)
-    setLoading(true)
-    setError(null)
     try {
-      const q = buildQuery()
+      const q = buildQuery();
       const data = await getAdminDashboard({
         period: q.period,
         from: q.from,
         to: q.to,
-      })
-      setDashboard(data)
+      });
+      setDashboard(data);
+      setError(null);
     } catch {
-      setError('Greška pri učitavanju admin dashboarda.')
+      setError("Greška pri učitavanju admin dashboarda.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [period, customFrom, customTo, buildQuery])
+  }, [buildQuery]);
+
+  const validatePeriod = useCallback(() => {
+    if (period === "custom" && customFrom > customTo) {
+      setPeriodError("Datum kraja mora biti nakon datuma početka.");
+      return false;
+    }
+
+    setPeriodError(null);
+    return true;
+  }, [period, customFrom, customTo]);
 
   useEffect(() => {
-    if (showMetrics) loadDashboard()
-  }, [showMetrics, loadDashboard])
+    if (showMetrics) {
+      const timeoutId = window.setTimeout(() => {
+        void loadDashboard();
+      }, 0);
+
+      return () => window.clearTimeout(timeoutId);
+    }
+  }, [showMetrics, loadDashboard]);
 
   const statusChartData = useMemo(() => {
-    if (!dashboard?.statusBreakdown?.length) return []
+    if (!dashboard?.statusBreakdown?.length) return [];
     return dashboard.statusBreakdown.map((s) => ({
       name: STATUS_LABELS[s.status] ?? s.status,
       value: s.count,
       status: s.status,
-      color: STATUS_COLORS[s.status] ?? '#94a3b8',
-    }))
-  }, [dashboard])
+      color: STATUS_COLORS[s.status] ?? "#94a3b8",
+    }));
+  }, [dashboard]);
 
   const problemChartData = useMemo(() => {
-    if (!dashboard?.topProblemTypes?.length) return []
+    if (!dashboard?.topProblemTypes?.length) return [];
     return dashboard.topProblemTypes.map((p) => ({
       name: PROBLEM_LABELS[p.name] ?? p.name,
       value: p.count,
       category: p.name,
-    }))
-  }, [dashboard])
+    }));
+  }, [dashboard]);
 
   const workloadChartData = useMemo(() => {
-    if (!dashboard?.topAgentWorkload?.length) return []
+    if (!dashboard?.topAgentWorkload?.length) return [];
     return dashboard.topAgentWorkload.map((a) => ({
-      name: a.fullName.split(' ')[0],
+      name: a.fullName.split(" ")[0],
       value: a.resolvedCount,
       userId: a.userId,
-    }))
-  }, [dashboard])
+    }));
+  }, [dashboard]);
 
   const handleGenerateReport = async () => {
-    if (period === 'custom' && customFrom > customTo) {
-      setPeriodError('Datum kraja mora biti nakon datuma početka.')
-      return
+    if (period === "custom" && customFrom > customTo) {
+      setPeriodError("Datum kraja mora biti nakon datuma početka.");
+      return;
     }
-    setPeriodError(null)
-    setReportLoading(true)
-    setReportResult(null)
+    setPeriodError(null);
+    setReportLoading(true);
+    setReportResult(null);
     try {
-      const q = buildQuery()
+      const q = buildQuery();
       const result = await generateReport({
         reportType,
         period: q.period,
         from: q.from,
         to: q.to,
-      })
-      setReportResult(result)
+      });
+      setReportResult(result);
     } catch {
-      setReportResult({ hasData: false, message: 'Greška pri generisanju izvještaja.' })
+      setReportResult({
+        hasData: false,
+        message: "Greška pri generisanju izvještaja.",
+      });
     } finally {
-      setReportLoading(false)
+      setReportLoading(false);
     }
-  }
+  };
 
   const renderReportTable = () => {
-    if (!reportResult) return null
+    if (!reportResult) return null;
     if (!reportResult.hasData) {
       return (
-        <p className="text-sm text-gray-500 italic py-4">{reportResult.message ?? 'Nema podataka.'}</p>
-      )
+        <p className="text-sm text-gray-500 italic py-4">
+          {reportResult.message ?? "Nema podataka."}
+        </p>
+      );
     }
 
-    const data = reportResult.data
+    const data = reportResult.data;
 
-    if (reportType === 'TICKET_COUNT') {
-      return <p className="text-lg font-bold text-gray-900 py-2">Ukupno: {data.totalCount}</p>
+    if (reportType === "TICKET_COUNT") {
+      return (
+        <p className="text-lg font-bold text-gray-900 py-2">
+          Ukupno: {data.totalCount}
+        </p>
+      );
     }
 
-    if (reportType === 'TICKET_STATUS' && data.items) {
+    if (reportType === "TICKET_STATUS" && data.items) {
       return (
         <table className="w-full text-sm mt-2">
           <thead>
@@ -292,17 +331,19 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
                 className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer"
                 onClick={() => drillDown({ status: row.status })}
               >
-                <td className="py-2">{STATUS_LABELS[row.status] ?? row.status}</td>
+                <td className="py-2">
+                  {STATUS_LABELS[row.status] ?? row.status}
+                </td>
                 <td className="py-2">{row.count}</td>
                 <td className="py-2">{row.percentage}%</td>
               </tr>
             ))}
           </tbody>
         </table>
-      )
+      );
     }
 
-    if (reportType === 'PROBLEM_TYPE' && data.items) {
+    if (reportType === "PROBLEM_TYPE" && data.items) {
       return (
         <table className="w-full text-sm mt-2">
           <thead>
@@ -324,10 +365,10 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
             ))}
           </tbody>
         </table>
-      )
+      );
     }
 
-    if (reportType === 'TEAM_WORKLOAD' && data.items) {
+    if (reportType === "TEAM_WORKLOAD" && data.items) {
       return (
         <table className="w-full text-sm mt-2">
           <thead>
@@ -347,16 +388,18 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
             ))}
           </tbody>
         </table>
-      )
+      );
     }
 
-    if (reportType === 'USER_RATINGS') {
+    if (reportType === "USER_RATINGS") {
       return (
         <div className="py-2 space-y-2 text-sm">
           <p>
-            Prosječna ocjena:{' '}
+            Prosječna ocjena:{" "}
             <span className="font-semibold">
-              {data.averageRating != null ? formatRating(data.averageRating) : '—'}
+              {data.averageRating != null
+                ? formatRating(data.averageRating)
+                : "—"}
             </span>
           </p>
           <p>Ocijenjenih tiketa: {data.ratedTicketsCount ?? 0}</p>
@@ -366,10 +409,10 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
             </p>
           ))}
         </div>
-      )
+      );
     }
 
-    if (reportType === 'FIRST_RESPONSE') {
+    if (reportType === "FIRST_RESPONSE") {
       return (
         <div className="py-2 space-y-3 text-sm">
           {reportResult.message && (
@@ -378,15 +421,16 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
             </p>
           )}
           <p>
-            Prosjek u periodu:{' '}
+            Prosjek u periodu:{" "}
             <span className="font-semibold">
               {data.avgFirstResponseMinutes != null
                 ? formatMinutes(data.avgFirstResponseMinutes)
-                : '—'}
+                : "—"}
             </span>
           </p>
           <p>
-            Tiketi s odgovorom: {data.ticketsWithResponseCount ?? 0} / {data.totalTicketsCount ?? 0}
+            Tiketi s odgovorom: {data.ticketsWithResponseCount ?? 0} /{" "}
+            {data.totalTicketsCount ?? 0}
           </p>
           <p className="text-xs text-gray-500">{data.bucketGranularityLabel}</p>
           {data.buckets?.length > 0 ? (
@@ -408,35 +452,41 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
                     <td className="py-2">
                       {row.avgFirstResponseMinutes != null
                         ? formatMinutes(row.avgFirstResponseMinutes)
-                        : '—'}
+                        : "—"}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <p className="text-gray-400 italic">Nema podataka po pod-periodima.</p>
+            <p className="text-gray-400 italic">
+              Nema podataka po pod-periodima.
+            </p>
           )}
         </div>
-      )
+      );
     }
 
-    return null
-  }
+    return null;
+  };
 
-  const closedInPeriod = dashboard?.statusBreakdown?.find((s) => s.status === 'CLOSED')?.count
+  const closedInPeriod = dashboard?.statusBreakdown?.find(
+    (s) => s.status === "CLOSED",
+  )?.count;
 
   return (
     <div className="space-y-6">
       {/* US-72: globalni filter */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Vremenski period</h3>
+        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          Vremenski period
+        </h3>
         <div className="flex flex-wrap gap-2 items-end">
           {[
-            { value: 'week', label: 'Sedmica' },
-            { value: 'month', label: 'Mjesec' },
-            { value: 'year', label: 'Godina' },
-            { value: 'custom', label: 'Prilagođeno' },
+            { value: "week", label: "Sedmica" },
+            { value: "month", label: "Mjesec" },
+            { value: "year", label: "Godina" },
+            { value: "custom", label: "Prilagođeno" },
           ].map((opt) => (
             <button
               key={opt.value}
@@ -444,14 +494,14 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
               onClick={() => setPeriod(opt.value)}
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 period === opt.value
-                  ? 'bg-navy-700 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? "bg-navy-700 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
               {opt.label}
             </button>
           ))}
-          {period === 'custom' && (
+          {period === "custom" && (
             <>
               <input
                 type="date"
@@ -471,7 +521,11 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
           {showMetrics && (
             <button
               type="button"
-              onClick={loadDashboard}
+              onClick={() => {
+                if (!validatePeriod()) return;
+                setLoading(true);
+                void loadDashboard();
+              }}
               className="px-4 py-2 bg-navy-600 text-white text-sm font-medium rounded-lg hover:bg-navy-700"
             >
               Primijeni
@@ -496,7 +550,9 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
         <>
           {/* US-71 / US-86: KPI kartice */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Ključne metrike</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Ključne metrike
+            </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               <StatCard
                 icon={Ticket}
@@ -532,21 +588,23 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
                 label="Otvoreni (trenutno)"
                 value={dashboard.openTicketsCount}
                 color="bg-emerald-500"
-                onClick={() => drillDown({ status: 'OPEN', snapshot: 'true' })}
+                onClick={() => drillDown({ status: "OPEN", snapshot: "true" })}
               />
               <StatCard
                 icon={AlertCircle}
                 label="Čeka zatvaranje"
                 value={dashboard.closureRequestedCount}
                 color="bg-amber-500"
-                onClick={() => drillDown({ status: 'CLOSURE_REQUESTED', snapshot: 'true' })}
+                onClick={() =>
+                  drillDown({ status: "CLOSURE_REQUESTED", snapshot: "true" })
+                }
               />
               <StatCard
                 icon={CheckCircle}
                 label="Zatvoreni"
                 value={closedInPeriod}
                 color="bg-emerald-600"
-                onClick={() => drillDown({ status: 'CLOSED' })}
+                onClick={() => drillDown({ status: "CLOSED" })}
                 emptyMessage="Nema zatvorenih u periodu"
               />
               <StatCard
@@ -554,23 +612,39 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
                 label="Zastarjeli (7+ dana)"
                 value={dashboard.staleTicketsCount}
                 color="bg-red-500"
-                onClick={() => drillDown({ stale: 'true', snapshot: 'true' })}
+                onClick={() => drillDown({ stale: "true", snapshot: "true" })}
               />
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Aktivni korisnici</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Aktivni korisnici
+            </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: 'Klijenti', value: dashboard.activeUsersByRole?.clients },
-                { label: 'Agenti', value: dashboard.activeUsersByRole?.agents },
-                { label: 'Tehničari', value: dashboard.activeUsersByRole?.technicians },
-                { label: 'Admini', value: dashboard.activeUsersByRole?.administrators },
+                {
+                  label: "Klijenti",
+                  value: dashboard.activeUsersByRole?.clients,
+                },
+                { label: "Agenti", value: dashboard.activeUsersByRole?.agents },
+                {
+                  label: "Tehničari",
+                  value: dashboard.activeUsersByRole?.technicians,
+                },
+                {
+                  label: "Admini",
+                  value: dashboard.activeUsersByRole?.administrators,
+                },
               ].map((item) => (
-                <div key={item.label} className="bg-white rounded-lg px-4 py-3 border border-gray-100 shadow-sm">
+                <div
+                  key={item.label}
+                  className="bg-white rounded-lg px-4 py-3 border border-gray-100 shadow-sm"
+                >
                   <p className="text-xs text-gray-400">{item.label}</p>
-                  <p className="text-lg font-bold text-gray-900">{item.value ?? 0}</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {item.value ?? 0}
+                  </p>
                 </div>
               ))}
             </div>
@@ -578,10 +652,14 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
 
           {/* US-82: grafovi */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Grafovi</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Grafovi
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <p className="text-sm font-semibold text-gray-700 mb-3">Po statusu</p>
+                <p className="text-sm font-semibold text-gray-700 mb-3">
+                  Po statusu
+                </p>
                 {statusChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={200}>
                     <PieChart>
@@ -592,8 +670,10 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
                         innerRadius={45}
                         outerRadius={75}
                         dataKey="value"
-                        onClick={(_, index) => drillDown({ status: statusChartData[index]?.status })}
-                        style={{ cursor: 'pointer' }}
+                        onClick={(_, index) =>
+                          drillDown({ status: statusChartData[index]?.status })
+                        }
+                        style={{ cursor: "pointer" }}
                       >
                         {statusChartData.map((entry) => (
                           <Cell key={entry.name} fill={entry.color} />
@@ -604,16 +684,24 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-sm text-gray-400 italic py-8 text-center">Nema podataka za grafikon.</p>
+                  <p className="text-sm text-gray-400 italic py-8 text-center">
+                    Nema podataka za grafikon.
+                  </p>
                 )}
               </div>
 
               <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <p className="text-sm font-semibold text-gray-700 mb-3">Top tipovi problema</p>
+                <p className="text-sm font-semibold text-gray-700 mb-3">
+                  Top tipovi problema
+                </p>
                 {problemChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={problemChartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="#f0f0f0"
+                        vertical={false}
+                      />
                       <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} width={28} />
                       <Tooltip content={<ChartTooltip />} />
@@ -621,30 +709,46 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
                         dataKey="value"
                         fill="#3b82f6"
                         radius={[4, 4, 0, 0]}
-                        onClick={(data) => drillDown({ problemCategory: data.category })}
-                        style={{ cursor: 'pointer' }}
+                        onClick={(data) =>
+                          drillDown({ problemCategory: data.category })
+                        }
+                        style={{ cursor: "pointer" }}
                       />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-sm text-gray-400 italic py-8 text-center">Nema podataka za grafikon.</p>
+                  <p className="text-sm text-gray-400 italic py-8 text-center">
+                    Nema podataka za grafikon.
+                  </p>
                 )}
               </div>
 
               <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <p className="text-sm font-semibold text-gray-700 mb-3">Opterećenje agenata</p>
+                <p className="text-sm font-semibold text-gray-700 mb-3">
+                  Opterećenje agenata
+                </p>
                 {workloadChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={workloadChartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="#f0f0f0"
+                        vertical={false}
+                      />
                       <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} width={28} />
                       <Tooltip content={<ChartTooltip />} />
-                      <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                      <Bar
+                        dataKey="value"
+                        fill="#8b5cf6"
+                        radius={[4, 4, 0, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-sm text-gray-400 italic py-8 text-center">Nema podataka za grafikon.</p>
+                  <p className="text-sm text-gray-400 italic py-8 text-center">
+                    Nema podataka za grafikon.
+                  </p>
                 )}
               </div>
             </div>
@@ -653,66 +757,71 @@ export default function AdminDashboardSection({ mode = 'metrics' }) {
       )}
 
       {showReports && (
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide flex items-center gap-2">
-            <BarChart2 size={16} />
-            Generisanje izvještaja
-          </h3>
-          <button
-            type="button"
-            disabled
-            title="Export će biti dostupan u PB-46"
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed"
-          >
-            <Download size={16} />
-            Export
-          </button>
-        </div>
-        <p className="text-xs text-gray-400 mb-3">CSV export planiran (PB-46)</p>
-
-        <div className="flex flex-wrap gap-2 items-center">
-          <select
-            value={reportType}
-            onChange={(e) => setReportType(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
-          >
-            {REPORT_TYPES.map((r) => (
-              <option key={r.value} value={r.value}>{r.label}</option>
-            ))}
-          </select>
-          <button
-            type="button"
-            onClick={handleGenerateReport}
-            disabled={reportLoading || !!periodError}
-            className="px-4 py-2 bg-navy-600 text-white text-sm font-medium rounded-lg hover:bg-navy-700 disabled:opacity-50"
-          >
-            {reportLoading ? 'Generisanje...' : 'Generiši izvještaj'}
-          </button>
-        </div>
-
-        {reportResult?.showLargePeriodWarning && (
-          <p className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mt-3">
-            Upozorenje: za veliki vremenski opseg izvještaj po statusu može dati nepouzdanu interpretaciju postotaka.
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide flex items-center gap-2">
+              <BarChart2 size={16} />
+              Generisanje izvještaja
+            </h3>
+            <button
+              type="button"
+              disabled
+              title="Export će biti dostupan u PB-46"
+              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed"
+            >
+              <Download size={16} />
+              Export
+            </button>
+          </div>
+          <p className="text-xs text-gray-400 mb-3">
+            CSV export planiran (PB-46)
           </p>
-        )}
 
-        <div className="mt-4 border-t border-gray-100 pt-4">
-          {reportLoading ? (
-            <div className="flex items-center text-gray-400 text-sm py-4">
-              <Loader2 size={18} className="animate-spin mr-2" />
-              Učitavanje...
-            </div>
-          ) : (
-            renderReportTable()
+          <div className="flex flex-wrap gap-2 items-center">
+            <select
+              value={reportType}
+              onChange={(e) => setReportType(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+            >
+              {REPORT_TYPES.map((r) => (
+                <option key={r.value} value={r.value}>
+                  {r.label}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={handleGenerateReport}
+              disabled={reportLoading || !!periodError}
+              className="px-4 py-2 bg-navy-600 text-white text-sm font-medium rounded-lg hover:bg-navy-700 disabled:opacity-50"
+            >
+              {reportLoading ? "Generisanje..." : "Generiši izvještaj"}
+            </button>
+          </div>
+
+          {reportResult?.showLargePeriodWarning && (
+            <p className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mt-3">
+              Upozorenje: za veliki vremenski opseg izvještaj po statusu može
+              dati nepouzdanu interpretaciju postotaka.
+            </p>
           )}
+
+          <div className="mt-4 border-t border-gray-100 pt-4">
+            {reportLoading ? (
+              <div className="flex items-center text-gray-400 text-sm py-4">
+                <Loader2 size={18} className="animate-spin mr-2" />
+                Učitavanje...
+              </div>
+            ) : (
+              renderReportTable()
+            )}
+          </div>
         </div>
-      </div>
       )}
     </div>
-  )
+  );
 }
 
 AdminDashboardSection.propTypes = {
-  mode: PropTypes.oneOf(['metrics', 'reports']),
-}
+  mode: PropTypes.oneOf(["metrics", "reports"]),
+};
