@@ -1,199 +1,162 @@
 # Sprint Retrospective – Sprint 8
 
-## Opšti utisak sprinta
+## Opće ocjene sprinta
 
-Sprint 8 je protekao veoma uspješno i stabilno, uz visok nivo saradnje, organizacije i komunikacije unutar tima. Fokus sprinta bio je na implementaciji funkcionalnosti koje direktno unapređuju korisničko iskustvo, ticket workflow i organizaciju rada agenata i tehničara unutar sistema podrške.
-
-Tokom sprinta uspješno su implementirane funkcionalnosti vezane za:
-- sistem notifikacija,
-- statistiku agenata i tehničara,
-- upravljanje korisničkim profilima,
-- pregled korisničkih paketa i pretplata,
-- ocjenjivanje tiketa,
-- ažuriranje statusa tiketa,
-- pregled korisničkih profila i historije tiketa.
-
-Sprint je dodatno obilježen stabilnom koordinacijom između frontend i backend dijela tima, pravovremenim rješavanjem problema i dobrim planiranjem zadataka. Većina članova tima izrazila je visok nivo zadovoljstva sprintom i saradnjom unutar tima.
-
----
-
-# Kvantitativni pregled sprinta
-
-| Kategorija | Rezultat |
+| Kategorija | Prosjek (1–5) |
 |---|---|
-| Ukupna ocjena sprinta | 5/5 |
-| Zadovoljstvo saradnjom tima | Veoma visoko |
-| Jasnoća sprint ciljeva | 100% potvrđeno |
-| Komunikacija unutar tima | 100% pozitivna |
-| Nivo stresa/opterećenja | Umjeren do povećan |
-| Veći tehnički problemi | Minimalni |
-| Blockeri | Nisu značajno uticali na sprint |
-| Završetak planiranih zadataka | Uspješno realizovan |
+| Ocjena sprinta u cjelini | 5.0 |
+| Razina stresa / opterećenja | 3.5 |
+| Zadovoljstvo suradnjom tima | 4.8 |
 
 ---
 
-# Šta je funkcionisalo posebno dobro
+# Što je funkcioniralo dobro
 
-## Komunikacija unutar tima
-
-Najveći pozitivan aspekt sprinta bila je veoma dobra komunikacija između članova tima. Članovi tima su naglasili da je saradnja bila organizovana, direktna i efikasna, što je značajno olakšalo implementaciju funkcionalnosti i koordinaciju između backend i frontend dijela sistema.
-
-Posebno je istaknuto:
-- brzo dogovaranje oko zadataka,
-- pravovremena razmjena informacija,
-- međusobno pomaganje pri implementaciji funkcionalnosti,
-- koordinacija pri merganju i integraciji koda,
-- dobra organizacija rada uprkos većem broju funkcionalnosti.
-
-Tim je pokazao visok nivo kolegijalnosti i spremnosti da članovi međusobno pomažu pri rješavanju problema i integraciji sistema.
-
----
-
-## Saradnja i atmosfera u timu
-
-Sprint 8 obilježila je veoma pozitivna atmosfera u timu. Većina članova navela je da je saradnja bila na veoma visokom nivou i da su članovi tima pokazali profesionalan i odgovoran pristup radu.
-
-Posebno je naglašeno:
-- međusobno poštovanje,
-- spremnost na pomoć,
-- otvorena komunikacija,
-- dobra koordinacija pri radu na zajedničkim funkcionalnostima,
-- osjećaj zajedničkog rada i podrške unutar tima.
-
-Tim je tokom sprinta funkcionisao stabilno čak i pri radu na većim i kompleksnijim funkcionalnostima poput sistema notifikacija i statistike agenata/tehničara.
+- Komunikacija i suradnja unutar tima bile su na veoma visokom nivou tokom cijelog sprinta.
+- Većina članova istaknula je da su članovi tima bili dostupni, odgovarali pravovremeno i pomagali jedni drugima pri implementaciji funkcionalnosti.
+- Sprint ciljevi i scope bili su jasno definisani od početka sprinta, što je omogućilo stabilniji workflow i lakšu organizaciju rada.
+- Integracija frontend i backend funkcionalnosti prošla je uspješno bez većih problema.
+- Implementacija notifikacijskog sistema uspješno je povezana sa postojećim ticket workflow sistemom.
+- Funkcionalnosti vezane za profile korisnika, statistiku agenata i tehničara te upravljanje tiketima uspješno su implementirane i integrisane u sistem.
+- AI alati i razvojna okruženja generalno su pomogli pri implementaciji novih funkcionalnosti i ubrzali razvoj pojedinih komponenti sistema.
+- Testiranje aplikacije i validacija implementiranih funkcionalnosti prošli su uspješno.
+- Tim je pokazao dobru organizaciju pri raspodjeli zadataka i koordinaciji između članova tokom rada na zajedničkim komponentama.
+- Workflow rada na branch-evima i Pull Request pristup omogućili su relativno stabilan razvoj bez ozbiljnijih problema pri integraciji.
+- Veći dio funkcionalnosti završen je na vrijeme i bez značajnijih tehničkih dugova.
+- Sprint je završen uz veoma visok nivo zadovoljstva članova tima i pozitivnu atmosferu tokom rada.
 
 ---
 
-## Organizacija sprinta
+# Osobni uspjesi i highlight momenti
 
-Sprint ciljevi i scope bili su jasno definisani od početka sprinta. Svi članovi tima imali su jasnu predstavu:
-- šta se implementira,
-- koje funkcionalnosti imaju prioritet,
-- kako su zadaci raspoređeni,
-- šta predstavlja očekivani deliverable sprinta.
-
-Jasna organizacija doprinijela je:
-- manjem broju nesporazuma,
-- stabilnijem workflow-u,
-- efikasnijem radu,
-- bržem završavanju zadataka.
-
----
-
-## Implementacija funkcionalnosti
-
-Tokom sprinta uspješno su implementirane ključne funkcionalnosti planirane za Sprint 8:
-- real-time sistem notifikacija,
-- statistika rada agenata i tehničara,
-- upravljanje korisničkim profilima,
-- pregled korisničkih paketa i pretplata,
-- ocjenjivanje zatvorenih tiketa,
-- ažuriranje statusa tiketa,
-- pregled korisničke historije i profila.
-
-Posebno je značajno što su funkcionalnosti uspješno integrisane sa postojećim ticket workflow sistemom bez većih problema u radu aplikacije.
+- Uspješna implementacija real-time notifikacijskog sistema.
+- Implementacija statistike rada agenata i tehničara na profilnim stranicama.
+- Integracija ocjenjivanja tiketa nakon zatvaranja.
+- Implementacija upravljanja korisničkim profilom i pregledom korisničkih podataka.
+- Uspješno povezivanje novih funkcionalnosti sa postojećim ticket workflow sistemom.
+- Završavanje kompleksnijih PB zadataka bez većih problema u integraciji.
+- Bolje razumijevanje arhitekture sistema i komunikacije između komponenti aplikacije.
+- Stabilna saradnja između frontend i backend dijela tima tokom implementacije sprint funkcionalnosti.
+- Uspješno testiranje i validacija novih funkcionalnosti.
+- Napredak u organizaciji rada i koordinaciji tima kroz sprint.
+- Pozitivna atmosfera i visok nivo međusobne pomoći unutar tima.
+- Veća sigurnost članova tima pri radu sa Git workflow-om i integracijom promjena.
 
 ---
 
-# Lični highlight momenti sprinta
+# Što je usporavalo tim (problemi i frustracije)
 
-Članovi tima istakli su nekoliko pozitivnih trenutaka tokom sprinta:
-- uspješna implementacija novih funkcionalnosti,
-- završavanje kompleksnijih PB zadataka,
-- bolje razumijevanje sistema i arhitekture aplikacije,
-- uspješna integracija frontend i backend dijela sistema,
-- napredak u organizaciji workflow logike i autorizacije.
-
-Posebno je naglašena motivacija tokom rada na novim funkcionalnostima i osjećaj napretka pri implementaciji većih modula sistema.
-
----
-
-# Problemi i izazovi tokom sprinta
-
-Iako je sprint generalno protekao veoma stabilno, identifikovano je nekoliko manjih izazova:
-
-## Merge konflikti
-
-Najveći tehnički izazov tokom sprinta bili su povremeni merge konflikti prilikom integracije većeg broja promjena u iste module sistema.
-
-Problemi su uglavnom nastajali zbog:
-- paralelnog rada više članova na sličnim dijelovima sistema,
-- izmjena istih fajlova,
-- integracije frontend i backend promjena.
-
-Međutim, konflikti su uspješno riješeni bez značajnijeg uticaja na završetak sprinta.
+- Merge konflikti između različitih branch-eva povremeno su usporavali integraciju promjena.
+- Dio vremena izgubljen je na usklađivanje frontend i backend implementacija.
+- Pojedine funkcionalnosti zahtijevale su dodatna testiranja zbog povezanosti sa postojećim workflow sistemom.
+- Povremeno čekanje na review i potvrdu određenih implementacija produžavalo je završetak pojedinih taskova.
+- Integracija većeg broja funkcionalnosti unutar istog sprinta povećala je kompleksnost koordinacije između članova tima.
+- Dio vremena potrošen je na stabilizaciju i provjeru SignalR notifikacijskog sistema.
+- Pojedine konsultacije i organizacijske aktivnosti skratile su efektivno vrijeme rada tokom sprinta.
+- Neki članovi tima naveli su povećan nivo opterećenja zbog većeg broja međusobno povezanih funkcionalnosti.
+- Povremeno je bilo potrebno dodatno usklađivanje oko poslovne logike pojedinih funkcionalnosti kako bi implementacija ostala konzistentna unutar sistema.
 
 ---
 
-## Organizacija vremena
+# Što treba prestati raditi
 
-Manji dio vremena izgubljen je zbog:
-- čekanja review-a,
-- koordinacije integracije funkcionalnosti,
-- pomjeranja konsultacija i sastanaka,
-- dodatnog vremena potrebnog za testiranje i stabilizaciju novih funkcionalnosti.
-
-Ipak, ovi problemi nisu značajno uticali na završetak sprinta niti na kvalitet implementacije.
-
----
-
-# Nivo stresa i opterećenja
-
-Većina članova tima ocijenila je nivo opterećenja kao umjeren do povećan, što je očekivano s obzirom na broj novih funkcionalnosti i integracija unutar sistema.
-
-Razlozi većeg opterećenja:
-- rad na više međusobno povezanih funkcionalnosti,
-- integracija SignalR notifikacija,
-- frontend-backend koordinacija,
-- testiranje workflow logike,
-- rad na statistici i autorizaciji.
-
-Uprkos tome, sprint nije izazvao ozbiljne blokade niti probleme u organizaciji rada.
+- Oslanjati se na završavanje većih taskova pred kraj sprinta.
+- Merge-ati veće promjene bez prethodne koordinacije sa ostalim članovima tima.
+- Oslanjati se isključivo na usmenu ili neformalnu komunikaciju bez ažuriranja task statusa.
+- Ostaviti integraciju većih funkcionalnosti za posljednje dane sprinta.
+- Raditi izmjene nad istim komponentama bez prethodnog dogovora između članova tima.
+- Prihvatati AI generisane prijedloge bez detaljne validacije logike i sigurnosnih aspekata.
+- Zanemarivati dodatno testiranje funkcionalnosti koje utiču na ticket workflow i autorizaciju.
 
 ---
 
-# Šta možemo unaprijediti u narednim sprintovima
+# Planiranje i jasnoća scope-a
 
-## Dodatno unapređenje planiranja
+Većina članova tima smatra da je sprint bio veoma dobro planiran i da su ciljevi i očekivani deliverable-i bili jasno definisani od početka sprinta. Funkcionalnosti planirane za Sprint 8 bile su logično povezane sa prethodnim sprintovima i predstavljale su nastavak razvoja ticket workflow sistema i korisničkog iskustva.
 
-Iako je sprint bio dobro organizovan, tim smatra da bi dodatno unapređenje detaljne razrade PB zadataka moglo dodatno pomoći u:
-- preciznijem planiranju implementacije,
-- lakšem raspoređivanju zadataka,
-- smanjenju merge konflikata,
-- boljoj procjeni vremena implementacije.
+Jasno definisan scope omogućio je:
+- stabilniju organizaciju rada,
+- efikasniju raspodjelu zadataka,
+- manji broj nesporazuma tokom implementacije,
+- lakšu koordinaciju između frontend i backend dijela sistema.
 
----
-
-## Dalje proširenje sistema
-
-Tokom retrospektive pojavile su se ideje za buduće sprintove:
-- AI recommendation sistem za agente,
-- AI chatbot pomoć pri radu sa tiketima,
-- napredniji administratorski dashboard,
-- dodatni statistički izvještaji,
-- proširenje analitike ticket sistema.
-
-Tim smatra da trenutna arhitektura sistema omogućava relativno jednostavno proširenje aplikacije u narednim sprintovima.
+Ipak, pojedini tehnički detalji i integracijski aspekti postajali su jasniji tek tokom same implementacije, što je zahtijevalo dodatne konsultacije i manje prilagodbe workflow logike.
 
 ---
 
-# Opšti zaključak sprinta
+# Glavni blokeri
 
-Sprint 8 ocijenjen je kao veoma uspješan sprint sa visokim nivoom završetka planiranih funkcionalnosti i veoma dobrom saradnjom unutar tima.
+- Merge konflikti između branch-eva.
+- Integracija više funkcionalnosti unutar istih modula sistema.
+- Dodatno vrijeme potrebno za testiranje i validaciju notifikacijskog sistema.
+- Povremeno čekanje na review i potvrdu implementacija.
+- Koordinacija izmjena između frontend i backend dijela sistema.
+- Dodatna provjera autorizacije i pristupa podacima po korisničkim rolama.
+- Stabilizacija pojedinih workflow funkcionalnosti nakon integracije.
 
-Ključni pozitivni aspekti sprinta:
-- veoma dobra komunikacija,
-- stabilna saradnja,
-- uspješna implementacija svih planiranih funkcionalnosti,
-- dobra organizacija rada,
-- uspješna frontend-backend integracija,
-- minimalan broj ozbiljnijih problema,
-- visok nivo motivacije unutar tima.
+Ipak, nijedan od navedenih problema nije značajno ugrozio završetak sprinta niti funkcionalnost sistema.
 
-Sprint je uspješno proširio funkcionalnosti ticket sistema i postavio kvalitetnu osnovu za naredne sprintove koji uključuju:
-- administratorske izvještaje,
-- naprednu analitiku,
-- AI recommendation funkcionalnosti,
-- dodatna proširenja notifikacijskog i workflow sistema.
+---
 
-Tim zaključuje da je Sprint 8 dodatno stabilizovao projekat i unaprijedio kvalitet cjelokupnog sistema podrške.
+# Prijedlozi za sljedeći sprint
+
+## Procesi i organizacija
+
+- Ranije raspodijeliti kompleksnije taskove i preciznije definisati odgovornosti članova tima.
+- Uvesti dodatne kratke sync sastanke radi lakše koordinacije većih funkcionalnosti.
+- Nastaviti održavati visok nivo komunikacije i međusobne pomoći unutar tima.
+- Jasnije planirati integraciju funkcionalnosti koje koriste iste module sistema.
+- Nastaviti koristiti Pull Request review za zajedničke komponente i veće izmjene.
+
+## Tehnički prijedlozi
+
+- Dodatno unaprijediti administratorski dashboard i statističke izvještaje.
+- Razmotriti implementaciju AI recommendation sistema za agente i administratore.
+- Proširiti notifikacijski sistem dodatnim tipovima događaja i filtriranjem.
+- Nastaviti unapređivati autorizaciju i sigurnosne provjere unutar sistema.
+- Dodatno standardizovati backend workflow logiku i organizaciju endpointa.
+- Proširiti testiranje real-time funkcionalnosti i SignalR integracije.
+
+## Korištenje AI-a
+
+- AI alati pokazali su se korisnim pri implementaciji i organizaciji određenih dijelova sistema.
+- Potrebno je nastaviti detaljno validirati AI generisani kod prije merge-a.
+- AI koristiti kao podršku pri implementaciji, dokumentaciji i analizi, ali ne kao zamjenu za code review i testiranje.
+- Razmotriti potencijalnu integraciju AI funkcionalnosti u buduće administratorske i analitičke module sistema.
+
+---
+
+# Vještine i znanja koja bi timu pomogla
+
+- Naprednije Git i branch management prakse.
+- Bolje razumijevanje real-time komunikacije i SignalR arhitekture.
+- Više iskustva sa integracijom kompleksnijih workflow sistema.
+- Dodatno iskustvo sa autorizacijom i sigurnosnim pravilima u web aplikacijama.
+- Bolja organizacija integracije većih funkcionalnosti između frontend i backend dijela sistema.
+- Više iskustva sa testiranjem i validacijom real-time funkcionalnosti.
+- Naprednije planiranje taskova i raspodjele rada kroz sprint.
+
+---
+
+# Pohvale i dodatni komentari
+
+- Timska saradnja i komunikacija ocijenjene su veoma visoko.
+- Članovi tima istaknuli su veoma pozitivnu atmosferu tokom rada.
+- Tim je pokazao visok nivo međusobne pomoći, profesionalnosti i organizacije.
+- Sprint je završen uspješno uz implementaciju velikog broja funkcionalnosti.
+- Većina članova smatra da tim kontinuirano napreduje kroz svaki naredni sprint.
+- Posebno je pohvaljena koordinacija između frontend i backend dijela tima.
+- Tim je pokazao stabilnost pri radu na većem broju međusobno povezanih funkcionalnosti.
+- Sprint 8 dodatno je unaprijedio kvalitet i stabilnost sistema podrške.
+
+---
+
+# TOP akcijske stavke za Sprint 9
+
+| Prioritet | Akcija |
+|---|---|
+| 1 | Ranije raspodijeliti kompleksnije taskove i preciznije definisati odgovornosti |
+| 2 | Smanjiti merge konflikte kroz češće sync-ovanje branch-eva |
+| 3 | Dodatno unaprijediti dokumentaciju workflow logike i API endpointa |
+| 4 | Proširiti testiranje real-time funkcionalnosti i notifikacija |
+| 5 | Nastaviti koristiti Pull Request review za sve veće izmjene i zajedničke komponente |
