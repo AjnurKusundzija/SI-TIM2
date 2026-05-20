@@ -62,12 +62,16 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-42](#pb-42) | Statistika agenta i tehničara            | Feature        |     2     |     M     | Done        | Sprint 8    |
 | [PB-43](#pb-43) | Izvještaj o opterećenju agenata          | Feature        |     2     |     M     | Backlog     | Sprint 11   |
 | [PB-44](#pb-44) | Izvještaj o ocjenama korisnika           | Feature        |     2     |     S     | Backlog     | Sprint 11   |
-| [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama    | Feature        |     1     |     L     | Backlog     | Sprint 11   |
+| [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama    | Feature        |     1     |     L     | To-Do       | Sprint 9    |
 | [PB-46](#pb-46) | Export izvještaja                        | Feature        |     5     |     S     | Backlog     | Sprint 11   |
 | [PB-47](#pb-47) | FAQ segment                              | Feature        |     3     |     S     | Done        | Sprint 6    |
 | [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente | Feature | 1    |     M     | Done        | Sprint 7    |
 | [PB-49](#pb-49) | Notifikacije                             | Feature        |     1     |     L     | Done        | Sprint 8    |
 | [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature | 2  |     S     | Backlog     | Sprint 11   |
+| [PB-51](#pb-51) | Upravljanje korisničkim nalozima         | Feature        |     1     |     L     | To-Do       | Sprint 9    |
+| [PB-52](#pb-52) | Upravljanje katalogom paketa i pretplata | Feature        |     2     |     M     | To-Do       | Sprint 9    |
+| [PB-53](#pb-53) | Pregled audit log-a aktivnosti           | Feature        |     2     |     M     | To-Do       | Sprint 9    |
+| [PB-56](#pb-56) | Prilozi na tiketima                      | Feature        |     1     |     M     | To-Do       | Sprint 9    |
 
 ---
 
@@ -614,8 +618,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** L
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 11
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Razrađeno kroz US-71, US-72
 
 ---
 
@@ -677,5 +682,57 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** S
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 11
+
+---
+
+### PB-51
+
+- **Naziv Stavke:** Upravljanje korisničkim nalozima
+- **Opis:** Implementirati feature gdje administrator može kreirati nove korisničke naloge (klijenti, agenti, tehničari), uređivati podatke postojećih korisnika, te deaktivirati/reaktivirati naloge bez gubitka historijskih podataka
+- **Tip Stavke:** Feature
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** L
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Razrađeno kroz US-73, US-74, US-75
+
+---
+
+### PB-52
+
+- **Naziv Stavke:** Upravljanje katalogom paketa i pretplata
+- **Opis:** Implementirati feature gdje administrator definiše i uređuje katalog paketa (Internet, TV, mobilni) koje firma nudi, te dodjeljuje i ukida pretplate klijentima
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Razrađeno kroz US-76, US-77
+
+---
+
+### PB-53
+
+- **Naziv Stavke:** Pregled audit log-a aktivnosti
+- **Opis:** Implementirati feature za evidenciju i pregled ključnih akcija u sistemu (prijava, kreiranje/zatvaranje tiketa, izmjene korisničkih naloga, izmjene paketa i pretplata) sa mogućnošću filtriranja po tipu akcije, korisniku i vremenskom periodu
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Razrađeno kroz US-78, US-79
+
+---
+
+### PB-56
+
+- **Naziv Stavke:** Prilozi na tiketima
+- **Opis:** Implementirati feature gdje korisnik, agent ili tehničar mogu priložiti slike (PNG, JPG, JPEG) i dokumente (PDF, DOCX, TXT) uz tiket ili poruku, sa pregledom i preuzimanjem priloga u detaljnom prikazu tiketa
+- **Tip Stavke:** Feature
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** M
+- **Status:** To-Do
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Razrađeno kroz US-80, US-81
 
 ---
