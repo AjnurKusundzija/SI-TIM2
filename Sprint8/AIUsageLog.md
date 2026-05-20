@@ -158,3 +158,19 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Šta je tim odbacio | Odbijen prijedlog da agent može urediti osnovne korisničke podatke — US-66/US-67 su isključivo pregled; odbijen prikaz osjetljivih polja (hash lozinke, interni ID-ovi) u DTO odgovoru |
 | Rizici, problemi ili greške koje su uočene | Inicijalni DTO vraćao polje `PasswordHash` — uklonjeno prije code reviewa|
 | Ko je koristio alat | Merisa Ogrić |
+
+## Unos #9
+
+| Polje | Detalji |
+|---|---|
+| Datum | 20.05.2026 |
+| Sprint broj | Sprint 8 |
+| Alat koji je korišten | ChatGPT (GPT-5.5) |
+| Svrha korištenja | Pomoć pri organizaciji Sprint 8 dokumentacije, definisanju sprint backlog stavki i povezivanju PB zadataka sa odgovarajućim user story zahtjevima. |
+| Kratak opis zadatka ili upita | AI je korišten za pomoć pri definisanju Sprint Goal dokumenta, organizaciji Sprint Backlog tabele, povezivanju PB stavki sa odgovarajućim US zahtjevima i strukturiranju sprint dokumentacije za Sprint 8. |
+| Šta je AI predložio ili generisao | Generisani prijedlozi za Sprint Goal Sprinta 8, Sprint Backlog tabelu sa PB-20, PB-21, PB-26, PB-34, PB-36 i PB-42 stavkama, povezivanje user story zahtjeva sa backlog funkcionalnostima i organizaciju acceptance kriterija za statistiku, profile, prioritete i pregled paketa. |
+| Šta je tim prihvatio | Strukturu Sprint Goal dokumenta, organizaciju Sprint Backlog tabele, povezivanje PB i US zahtjeva i dio prijedloga za acceptance kriterije funkcionalnosti Sprinta 8. |
+| Šta je tim izmijenio | Prilagođeni su nazivi PB stavki, povezani user story zahtjevi i dio acceptance kriterija kako bi odgovarali postojećem backlogu projekta i dogovorima tima. |
+| Šta je tim odbacio | Prijedlozi koji nisu odgovarali stvarnom scope-u Sprinta 8 ili su uključivali funkcionalnosti planirane za naredne sprintove. |
+| Rizici, problemi ili greške koje su uočene | Potencijalna neusklađenost između PB i US numeracije, potreba za dodatnom validacijom backlog stavki i usklađivanjem sprint dokumentacije sa postojećim release planom projekta. |
+| Ko je koristio alat | Lejan Kozlić |
