@@ -124,3 +124,37 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Sta je tim odbacio | Odbijena je opcija dodavanja nove tabele/kolone za aktivne assigneeje jer postojeća historija dodjela može jednoznačno podržati pravilo bez migracije. Odbijeno je i slanje notifikacija svim korisnicima iz kompletne historije dodjela jer bi stvaralo nepotreban šum. |
 | Rizici, problemi ili greske koje su uocene | Prvi pokušaj backend testiranja u sandboxu pao je zbog MSBuild named-pipe ograničenja (`SocketException: Permission denied`); testovi su ponovo pokrenuti uz odobreno izvršavanje izvan sandboxa. Tok "posljednja dodjela" je morao ostati važeći za forward na drugog agenta, dok je samo forward na tehničara poseban slučaj. |
 | Ko je koristio alat | Uma Mahmutović |
+
+## Unos #7
+
+| Polje | Detalji |
+|---|---|
+| Datum | 18.05.2026 |
+| Sprint broj | Sprint 8 |
+| Alat koji je korišten | OpenAI Codex (GPT-5) |
+| Svrha korištenja | Implementacija funkcionalnosti promjene email adrese (US-64) i promjene lozinke (US-65) na korisničkom profilu — backend i frontend nadogradnja bez izmjena postojeće logike |
+| Kratak opis zadatka ili upita | Dodati na stranicu profila opciju za promjenu email-a (s validacijom formata i jedinstvenosti) i opciju za promjenu lozinke (s provjerom trenutne lozinke, minimalnim zahtjevima sigurnosti i dvostrukom potvrdom nove lozinke); oba toka prikazuju poruke uspjeha ili greške |
+| Šta je AI predložio ili generisao | Backend: novi endpoint `PUT /api/profile/email` s provjerom jedinstvenosti i formatnom validacijom; endpoint `PUT /api/profile/password` s provjerom trenutne lozinke, hash-om nove lozinke i minimalnom dužinom. Service metode `ChangeEmailAsync` i `ChangePasswordAsync` u `UserProfileService`. DTO-ovi: `ChangeEmailDto`, `ChangePasswordDto`. Frontend: komponente forme za promjenu email-a i lozinke integrirane u postojeću stranicu profila; inline poruke validacije i potvrde. Testovi: `UserProfileServiceTests` za oba scenarija (uspjeh, greška). |
+| Šta je tim prihvatio | Cjelokupna backend logika za oba toka; frontend integracija u postojeću profilnu stranicu bez izmjena postojećih komponenti; inline validacija i poruke povratnih informacija |
+| Šta je tim izmijenio | Poruke grešaka usklađene s terminologijom ostatka sistema; minimalna dužina lozinke postavljena prema utvrđenoj sigurnosnoj politici projekta |
+| Šta je tim odbacio | Odbijen prijedlog za slanje email potvrde pri promjeni email adrese — nije u opsegu trenutnog sprinta; odbijen modalni dijalog za promjenu lozinke u korist inline prikaza |
+| Rizici, problemi ili greške koje su uočene | Inicijalni prijedlog nije provjeravao jedinstvenost email-a na razini repozitorija — dodana provjera u `UserRepository` prije pohrane |
+| Ko je koristio alat | Merisa Ogrić |
+
+---
+
+## Unos #8
+
+| Polje | Detalji |
+|---|---|
+| Datum | 19.05.2026 |
+| Sprint broj | Sprint 8 |
+| Alat koji je korišten | OpenAI Codex (GPT-5) |
+| Svrha korištenja | Implementacija agentskog pregleda korisničkog profila s historijom tiketa (US-66) i prikazom aktivnih paketa/pretplata (US-67) — isključivo read-only nadogradnja bez izmjena postojećih tiketa ili korisničkih podataka |
+| Kratak opis zadatka ili upita | Agentu omogućiti prikaz profila korisnika čiji tiket obrađuje: osnovni podaci, kompletna historija tiketa s klik-navigacijom, te lista aktivnih paketa i pretplata s tipom i statusom; klijentu zabraniti pristup profilima tuđih korisnika |
+| Šta je AI predložio ili generisao | Backend: novi endpoint `GET /api/agent/users/{userId}/profile` koji vraća `UserProfileDetailDto` (ime, prezime, email, telefon, lokacija, historija tiketa, lista paketa). Proširenje `UserProfileDetailDto` sa `TicketSummaryList` i `SubscriptionList`. Autorizacijska provjera: samo role `Agent` ili `Technician` mogu pozvati endpoint; klijent dobija 403. Frontend: link "Profil korisnika" na detalju tiketa; read-only profilna stranica za agenta s tabovima Pregled / Tiketi / Paketi; klik na tiket iz historije vodi na detalje tiketa. Testovi: `AgentUserProfileServiceTests`, `AgentUserProfile.test.jsx`. |
+| Šta je tim prihvatio | Cjelokupni read-only pristup s proširenim DTO-om; autorizacijska provjera na razini endpointa; tab-based prikaz na frontendu; navigacija na tikete iz historije |
+| Šta je tim izmijenio | Onemogućiti agentu dugmad s opcijeom prosljeđivanja i zatvaranja tiketa ukoliko nije dodijeljen istom|
+| Šta je tim odbacio | Odbijen prijedlog da agent može urediti osnovne korisničke podatke — US-66/US-67 su isključivo pregled; odbijen prikaz osjetljivih polja (hash lozinke, interni ID-ovi) u DTO odgovoru |
+| Rizici, problemi ili greške koje su uočene | Inicijalni DTO vraćao polje `PasswordHash` — uklonjeno prije code reviewa|
+| Ko je koristio alat | Merisa Ogrić |
