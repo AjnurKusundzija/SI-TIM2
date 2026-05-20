@@ -4,6 +4,7 @@ using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
+using NotificationType = TelecomSupportSystem.DAL.Entities.Enums.NotificationType;
 
 namespace TelecomSupportSystem.BLL.Services
 {
@@ -12,15 +13,21 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ITicketRepository _ticketRepository;
         private readonly ITeamRepository _teamRepository;
         private readonly IUserRepository _userRepository;
+        private readonly INotificationService _notificationService;
+        private readonly ICommentService _commentService;
 
         public TicketService(
             ITicketRepository ticketRepository,
             ITeamRepository teamRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            INotificationService notificationService,
+            ICommentService commentService)
         {
-            _ticketRepository = ticketRepository;
-            _teamRepository   = teamRepository;
-            _userRepository   = userRepository;
+            _ticketRepository    = ticketRepository;
+            _teamRepository      = teamRepository;
+            _userRepository      = userRepository;
+            _notificationService = notificationService;
+            _commentService      = commentService;
         }
 
         // US-11: Dohvata tikete iz repozitorija i mapira ih u DTO.
@@ -43,13 +50,57 @@ namespace TelecomSupportSystem.BLL.Services
             });
         }
 
+        private static bool IsActiveAssignee(Ticket ticket, int userId)
+        {
+            var orderedAssignments = ticket.Assignments
+                .OrderBy(a => a.AssignmentDate)
+                .ThenBy(a => a.AssignmentId)
+                .ToList();
+
+            var latestAssignment = orderedAssignments.LastOrDefault();
+            if (latestAssignment is null)
+                return false;
+
+            if (latestAssignment.UserId == userId)
+                return true;
+
+            if (latestAssignment.AssignmentType != AssignmentType.FORWARDED_TO_TECHNICIAN)
+                return false;
+
+            var previousAssignment = orderedAssignments.Count > 1 ? orderedAssignments[^2] : null;
+            return previousAssignment?.UserId == userId;
+        }
+
+        private static IEnumerable<int> GetActiveStaffAssigneeIds(Ticket ticket)
+        {
+            var orderedAssignments = ticket.Assignments
+                .OrderBy(a => a.AssignmentDate)
+                .ThenBy(a => a.AssignmentId)
+                .ToList();
+
+            var latestAssignment = orderedAssignments.LastOrDefault();
+            if (latestAssignment is null)
+                return Enumerable.Empty<int>();
+
+            var activeAssignments = new List<TicketUser> { latestAssignment };
+
+            if (latestAssignment.AssignmentType == AssignmentType.FORWARDED_TO_TECHNICIAN && orderedAssignments.Count > 1)
+                activeAssignments.Add(orderedAssignments[^2]);
+
+            return activeAssignments
+                .Where(a => a.User is not null && a.User.Role is Role.AGENT or Role.TECHNICIAN or Role.ADMINISTRATOR)
+                .Select(a => a.UserId)
+                .Distinct()
+                .ToList();
+        }
+
         // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
         public async Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role)
         {
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
 
             if (ticket is null)
-                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+                throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             bool hasAccess = role switch
             {
@@ -60,9 +111,17 @@ namespace TelecomSupportSystem.BLL.Services
             };
 
             if (!hasAccess)
-                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+                throw new UnauthorizedAccessException("Nemate pristup ovom tiketu.");
 
             var agentAssignment = ticket.Assignments
+                .Where(a => a.AssignmentType != AssignmentType.FORWARDED_TO_TECHNICIAN
+                         && a.User.Role != Role.TECHNICIAN)
+                .OrderByDescending(a => a.AssignmentDate)
+                .FirstOrDefault();
+
+            var technicianAssignment = ticket.Assignments
+                .Where(a => a.AssignmentType == AssignmentType.FORWARDED_TO_TECHNICIAN
+                         || a.User.Role == Role.TECHNICIAN)
                 .OrderByDescending(a => a.AssignmentDate)
                 .FirstOrDefault();
 
@@ -71,6 +130,7 @@ namespace TelecomSupportSystem.BLL.Services
             return new TicketDetailDto
             {
                 TicketId          = ticket.TicketId,
+                CreatorId         = ticket.CreatorId,
                 Title             = ticket.Title,
                 Description       = ticket.Description,
                 Status            = ticket.Status.ToString(),
@@ -86,8 +146,70 @@ namespace TelecomSupportSystem.BLL.Services
                 ClientName        = $"{ticket.Creator.FirstName} {ticket.Creator.LastName}",
                 AssignedAgentName = agentAssignment is not null
                     ? $"{agentAssignment.User.FirstName} {agentAssignment.User.LastName}"
+                    : technicianAssignment is not null
+                        ? $"{technicianAssignment.User.FirstName} {technicianAssignment.User.LastName}"
+                        : string.Empty,
+                AssignedAgentId = agentAssignment?.UserId ?? technicianAssignment?.UserId,
+                AssignedTechnicianName = technicianAssignment is not null
+                    ? $"{technicianAssignment.User.FirstName} {technicianAssignment.User.LastName}"
                     : string.Empty,
+                AssignedTechnicianId = technicianAssignment?.UserId,
             };
+        }
+
+        // PB-36 / US-60: Tehničar mijenja status tiketa koji mu je dodijeljen.
+        // Dozvoljeni ciljni statusi za tehničara: OPEN, CLOSURE_REQUESTED.
+        // Direktno zatvaranje (CLOSED) ide kroz client-confirm tok (request-closure / accept-closure),
+        // pa ovdje nije dozvoljeno da tehničar postavi CLOSED.
+        private static readonly TicketStatus[] TechnicianAllowedStatuses =
+            { TicketStatus.OPEN, TicketStatus.CLOSURE_REQUESTED };
+
+        public async Task UpdateTicketStatusAsync(int ticketId, TicketStatus newStatus, int userId, string role)
+        {
+            if (role != "TECHNICIAN")
+                throw new UnauthorizedAccessException("Samo tehničar može mijenjati status tiketa.");
+
+            if (!TechnicianAllowedStatuses.Contains(newStatus))
+                throw new InvalidOperationException("Odabrani status nije dozvoljen za tehničara.");
+
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            if (ticket.Status == TicketStatus.CLOSED)
+                throw new InvalidOperationException("Status zatvorenog tiketa se ne može mijenjati.");
+
+            var latestAssignment = ticket.Assignments
+                .OrderByDescending(a => a.AssignmentDate)
+                .FirstOrDefault();
+
+            if (latestAssignment?.UserId != userId)
+                throw new UnauthorizedAccessException("Možete mijenjati status samo tiketa koji su vama dodijeljeni.");
+
+            if (ticket.Status == newStatus)
+                return;
+
+            var previousStatus = ticket.Status;
+            ticket.Status = newStatus;
+
+            if (newStatus == TicketStatus.CLOSURE_REQUESTED)
+            {
+                ticket.ClosureRequestedDate = DateTime.Now;
+                ticket.ClosureRequestedById = userId;
+                ticket.ClosureRequestStatus = ClosureRequestStatus.PENDING;
+            }
+            else if (newStatus == TicketStatus.OPEN && previousStatus == TicketStatus.CLOSURE_REQUESTED)
+            {
+                ticket.ClosureRequestStatus = ClosureRequestStatus.REJECTED;
+            }
+
+            await _ticketRepository.UpdateAsync(ticket);
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Promjena statusa tiketa",
+                $"Status vašeg tiketa \"{ticket.Title}\" je promijenjen na '{newStatus}'.",
+                NotificationType.STATUS_CHANGED,
+                ticket.TicketId);
         }
 
         public async Task UpdateInternalPriorityAsync(int ticketId, InternalPriority priority, int userId, string role)
@@ -120,6 +242,14 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosedDate = DateTime.Now;
             ticket.ClosedById = userId;
             await _ticketRepository.UpdateAsync(ticket);
+
+            if (role != "CLIENT")
+                await _notificationService.SendNotificationAsync(
+                    ticket.CreatorId,
+                    "Tiket zatvoren",
+                    $"Vaš tiket \"{ticket.Title}\" je zatvoren.",
+                    NotificationType.TICKET_CLOSED,
+                    ticket.TicketId);
         }
 
         public async Task RequestClosureAsync(int ticketId, int userId, string role)
@@ -127,11 +257,17 @@ namespace TelecomSupportSystem.BLL.Services
             if (role is not ("AGENT" or "TECHNICIAN" or "ADMINISTRATOR"))
                 throw new UnauthorizedAccessException("Samo osoblje može zatražiti zatvaranje tiketa.");
 
-            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
                 ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             if (ticket.Status != TicketStatus.OPEN)
                 throw new InvalidOperationException("Zahtjev za zatvaranje se može poslati samo za otvorene tikete.");
+
+            if (role is "AGENT" or "TECHNICIAN")
+            {
+                if (!IsActiveAssignee(ticket, userId))
+                    throw new UnauthorizedAccessException("Možete zatražiti zatvaranje samo za tiket koji je vama dodijeljen.");
+            }
 
             ticket.Status = TicketStatus.CLOSURE_REQUESTED;
             ticket.ClosureRequestedDate = DateTime.Now;
@@ -139,11 +275,18 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosureRequestStatus = ClosureRequestStatus.PENDING;
 
             await _ticketRepository.UpdateAsync(ticket);
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Promjena statusa tiketa",
+                $"Status vašeg tiketa \"{ticket.Title}\" je promijenjen na 'Čeka zatvaranje'.",
+                NotificationType.STATUS_CHANGED,
+                ticket.TicketId);
         }
 
         public async Task AcceptClosureAsync(int ticketId, int userId)
         {
-            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
                 ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             if (ticket.CreatorId != userId)
@@ -158,11 +301,21 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosureRequestStatus = ClosureRequestStatus.ACCEPTED;
 
             await _ticketRepository.UpdateAsync(ticket);
+
+            foreach (var staffUserId in GetActiveStaffAssigneeIds(ticket))
+            {
+                await _notificationService.SendNotificationAsync(
+                    staffUserId,
+                    "Tiket zatvoren",
+                    $"Klijent je prihvatio zatvaranje tiketa \"{ticket.Title}\".",
+                    NotificationType.TICKET_CLOSED,
+                    ticket.TicketId);
+            }
         }
 
         public async Task RejectClosureAsync(int ticketId, int userId)
         {
-            var ticket = await _ticketRepository.GetByIdAsync(ticketId)
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
                 ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             if (ticket.CreatorId != userId)
@@ -175,6 +328,16 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosureRequestStatus = ClosureRequestStatus.REJECTED;
 
             await _ticketRepository.UpdateAsync(ticket);
+
+            foreach (var staffUserId in GetActiveStaffAssigneeIds(ticket))
+            {
+                await _notificationService.SendNotificationAsync(
+                    staffUserId,
+                    "Zatvaranje odbijeno",
+                    $"Klijent je odbio zatvaranje tiketa \"{ticket.Title}\".",
+                    NotificationType.STATUS_CHANGED,
+                    ticket.TicketId);
+            }
         }
 
         public async Task ForceCloseAsync(int ticketId, int userId, string role)
@@ -185,12 +348,15 @@ namespace TelecomSupportSystem.BLL.Services
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
                 ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
+            if (role is "AGENT" or "TECHNICIAN" && !IsActiveAssignee(ticket, userId))
+                throw new UnauthorizedAccessException("Možete prisilno zatvoriti samo tiket koji je vama dodijeljen.");
+
             if (ticket.Status != TicketStatus.CLOSURE_REQUESTED)
                 throw new InvalidOperationException("Tiket mora biti u statusu 'Zahtjev za zatvaranje' da bi se mogao prisilno zatvoriti.");
 
             // Provjera 7 dana od zadnjeg komentara klijenta
             var lastClientComment = ticket.Comments
-                .Where(c => c.Author.Role == Role.CLIENT)
+                .Where(c => c.Author != null && c.Author.Role == Role.CLIENT)
                 .OrderByDescending(c => c.DateTime)
                 .FirstOrDefault();
 
@@ -205,6 +371,13 @@ namespace TelecomSupportSystem.BLL.Services
             ticket.ClosureRequestStatus = ClosureRequestStatus.EXPIRED;
 
             await _ticketRepository.UpdateAsync(ticket);
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Tiket zatvoren",
+                $"Vaš tiket \"{ticket.Title}\" je zatvoren.",
+                NotificationType.TICKET_CLOSED,
+                ticket.TicketId);
         }
 
         // PB-32: Lista tiketa filtrirana prema roli — AGENT/ADMIN vide sve, TECHNICIAN samo dodijeljene
@@ -216,7 +389,7 @@ namespace TelecomSupportSystem.BLL.Services
                 "AGENT" when assignedOnly  => await _ticketRepository.GetByAssigneeIdAsync(userId),
                 "ADMINISTRATOR" or "AGENT" => await _ticketRepository.GetAllAsync(),
                 "TECHNICIAN"               => await _ticketRepository.GetByAssigneeIdAsync(userId),
-                _                          => throw new UnauthorizedAccessException("Access not allowed.")
+                _                          => throw new UnauthorizedAccessException("Pristup nije dozvoljen.")
             };
 
             return tickets.Select(t => new MyTicketDto
@@ -368,6 +541,25 @@ namespace TelecomSupportSystem.BLL.Services
                 ticket.TeamId = targetAgent.TeamId;
 
             await _ticketRepository.AddAssignmentAsync(newAssignment);
+
+            await _notificationService.SendNotificationAsync(
+                targetAgent.UserId,
+                "Tiket je proslijeđen vama",
+                $"Tiket \"{ticket.Title}\" je proslijeđen vama.",
+                NotificationType.TICKET_FORWARDED,
+                ticket.TicketId);
+
+            await _commentService.AddSystemCommentAsync(
+                ticketId,
+                $"Tiket je proslijeđen agentu: {targetAgent.FirstName} {targetAgent.LastName}");
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Tiket proslijeđen",
+                $"Vaš tiket \"{ticket.Title}\" je proslijeđen drugom agentu.",
+                NotificationType.TICKET_FORWARDED,
+                ticket.TicketId);
+
             return newAssignment;
         }
 
@@ -440,7 +632,7 @@ namespace TelecomSupportSystem.BLL.Services
             var techniciansAtLocation = (await _userRepository.GetTechniciansByLocationAsync(location)).ToList();
 
             if (!techniciansAtLocation.Any())
-                throw new InvalidOperationException("nemamo tehničara na toj lokaciji");
+                throw new InvalidOperationException("Nema dostupnog tehničara na toj lokaciji.");
 
             // Algoritam za dodjelu:
             // 1. Ako neki tehničar ima 0 otvorenih tiketa, dodijeli njemu
@@ -473,6 +665,24 @@ namespace TelecomSupportSystem.BLL.Services
                 ticket.TeamId = bestTech.TeamId;
 
             await _ticketRepository.AddAssignmentAsync(newAssignment);
+
+            await _notificationService.SendNotificationAsync(
+                bestTech.UserId,
+                "Tiket je proslijeđen vama",
+                $"Tiket \"{ticket.Title}\" je proslijeđen vama.",
+                NotificationType.TICKET_FORWARDED,
+                ticket.TicketId);
+
+            await _commentService.AddSystemCommentAsync(
+                ticketId,
+                $"Tiket je proslijeđen tehničaru: {bestTech.FirstName} {bestTech.LastName}");
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Tiket proslijeđen",
+                $"Vaš tiket \"{ticket.Title}\" je proslijeđen tehničaru.",
+                NotificationType.TICKET_FORWARDED,
+                ticket.TicketId);
 
             return new AgentScoreDto
             {
@@ -537,6 +747,13 @@ namespace TelecomSupportSystem.BLL.Services
                     });
 
                     assignedAgentName = $"{bestAgent.FirstName} {bestAgent.LastName}";
+
+                    await _notificationService.SendNotificationAsync(
+                        bestAgent.UserId,
+                        "Dodijeljen vam je tiket",
+                        $"Tiket \"{ticket.Title}\" vam je dodijeljen.",
+                        NotificationType.TICKET_ASSIGNED,
+                        ticket.TicketId);
                 }
             }
 

@@ -39,6 +39,9 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         // Internal Priority Management
         Task UpdateInternalPriorityAsync(int ticketId, InternalPriority priority, int userId, string role);
 
+        // PB-36 / US-60: Tehničar mijenja status tiketa koji mu je dodijeljen
+        Task UpdateTicketStatusAsync(int ticketId, TicketStatus newStatus, int userId, string role);
+
         // Closure Workflow
         Task CloseTicketAsync(int ticketId, int userId, string role);
         Task RequestClosureAsync(int ticketId, int userId, string role);

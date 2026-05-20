@@ -8,5 +8,6 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         Task<IEnumerable<CommentDto>> GetCommentsForTicketAsync(int ticketId, int requestingUserId, string role);
         
         Task<CommentDto> AddCommentAsync(int ticketId, int userId, string role, string content);
+        Task AddSystemCommentAsync(int ticketId, string content);
     }
 }

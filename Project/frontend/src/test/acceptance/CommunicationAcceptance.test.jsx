@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   getTicketById: vi.fn(),
   getTicketComments: vi.fn(),
   addComment: vi.fn(),
+  getTicketRating: vi.fn(),
   useAuth: vi.fn(),
 }))
 
@@ -13,6 +14,19 @@ vi.mock('../../services/ticketService', () => ({
   getTicketById: mocks.getTicketById,
   getTicketComments: mocks.getTicketComments,
   addComment: mocks.addComment,
+  getTicketRating: mocks.getTicketRating,
+  createTicketRating: vi.fn(),
+  closeTicket: vi.fn(),
+  requestTicketClosure: vi.fn(),
+  acceptTicketClosure: vi.fn(),
+  rejectTicketClosure: vi.fn(),
+  forceCloseTicket: vi.fn(),
+  autoForwardTicket: vi.fn(),
+  forwardTicketToAgent: vi.fn(),
+  getAgentScores: vi.fn(),
+  forwardTicketToTechnician: vi.fn(),
+  updateInternalPriority: vi.fn(),
+  updateTicketStatus: vi.fn(),
 }))
 
 vi.mock('../../context/AuthContext', () => ({
@@ -51,6 +65,7 @@ describe('PB-27 Communication acceptance — tok komunikacije klijent-agent', ()
   beforeEach(() => {
     vi.clearAllMocks()
     mocks.useAuth.mockReturnValue({ user: { role: 'CLIENT', firstName: 'Merjem' } })
+    mocks.getTicketRating.mockResolvedValue(null)
   })
 
   it('klijent moze poslati poruku agentu na otvorenom tiketu', async () => {

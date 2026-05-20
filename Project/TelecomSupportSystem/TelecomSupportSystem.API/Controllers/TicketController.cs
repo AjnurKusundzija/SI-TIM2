@@ -279,6 +279,30 @@ namespace TelecomSupportSystem.API.Controllers
             }
         }
 
+        // PB-36 / US-60: POST /api/tickets/{id}/status
+        // Tehničar mijenja status tiketa koji mu je dodijeljen
+        [HttpPost("{id:int}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateTicketStatusDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            try
+            {
+                await _ticketService.UpdateTicketStatusAsync(id, dto.Status, userId, role);
+                return Ok(new { message = "Status tiketa je uspješno ažuriran." });
+            }
+            catch (KeyNotFoundException) { return NotFound(); }
+            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) { return BadRequest(new { poruka = ex.Message }); }
+        }
+
         // POST /api/tickets/{id}/close
         [HttpPost("{id:int}/close")]
         public async Task<IActionResult> CloseTicket(int id)

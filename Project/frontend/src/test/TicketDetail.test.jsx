@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   getTicketById: vi.fn(),
   getTicketComments: vi.fn(),
   addComment: vi.fn(),
+  getTicketRating: vi.fn(),
   useAuth: vi.fn(),
   HubConnectionBuilder: vi.fn(),
 }))
@@ -14,6 +15,19 @@ vi.mock('../services/ticketService', () => ({
   getTicketById: mocks.getTicketById,
   getTicketComments: mocks.getTicketComments,
   addComment: mocks.addComment,
+  getTicketRating: mocks.getTicketRating,
+  createTicketRating: vi.fn(),
+  closeTicket: vi.fn(),
+  requestTicketClosure: vi.fn(),
+  acceptTicketClosure: vi.fn(),
+  rejectTicketClosure: vi.fn(),
+  forceCloseTicket: vi.fn(),
+  autoForwardTicket: vi.fn(),
+  forwardTicketToAgent: vi.fn(),
+  getAgentScores: vi.fn(),
+  forwardTicketToTechnician: vi.fn(),
+  updateInternalPriority: vi.fn(),
+  updateTicketStatus: vi.fn(),
 }))
 
 vi.mock('../context/AuthContext', () => ({
@@ -62,6 +76,9 @@ const FAKE_TICKET = {
   createdDate: '2026-05-01T10:00:00Z',
   clientName: 'Merjem Omerović',
   assignedAgentName: 'Selma Mujić',
+  assignedAgentId: 2,
+  assignedTechnicianName: 'Adnan Hasić',
+  assignedTechnicianId: 7,
 }
 
 const FAKE_COMMENTS = [
@@ -88,6 +105,7 @@ function renderTicketDetail(user = CLIENT_USER, ticketId = '1') {
 describe('TicketDetail page — PB-24, PB-27', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mocks.getTicketRating.mockResolvedValue(null)
   })
 
   // PB-24 / US-14: detalji tiketa se prikazuju nakon učitavanja
@@ -109,6 +127,15 @@ describe('TicketDetail page — PB-24, PB-27', () => {
 
     await waitFor(() => expect(screen.queryAllByText('Merjem Omerović')).not.toHaveLength(0))
     expect(screen.queryAllByText('Selma Mujić')).not.toHaveLength(0)
+  })
+
+  it('shows assigned technician below the assigned agent', async () => {
+    mocks.getTicketById.mockResolvedValueOnce(FAKE_TICKET)
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    renderTicketDetail(AGENT_USER)
+
+    await waitFor(() => expect(screen.queryAllByText('Selma Mujić')).not.toHaveLength(0))
+    expect(screen.queryAllByText('Adnan Hasić')).not.toHaveLength(0)
   })
 
   // PB-24 / US-15: historija komentara se prikazuje

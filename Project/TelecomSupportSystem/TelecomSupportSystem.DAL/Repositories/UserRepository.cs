@@ -15,7 +15,19 @@ namespace TelecomSupportSystem.DAL.Repositories
         }
 
         public async Task<User?> GetByEmailAsync(string email)
-            => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        {
+            var normalizedEmail = email.Trim().ToLowerInvariant();
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
+        }
+
+        public async Task<User?> GetByIdAsync(int userId)
+            => await _context.Users.FindAsync(userId);
+
+        public async Task UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<IEnumerable<User>> GetAvailableAgentsByTeamIdAsync(int teamId)
             => await _context.Users

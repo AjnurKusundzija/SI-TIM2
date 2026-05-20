@@ -2,11 +2,12 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getMyTickets } from '../services/ticketService'
 import { Search, Plus, Ticket } from 'lucide-react'
+import { formatDateOnly } from '../utils/formatDate'
 import EmptyState from '../components/common/EmptyState'
 import Badge from '../components/common/Badge'
 
 const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok' }
-const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', CLOSURE_REQUESTED: 'Čeka zatvaranje' }
+const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', CLOSURE_REQUESTED: 'Čeka se' }
 const TYPE_LABELS = {
     INTERNET: 'Internet',
     TV: 'TV',
@@ -16,6 +17,43 @@ const TYPE_LABELS = {
 }
 
 const EMPTY_FILTERS = { priority: '', status: '', type: '', dateFrom: '' }
+
+function SkeletonTable() {
+    return (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+            <div className="hidden md:block">
+                <div className="flex gap-4 px-5 py-3 border-b border-gray-100 bg-gray-50">
+                    {[180, 80, 70, 80, 80].map((w, i) => (
+                        <div key={i} className="h-3 bg-gray-200 rounded" style={{ width: w }} />
+                    ))}
+                </div>
+                {Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="flex items-center gap-4 px-5 py-3.5 border-b border-gray-50 last:border-0">
+                        <div className="flex-1">
+                            <div className="h-3.5 bg-gray-200 rounded w-48 mb-1.5" />
+                            <div className="h-2.5 bg-gray-100 rounded w-16" />
+                        </div>
+                        <div className="h-5 bg-gray-200 rounded-full w-20" />
+                        <div className="h-5 bg-gray-200 rounded-full w-14" />
+                        <div className="h-3.5 bg-gray-100 rounded w-20" />
+                        <div className="h-3 bg-gray-100 rounded w-20" />
+                    </div>
+                ))}
+            </div>
+            <div className="md:hidden divide-y divide-gray-50">
+                {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="px-4 py-3">
+                        <div className="h-3.5 bg-gray-200 rounded w-48 mb-2" />
+                        <div className="flex gap-2">
+                            <div className="h-5 bg-gray-200 rounded-full w-16" />
+                            <div className="h-5 bg-gray-200 rounded-full w-14" />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
 
 export default function MyTickets() {
     const navigate = useNavigate()
@@ -30,7 +68,7 @@ export default function MyTickets() {
             .then(setTickets)
             .catch((err) => {
                 console.error(err)
-                setError('Failed to load tickets.')
+                setError('Greška pri učitavanju tiketa.')
             })
             .finally(() => setLoading(false))
     }, [])
@@ -58,10 +96,10 @@ export default function MyTickets() {
     }
 
     const filterLabel = (key, value) => {
-        if (key === 'priority') return `Priority: ${PRIORITY_LABELS[value] ?? value}`
+        if (key === 'priority') return `Prioritet: ${PRIORITY_LABELS[value] ?? value}`
         if (key === 'status') return `Status: ${STATUS_LABELS[value] ?? value}`
-        if (key === 'type') return `Type: ${TYPE_LABELS[value] ?? value}`
-        if (key === 'dateFrom') return `From: ${new Date(value).toLocaleDateString()}`
+        if (key === 'type') return `Tip: ${TYPE_LABELS[value] ?? value}`
+        if (key === 'dateFrom') return `Od: ${formatDateOnly(value)}`
         return value
     }
 
@@ -87,7 +125,7 @@ export default function MyTickets() {
                     <select
                         value={filters.priority}
                         onChange={(e) => setFilters((f) => ({ ...f, priority: e.target.value }))}
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
                     >
                         <option value="">Svi prioriteti</option>
                         {Object.entries(PRIORITY_LABELS).map(([val, label]) => (
@@ -98,7 +136,7 @@ export default function MyTickets() {
                     <select
                         value={filters.status}
                         onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
                     >
                         <option value="">Svi statusi</option>
                         {Object.entries(STATUS_LABELS).map(([val, label]) => (
@@ -109,7 +147,7 @@ export default function MyTickets() {
                     <select
                         value={filters.type}
                         onChange={(e) => setFilters((f) => ({ ...f, type: e.target.value }))}
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
                     >
                         <option value="">Svi tipovi</option>
                         {Object.entries(TYPE_LABELS).map(([val, label]) => (
@@ -121,7 +159,7 @@ export default function MyTickets() {
                         type="date"
                         value={filters.dateFrom}
                         onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value }))}
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none"
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500"
                     />
 
                     <Link to="/create-ticket">
@@ -143,7 +181,8 @@ export default function MyTickets() {
                             {filterLabel(key, value)}
                             <button
                                 onClick={() => removeFilter(key)}
-                                className="text-navy-400 hover:text-navy-700 leading-none"
+                                className="text-navy-400 hover:text-navy-700 leading-none text-sm"
+                                aria-label="Ukloni filter"
                             >
                                 ×
                             </button>
@@ -160,9 +199,7 @@ export default function MyTickets() {
             )}
 
             {loading ? (
-                <div className="flex justify-center py-16">
-                    <div className="w-8 h-8 border-2 border-navy-600 border-t-transparent rounded-full animate-spin" />
-                </div>
+                <SkeletonTable />
             ) : error ? (
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
                     {error}
@@ -221,7 +258,7 @@ export default function MyTickets() {
 
                                         <td className="px-5 py-3 text-sm text-gray-500 whitespace-nowrap">
                                             {ticket.createdDate
-                                                ? new Date(ticket.createdDate).toLocaleDateString()
+                                                ? formatDateOnly(ticket.createdDate)
                                                 : '—'}
                                         </td>
                                     </tr>
@@ -248,7 +285,7 @@ export default function MyTickets() {
 
                                 <p className="text-xs text-gray-400 mt-1">
                                     {ticket.createdDate
-                                        ? new Date(ticket.createdDate).toLocaleDateString()
+                                        ? new Date(ticket.createdDate).toLocaleDateString('bs-BA')
                                         : '—'}
                                 </p>
                             </div>

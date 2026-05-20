@@ -1,5 +1,6 @@
 using TelecomSupportSystem.BLL.DTOs.Comments;
 using TelecomSupportSystem.BLL.Services.Interfaces;
+using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
 namespace TelecomSupportSystem.BLL.Services
@@ -8,11 +9,19 @@ namespace TelecomSupportSystem.BLL.Services
     {
         private readonly ICommentRepository _commentRepository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly INotificationService _notificationService;
+        private readonly IChatPusher _chatPusher;
 
-        public CommentService(ICommentRepository commentRepository, ITicketRepository ticketRepository)
+        public CommentService(
+            ICommentRepository commentRepository,
+            ITicketRepository ticketRepository,
+            INotificationService notificationService,
+            IChatPusher chatPusher)
         {
             _commentRepository = commentRepository;
             _ticketRepository = ticketRepository;
+            _notificationService = notificationService;
+            _chatPusher = chatPusher;
         }
 
         // US-15: Ista logika pristupa kao i za tiket (CLIENT → vlastiti, AGENT/TECHNICIAN → dodijeljeni, ADMIN → svi)
@@ -21,7 +30,7 @@ namespace TelecomSupportSystem.BLL.Services
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
 
             if (ticket is null)
-                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+                throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             bool hasAccess = role switch
             {
@@ -32,30 +41,31 @@ namespace TelecomSupportSystem.BLL.Services
             };
 
             if (!hasAccess)
-                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+                throw new UnauthorizedAccessException("Nemate pristup ovom tiketu.");
 
             var comments = await _commentRepository.GetByTicketIdAsync(ticketId);
 
             return comments.Select(c => new CommentDto
             {
-                CommentId  = c.CommentId,
-                Content    = c.Content,
-                DateTime   = c.DateTime,
-                AuthorId   = c.AuthorId,
-                AuthorName = $"{c.Author.FirstName} {c.Author.LastName}",
-                AuthorRole = c.Author.Role.ToString(),
+                CommentId       = c.CommentId,
+                Content         = c.Content,
+                DateTime        = c.DateTime,
+                AuthorId        = c.AuthorId,
+                AuthorName      = c.IsSystemMessage ? string.Empty : $"{c.Author!.FirstName} {c.Author.LastName}",
+                AuthorRole      = c.IsSystemMessage ? string.Empty : c.Author!.Role.ToString(),
+                IsSystemMessage = c.IsSystemMessage,
             });
         }
 
         public async Task<CommentDto> AddCommentAsync(int ticketId, int userId, string role, string content)
         {
             if (content.Length > 1000)
-                throw new ArgumentException("Message exceeds maximum length of 1000 characters.");
+                throw new ArgumentException("Poruka ne može biti duža od 1000 znakova.");
 
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
 
             if (ticket is null)
-                throw new KeyNotFoundException($"Ticket {ticketId} not found.");
+                throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
 
             bool hasAccess = role switch
             {
@@ -66,7 +76,7 @@ namespace TelecomSupportSystem.BLL.Services
             };
 
             if (!hasAccess)
-                throw new UnauthorizedAccessException("Access to this ticket is not allowed.");
+                throw new UnauthorizedAccessException("Nemate pristup ovom tiketu.");
 
             if (role == "CLIENT")
             {
@@ -75,7 +85,9 @@ namespace TelecomSupportSystem.BLL.Services
 
                 foreach (var c in existingComments.OrderByDescending(x => x.DateTime))
                 {
-                    if (c.Author.Role.ToString() == "CLIENT")
+                    if (c.IsSystemMessage) continue;
+
+                    if (c.Author!.Role.ToString() == "CLIENT")
                     {
                         consecutiveClientComments++;
                     }
@@ -87,7 +99,7 @@ namespace TelecomSupportSystem.BLL.Services
 
                 if (consecutiveClientComments >= 3)
                 {
-                    throw new InvalidOperationException("You cannot spam comments! Please wait for an agent to respond.");
+                    throw new InvalidOperationException("Ne možete slati više od 3 uzastopne poruke. Sačekajte odgovor agenta.");
                 }
             }
 
@@ -130,15 +142,64 @@ namespace TelecomSupportSystem.BLL.Services
             // Fetch the created comment to get author details
             var createdComment = (await _commentRepository.GetByTicketIdAsync(ticketId)).Last();
 
+            // TICKET_RESPONSE: klijent odgovori → notifikacija agentu/tehničaru; agent/tech odgovori → notifikacija klijentu
+            if (role == "CLIENT")
+            {
+                var currentAssignee = ticket.Assignments
+                    .OrderByDescending(a => a.AssignmentDate)
+                    .FirstOrDefault();
+
+                if (currentAssignee is not null)
+                    await _notificationService.SendNotificationAsync(
+                        currentAssignee.UserId,
+                        "Novi odgovor klijenta",
+                        $"Klijent je odgovorio na tiket \"{ticket.Title}\".",
+                        NotificationType.TICKET_RESPONSE,
+                        ticketId);
+            }
+            else if (role is "AGENT" or "TECHNICIAN")
+            {
+                await _notificationService.SendNotificationAsync(
+                    ticket.CreatorId,
+                    "Odgovor na vaš tiket",
+                    $"Dobili ste odgovor na tiket \"{ticket.Title}\".",
+                    NotificationType.TICKET_RESPONSE,
+                    ticketId);
+            }
+
             return new CommentDto
             {
-                CommentId = createdComment.CommentId,
-                Content = createdComment.Content,
-                DateTime = createdComment.DateTime,
-                AuthorId = createdComment.AuthorId,
-                AuthorName = $"{createdComment.Author.FirstName} {createdComment.Author.LastName}",
-                AuthorRole = createdComment.Author.Role.ToString()
+                CommentId  = createdComment.CommentId,
+                Content    = createdComment.Content,
+                DateTime   = createdComment.DateTime,
+                AuthorId   = createdComment.AuthorId,
+                AuthorName = $"{createdComment.Author!.FirstName} {createdComment.Author.LastName}",
+                AuthorRole = createdComment.Author.Role.ToString(),
             };
+        }
+
+        public async Task AddSystemCommentAsync(int ticketId, string content)
+        {
+            var comment = new TelecomSupportSystem.DAL.Entities.Comment
+            {
+                TicketId        = ticketId,
+                Content         = content,
+                DateTime        = DateTime.UtcNow,
+                IsSystemMessage = true,
+                IsInternal      = false,
+            };
+
+            await _commentRepository.CreateAsync(comment);
+
+            var dto = new CommentDto
+            {
+                CommentId       = comment.CommentId,
+                Content         = comment.Content,
+                DateTime        = comment.DateTime,
+                IsSystemMessage = true,
+            };
+
+            await _chatPusher.PushCommentAsync(ticketId, dto);
         }
     }
 }

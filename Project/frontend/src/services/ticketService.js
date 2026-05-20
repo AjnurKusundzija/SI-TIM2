@@ -77,6 +77,12 @@ export async function updateInternalPriority(ticketId, priority) {
   return response.data
 }
 
+// PB-36 / US-60: Tehničar mijenja status tiketa koji mu je dodijeljen
+export async function updateTicketStatus(ticketId, status) {
+  const response = await api.post(`/tickets/${ticketId}/status`, { status })
+  return response.data
+}
+
 // Closure Workflow
 export async function closeTicket(ticketId) {
   const response = await api.post(`/tickets/${ticketId}/close`)
@@ -100,5 +106,18 @@ export async function rejectTicketClosure(ticketId) {
 
 export async function forceCloseTicket(ticketId) {
   const response = await api.post(`/tickets/${ticketId}/force-close`)
+  return response.data
+}
+
+// US-61: Dohvati ocjenu za tiket (null ako nije ocijenjen, 204 No Content)
+export async function getTicketRating(ticketId) {
+  const response = await api.get(`/tickets/${ticketId}/rating`)
+  if (response.status === 204) return null
+  return response.data
+}
+
+// US-61: Kreiraj ocjenu za tiket (samo CLIENT, tiket mora biti CLOSED)
+export async function createTicketRating(ticketId, payload) {
+  const response = await api.post(`/tickets/${ticketId}/rating`, payload)
   return response.data
 }

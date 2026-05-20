@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Moq;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
@@ -13,11 +14,12 @@ namespace TelecomSupportSystem.Tests.Tickets
         private readonly Mock<ITicketRepository> _repoMock = new();
         private readonly Mock<ITeamRepository> _teamRepoMock = new();
         private readonly Mock<IUserRepository> _userRepoMock = new();
+        private readonly Mock<INotificationService> _notificationServiceMock = new();
         private readonly TicketService _service;
 
         public TicketDetailServiceTests()
         {
-            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object);
+            _service = new TicketService(_repoMock.Object, _teamRepoMock.Object, _userRepoMock.Object, _notificationServiceMock.Object, new Mock<ICommentService>().Object);
         }
 
         private static User MakeUser(int id = 1, string first = "Amir", string last = "Hadzic", Role role = Role.CLIENT) =>
@@ -89,16 +91,29 @@ namespace TelecomSupportSystem.Tests.Tickets
         public async Task GetTicketByIdAsync_ShouldMapAllFieldsToDto()
         {
             var agentUser = MakeUser(10, "Selma", "Mujić", Role.AGENT);
+            var technicianUser = MakeUser(11, "Adnan", "Hasić", Role.TECHNICIAN);
+            var baseDate = DateTime.UtcNow.AddMinutes(-10);
             var assignment = new TicketUser
             {
                 AssignmentId = 1,
                 TicketId = 1,
                 UserId = agentUser.UserId,
                 User = agentUser,
-                AssignmentDate = DateTime.UtcNow,
-                TeamId = 0
+                AssignmentDate = baseDate,
+                TeamId = 0,
+                AssignmentType = AssignmentType.AUTOMATIC
             };
-            var ticket = MakeTicket(id: 1, creatorId: 5, assignments: new List<TicketUser> { assignment });
+            var technicianAssignment = new TicketUser
+            {
+                AssignmentId = 2,
+                TicketId = 1,
+                UserId = technicianUser.UserId,
+                User = technicianUser,
+                AssignmentDate = baseDate.AddMinutes(1),
+                TeamId = 0,
+                AssignmentType = AssignmentType.FORWARDED_TO_TECHNICIAN
+            };
+            var ticket = MakeTicket(id: 1, creatorId: 5, assignments: new List<TicketUser> { assignment, technicianAssignment });
 
             _repoMock.Setup(r => r.GetByIdWithDetailsAsync(1)).ReturnsAsync(ticket);
 
@@ -111,6 +126,9 @@ namespace TelecomSupportSystem.Tests.Tickets
             dto.ProblemCategory.Should().Be(ProblemCategory.INTERNET.ToString());
             dto.ClientName.Should().Be("Merjem Omerović");
             dto.AssignedAgentName.Should().Be("Selma Mujić");
+            dto.AssignedAgentId.Should().Be(10);
+            dto.AssignedTechnicianName.Should().Be("Adnan Hasić");
+            dto.AssignedTechnicianId.Should().Be(11);
         }
     }
 }

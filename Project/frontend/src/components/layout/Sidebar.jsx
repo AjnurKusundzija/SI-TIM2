@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useNotifications } from '../../context/NotificationContext';
 import {
   LayoutDashboard,
   Ticket,
@@ -9,35 +10,51 @@ import {
   Headphones,
   PlusCircle,
   HelpCircle,
+  BarChart2,
+  Bell,
+  Package,
+  User,
 } from 'lucide-react';
 
 const navConfig = {
   CLIENT: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/profile', label: 'Profil', icon: User },
     { to: '/mytickets', label: 'Moji tiketi', icon: Ticket },
     { to: '/create-ticket', label: 'Kreiraj tiket', icon: PlusCircle },
+    { to: '/packages', label: 'Moji paketi', icon: Package },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
+    { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
   AGENT: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/profile', label: 'Profil', icon: User },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
     { to: '/assigned', label: 'Dodijeljeni meni', icon: Ticket },
+    { to: '/statistics', label: 'Moja statistika', icon: BarChart2 },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
+    { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
   TECHNICIAN: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/profile', label: 'Profil', icon: User },
     { to: '/assigned', label: 'Dodijeljeni meni', icon: Ticket },
+    { to: '/statistics', label: 'Moja statistika', icon: BarChart2 },
+    { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
   ADMINISTRATOR: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/profile', label: 'Profil', icon: User },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
+    { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
 };
 
 export default function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { unreadCount } = useNotifications();
   const links = navConfig[user?.role] || [];
 
   const handleLogout = async () => {
@@ -101,7 +118,12 @@ export default function Sidebar({ isOpen, onClose }) {
               }
             >
               <link.icon size={18} />
-              {link.label}
+              <span className="flex-1">{link.label}</span>
+              {link.to === '/notifications' && unreadCount > 0 && (
+                <span className="min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

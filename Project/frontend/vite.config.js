@@ -23,6 +23,11 @@ export default defineConfig({
         ws: true,
         secure: false,
       },
+      '/notificationhub': {
+        target: 'http://localhost:5122',
+        ws: true,
+        secure: false,
+      },
     },
   },
   esbuild: { jsx: 'automatic' },

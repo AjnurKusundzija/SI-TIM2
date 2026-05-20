@@ -10,6 +10,7 @@ using TelecomSupportSystem.API.Controllers;
 using TelecomSupportSystem.API.Hubs;
 using TelecomSupportSystem.BLL.DTOs.Comments;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
@@ -86,7 +87,7 @@ namespace TelecomSupportSystem.Tests.Performance
             await context.SaveChangesAsync();
 
             var controller = new CommentController(
-                new CommentService(new CommentRepository(context), new TicketRepository(context)));
+                new CommentService(new CommentRepository(context), new TicketRepository(context), new Mock<INotificationService>().Object, new Mock<IChatPusher>().Object));
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, "1"),

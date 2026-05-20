@@ -9,6 +9,7 @@ using TelecomSupportSystem.API.Controllers;
 using TelecomSupportSystem.API.Hubs;
 using TelecomSupportSystem.BLL.DTOs.Comments;
 using TelecomSupportSystem.BLL.Services;
+using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
@@ -30,7 +31,7 @@ namespace TelecomSupportSystem.Tests.Integration
         {
             var ticketRepo = new TicketRepository(context);
             var commentRepo = new CommentRepository(context);
-            var service = new CommentService(commentRepo, ticketRepo);
+            var service = new CommentService(commentRepo, ticketRepo, new Mock<INotificationService>().Object, new Mock<IChatPusher>().Object);
             var controller = new CommentController(service);
 
             var claims = new List<Claim>

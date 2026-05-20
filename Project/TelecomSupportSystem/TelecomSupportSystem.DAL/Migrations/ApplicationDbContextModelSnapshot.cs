@@ -77,7 +77,7 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
 
-                    b.Property<int>("AuthorId")
+                    b.Property<int?>("AuthorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -88,6 +88,9 @@ namespace TelecomSupportSystem.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsInternal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSystemMessage")
                         .HasColumnType("bit");
 
                     b.Property<int>("TicketId")
@@ -164,6 +167,9 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("TicketId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -333,6 +339,9 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackageId"));
 
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("MonthlyPrice")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -352,6 +361,9 @@ namespace TelecomSupportSystem.DAL.Migrations
 
                     b.Property<int>("PackageType")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -573,8 +585,7 @@ namespace TelecomSupportSystem.DAL.Migrations
                     b.HasOne("TelecomSupportSystem.DAL.Entities.User", "Author")
                         .WithMany("Comments")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TelecomSupportSystem.DAL.Entities.Ticket", "Ticket")
                         .WithMany("Comments")
