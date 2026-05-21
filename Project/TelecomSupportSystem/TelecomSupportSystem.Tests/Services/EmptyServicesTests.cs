@@ -46,7 +46,8 @@ namespace TelecomSupportSystem.Tests.Services
             var service = new UserService(
                 new Mock<ITicketRepository>().Object,
                 new Mock<IUserRepository>().Object,
-                new Mock<IPackageService>().Object);
+                new Mock<IPackageService>().Object,
+                new Mock<TelecomSupportSystem.DAL.Repositories.Interfaces.ITeamRepository>().Object);
 
             // Assert
             service.Should().NotBeNull();
