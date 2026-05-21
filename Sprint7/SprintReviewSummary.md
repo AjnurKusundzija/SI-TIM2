@@ -16,7 +16,7 @@
 
 ---
 
-## Sta je zavrseno
+## Šta je završeno
 
 - Implementirana funkcionalnost automatske dodjele tiketa.
 - Implementirano upravljanje prioritetima tiketa.
@@ -32,7 +32,7 @@
 
 ---
 
-## Sta nije zavrseno
+## Šta nije završeno
 
 - Potpuna implementacija sistema notifikacija planirana je za Sprint 8.
 - Napredni dashboard i izvještajni moduli ostavljeni su za naredne sprintove.
@@ -64,11 +64,11 @@
 
 ---
 
-## Kljucne odluke donesene u sprintu
+## Ključne odluke donesene u sprintu
 
-- Donijeta odluka o centralizaciji ticket workflow logike na backend sistemu.
-- Donijeta odluka o standardizaciji API endpointa za ticket management.
-- Donijeta odluka o pripremi infrastrukture za real-time notifikacijski sistem.
+- Donesena odluka o centralizaciji ticket workflow logike na backend sistemu.
+- Donesena odluka o standardizaciji API endpointa za ticket management.
+- Donesena odluka o pripremi infrastrukture za real-time notifikacijski sistem.
 - Dogovorena validacija AvailabilityStatus logike za tehničare i agente.
 - Usaglašena struktura routing sistema za automatsku dodjelu tiketa.
 - Definisani workflow-i za zatvaranje i prosljeđivanje tiketa.
@@ -86,7 +86,7 @@
 
 ---
 
-## Zakljucak za naredni sprint
+## Zaključak za naredni sprint
 
 - Fokus narednog sprinta biće implementacija kompletnog sistema notifikacija i proširenje korisničkog iskustva.
 - Planirano je proširenje profilnih funkcionalnosti i statistike rada za agente i tehničare.
