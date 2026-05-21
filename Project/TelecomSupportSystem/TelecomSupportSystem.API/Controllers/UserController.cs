@@ -196,7 +196,7 @@ namespace TelecomSupportSystem.API.Controllers
                 await _userService.CreateUserAsync(dto, currentRole);
                 return Ok(new { message = "Korisnik je uspješno kreiran." });
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 return Forbid();
             }
@@ -224,7 +224,7 @@ namespace TelecomSupportSystem.API.Controllers
             {
                 return NotFound(new { message = "Korisnik nije pronađen." });
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 return Forbid();
             }
@@ -246,7 +246,7 @@ namespace TelecomSupportSystem.API.Controllers
             {
                 return NotFound(new { message = "Korisnik nije pronađen." });
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 return Forbid();
             }
@@ -272,7 +272,7 @@ namespace TelecomSupportSystem.API.Controllers
             {
                 return NotFound(new { message = "Korisnik nije pronađen." });
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 return Forbid();
             }
@@ -293,7 +293,7 @@ namespace TelecomSupportSystem.API.Controllers
                 var result = await _userService.GetUsersPaginatedAsync(currentRole, role, status, search, location, page, pageSize);
                 return Ok(result);
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 return Forbid();
             }

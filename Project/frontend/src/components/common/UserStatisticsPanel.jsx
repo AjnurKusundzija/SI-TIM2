@@ -123,11 +123,13 @@ export default function UserStatisticsPanel({ userId, role }) {
   useEffect(() => {
     if (!userId) return
 
-    setLoading(true)
+    const t = setTimeout(() => setLoading(true), 0)
     getUserStatistics(userId)
       .then((data) => { setStats(data); setError(null) })
       .catch(() => setError('Greška pri učitavanju statistike korisnika.'))
       .finally(() => setLoading(false))
+      
+    return () => clearTimeout(t)
   }, [userId])
 
   if (loading) {

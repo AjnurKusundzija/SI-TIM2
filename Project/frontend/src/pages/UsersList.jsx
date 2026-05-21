@@ -37,10 +37,13 @@ export default function UsersList() {
   }, [user, isAgents, isDeactivated, navigate])
 
   useEffect(() => {
-    setPage(1)
-    setSearch('')
-    setLocationFilter('')
-    setDeactivatedRoleFilter('')
+    const t = setTimeout(() => {
+      setPage(1)
+      setSearch('')
+      setLocationFilter('')
+      setDeactivatedRoleFilter('')
+    }, 0)
+    return () => clearTimeout(t)
   }, [location.pathname])
 
   useEffect(() => {

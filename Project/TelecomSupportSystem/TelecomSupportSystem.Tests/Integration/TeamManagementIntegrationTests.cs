@@ -33,7 +33,8 @@ namespace TelecomSupportSystem.Tests.Integration
             var service = new UserService(
                 new TicketRepository(context),
                 new UserRepository(context),
-                new Mock<IPackageService>().Object);
+                new Mock<IPackageService>().Object,
+                new TeamRepository(context));
 
             var controller = new UserController(service);
             controller.ControllerContext = new ControllerContext
