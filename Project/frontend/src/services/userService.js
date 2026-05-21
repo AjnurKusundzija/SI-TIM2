@@ -23,6 +23,11 @@ export async function getUserProfile(userId) {
   return response.data
 }
 
+export async function getUserStatistics(userId) {
+  const response = await api.get(`/users/${userId}/statistics`)
+  return response.data
+}
+
 export async function updateEmail(email) {
   const response = await api.put('/users/me/email', { email })
   return response.data
@@ -34,5 +39,36 @@ export async function updatePassword(currentPassword, newPassword, confirmPasswo
     newPassword,
     confirmPassword,
   })
+  return response.data
+}
+
+// PB-51: User Account Management API calls
+export async function createUser(userData) {
+  const response = await api.post('/users', userData)
+  return response.data
+}
+
+export async function updateUserDetails(userId, userData) {
+  const response = await api.put(`/users/${userId}`, userData)
+  return response.data
+}
+
+export async function deactivateUser(userId) {
+  const response = await api.put(`/users/${userId}/deactivate`)
+  return response.data
+}
+
+export async function reactivateUser(userId) {
+  const response = await api.put(`/users/${userId}/reactivate`)
+  return response.data
+}
+
+export async function getUsersList(params) {
+  const response = await api.get('/users/list', { params })
+  return response.data
+}
+
+export async function getAgentTeams() {
+  const response = await api.get('/users/agent-teams')
   return response.data
 }

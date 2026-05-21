@@ -21,7 +21,7 @@ namespace TelecomSupportSystem.DAL.Repositories
         }
 
         public async Task<User?> GetByIdAsync(int userId)
-            => await _context.Users.FindAsync(userId);
+            => await _context.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.UserId == userId);
 
         public async Task UpdateAsync(User user)
         {
@@ -58,5 +58,47 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .Include(u => u.TicketAssignments)
                     .ThenInclude(ta => ta.Ticket)
                 .ToListAsync();
+
+        public async Task CreateAsync(User user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<(IEnumerable<User> Users, int TotalCount)> GetUsersPaginatedAsync(Role? role, AccountStatus? status, string? search, Location? location, int page, int pageSize)
+        {
+            var query = _context.Users.AsQueryable();
+
+            if (role.HasValue)
+                query = query.Where(u => u.Role == role.Value);
+            
+            if (status.HasValue)
+                query = query.Where(u => u.AccountStatus == status.Value);
+
+            if (location.HasValue)
+                query = query.Where(u => u.Location == location.Value);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var lowerSearch = search.ToLowerInvariant();
+                query = query.Where(u => 
+                    u.FirstName.ToLower().Contains(lowerSearch) ||
+                    u.LastName.ToLower().Contains(lowerSearch) ||
+                    u.Email.ToLower().Contains(lowerSearch) ||
+                    u.Phone.ToLower().Contains(lowerSearch));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var users = await query
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Include(u => u.Team) // Include Team for Agent Category
+                .ToListAsync();
+
+            return (users, totalCount);
+        }
     }
 }

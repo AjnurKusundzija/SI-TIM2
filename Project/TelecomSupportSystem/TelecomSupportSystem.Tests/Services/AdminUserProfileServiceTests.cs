@@ -43,7 +43,7 @@ namespace TelecomSupportSystem.Tests.Services
             Username      = $"user{id}",
             PasswordHash  = "bcrypt_hash_NOT_FOR_DISPLAY",
             Role          = role,
-            Phone         = "+38761000000",
+            Phone         = "061000000",
             Location      = Location.SARAJEVO,
             AccountStatus = AccountStatus.ACTIVE,
         };
