@@ -13,10 +13,21 @@ namespace TelecomSupportSystem.BLL.Services
     public class PackageService : IPackageService
     {
         private readonly ISubscriptionPackageRepository _packageRepository;
+        private readonly IClientSubscriptionRepository? _clientSubscriptionRepository;
 
         public PackageService(ISubscriptionPackageRepository packageRepository)
         {
             _packageRepository = packageRepository;
+        }
+
+        // PB-52: dodatni konstruktor — uključuje pretplate iz kataloga u "Moji paketi"
+        // tako da klijent vidi promjene odmah kad ih admin dodijeli (US-77 AC).
+        public PackageService(
+            ISubscriptionPackageRepository packageRepository,
+            IClientSubscriptionRepository clientSubscriptionRepository)
+            : this(packageRepository)
+        {
+            _clientSubscriptionRepository = clientSubscriptionRepository;
         }
 
         // US-6: Repozitorij već filtrira po UserId i statusu ACTIVE.
@@ -25,7 +36,7 @@ namespace TelecomSupportSystem.BLL.Services
         {
             var packages = await _packageRepository.GetActivePackagesByUserIdAsync(userId);
 
-            return packages.Select(p => new PackageSummaryDto
+            var legacy = packages.Select(p => new PackageSummaryDto
             {
                 PackageId          = p.PackageId,
                 PackageName        = p.PackageName,
@@ -35,7 +46,30 @@ namespace TelecomSupportSystem.BLL.Services
                 PackageDescription = p.PackageDescription,
                 Summary            = BuildSummary(p),
                 IncludedServices   = BuildIncludedServices(p),
-            });
+            }).ToList();
+
+            if (_clientSubscriptionRepository is null) return legacy;
+
+            // PB-52: aktivne pretplate iz kataloga (US-77) — koristimo negativan ID
+            // kako se ne bi sudarale s legacy SubscriptionPackage rutama na frontu.
+            var catalogSubs = await _clientSubscriptionRepository.GetActiveByClientIdAsync(userId);
+            foreach (var s in catalogSubs)
+            {
+                if (s.CatalogPackage is null) continue;
+                legacy.Add(new PackageSummaryDto
+                {
+                    PackageId          = -s.SubscriptionId,
+                    PackageName        = s.CatalogPackage.Name,
+                    PackageType        = s.CatalogPackage.Type.ToString(),
+                    PackageStatus      = s.Status.ToString(),
+                    MonthlyPrice       = s.CatalogPackage.Price,
+                    PackageDescription = s.CatalogPackage.Description,
+                    Summary            = s.CatalogPackage.Description,
+                    IncludedServices   = BuildIncludedServicesForType(s.CatalogPackage.Type),
+                });
+            }
+
+            return legacy;
         }
 
         // US-7: Provjera vlasništva — ako paket ne pripada korisniku → 403 (UnauthorizedAccessException).
@@ -100,6 +134,19 @@ namespace TelecomSupportSystem.BLL.Services
                 PackageType.TV       => new List<string> { "TV" },
                 PackageType.MOBILE   => new List<string> { "Mobilni" },
                 PackageType.BUNDLE   => InferBundleServices(p),
+                _                    => new List<string>(),
+            };
+        }
+
+        // PB-52: ekvivalent BuildIncludedServices za katalog pakete (bez Features kolekcije).
+        private static List<string> BuildIncludedServicesForType(PackageType type)
+        {
+            return type switch
+            {
+                PackageType.INTERNET => new List<string> { "Internet" },
+                PackageType.TV       => new List<string> { "TV" },
+                PackageType.MOBILE   => new List<string> { "Mobilni" },
+                PackageType.BUNDLE   => new List<string> { "Internet", "TV", "Mobilni" },
                 _                    => new List<string>(),
             };
         }

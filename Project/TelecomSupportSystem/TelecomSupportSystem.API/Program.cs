@@ -117,6 +117,10 @@ builder.Services.AddScoped<ISubscriptionPackageRepository, SubscriptionPackageRe
 builder.Services.AddScoped<IPackageFeatureRepository, PackageFeatureRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IFaqRepository, FaqRepository>();
+// PB-52 / US-76, US-77
+builder.Services.AddScoped<ICatalogPackageRepository, CatalogPackageRepository>();
+builder.Services.AddScoped<IClientSubscriptionRepository, ClientSubscriptionRepository>();
+builder.Services.AddScoped<ISubscriptionAuditLogRepository, SubscriptionAuditLogRepository>();
 
 // Services
 builder.Services.AddScoped<ICommentService, CommentService>();
@@ -130,6 +134,9 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFaqService, FaqService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
+// PB-52 / US-76, US-77
+builder.Services.AddScoped<ICatalogPackageService, CatalogPackageService>();
+builder.Services.AddScoped<IClientSubscriptionService, ClientSubscriptionService>();
 
 var app = builder.Build();
 
@@ -449,6 +456,86 @@ if (app.Environment.IsDevelopment())
                 db.SaveChanges();
             }
         }
+    }
+
+    // PB-52 / US-76: Seed kataloga paketa (admin-managed)
+    if (!db.CatalogPackages.Any())
+    {
+        db.CatalogPackages.AddRange(
+            new CatalogPackage
+            {
+                Name = "Internet Start 100 Mbps",
+                Type = PackageType.INTERNET,
+                Description = "Optički internet za svakodnevne potrebe — streaming, video pozivi, lagano gaming.",
+                Price = 29.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "Internet Premium 1 Gbps",
+                Type = PackageType.INTERNET,
+                Description = "Gigabitni optički internet za najzahtjevnije korisnike i timski rad od kuće.",
+                Price = 59.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "TV Basic",
+                Type = PackageType.TV,
+                Description = "Standardna ponuda kanala uključujući domaće i informativne kanale.",
+                Price = 14.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "TV Premium",
+                Type = PackageType.TV,
+                Description = "Bogata ponuda HD kanala — sport, film, dječji i strani sadržaj.",
+                Price = 24.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "Mobilni M",
+                Type = PackageType.MOBILE,
+                Description = "Mjesečni paket sa minutama, SMS porukama i mobilnim podacima.",
+                Price = 19.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "Mobilni L Unlimited",
+                Type = PackageType.MOBILE,
+                Description = "Neograničeni razgovori, SMS i mobilni podaci na cijeloj BH mreži.",
+                Price = 34.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "Duo paket Internet + TV",
+                Type = PackageType.BUNDLE,
+                Description = "Kombinacija brzog interneta i kvalitetne TV ponude — povoljnije nego zasebno.",
+                Price = 49.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "All-in-One paket",
+                Type = PackageType.BUNDLE,
+                Description = "Sve usluge u jednom — najbrži internet, kompletna TV ponuda i neograničena mobilna.",
+                Price = 79.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "Internet Legacy ADSL",
+                Type = PackageType.INTERNET,
+                Description = "Stari ADSL paket — više nije dostupan za nove klijente.",
+                Price = 19.90m,
+                Status = PackageStatus.INACTIVE,
+            }
+        );
+        db.SaveChanges();
     }
 
     // US-6, US-7: Seed paketa i pretplata za testne korisnike (CLIENT, John Doe)

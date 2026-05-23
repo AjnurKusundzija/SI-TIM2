@@ -4,13 +4,20 @@ import { ArrowLeft, Mail, Phone, MapPin, ClipboardList, Package, User } from 'lu
 import { getUserProfile } from '../services/userService'
 import Badge from '../components/common/Badge'
 import EmptyState from '../components/common/EmptyState'
+import { useAuth } from '../context/AuthContext'
+import ClientSubscriptionsSection from '../components/admin/ClientSubscriptionsSection'
 
 export default function UserProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  // PB-52 / US-77 AC: kontrole pretplata postoje u DOM-u SAMO za admina.
+  const canManageSubscriptions =
+    user?.role === 'ADMINISTRATOR' && profile?.role === 'CLIENT'
 
   useEffect(() => {
     async function loadProfile() {
@@ -145,6 +152,10 @@ export default function UserProfile() {
           )}
         </div>
       </section>
+
+      {canManageSubscriptions && (
+        <ClientSubscriptionsSection clientId={profile.userId} />
+      )}
 
       <section className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
         <div className="flex items-center gap-3 text-navy-700 mb-5">

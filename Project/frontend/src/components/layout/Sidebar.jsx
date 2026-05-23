@@ -47,6 +47,7 @@ const navConfig = {
     { to: '/profile', label: 'Profil', icon: User },
     { to: '/reports', label: 'Izvještaji', icon: BarChart2 },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
+    { to: '/admin/packages', label: 'Upravljanje paketima', icon: Package },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
     { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
