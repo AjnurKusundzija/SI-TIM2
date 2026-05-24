@@ -44,6 +44,7 @@ namespace TelecomSupportSystem.BLL.Services
                 FirstResponseBucketGranularityLabel = firstResponseReport.BucketGranularityLabel,
                 FirstResponseByPeriod = firstResponseReport.Buckets,
                 AvgResolutionHours = TicketMetricsHelper.CalculateAvgResolutionHours(ticketList),
+                ClosedInPeriodCount = await _reportRepository.GetClosedInPeriodCountAsync(periodFrom, periodTo),
                 AvgRating = TicketMetricsHelper.CalculateAvgRating(ticketList),
                 TopProblemTypes = BuildProblemTypeSummary(ticketList),
                 TopAgentWorkload = MapWorkload(workload.Take(TopItemsLimit)),

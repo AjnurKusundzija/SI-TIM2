@@ -51,7 +51,7 @@ const REPORT_TYPES = [
   { value: "TICKET_COUNT", label: "Broj tiketa" },
   { value: "TICKET_STATUS", label: "Status tiketa" },
   { value: "PROBLEM_TYPE", label: "Tip problema" },
-  { value: "TEAM_WORKLOAD", label: "Opterećenje agenata" },
+  { value: "TEAM_WORKLOAD", label: "Opterećenje agenata/tehničara" },
   { value: "USER_RATINGS", label: "Ocjene korisnika" },
   { value: "FIRST_RESPONSE", label: "Prosj. prvi odgovor" },
 ];
@@ -171,7 +171,7 @@ const ChartTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm text-xs">
-      <p className="font-semibold text-gray-800">{payload[0].name}</p>
+      <p className="font-semibold text-gray-800">{payload[0].payload.name}</p>
       <p className="text-gray-600">{payload[0].value}</p>
     </div>
   );
@@ -389,9 +389,9 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
         <table className="w-full text-sm mt-2">
           <thead>
             <tr className="text-left text-gray-500 border-b">
-              <th className="py-2">Agent</th>
+              <th className="py-2">Agent / Tehničar</th>
               <th className="py-2">Uloga</th>
-              <th className="py-2">Riješeno</th>
+              <th className="py-2">Zatvoreno u periodu</th>
             </tr>
           </thead>
           <tbody>
@@ -502,6 +502,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
             { value: "week", label: "Sedmica" },
             { value: "month", label: "Mjesec" },
             { value: "year", label: "Godina" },
+            { value: "alltime", label: "Svi tiketi" },
             { value: "custom", label: "Prilagođeno" },
           ].map((opt) => (
             <button
@@ -572,7 +573,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               <StatCard
                 icon={Ticket}
-                label="Tiketi u periodu"
+                label="Kreirani tiketi"
                 value={dashboard.totalTicketsInPeriod}
                 color="bg-navy-600"
                 onClick={() => drillDown()}
@@ -589,6 +590,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
                 icon={Clock}
                 label="Prosj. rješavanje"
                 value={formatHours(dashboard.avgResolutionHours)}
+                description={dashboard.closedInPeriodCount != null ? `${dashboard.closedInPeriodCount} zatvorenih tiketa` : undefined}
                 color="bg-blue-500"
                 emptyMessage="Nema zatvorenih tiketa"
               />
@@ -618,7 +620,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
               <StatCard
                 icon={CheckCircle}
                 label="Zatvoreni"
-                value={closedInPeriod}
+                value={dashboard.closedInPeriodCount ?? 0}
                 color="bg-emerald-600"
                 onClick={() => drillDown({ status: "CLOSED" })}
                 emptyMessage="Nema zatvorenih u periodu"

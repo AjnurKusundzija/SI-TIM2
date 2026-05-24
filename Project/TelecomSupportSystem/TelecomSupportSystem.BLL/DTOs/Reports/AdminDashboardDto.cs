@@ -10,6 +10,7 @@ namespace TelecomSupportSystem.BLL.DTOs.Reports
         public string FirstResponseBucketGranularityLabel { get; set; } = string.Empty;
         public IReadOnlyList<FirstResponseBucketDto> FirstResponseByPeriod { get; set; } = Array.Empty<FirstResponseBucketDto>();
         public double? AvgResolutionHours { get; set; }
+        public int ClosedInPeriodCount { get; set; }
         public double? AvgRating { get; set; }
         public IReadOnlyList<NamedCountDto> TopProblemTypes { get; set; } = Array.Empty<NamedCountDto>();
         public IReadOnlyList<AgentWorkloadDto> TopAgentWorkload { get; set; } = Array.Empty<AgentWorkloadDto>();
