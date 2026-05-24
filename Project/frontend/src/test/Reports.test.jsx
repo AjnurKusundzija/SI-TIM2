@@ -67,7 +67,7 @@ describe('Reports page (/reports)', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Izvještaji' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Izvještaji', level: 2 })).toBeInTheDocument()
     })
     expect(screen.getByText(/generisanje izvještaja za odabrani vremenski period/i)).toBeInTheDocument()
   })
