@@ -46,40 +46,42 @@ const MAX_COMMENT_LENGTH = 1000
 
 function TicketDetailSkeleton() {
     return (
-        <div className="max-w-5xl mx-auto space-y-5">
+        <div className="max-w-5xl mx-auto space-y-4">
             <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
-
-            <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
-                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                <div className="px-6 py-5 border-b border-gray-100 flex items-start justify-between gap-4 animate-pulse">
                     <div className="space-y-2">
-                        <div className="h-6 w-64 bg-gray-200 rounded animate-pulse" />
-                        <div className="h-3 w-24 bg-gray-100 rounded animate-pulse" />
+                        <div className="h-5 w-64 bg-gray-200 rounded" />
+                        <div className="h-3 w-20 bg-gray-100 rounded" />
                     </div>
                     <div className="flex gap-2">
-                        <div className="h-6 w-20 bg-gray-100 rounded-full animate-pulse" />
-                        <div className="h-6 w-20 bg-gray-100 rounded-full animate-pulse" />
+                        <div className="h-5 w-16 bg-gray-100 rounded-full" />
+                        <div className="h-5 w-16 bg-gray-100 rounded-full" />
                     </div>
                 </div>
-
-                <div className="border-t border-gray-100 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {[0, 1, 2].map((item) => (
-                        <div key={item} className="h-4 bg-gray-100 rounded animate-pulse" />
-                    ))}
-                </div>
-            </section>
-
-            <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                <div className="h-5 w-36 bg-gray-200 rounded animate-pulse" />
-                {[0, 1, 2].map((item) => (
-                    <div key={item} className="flex gap-3">
-                        <div className="w-9 h-9 rounded-full bg-gray-100 animate-pulse" />
-                        <div className="flex-1 space-y-2">
-                            <div className="h-4 w-40 bg-gray-100 rounded animate-pulse" />
-                            <div className="h-4 w-full bg-gray-100 rounded animate-pulse" />
-                        </div>
+                <div className="flex flex-col lg:flex-row">
+                    <div className="flex-1 px-6 py-5 space-y-5 lg:border-r lg:border-gray-100 animate-pulse">
+                        {[0, 1, 2].map((i) => (
+                            <div key={i} className="flex gap-3">
+                                <div className="w-9 h-9 rounded-full bg-gray-200 flex-shrink-0" />
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-3.5 w-40 bg-gray-200 rounded" />
+                                    <div className="h-3 w-full bg-gray-100 rounded" />
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </section>
+                    <div className="w-full lg:w-72 px-5 py-4 space-y-3 animate-pulse">
+                        <div className="h-3 w-24 bg-gray-200 rounded" />
+                        {[0, 1, 2, 3].map((i) => (
+                            <div key={i} className="space-y-1">
+                                <div className="h-2.5 w-16 bg-gray-100 rounded" />
+                                <div className="h-3.5 w-32 bg-gray-200 rounded" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
@@ -633,7 +635,7 @@ export default function TicketDetail() {
     const allComments = [initialComment, ...comments]
 
     return (
-        <div className="max-w-5xl mx-auto space-y-5">
+        <div className="max-w-5xl mx-auto space-y-4">
             <Link
                 to={backPath}
                 className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-navy-700 transition-colors"
@@ -642,355 +644,379 @@ export default function TicketDetail() {
                 Nazad na tikete
             </Link>
 
-            {/* Ticket details */}
-            <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                    <div>
-                        <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
-                        <p className="text-xs text-gray-400 mt-1">ticket-{ticket.ticketId}</p>
-                    </div>
+            {/* ── Unified window ──────────────────────────────────────────────── */}
+            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
 
-                    <div className="flex flex-wrap gap-2">
-                        {ticket.status && <Badge value={ticket.status} />}
-                        {ticket.priority && <Badge value={ticket.priority} />}
-                        {category && <Badge value={category} />}
+                {/* ── Header: title, ID, badges ──────────────────────────────── */}
+                <div className="px-6 py-5 border-b border-gray-100">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                        <div>
+                            <h1 className="text-lg font-semibold text-gray-900 leading-snug">{title}</h1>
+                            <p className="text-xs text-gray-400 font-mono mt-0.5">ticket-{ticket.ticketId}</p>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                            {ticket.status && <Badge value={ticket.status} />}
+                            {ticket.priority && <Badge value={ticket.priority} />}
+                            {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN') && ticket.internalPriority && (
+                                <Badge value={ticket.internalPriority} />
+                            )}
+                            {category && <Badge value={category} />}
+                        </div>
                     </div>
                 </div>
 
-                <div className="border-t border-gray-100 mt-6 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-500">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                        <div className="flex items-center gap-2">
-                            <User size={16} />
-                            <span>Kreirao: <strong className="text-gray-700">{clientName}</strong></span>
+                {/* ── Two-column body ────────────────────────────────────────── */}
+                <div className="flex flex-col lg:flex-row">
+
+                    {/* LEFT: Conversation ──────────────────────────────────── */}
+                    <div className="flex-1 min-w-0 lg:border-r lg:border-gray-100">
+
+                        <div className="flex items-center gap-2 px-6 pt-5 pb-3">
+                            <MessageCircle size={14} className="text-gray-400" />
+                            <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                                Razgovor ({allComments.length})
+                            </span>
                         </div>
-                        {ticket.creatorId > 0 && (user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR') && (
-                            <Link
-                                to={`/users/${ticket.creatorId}`}
-                                className="text-sm text-navy-700 hover:text-navy-900 underline"
-                            >
-                                Pogledaj profil korisnika
-                            </Link>
-                        )}
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                            <Tag size={16} />
-                            <span>Agent: <strong className="text-gray-700">{agentName}</strong></span>
+
+                        <div className="px-6 pb-5 space-y-5">
+                            {allComments.map((comment) => {
+                                if (comment.isSystemMessage) {
+                                    return (
+                                        <div key={comment.commentId} className="flex items-center gap-3 py-1">
+                                            <div className="flex-1 border-t border-gray-100" />
+                                            <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100 whitespace-nowrap flex items-center gap-1.5">
+                                                <Info size={11} />
+                                                {comment.content}
+                                            </span>
+                                            <div className="flex-1 border-t border-gray-100" />
+                                        </div>
+                                    )
+                                }
+
+                                const nameParts = comment.authorName.split(' ')
+                                const initials = (
+                                    nameParts.length >= 2
+                                        ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`
+                                        : comment.authorName.slice(0, 2)
+                                ).toUpperCase()
+
+                                return (
+                                    <div key={comment.commentId} className="flex gap-3">
+                                        <div className="w-9 h-9 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                                            {initials}
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-sm font-semibold text-gray-900">
+                                                        {comment.authorName}
+                                                    </span>
+                                                    {comment.authorRole && (
+                                                        <Badge value={comment.authorRole} />
+                                                    )}
+                                                </div>
+                                                <span className="text-xs text-gray-400">
+                                                    {formatDateTime(comment.dateTime)}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-gray-600 mt-1 leading-6">
+                                                {comment.content}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )
+                            })}
                         </div>
-                        {technicianName && (
-                            <div className="flex items-center gap-2">
-                                <Wrench size={16} />
-                                <span>Tehničar: <strong className="text-gray-700">{technicianName}</strong></span>
+
+                        {/* Reply footer or closed notice */}
+                        {ticket.status !== 'CLOSED' ? (
+                            <div className="border-t border-gray-100 px-6 py-4 bg-gray-50/40 space-y-2">
+                                <textarea
+                                    value={message}
+                                    onChange={(e) => {
+                                        if (e.target.value.length <= MAX_COMMENT_LENGTH) {
+                                            setMessage(e.target.value)
+                                            if (sendError) setSendError(null)
+                                        }
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleSend()
+                                    }}
+                                    rows={3}
+                                    placeholder="Unesite vašu poruku... (Ctrl+Enter za slanje)"
+                                    className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none resize-none bg-white"
+                                />
+                                {sendError && (
+                                    <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+                                        <AlertCircle size={13} />
+                                        {sendError}
+                                    </div>
+                                )}
+                                <div className="flex items-center justify-between">
+                                    <span className={`text-xs ${message.length >= MAX_COMMENT_LENGTH ? 'text-red-500 font-medium' : 'text-gray-400'}`}>
+                                        {message.length} / {MAX_COMMENT_LENGTH}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        onClick={handleSend}
+                                        disabled={!message.trim() || isSending}
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+                                    >
+                                        <Send size={16} />
+                                        {isSending ? 'Slanje...' : 'Pošalji'}
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="border-t border-gray-100 px-6 py-3 bg-gray-50 text-center">
+                                <p className="text-xs text-gray-400">Tiket je zatvoren — razgovor je arhiviran.</p>
                             </div>
                         )}
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Clock size={16} />
-                        <span>Kreirano: <strong className="text-gray-700">{createdDate}</strong></span>
-                    </div>
-                </div>
 
-                {ticket.status !== 'CLOSED' && (
-                    <div className="border-t border-gray-100 mt-5 pt-4 flex flex-wrap gap-2">
-                        {/* Client actions */}
-                        {user?.role === 'CLIENT' && (
-                            <>
-                                {(ticket.status === 'OPEN' || ticket.status === 'CLOSURE_REQUESTED') && (
-                                    <button
-                                        type="button"
-                                        disabled={closureLoading}
-                                        onClick={() => setConfirmCloseOpen(true)}
-                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
-                                    >
-                                        <XCircle size={16} />
-                                        Zatvori tiket
-                                    </button>
-                                )}
-                                {ticket.status === 'CLOSURE_REQUESTED' && (
-                                    <>
-                                        <button
-                                            type="button"
-                                            disabled={closureLoading}
-                                            onClick={handleAcceptClosure}
-                                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 rounded-lg transition-colors disabled:opacity-50"
-                                        >
-                                            <CheckCircle size={16} />
-                                            Prihvati zatvaranje
-                                        </button>
-                                        <button
-                                            type="button"
-                                            disabled={closureLoading}
-                                            onClick={handleRejectClosure}
-                                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors disabled:opacity-50"
-                                        >
-                                            <XCircle size={16} />
-                                            Odbij zatvaranje
-                                        </button>
-                                    </>
-                                )}
-                            </>
-                        )}
+                    {/* RIGHT: Sidebar ────────────────────────────────────────── */}
+                    <div className="w-full lg:w-72 flex-shrink-0 border-t border-gray-100 lg:border-t-0 divide-y divide-gray-100">
 
-                        {/* Staff actions */}
-                        {(user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR') && (
-                            <>
-                                {ticket.status === 'OPEN' && (
-                                    <button
-                                        type="button"
-                                        disabled={closureLoading || !isAssignedStaff}
-                                        onClick={handleRequestClosure}
-                                        title={!isAssignedStaff
-                                            ? 'Samo dodijeljeni agent ili tehničar može zatražiti zatvaranje'
-                                            : undefined
-                                        }
-                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
-                                    >
-                                        <Clock size={16} />
-                                        Zatraži zatvaranje
-                                    </button>
-                                )}
-                                {ticket.status === 'CLOSURE_REQUESTED' && (
-                                    <div className="flex items-center gap-3 flex-wrap">
-                                        <button
-                                            type="button"
-                                            disabled={closureLoading || !isAssignedStaff}
-                                            onClick={handleForceClose}
-                                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
-                                            title={!isAssignedStaff
-                                                ? 'Samo dodijeljeni agent ili tehničar može prisilno zatvoriti tiket'
-                                                : 'Moguće tek nakon 7 dana bez odgovora klijenta'
-                                            }
-                                        >
-                                            <Zap size={16} />
-                                            Prisilno zatvori
-                                        </button>
-                                        {timeLeft && (
-                                            <div className={`flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border ${countdownClass}`}>
-                                                <Clock size={14} />
-                                                <span>{timeLeft}</span>
-                                                {timeLeftMs !== null && timeLeftMs <= 86400000 && (
-                                                    <AlertCircle size={13} className="ml-0.5" />
-                                                )}
-                                            </div>
+                        {/* Metadata */}
+                        <div className="px-5 py-4">
+                            <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-3">Detalji tiketa</p>
+                            <dl className="space-y-3">
+                                <div>
+                                    <dt className="text-[10px] uppercase tracking-wider text-gray-400 font-medium flex items-center gap-1">
+                                        <User size={10} />
+                                        Klijent
+                                    </dt>
+                                    <dd className="text-sm font-medium text-gray-800 mt-0.5">
+                                        {clientName}
+                                        {ticket.creatorId > 0 && (user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR') && (
+                                            <Link
+                                                to={`/users/${ticket.creatorId}`}
+                                                className="block text-xs text-navy-700 hover:text-navy-900 underline mt-0.5"
+                                            >
+                                                Pogledaj profil
+                                            </Link>
                                         )}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt className="text-[10px] uppercase tracking-wider text-gray-400 font-medium flex items-center gap-1">
+                                        <Tag size={10} />
+                                        Agent
+                                    </dt>
+                                    <dd className="text-sm font-medium text-gray-800 mt-0.5">{agentName}</dd>
+                                </div>
+                                {technicianName && (
+                                    <div>
+                                        <dt className="text-[10px] uppercase tracking-wider text-gray-400 font-medium flex items-center gap-1">
+                                            <Wrench size={10} />
+                                            Tehničar
+                                        </dt>
+                                        <dd className="text-sm font-medium text-gray-800 mt-0.5">{technicianName}</dd>
                                     </div>
                                 )}
-                                {user?.role === 'AGENT' && ticket.status === 'OPEN' && (
-                                    <button
-                                        type="button"
-                                        disabled={closureLoading || ticket.assignedAgentId !== user?.userId}
-                                        onClick={handleOpenForward}
-                                        title={ticket.assignedAgentId !== user?.userId ? 'Samo dodijeljeni agent može proslijediti tiket' : undefined}
-                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
-                                    >
-                                        <ArrowRightLeft size={16} />
-                                        Proslijedi tiket
-                                    </button>
-                                )}
-                            </>
-                        )}
-                    </div>
-                )}
+                                <div>
+                                    <dt className="text-[10px] uppercase tracking-wider text-gray-400 font-medium flex items-center gap-1">
+                                        <Clock size={10} />
+                                        Kreirano
+                                    </dt>
+                                    <dd className="text-sm font-medium text-gray-800 mt-0.5">{createdDate}</dd>
+                                </div>
+                            </dl>
+                        </div>
 
-                {/* PB-36 / US-60: Tehničar mijenja status tiketa koji mu je dodijeljen */}
-                {user?.role === 'TECHNICIAN'
-                    && ticket.status !== 'CLOSED'
-                    && ticket.assignedTechnicianId === user?.userId && (
-                    <div className="border-t border-gray-100 mt-5 pt-4">
-                        <div className="flex flex-col sm:flex-row sm:items-end gap-3">
-                            <div className="flex-1">
-                                <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">
-                                    Promijeni status tiketa
+                        {/* Closure notification — always visible when set */}
+                        {closureNotification && (
+                            <div className="px-5 py-3">
+                                <div className={`p-2.5 rounded-lg text-xs font-medium ${closureNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
+                                    {closureNotification.message}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Actions (open/closure_requested tickets) */}
+                        {ticket.status !== 'CLOSED' && (
+                            <div className="px-5 py-4">
+                                <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-3">Akcije</p>
+                                <div className="space-y-2">
+                                    {user?.role === 'CLIENT' && (
+                                        <>
+                                            {(ticket.status === 'OPEN' || ticket.status === 'CLOSURE_REQUESTED') && (
+                                                <button
+                                                    type="button"
+                                                    disabled={closureLoading}
+                                                    onClick={() => setConfirmCloseOpen(true)}
+                                                    className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
+                                                >
+                                                    <XCircle size={15} />
+                                                    Zatvori tiket
+                                                </button>
+                                            )}
+                                            {ticket.status === 'CLOSURE_REQUESTED' && (
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        disabled={closureLoading}
+                                                        onClick={handleAcceptClosure}
+                                                        className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <CheckCircle size={15} />
+                                                        Prihvati zatvaranje
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        disabled={closureLoading}
+                                                        onClick={handleRejectClosure}
+                                                        className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <XCircle size={15} />
+                                                        Odbij zatvaranje
+                                                    </button>
+                                                </>
+                                            )}
+                                        </>
+                                    )}
+
+                                    {(user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR') && (
+                                        <>
+                                            {ticket.status === 'OPEN' && (
+                                                <button
+                                                    type="button"
+                                                    disabled={closureLoading || !isAssignedStaff}
+                                                    onClick={handleRequestClosure}
+                                                    title={!isAssignedStaff ? 'Samo dodijeljeni agent ili tehničar može zatražiti zatvaranje' : undefined}
+                                                    className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
+                                                >
+                                                    <Clock size={15} />
+                                                    Zatraži zatvaranje
+                                                </button>
+                                            )}
+                                            {ticket.status === 'CLOSURE_REQUESTED' && (
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        disabled={closureLoading || !isAssignedStaff}
+                                                        onClick={handleForceClose}
+                                                        className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
+                                                        title={!isAssignedStaff ? 'Samo dodijeljeni agent ili tehničar može prisilno zatvoriti tiket' : 'Moguće tek nakon 7 dana bez odgovora klijenta'}
+                                                    >
+                                                        <Zap size={15} />
+                                                        Prisilno zatvori
+                                                    </button>
+                                                    {timeLeft && (
+                                                        <div className={`flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border ${countdownClass}`}>
+                                                            <Clock size={13} />
+                                                            <span>{timeLeft}</span>
+                                                            {timeLeftMs !== null && timeLeftMs <= 86400000 && (
+                                                                <AlertCircle size={12} className="ml-0.5" />
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+                                            {user?.role === 'AGENT' && ticket.status === 'OPEN' && (
+                                                <button
+                                                    type="button"
+                                                    disabled={closureLoading || ticket.assignedAgentId !== user?.userId}
+                                                    onClick={handleOpenForward}
+                                                    title={ticket.assignedAgentId !== user?.userId ? 'Samo dodijeljeni agent može proslijediti tiket' : undefined}
+                                                    className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
+                                                >
+                                                    <ArrowRightLeft size={15} />
+                                                    Proslijedi tiket
+                                                </button>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Internal priority — staff only */}
+                        {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN') && (
+                            <div className="px-5 py-4">
+                                <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-1">
+                                    <Zap size={10} />
+                                    Interni prioritet
                                 </p>
+                                {priorityNotification && (
+                                    <div className={`mb-3 p-2.5 rounded-lg text-xs font-medium ${priorityNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
+                                        {priorityNotification.message}
+                                    </div>
+                                )}
+                                <div className="mb-3">
+                                    {ticket.internalPriority ? (
+                                        <Badge value={ticket.internalPriority} />
+                                    ) : (
+                                        <span className="text-xs text-gray-400 italic">Nije postavljen</span>
+                                    )}
+                                </div>
+                                {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR') && (
+                                    <select
+                                        disabled={updatingPriority}
+                                        value={INTERNAL_PRIORITIES.find(p => p.key === ticket.internalPriority)?.value || ''}
+                                        onChange={(e) => handleUpdateInternalPriority(Number(e.target.value))}
+                                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500 disabled:opacity-50"
+                                    >
+                                        <option value="" disabled>Odaberi prioritet...</option>
+                                        {INTERNAL_PRIORITIES.map((p) => (
+                                            <option key={p.value} value={p.value}>{p.label}</option>
+                                        ))}
+                                    </select>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Technician status change */}
+                        {user?.role === 'TECHNICIAN'
+                            && ticket.status !== 'CLOSED'
+                            && ticket.assignedTechnicianId === user?.userId && (
+                            <div className="px-5 py-4">
+                                <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-3">Promijeni status</p>
                                 <select
                                     aria-label="Promijeni status tiketa"
                                     disabled={statusUpdating}
                                     value={ticket.status || ''}
                                     onChange={(e) => handleUpdateTicketStatus(e.target.value)}
-                                    className="w-full sm:w-72 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500 disabled:opacity-50"
+                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500 disabled:opacity-50"
                                 >
                                     {TECHNICIAN_STATUSES.map((s) => (
                                         <option key={s.value} value={s.value}>{s.label}</option>
                                     ))}
                                 </select>
-                            </div>
-                        </div>
-
-                        {statusNotification && (
-                            <div
-                                role="status"
-                                className={`mt-3 p-3 rounded-lg text-xs font-medium ${
-                                    statusNotification.type === 'success'
-                                        ? 'bg-green-50 text-green-700 border border-green-100'
-                                        : 'bg-red-50 text-red-700 border border-red-100'
-                                }`}
-                            >
-                                {statusNotification.message}
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {/* Closure workflow notification */}
-                {closureNotification && (
-                    <div className={`mt-4 p-3 rounded-lg text-xs font-medium ${closureNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
-                        {closureNotification.message}
-                    </div>
-                )}
-            </section>
-
-            {/* Internal priority — visible to staff, editable by agent/admin */}
-            {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN') && (
-                <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Zap size={18} className="text-navy-600" />
-                        <h3 className="text-sm font-semibold text-gray-900">Interni prioritet</h3>
-                    </div>
-
-                    {priorityNotification && (
-                        <div className={`mb-4 p-3 rounded-lg text-xs font-medium ${priorityNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
-                            {priorityNotification.message}
-                        </div>
-                    )}
-
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <div className="flex-1">
-                            <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">Trenutni interni prioritet</p>
-                            <div className="flex items-center gap-3">
-                                {ticket.internalPriority ? (
-                                    <Badge value={ticket.internalPriority} className="text-sm px-4 py-1" />
-                                ) : (
-                                    <span className="text-sm text-gray-400 italic">Prioritet nije postavljen</span>
+                                {statusNotification && (
+                                    <div
+                                        role="status"
+                                        className={`mt-2.5 p-2.5 rounded-lg text-xs font-medium ${statusNotification.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}
+                                    >
+                                        {statusNotification.message}
+                                    </div>
                                 )}
                             </div>
-                        </div>
+                        )}
 
-                        {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR') && (
-                            <div className="sm:w-64">
-                                <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">Promijeni prioritet</p>
-                                <select
-                                    disabled={updatingPriority}
-                                    value={INTERNAL_PRIORITIES.find(p => p.key === ticket.internalPriority)?.value || ''}
-                                    onChange={(e) => handleUpdateInternalPriority(Number(e.target.value))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-navy-500 disabled:opacity-50"
-                                >
-                                    <option value="" disabled>Odaberi prioritet...</option>
-                                    {INTERNAL_PRIORITIES.map((p) => (
-                                        <option key={p.value} value={p.value}>{p.label}</option>
-                                    ))}
-                                </select>
+                        {/* Rating read-only (AGENT/ADMIN, closed ticket) */}
+                        {ticket.status === 'CLOSED' &&
+                            (user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR') &&
+                            rating && (
+                            <div className="px-5 py-4">
+                                <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-3">Ocjena klijenta</p>
+                                <RatingScale value={rating.ratingValue} readonly />
+                                {rating.ratingComment && (
+                                    <p className="mt-3 text-sm text-gray-600 italic text-center">
+                                        &ldquo;{rating.ratingComment}&rdquo;
+                                    </p>
+                                )}
+                                <p className="mt-1 text-xs text-gray-400 text-center">
+                                    {new Date(rating.ratingDate).toLocaleString('bs-BA')}
+                                </p>
                             </div>
                         )}
                     </div>
-                </section>
-            )}
 
-            {/* Conversation history */}
-            <section className="bg-white rounded-xl shadow-sm border border-gray-100">
-                <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-                    <MessageCircle size={18} className="text-gray-500" />
-                    <h3 className="text-sm font-semibold text-gray-900">
-                        Razgovor ({allComments.length})
-                    </h3>
-                </div>
+                </div>{/* end two-column body */}
+            </div>{/* end unified window */}
 
-                <div className="p-6 space-y-5">
-                    {allComments.map((comment) => {
-                        if (comment.isSystemMessage) {
-                            return (
-                                <div key={comment.commentId} className="flex items-center gap-3 py-1">
-                                    <div className="flex-1 border-t border-gray-100" />
-                                    <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100 whitespace-nowrap flex items-center gap-1.5">
-                                        <Info size={11} />
-                                        {comment.content}
-                                    </span>
-                                    <div className="flex-1 border-t border-gray-100" />
-                                </div>
-                            )
-                        }
-
-                        const nameParts = comment.authorName.split(' ')
-                        const initials = (
-                            nameParts.length >= 2
-                                ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`
-                                : comment.authorName.slice(0, 2)
-                        ).toUpperCase()
-
-                        return (
-                            <div key={comment.commentId} className="flex gap-3">
-                                <div className="w-9 h-9 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
-                                    {initials}
-                                </div>
-
-                                <div className="flex-1">
-                                    <div className="flex flex-wrap items-center justify-between gap-2">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm font-semibold text-gray-900">
-                                                {comment.authorName}
-                                            </span>
-                                            {comment.authorRole && (
-                                                <Badge value={comment.authorRole} />
-                                            )}
-                                        </div>
-                                        <span className="text-xs text-gray-400">
-                                            {formatDateTime(comment.dateTime)}
-                                        </span>
-                                    </div>
-
-                                    <p className="text-sm text-gray-600 mt-1 leading-6">
-                                        {comment.content}
-                                    </p>
-                                </div>
-                            </div>
-                        )
-                    })}
-
-                    {/* Message input */}
-                    {ticket.status !== 'CLOSED' && (
-                        <div className="space-y-2 border-t border-gray-100 pt-4">
-                            <textarea
-                                value={message}
-                                onChange={(e) => {
-                                    if (e.target.value.length <= MAX_COMMENT_LENGTH) {
-                                        setMessage(e.target.value)
-                                        if (sendError) setSendError(null)
-                                    }
-                                }}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleSend()
-                                }}
-                                rows={3}
-                                placeholder="Unesite vašu poruku... (Ctrl+Enter za slanje)"
-                                className="w-full px-3 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none resize-none"
-                            />
-
-                            {sendError && (
-                                <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
-                                    <AlertCircle size={13} />
-                                    {sendError}
-                                </div>
-                            )}
-
-                            <div className="flex items-center justify-between">
-                                <span className={`text-xs ${message.length >= MAX_COMMENT_LENGTH ? 'text-red-500 font-medium' : 'text-gray-400'}`}>
-                                    {message.length} / {MAX_COMMENT_LENGTH}
-                                </span>
-                                <button
-                                    type="button"
-                                    onClick={handleSend}
-                                    disabled={!message.trim() || isSending}
-                                    className="inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
-                                >
-                                    <Send size={16} />
-                                    {isSending ? 'Slanje...' : 'Pošalji'}
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </section>
-
-            {/* US-61: Poziv na ocjenjivanje za CLIENT (bez ocjene) */}
+            {/* Rating call-to-action (CLIENT, closed, no rating yet) */}
             {ticket.status === 'CLOSED' && user?.role === 'CLIENT' && rating === null && (
                 <section className="bg-navy-50 rounded-xl border border-navy-100 p-5 flex items-center justify-between gap-4">
                     <div>
@@ -1006,26 +1032,6 @@ export default function TicketDetail() {
                     </button>
                 </section>
             )}
-
-            {/* US-61: Read-only prikaz ocjene za Agent i Administrator */}
-            {ticket.status === 'CLOSED' &&
-                (user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR') &&
-                rating && (
-                    <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="text-sm font-semibold text-gray-900">Ocjena klijenta</span>
-                        </div>
-                        <RatingScale value={rating.ratingValue} readonly />
-                        {rating.ratingComment && (
-                            <p className="mt-3 text-sm text-gray-600 italic text-center">
-                                &ldquo;{rating.ratingComment}&rdquo;
-                            </p>
-                        )}
-                        <p className="mt-1 text-xs text-gray-400 text-center">
-                            {new Date(rating.ratingDate).toLocaleString('bs-BA')}
-                        </p>
-                    </section>
-                )}
 
             {/* US-61: Modal za ocjenjivanje tiketa (CLIENT) */}
             <Modal
