@@ -56,21 +56,37 @@ const REPORT_TYPES = [
   { value: "FIRST_RESPONSE", label: "Prosj. prvi odgovor" },
 ];
 
+function formatDuration(totalMinutes) {
+  if (totalMinutes == null) return null;
+  const mins = Math.round(totalMinutes);
+  const MINS_IN_YEAR = 525960;
+  const MINS_IN_MONTH = 43830;
+  const MINS_IN_DAY = 1440;
+  const MINS_IN_HOUR = 60;
+
+  const years = Math.floor(mins / MINS_IN_YEAR);
+  const months = Math.floor((mins % MINS_IN_YEAR) / MINS_IN_MONTH);
+  const days = Math.floor((mins % MINS_IN_MONTH) / MINS_IN_DAY);
+  const hours = Math.floor((mins % MINS_IN_DAY) / MINS_IN_HOUR);
+  const minutes = mins % MINS_IN_HOUR;
+
+  const parts = [];
+  if (years > 0) parts.push(`${years} god`);
+  if (months > 0) parts.push(`${months} mj`);
+  if (days > 0) parts.push(`${days} d`);
+  if (hours > 0) parts.push(`${hours} h`);
+  if (minutes > 0) parts.push(`${minutes} min`);
+
+  return parts.length > 0 ? parts.join(" ") : "0 min";
+}
+
 function formatMinutes(minutes) {
-  if (minutes == null) return null;
-  if (minutes < 60) return `${Math.round(minutes)} min`;
-  const h = Math.floor(minutes / 60);
-  const m = Math.round(minutes % 60);
-  return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  return formatDuration(minutes);
 }
 
 function formatHours(hours) {
   if (hours == null) return null;
-  if (hours < 1) return `${Math.round(hours * 60)} min`;
-  if (hours < 24) return `${hours.toFixed(1)}h`;
-  const d = Math.floor(hours / 24);
-  const h = Math.round(hours % 24);
-  return h > 0 ? `${d}d ${h}h` : `${d}d`;
+  return formatDuration(hours * 60);
 }
 
 function formatRating(rating) {
@@ -421,7 +437,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
             </p>
           )}
           <p>
-            Prosjek u periodu:{" "}
+            Prosjek u periodu{period === "custom" ? ` (${customFrom} — ${customTo})` : ""}:{" "}
             <span className="font-semibold">
               {data.avgFirstResponseMinutes != null
                 ? formatMinutes(data.avgFirstResponseMinutes)
