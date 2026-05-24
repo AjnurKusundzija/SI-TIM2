@@ -64,37 +64,55 @@ namespace TelecomSupportSystem.DAL.Repositories
                 (t.Status == TicketStatus.OPEN || t.Status == TicketStatus.CLOSURE_REQUESTED)
                 && t.CreatedDate <= olderThanUtc);
 
+        public Task<int> GetClosedInPeriodCountAsync(DateTime from, DateTime to) =>
+            _context.Tickets.CountAsync(t =>
+                t.Status == TicketStatus.CLOSED
+                && t.ClosedDate.HasValue
+                && t.ClosedDate >= from
+                && t.ClosedDate <= to);
+
         public async Task<IReadOnlyList<AgentResolveRow>> GetAgentResolvedCountsAsync(DateTime from, DateTime to)
         {
-            var closed = await _context.Tickets
+            var closedTicketIds = await _context.Tickets
                 .Where(t =>
                     t.Status == TicketStatus.CLOSED
                     && t.ClosedDate.HasValue
                     && t.ClosedDate >= from
-                    && t.ClosedDate <= to
-                    && t.ClosedById.HasValue)
-                .GroupBy(t => t.ClosedById!.Value)
-                .Select(g => new { UserId = g.Key, Count = g.Count() })
+                    && t.ClosedDate <= to)
+                .Select(t => t.TicketId)
                 .ToListAsync();
 
-            if (closed.Count == 0)
+            if (closedTicketIds.Count == 0)
                 return Array.Empty<AgentResolveRow>();
 
-            var userIds = closed.Select(c => c.UserId).ToList();
-            var users = await _context.Users
-                .Where(u => userIds.Contains(u.UserId))
-                .Where(u => u.Role == Role.AGENT || u.Role == Role.TECHNICIAN)
-                .AsNoTracking()
+            var assignments = await _context.TicketUsers
+                .Where(tu => closedTicketIds.Contains(tu.TicketId))
+                .Join(
+                    _context.Users.Where(u => u.Role == Role.AGENT || u.Role == Role.TECHNICIAN),
+                    tu => tu.UserId,
+                    u => u.UserId,
+                    (tu, u) => new { tu.TicketId, tu.UserId, tu.AssignmentDate, u.FirstName, u.LastName, u.Role })
                 .ToListAsync();
 
-            return closed
-                .Join(users, c => c.UserId, u => u.UserId, (c, u) => new AgentResolveRow
+            // Za agente: po tiketu računa se samo posljednji assignirani agent
+            // (kad agent proslijedi drugom agentu, stari gubi bod)
+            var agentCredits = assignments
+                .Where(x => x.Role == Role.AGENT)
+                .GroupBy(x => x.TicketId)
+                .Select(g => g.OrderByDescending(x => x.AssignmentDate).First());
+
+            // Za tehničare: svi assignirani tehničari dobivaju bod
+            var techCredits = assignments.Where(x => x.Role == Role.TECHNICIAN);
+
+            return agentCredits.Concat(techCredits)
+                .GroupBy(x => new { x.UserId, x.FirstName, x.LastName, x.Role })
+                .Select(g => new AgentResolveRow
                 {
-                    UserId = u.UserId,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    Role = u.Role,
-                    ResolvedCount = c.Count,
+                    UserId = g.Key.UserId,
+                    FirstName = g.Key.FirstName,
+                    LastName = g.Key.LastName,
+                    Role = g.Key.Role,
+                    ResolvedCount = g.Select(x => x.TicketId).Distinct().Count(),
                 })
                 .OrderByDescending(r => r.ResolvedCount)
                 .ToList();

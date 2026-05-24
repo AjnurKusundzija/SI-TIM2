@@ -12,6 +12,7 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
         Task<int> GetUnassignedOpenTicketsCountAsync();
         Task<int> GetStaleTicketsCountAsync(DateTime olderThanUtc);
         Task<IReadOnlyList<AgentResolveRow>> GetAgentResolvedCountsAsync(DateTime from, DateTime to);
+        Task<int> GetClosedInPeriodCountAsync(DateTime from, DateTime to);
     }
 
     public class UserRoleCounts

@@ -51,26 +51,42 @@ const REPORT_TYPES = [
   { value: "TICKET_COUNT", label: "Broj tiketa" },
   { value: "TICKET_STATUS", label: "Status tiketa" },
   { value: "PROBLEM_TYPE", label: "Tip problema" },
-  { value: "TEAM_WORKLOAD", label: "Opterećenje agenata" },
+  { value: "TEAM_WORKLOAD", label: "Opterećenje agenata/tehničara" },
   { value: "USER_RATINGS", label: "Ocjene korisnika" },
   { value: "FIRST_RESPONSE", label: "Prosj. prvi odgovor" },
 ];
 
+function formatDuration(totalMinutes) {
+  if (totalMinutes == null) return null;
+  const mins = Math.round(totalMinutes);
+  const MINS_IN_YEAR = 525960;
+  const MINS_IN_MONTH = 43830;
+  const MINS_IN_DAY = 1440;
+  const MINS_IN_HOUR = 60;
+
+  const years = Math.floor(mins / MINS_IN_YEAR);
+  const months = Math.floor((mins % MINS_IN_YEAR) / MINS_IN_MONTH);
+  const days = Math.floor((mins % MINS_IN_MONTH) / MINS_IN_DAY);
+  const hours = Math.floor((mins % MINS_IN_DAY) / MINS_IN_HOUR);
+  const minutes = mins % MINS_IN_HOUR;
+
+  const parts = [];
+  if (years > 0) parts.push(`${years} god`);
+  if (months > 0) parts.push(`${months} mj`);
+  if (days > 0) parts.push(`${days} d`);
+  if (hours > 0) parts.push(`${hours} h`);
+  if (minutes > 0) parts.push(`${minutes} min`);
+
+  return parts.length > 0 ? parts.join(" ") : "0 min";
+}
+
 function formatMinutes(minutes) {
-  if (minutes == null) return null;
-  if (minutes < 60) return `${Math.round(minutes)} min`;
-  const h = Math.floor(minutes / 60);
-  const m = Math.round(minutes % 60);
-  return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  return formatDuration(minutes);
 }
 
 function formatHours(hours) {
   if (hours == null) return null;
-  if (hours < 1) return `${Math.round(hours * 60)} min`;
-  if (hours < 24) return `${hours.toFixed(1)}h`;
-  const d = Math.floor(hours / 24);
-  const h = Math.round(hours % 24);
-  return h > 0 ? `${d}d ${h}h` : `${d}d`;
+  return formatDuration(hours * 60);
 }
 
 function formatRating(rating) {
@@ -155,7 +171,7 @@ const ChartTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm text-xs">
-      <p className="font-semibold text-gray-800">{payload[0].name}</p>
+      <p className="font-semibold text-gray-800">{payload[0].payload.name}</p>
       <p className="text-gray-600">{payload[0].value}</p>
     </div>
   );
@@ -373,9 +389,9 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
         <table className="w-full text-sm mt-2">
           <thead>
             <tr className="text-left text-gray-500 border-b">
-              <th className="py-2">Agent</th>
+              <th className="py-2">Agent / Tehničar</th>
               <th className="py-2">Uloga</th>
-              <th className="py-2">Riješeno</th>
+              <th className="py-2">Zatvoreno u periodu</th>
             </tr>
           </thead>
           <tbody>
@@ -421,7 +437,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
             </p>
           )}
           <p>
-            Prosjek u periodu:{" "}
+            Prosjek u periodu{period === "custom" ? ` (${customFrom} — ${customTo})` : ""}:{" "}
             <span className="font-semibold">
               {data.avgFirstResponseMinutes != null
                 ? formatMinutes(data.avgFirstResponseMinutes)
@@ -470,9 +486,6 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     return null;
   };
 
-  const closedInPeriod = dashboard?.statusBreakdown?.find(
-    (s) => s.status === "CLOSED",
-  )?.count;
 
   return (
     <div className="space-y-6">
@@ -486,6 +499,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
             { value: "week", label: "Sedmica" },
             { value: "month", label: "Mjesec" },
             { value: "year", label: "Godina" },
+            { value: "alltime", label: "Svi tiketi" },
             { value: "custom", label: "Prilagođeno" },
           ].map((opt) => (
             <button
@@ -556,7 +570,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               <StatCard
                 icon={Ticket}
-                label="Tiketi u periodu"
+                label="Kreirani tiketi"
                 value={dashboard.totalTicketsInPeriod}
                 color="bg-navy-600"
                 onClick={() => drillDown()}
@@ -573,6 +587,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
                 icon={Clock}
                 label="Prosj. rješavanje"
                 value={formatHours(dashboard.avgResolutionHours)}
+                description={dashboard.closedInPeriodCount != null ? `${dashboard.closedInPeriodCount} zatvorenih tiketa` : undefined}
                 color="bg-blue-500"
                 emptyMessage="Nema zatvorenih tiketa"
               />
@@ -602,7 +617,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
               <StatCard
                 icon={CheckCircle}
                 label="Zatvoreni"
-                value={closedInPeriod}
+                value={dashboard.closedInPeriodCount ?? 0}
                 color="bg-emerald-600"
                 onClick={() => drillDown({ status: "CLOSED" })}
                 emptyMessage="Nema zatvorenih u periodu"
