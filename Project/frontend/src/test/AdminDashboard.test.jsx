@@ -73,7 +73,7 @@ describe('AdminDashboardSection (PB-45)', () => {
       expect(screen.getByText('Ključne metrike')).toBeInTheDocument()
     })
     expect(screen.getByText('10')).toBeInTheDocument()
-    expect(screen.getByText('Tiketi u periodu')).toBeInTheDocument()
+    expect(screen.getByText('Kreirani tiketi')).toBeInTheDocument()
     expect(screen.getByText('Zatvoreni')).toBeInTheDocument()
     expect(screen.queryByText('Admin dashboard')).not.toBeInTheDocument()
     expect(screen.queryByText('Nedodijeljeni')).not.toBeInTheDocument()
