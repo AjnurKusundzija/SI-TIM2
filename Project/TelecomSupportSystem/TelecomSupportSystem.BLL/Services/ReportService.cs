@@ -181,7 +181,7 @@ namespace TelecomSupportSystem.BLL.Services
             DateTime periodTo)
         {
             var totals = await _reportRepository.GetAgentResolvedCountsAsync(periodFrom, periodTo);
-            var details = await _reportRepository.GetAgentResolvedDetailsAsync(periodFrom, periodTo);
+            var details = await _reportRepository.GetAgentResolvedDetailsAsync(periodFrom, periodTo) ?? [];
 
             var agentTotalsList = MapWorkload(totals);
             var agentNames = agentTotalsList.Select(a => a.FullName).ToList();
