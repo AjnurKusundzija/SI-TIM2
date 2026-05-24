@@ -20,6 +20,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<Rating> Ratings => Set<Rating>();
     public DbSet<SubscriptionPackage> SubscriptionPackages => Set<SubscriptionPackage>();
     public DbSet<PackageFeature> PackageFeatures => Set<PackageFeature>();
+    public DbSet<CatalogPackage> CatalogPackages => Set<CatalogPackage>();
+    public DbSet<ClientSubscription> ClientSubscriptions => Set<ClientSubscription>();
+    public DbSet<SubscriptionAuditLog> SubscriptionAuditLogs => Set<SubscriptionAuditLog>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<Report> Reports => Set<Report>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
@@ -227,6 +230,57 @@ public class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.IsActive);
             entity.HasIndex(e => e.SortOrder);
+        });
+
+        // PB-52 / US-76
+        modelBuilder.Entity<CatalogPackage>(entity =>
+        {
+            entity.HasKey(e => e.CatalogPackageId);
+
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Description).HasMaxLength(1000);
+            entity.Property(e => e.Price).HasPrecision(18, 2);
+            entity.Property(e => e.CreatedDate).IsRequired();
+
+            entity.HasIndex(e => e.Status);
+            entity.HasIndex(e => e.Type);
+
+            entity.HasMany(e => e.Subscriptions)
+                .WithOne(s => s.CatalogPackage)
+                .HasForeignKey(s => s.CatalogPackageId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // PB-52 / US-77
+        modelBuilder.Entity<ClientSubscription>(entity =>
+        {
+            entity.HasKey(e => e.SubscriptionId);
+
+            entity.Property(e => e.StartDate).IsRequired();
+            entity.Property(e => e.Status).IsRequired();
+
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.CatalogPackageId);
+            entity.HasIndex(e => e.Status);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // PB-52 / US-77 — audit log za promjene pretplata
+        modelBuilder.Entity<SubscriptionAuditLog>(entity =>
+        {
+            entity.HasKey(e => e.SubscriptionAuditLogId);
+
+            entity.Property(e => e.Action).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Timestamp).IsRequired();
+
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.AdminId);
+            entity.HasIndex(e => e.CatalogPackageId);
+            entity.HasIndex(e => e.Timestamp);
         });
 
         modelBuilder.Entity<TicketUser>(entity =>

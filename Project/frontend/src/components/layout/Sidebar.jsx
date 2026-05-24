@@ -55,24 +55,26 @@ const navConfig = {
     { to: '/statistics', label: 'Moja statistika', icon: BarChart2 },
     { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
-  ADMINISTRATOR: [
-    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/profile', label: 'Profil', icon: User },
-    { to: '/reports', label: 'Izvještaji', icon: BarChart2 },
-    { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
-    {
-      label: 'Korisnici',
-      icon: Users,
-      subItems: [
-        { to: '/users/clients', label: 'Klijenti' },
-        { to: '/users/agents', label: 'Agenti' },
-        { to: '/users/technicians', label: 'Tehničari' },
-        { to: '/users/deactivated', label: 'Deaktivirani' },
-      ],
-    },
-    { to: '/faq', label: 'FAQ', icon: HelpCircle },
-    { to: '/notifications', label: 'Notifikacije', icon: Bell },
-  ],
+ ADMINISTRATOR: [
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/profile', label: 'Profil', icon: User },
+  { to: '/reports', label: 'Izvještaji', icon: BarChart2 },
+  { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
+  {
+    label: 'Korisnici',
+    icon: Users,
+    subItems: [
+      { to: '/users/clients', label: 'Klijenti' },
+      { to: '/users/agents', label: 'Agenti' },
+      { to: '/users/technicians', label: 'Tehničari' },
+      { to: '/users/deactivated', label: 'Deaktivirani' },
+    ],
+  },
+  { to: '/admin/packages', label: 'Upravljanje paketima', icon: Package },
+  { to: '/faq', label: 'FAQ', icon: HelpCircle },
+  { to: '/notifications', label: 'Notifikacije', icon: Bell },
+],
+
 };
 
 export default function Sidebar({ isOpen, onClose }) {

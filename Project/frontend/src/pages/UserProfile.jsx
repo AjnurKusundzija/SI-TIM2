@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import Badge from '../components/common/Badge'
 import EmptyState from '../components/common/EmptyState'
 import UserStatisticsPanel from '../components/common/UserStatisticsPanel'
+import ClientSubscriptionsSection from '../components/admin/ClientSubscriptionsSection'
 
 // ─── Validation rules per field ────────────────────────────────────────────────
 function validateField(name, value, role) {
@@ -150,10 +151,13 @@ export default function UserProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { user: currentUser } = useAuth()
-
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  // PB-52 / US-77 AC: kontrole pretplata postoje u DOM-u SAMO za admina.
+  const canManageSubscriptions =
+    currentUser?.role === 'ADMINISTRATOR' && profile?.role === 'CLIENT'
 
   const [isEditing, setIsEditing] = useState(false)
   const [editForm, setEditForm] = useState({})
@@ -165,12 +169,11 @@ export default function UserProfile() {
   const [showStatusConfirm, setShowStatusConfirm] = useState(false)
   const [statusAction, setStatusAction] = useState(null) // 'activate' or 'deactivate'
   const [statusLoading, setStatusLoading] = useState(false)
-
   const canEdit = currentUser?.role === 'ADMINISTRATOR' ||
     (currentUser?.role === 'AGENT' && profile?.role !== 'ADMINISTRATOR' && profile?.role !== 'AGENT')
-
   const canDeactivate = currentUser?.role === 'ADMINISTRATOR' ||
     (currentUser?.role === 'AGENT' && profile?.role === 'CLIENT')
+
 
   useEffect(() => {
     async function loadProfile() {
@@ -436,7 +439,9 @@ export default function UserProfile() {
       )}
 
       <section className="grid gap-4 xl:grid-cols-3">
-        <div className={`rounded-3xl bg-white p-8 shadow-sm border border-slate-200 space-y-5 h-fit ${profile.role === 'AGENT' || profile.role === 'TECHNICIAN' ? 'xl:col-span-3 max-w-3xl' : ''}`}>
+        {/* PB-52: kada admin gleda klijenta -> Osnovni podaci uzima 1 kolonu, Pretplate 2.
+            U svim ostalim slučajevima Osnovni podaci se proteže preko sve 3 kolone. */}
+        <div className={`rounded-3xl bg-white p-8 shadow-sm border border-slate-200 space-y-5 h-fit ${!canManageSubscriptions ? 'xl:col-span-3 max-w-3xl' : ''}`}>
           <div className="flex items-center justify-between text-navy-700">
             <div className="flex items-center gap-3">
               <User size={18} />
@@ -533,39 +538,10 @@ export default function UserProfile() {
           </div>
         </div>
 
-        {profile.role !== 'AGENT' && profile.role !== 'TECHNICIAN' && (
-          <div className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200 xl:col-span-2 h-fit">
-            <div className="flex items-center gap-3 text-navy-700 mb-5">
-              <Package size={18} />
-              <h2 className="text-lg font-semibold">Aktivni paketi i pretplate</h2>
-            </div>
-
-            {profile.activePackages.length > 0 ? (
-              <div className="space-y-4">
-                {profile.activePackages.map((pkg) => (
-                  <div key={pkg.packageId} className="rounded-3xl border border-gray-100 p-4 hover:shadow-sm transition">
-                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                      <div>
-                        <p className="text-sm text-gray-500 uppercase tracking-[0.24em]">{pkg.packageType}</p>
-                        <h3 className="text-lg font-semibold text-gray-900 mt-1">{pkg.packageName}</h3>
-                        <p className="text-sm text-slate-500 mt-1">{pkg.packageDescription}</p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Badge value={pkg.packageStatus} />
-                        <span className="text-sm font-semibold text-gray-900">{pkg.monthlyPrice} KM/mj</span>
-                      </div>
-                    </div>
-                    {pkg.summary && (
-                      <p className="text-sm text-slate-500 mt-3">{pkg.summary}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-3xl border border-dashed border-gray-200 p-8 text-sm text-slate-500">
-                <p>Korisnik nema aktivne pakete ili pretplate.</p>
-              </div>
-            )}
+        {/* PB-52 / US-77: Pretplate sekcija — samo admin nad klijentom. */}
+        {canManageSubscriptions && (
+          <div className="xl:col-span-2">
+            <ClientSubscriptionsSection clientId={profile.userId} />
           </div>
         )}
       </section>
@@ -608,6 +584,7 @@ export default function UserProfile() {
           )}
         </section>
       )}
+
     </div>
   )
 }

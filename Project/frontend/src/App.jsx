@@ -20,8 +20,10 @@ import PackageDetail from './pages/PackageDetail'
 import Profile from './pages/Profile'
 import UserProfile from './pages/UserProfile'
 import Reports from './pages/Reports'
+import PackageManagement from './pages/PackageManagement'
 import UsersList from './pages/UsersList'
 import CreateUser from './pages/CreateUser'
+
 
 
 function AppRoutes() {
@@ -55,6 +57,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={['ADMINISTRATOR']}>
               <Reports />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/packages"
+          element={
+            <ProtectedRoute allowedRoles={['ADMINISTRATOR']}>
+              <PackageManagement />
             </ProtectedRoute>
           }
         />
