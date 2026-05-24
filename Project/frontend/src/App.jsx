@@ -21,6 +21,9 @@ import Profile from './pages/Profile'
 import UserProfile from './pages/UserProfile'
 import Reports from './pages/Reports'
 import PackageManagement from './pages/PackageManagement'
+import UsersList from './pages/UsersList'
+import CreateUser from './pages/CreateUser'
+
 
 
 function AppRoutes() {
@@ -72,6 +75,14 @@ function AppRoutes() {
         <Route path="/packages/:id" element={<PackageDetail />} />
         <Route path="/users/:id" element={<UserProfile />} />
         <Route path="/profile" element={<Profile />} />
+        
+        {/* User Account Management Routes */}
+        <Route path="/users/add" element={<ProtectedRoute allowedRoles={['ADMINISTRATOR']}><CreateUser /></ProtectedRoute>} />
+        <Route path="/users/clients" element={<ProtectedRoute allowedRoles={['ADMINISTRATOR', 'AGENT']}><UsersList /></ProtectedRoute>} />
+        <Route path="/users/agents" element={<ProtectedRoute allowedRoles={['ADMINISTRATOR']}><UsersList /></ProtectedRoute>} />
+        <Route path="/users/technicians" element={<ProtectedRoute allowedRoles={['ADMINISTRATOR', 'AGENT']}><UsersList /></ProtectedRoute>} />
+        <Route path="/users/deactivated" element={<ProtectedRoute allowedRoles={['ADMINISTRATOR']}><UsersList /></ProtectedRoute>} />
+
       </Route>
 
       <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />

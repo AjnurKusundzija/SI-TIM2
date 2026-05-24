@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
@@ -14,6 +15,10 @@ import {
   Bell,
   Package,
   User,
+  Users,
+  UserMinus,
+  ChevronDown,
+  ChevronRight
 } from 'lucide-react';
 
 const navConfig = {
@@ -31,6 +36,14 @@ const navConfig = {
     { to: '/profile', label: 'Profil', icon: User },
     { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
     { to: '/assigned', label: 'Dodijeljeni meni', icon: Ticket },
+    {
+      label: 'Korisnici',
+      icon: Users,
+      subItems: [
+        { to: '/users/clients', label: 'Klijenti' },
+        { to: '/users/technicians', label: 'Tehničari' },
+      ],
+    },
     { to: '/statistics', label: 'Moja statistika', icon: BarChart2 },
     { to: '/faq', label: 'FAQ', icon: HelpCircle },
     { to: '/notifications', label: 'Notifikacije', icon: Bell },
@@ -42,15 +55,26 @@ const navConfig = {
     { to: '/statistics', label: 'Moja statistika', icon: BarChart2 },
     { to: '/notifications', label: 'Notifikacije', icon: Bell },
   ],
-  ADMINISTRATOR: [
-    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/profile', label: 'Profil', icon: User },
-    { to: '/reports', label: 'Izvještaji', icon: BarChart2 },
-    { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
-    { to: '/admin/packages', label: 'Upravljanje paketima', icon: Package },
-    { to: '/faq', label: 'FAQ', icon: HelpCircle },
-    { to: '/notifications', label: 'Notifikacije', icon: Bell },
-  ],
+ ADMINISTRATOR: [
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/profile', label: 'Profil', icon: User },
+  { to: '/reports', label: 'Izvještaji', icon: BarChart2 },
+  { to: '/tickets', label: 'Svi tiketi', icon: Ticket },
+  {
+    label: 'Korisnici',
+    icon: Users,
+    subItems: [
+      { to: '/users/clients', label: 'Klijenti' },
+      { to: '/users/agents', label: 'Agenti' },
+      { to: '/users/technicians', label: 'Tehničari' },
+      { to: '/users/deactivated', label: 'Deaktivirani' },
+    ],
+  },
+  { to: '/admin/packages', label: 'Upravljanje paketima', icon: Package },
+  { to: '/faq', label: 'FAQ', icon: HelpCircle },
+  { to: '/notifications', label: 'Notifikacije', icon: Bell },
+],
+
 };
 
 export default function Sidebar({ isOpen, onClose }) {
@@ -58,6 +82,15 @@ export default function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
   const { unreadCount } = useNotifications();
   const links = navConfig[user?.role] || [];
+  
+  const [openMenus, setOpenMenus] = useState({});
+
+  const toggleMenu = (label) => {
+    setOpenMenus(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -106,28 +139,71 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 px-3">
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              onClick={onClose}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
-                  isActive
-                    ? 'bg-navy-700 text-white'
-                    : 'text-navy-300 hover:bg-navy-800 hover:text-white'
-                }`
-              }
-            >
-              <link.icon size={18} />
-              <span className="flex-1">{link.label}</span>
-              {link.to === '/notifications' && unreadCount > 0 && (
-                <span className="min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </NavLink>
-          ))}
+          {links.map((link) => {
+            if (link.subItems) {
+              const isOpen = openMenus[link.label];
+              return (
+                <div key={link.label} className="mb-1">
+                  <button
+                    onClick={() => toggleMenu(link.label)}
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      isOpen ? 'bg-navy-800 text-white' : 'text-navy-300 hover:bg-navy-800 hover:text-white'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <link.icon size={18} />
+                      <span>{link.label}</span>
+                    </div>
+                    {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                  </button>
+                  
+                  {isOpen && (
+                    <div className="mt-1 ml-9 space-y-1">
+                      {link.subItems.map(subItem => (
+                        <NavLink
+                          key={subItem.to}
+                          to={subItem.to}
+                          onClick={onClose}
+                          className={({ isActive }) =>
+                            `block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                              isActive
+                                ? 'bg-navy-700 text-white'
+                                : 'text-navy-400 hover:bg-navy-800 hover:text-white'
+                            }`
+                          }
+                        >
+                          {subItem.label}
+                        </NavLink>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            return (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-1 ${
+                    isActive
+                      ? 'bg-navy-700 text-white'
+                      : 'text-navy-300 hover:bg-navy-800 hover:text-white'
+                  }`
+                }
+              >
+                <link.icon size={18} />
+                <span className="flex-1">{link.label}</span>
+                {link.to === '/notifications' && unreadCount > 0 && (
+                  <span className="min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </NavLink>
+            );
+          })}
         </nav>
 
         {/* Logout */}

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TelecomSupportSystem.BLL.DTOs.Users;
@@ -150,6 +150,163 @@ namespace TelecomSupportSystem.API.Controllers
             {
                 return Forbid();
             }
+        }
+
+        [HttpGet("{id:int}/statistics")]
+        public async Task<IActionResult> GetUserStatistics(int id)
+        {
+            var requestorRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (requestorRole != "ADMINISTRATOR" && requestorRole != "AGENT")
+                return Forbid();
+
+            try
+            {
+                // Verify the user exists and check their role
+                // GetUserProfileAsync handles auth and checks if user exists
+                var requestorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var profile = await _userService.GetUserProfileAsync(id, requestorId, requestorRole);
+                
+                if (profile.Role != "AGENT" && profile.Role != "TECHNICIAN")
+                    return BadRequest(new { message = "Statistika je dostupna samo za agente i tehničare." });
+
+                var stats = await _userService.GetMyStatisticsAsync(id, profile.Role);
+                return Ok(stats);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (currentRole == null) return Unauthorized();
+
+            try
+            {
+                await _userService.CreateUserAsync(dto, currentRole);
+                return Ok(new { message = "Korisnik je uspješno kreiran." });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateUserDetails(int id, [FromBody] UpdateUserDetailsDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (currentRole == null) return Unauthorized();
+
+            try
+            {
+                await _userService.UpdateUserDetailsAsync(id, dto, currentRole);
+                return Ok(new { message = "Podaci korisnika su uspješno ažurirani." });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = "Korisnik nije pronađen." });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
+        [HttpPut("{id:int}/deactivate")]
+        public async Task<IActionResult> DeactivateUser(int id)
+        {
+            if (!TryGetUserId(out var currentUserId)) return Unauthorized();
+            var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (currentRole == null) return Unauthorized();
+
+            try
+            {
+                await _userService.ChangeUserStatusAsync(id, false, currentRole, currentUserId);
+                return Ok(new { message = "Korisnik je uspješno deaktiviran." });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = "Korisnik nije pronađen." });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPut("{id:int}/reactivate")]
+        public async Task<IActionResult> ReactivateUser(int id)
+        {
+            if (!TryGetUserId(out var currentUserId)) return Unauthorized();
+            var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (currentRole == null) return Unauthorized();
+
+            try
+            {
+                await _userService.ChangeUserStatusAsync(id, true, currentRole, currentUserId);
+                return Ok(new { message = "Korisnik je uspješno reaktiviran." });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = "Korisnik nije pronađen." });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("list")]
+        public async Task<IActionResult> GetUsersList([FromQuery] string? role, [FromQuery] string? status, [FromQuery] string? search, [FromQuery] string? location, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (currentRole == null) return Unauthorized();
+
+            try
+            {
+                var result = await _userService.GetUsersPaginatedAsync(currentRole, role, status, search, location, page, pageSize);
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
+        [HttpGet("agent-teams")]
+        public async Task<IActionResult> GetAgentTeams()
+        {
+            var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (currentRole != "ADMINISTRATOR") return Forbid();
+
+            var teams = await _userService.GetAgentTeamsAsync();
+            return Ok(teams);
         }
     }
 }

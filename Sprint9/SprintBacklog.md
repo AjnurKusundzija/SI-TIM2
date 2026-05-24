@@ -16,7 +16,7 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 |---|---|---|---|---|---|
 | SB-01 | PB-45 Admin Dashboard sa ključnim metrikama | US-71, US-72, US-82 – US-86 | Uma | Done | Metrike na `/dashboard`; generisanje na `/reports` |
 | SB-00 | PB-50 Prosječno vrijeme prvog odgovora (admin) | US-87, US-88 | Uma | Done | On-demand `FIRST_RESPONSE` + trend po pod-periodima na `/reports` |
-| SB-02 | PB-51 Upravljanje korisničkim nalozima | US-73, US-74, US-75 | Ajdin | To-Do | CRUD operacije nad nalozima agenata, tehničara i klijenata |
+| SB-02 | PB-51 Upravljanje korisničkim nalozima | US-73, US-74, US-75, US-89, US-90, US-91, US-92, US-93 | Ajdin | Done | CRUD operacije nad nalozima agenata, tehničara i klijenata, te logika prosljeđivanja kada postoje deaktivirani agenti |
 | SB-03 | PB-52 Upravljanje katalogom paketa i pretplata | US-76, US-77 | Eldar | To-Do | Admin definiše pakete i dodjeljuje pretplate klijentima |
 | SB-04 | PB-53 Pregled audit log-a aktivnosti | US-78, US-79 | Hana, Lamija | To-Do | Praćenje ključnih akcija u sistemu sa filtriranjem |
 | SB-05 | PB-56 Prilozi na tiketima | US-80, US-81 | Merisa | To-Do | Upload i preuzimanje priloga (slike, dokumenti) na tiketima |
@@ -145,7 +145,7 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 *Kao administrator, želim da kreiram nove korisničke naloge za agente, tehničare i klijente, kako bih mogao širiti tim i dodavati nove korisnike sistema bez direktnog pristupa bazi podataka.*
 
 **Acceptance Criteria:**
-- Kada administrator otvori sekciju "Upravljanje korisnicima" i klikne na opciju "Dodaj korisnika", sistem mora prikazati formu za kreiranje novog naloga
+- Kada administrator otvori sekciju "Korisnici" i klikne na opciju "Dodaj korisnika", sistem mora prikazati formu za kreiranje novog naloga
 - Forma mora sadržavati polja: ime, prezime, email, telefon, lozinka, rola (klijent, agent, tehničar), lokacija
 - Kada je rola agent, sistem mora ponuditi dodatno polje za kategoriju stručnosti
 - Sistem mora validirati ispravnost email formata i jedinstvenost emaila u sistemu
@@ -158,12 +158,12 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 ---
 
 ### US-74
-*Kao administrator, želim da uredim podatke postojećih korisnika, kako bih održavao tačnost informacija u sistemu.*
+*Kao administrator ili agent, želim da uredim podatke postojećih korisnika, kako bih održavao tačnost informacija u sistemu.*
 
 **Acceptance Criteria:**
-- Kada administrator otvori listu korisnika, sistem mora prikazati paginiranu listu svih korisnika sa osnovnim podacima (ime, prezime, email, rola, status naloga)
-- Sistem mora omogućiti filtriranje liste po roli i statusu naloga
-- Sistem mora omogućiti pretraživanje korisnika po imenu, prezimenu ili emailu
+- Kada administrator otvori listu korisnika, sistem mora prikazati paginiranu listu svih korisnika sa osnovnim podacima (ime, prezime, broj telefona, email, lokacija)
+- Sistem mora omogućiti filtriranje liste po lokaciji
+- Sistem mora omogućiti pretraživanje korisnika po imenu, prezimenu ,emailu ili broju telefona
 - Kada administrator klikne na korisnika, sistem mora prikazati detaljnu stranicu sa svim podacima i opcijom za izmjenu
 - Administrator može mijenjati ime, prezime, telefon i lokaciju korisnika
 - Sistem ne smije dozvoliti administratoru promjenu role postojećeg korisnika
@@ -173,17 +173,101 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 ---
 
 ### US-75
-*Kao administrator, želim da deaktiviram korisničke naloge koji više nisu aktivni, kako bih onemogućio pristup sistemu bivšim zaposlenicima ili neaktivnim klijentima bez gubitka historije.*
+*Kao administrator ili agent, želim da pregledam i deaktiviram klijentske naloge, kako bih mogao onemogućiti pristup neaktivnim ili problematičnim korisnicima.*
 
 **Acceptance Criteria:**
-- Kada administrator otvori detaljnu stranicu korisnika, sistem mora prikazati opciju za deaktivaciju naloga
-- Kada administrator deaktivira nalog, status naloga se mijenja u `INACTIVE`
+- Kada administrator ili agent otvori sekciju "Korisnici" i klikne na opciju "Klijenti", sistem mora prikazati listu samo aktivnih klijenata
+- Lista klijenata mora biti paginirana i sadržavati osnovne podatke (ime, prezime, email, broj telefona, lokacija)
+- Sistem mora omogućiti pretragu klijenata po imenu, prezimenu, emailu ili broju telefona
+- Kada administrator ili agent klikne na klijenta, sistem mora prikazati detaljnu stranicu korisnika
+- Administrator i agent mogu mijenjati podatke klijenta
+- Kada administrator ili agent deaktivira klijentski nalog, status korisnika se mijenja u `INACTIVE`
 - Sistem ne smije dozvoliti prijavu korisnicima sa statusom `INACTIVE`
 - Sistem mora zadržati sve historijske podatke deaktiviranog korisnika (tiketi, poruke, ocjene)
-- Sistem ne smije dodjeljivati nove tikete deaktiviranom agentu ili tehničaru
-- Sistem mora omogućiti administratoru reaktivaciju naloga (vraćanje statusa u `ACTIVE`)
-- Kada administrator deaktivira agenta koji ima aktivno dodijeljene tikete, sistem mora prikazati upozorenje i tražiti potvrdu
+- Agent ne može deaktivirati administratorski ili agentski nalog
+- Deaktivirani klijenti se ne smiju prikazivati u sekciji "Klijenti"
+
+---
+
+### US-89
+*Kao administrator, želim da pregledam i upravljam agentskim nalozima, kako bih mogao održavati agentski tim i kontrolisati pristup sistemu.*
+
+**Acceptance Criteria:**
+- Kada administrator otvori sekciju "Korisnici", sistem mora prikazati opciju "Agenti"
+- Opcija "Agenti" mora biti vidljiva samo administratorima
+- Kada administrator klikne na opciju "Agenti", sistem mora prikazati listu samo aktivnih agenata
+- Lista agenata mora sadržavati osnovne podatke (ime, prezime, email, broj telefona, lokacija, kategorija stručnosti)
+- Sistem mora omogućiti pretragu i filtriranje agenata
+- Kada administrator klikne na agenta, sistem mora prikazati detaljnu stranicu sa opcijom izmjene podataka
+- Administrator može mijenjati podatke bilo kojeg agenta
+- Administrator može deaktivirati agentski nalog
+- Agent ne može pristupiti sekciji "Agenti"
 - Sistem ne smije dozvoliti administratoru deaktivaciju vlastitog naloga
+- Kada administrator deaktivira agenta koji ima aktivno dodijeljene tikete, sistem mora prikazati upozorenje i tražiti potvrdu
+- Deaktivirani agenti se ne smiju prikazivati u sekciji "Agenti"
+- Sistem ne smije dodjeljivati nove tikete deaktiviranom agentu
+
+---
+
+### US-90
+*Kao administrator ili agent, želim da pregledam i uređujem tehničarske naloge, kako bih mogao održavati tačne informacije o tehničkom osoblju.*
+
+**Acceptance Criteria:**
+- Kada administrator ili agent otvori sekciju "Korisnici" i klikne na opciju "Tehničari", sistem mora prikazati listu samo aktivnih tehničara
+- Lista tehničara mora sadržavati osnovne podatke (ime, prezime, email, broj telefona, lokacija)
+- Sistem mora omogućiti pretragu i filtriranje tehničara
+- Kada administrator ili agent klikne na tehničara, sistem mora prikazati detaljnu stranicu sa opcijom izmjene podataka
+- Administrator i agent mogu mijenjati podatke tehničara
+- Samo administrator može deaktivirati tehničarski nalog
+- Kada administrator deaktivira tehničarski nalog, status korisnika se mijenja u `INACTIVE`
+- Sistem ne smije dozvoliti prijavu korisnicima sa statusom `INACTIVE`
+- Deaktivirani tehničari se ne smiju prikazivati u sekciji "Tehničari"
+- Sistem ne smije dodjeljivati nove tikete deaktiviranom tehničaru
+
+---
+
+### US-91
+*Kao administrator, želim da pregledam deaktivirane korisničke naloge i reaktiviram ih, kako bih mogao vratiti pristup korisnicima kada je to potrebno.*
+
+**Acceptance Criteria:**
+- Kada administrator otvori sekciju "Korisnici", sistem mora prikazati opciju "Deaktivirani"
+- Opcija "Deaktivirani" mora biti vidljiva samo administratorima
+- Kada administrator klikne na opciju "Deaktivirani", sistem mora prikazati listu svih deaktiviranih korisnika
+- Sistem mora omogućiti filtriranje deaktiviranih korisnika po roli (klijent, agent, tehničar, administrator)
+- Sistem mora omogućiti pretragu deaktiviranih korisnika po imenu, prezimenu, emailu ili broju telefona
+- Kada administrator klikne na deaktiviranog korisnika, sistem mora prikazati detalje korisnika i opciju za reaktivaciju
+- Kada administrator reaktivira korisnika, status naloga se vraća u `ACTIVE`
+- Reaktivirani korisnici se ponovo prikazuju u odgovarajućim sekcijama ("Klijenti", "Agenti", "Tehničari")
+- Sistem mora evidentirati deaktivaciju i reaktivaciju korisnika u audit log
+- Agent ne može pristupiti sekciji "Deaktivirani"
+
+---
+
+### US-92
+*Kao administrator, želim da pregledam detaljne profile agenata i tehničara sa relevantnom statistikom, kako bih mogao pratiti njihov rad i upravljati njihovim podacima.*
+
+**Acceptance Criteria:**
+- Kada administrator otvori sekciju "Agenti" ili "Tehničari" i klikne na određenog korisnika, sistem mora prikazati detaljan profil agenta ili tehničara
+- Ako je korisnik agent, sistem mora prikazati i kategoriju stručnosti
+- Administrator mora imati mogućnost uređivanja podataka agenta ili tehničara
+- Pravila validacije prilikom uređivanja moraju biti ista kao kod kreiranja korisnika
+- Sistem ne smije dozvoliti promjenu role postojećeg korisnika
+- Umjesto korisničkih podataka, sistem mora prikazati statistiku rada agenta ili tehničara
+- Sistem mora prikazati potvrdu nakon uspješnog uređivanja podataka
+
+---
+
+### US-93
+*Kao agent, želim da prilikom prosljeđivanja tiketa drugom agentu vidim samo aktivne agente, kako bih mogao uspješno dodijeliti tiket dostupnim članovima tima.*
+
+**Acceptance Criteria:**
+- Kada agent otvori opciju za prosljeđivanje tiketa, sistem mora prikazati listu samo aktivnih agenata
+- Deaktivirani agenti se ne smiju prikazivati u listi dostupnih agenata
+- Kada agent odabere drugog agenta i potvrdi dodjelu, sistem mora uspješno proslijediti tiket ako je odabrani agent i dalje aktivan
+- Ako je agent deaktiviran nakon učitavanja liste, a prije potvrde dodjele, sistem ne smije dozvoliti dodjelu tiketa tom agentu
+- U slučaju neuspjele dodjele zbog deaktivacije agenta, sistem mora prikazati odgovarajuću poruku:
+  - da dodjela nije izvršena
+- Sistem mora zahtijevati ponovno biranje aktivnog agenta
 
 ---
 
