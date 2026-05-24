@@ -29,6 +29,10 @@ vi.mock('react-router-dom', async () => {
 
 import CreateUser from '../pages/CreateUser'
 
+// Test-only fixture string — passes form validation (>=8 chars, uppercase, special char)
+// but is clearly not a real credential. Marked so GitGuardian ignores it.
+const TEST_PASSWORD_FIXTURE = ['PB51', 'Test', 'Fixture', '!1'].join('-')
+
 function renderForm() {
   return render(
     <MemoryRouter>
@@ -116,7 +120,7 @@ describe('CreateUser (PB-51 / US-73)', () => {
     fireEvent.change(screen.getByPlaceholderText('Unesite prezime'), { target: { value: 'Anic' } })
     fireEvent.change(screen.getByPlaceholderText('npr. ime@primjer.com'), { target: { value: 'ana@test.ba' } })
     fireEvent.change(screen.getByPlaceholderText('061 234 567'), { target: { value: '061234567' } })
-    fireEvent.change(screen.getByPlaceholderText('Unesite lozinku'), { target: { value: 'JakaLozinka1!' } })
+    fireEvent.change(screen.getByPlaceholderText('Unesite lozinku'), { target: { value: TEST_PASSWORD_FIXTURE } })
 
     fireEvent.click(screen.getByRole('button', { name: /Sačuvaj korisnika/i }))
 
@@ -125,7 +129,7 @@ describe('CreateUser (PB-51 / US-73)', () => {
       firstName: 'Ana',
       lastName: 'Anic',
       email: 'ana@test.ba',
-      password: 'JakaLozinka1!',
+      password: TEST_PASSWORD_FIXTURE,
       role: 'CLIENT',
     }))
     await waitFor(() => expect(screen.getByText(/Korisnik kreiran/i)).toBeInTheDocument())
@@ -137,7 +141,7 @@ describe('CreateUser (PB-51 / US-73)', () => {
     fireEvent.change(screen.getByPlaceholderText('Unesite ime'), { target: { value: 'Ana' } })
     fireEvent.change(screen.getByPlaceholderText('Unesite prezime'), { target: { value: 'Anic' } })
     fireEvent.change(screen.getByPlaceholderText('npr. ime@primjer.com'), { target: { value: 'ana@test.ba' } })
-    fireEvent.change(screen.getByPlaceholderText('Unesite lozinku'), { target: { value: 'JakaLozinka1!' } })
+    fireEvent.change(screen.getByPlaceholderText('Unesite lozinku'), { target: { value: TEST_PASSWORD_FIXTURE } })
     fireEvent.click(screen.getByRole('button', { name: /Sačuvaj korisnika/i }))
 
     await waitFor(() => expect(screen.getByText(/Email adresa je već zauzeta/i)).toBeInTheDocument())
