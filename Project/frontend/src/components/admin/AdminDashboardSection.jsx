@@ -54,6 +54,7 @@ const REPORT_TYPES = [
   { value: "TEAM_WORKLOAD", label: "Opterećenje agenata/tehničara" },
   { value: "USER_RATINGS", label: "Ocjene korisnika" },
   { value: "FIRST_RESPONSE", label: "Prosj. prvi odgovor" },
+  { value: "AVG_RESOLUTION", label: "Prosj. rješavanje tiketa" },
 ];
 
 function formatDuration(totalMinutes) {
@@ -324,9 +325,32 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
 
     if (reportType === "TICKET_COUNT") {
       return (
-        <p className="text-lg font-bold text-gray-900 py-2">
-          Ukupno: {data.totalCount}
-        </p>
+        <div className="py-2 space-y-3 text-sm">
+          <p className="text-lg font-bold text-gray-900">
+            Ukupno: {data.totalCount}
+          </p>
+          {data.bucketGranularityLabel && (
+            <p className="text-xs text-gray-500">{data.bucketGranularityLabel}</p>
+          )}
+          {data.buckets?.length > 0 && (
+            <table className="w-full text-sm mt-1">
+              <thead>
+                <tr className="text-left text-gray-500 border-b">
+                  <th className="py-2">Period</th>
+                  <th className="py-2">Tiketa</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.buckets.map((row) => (
+                  <tr key={row.label} className="border-b border-gray-50">
+                    <td className="py-2">{row.label}</td>
+                    <td className="py-2">{row.ticketCount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       );
     }
 
@@ -386,36 +410,71 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
 
     if (reportType === "TEAM_WORKLOAD" && data.items) {
       return (
-        <table className="w-full text-sm mt-2">
-          <thead>
-            <tr className="text-left text-gray-500 border-b">
-              <th className="py-2">Agent / Tehničar</th>
-              <th className="py-2">Uloga</th>
-              <th className="py-2">Zatvoreno u periodu</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.items.map((row) => (
-              <tr key={row.userId} className="border-b border-gray-50">
-                <td className="py-2">{row.fullName}</td>
-                <td className="py-2">{row.role}</td>
-                <td className="py-2">{row.resolvedCount}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="space-y-5 text-sm py-2">
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+              Ukupno po agentu / tehničaru
+            </p>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-gray-500 border-b">
+                  <th className="py-2">Agent / Tehničar</th>
+                  <th className="py-2">Uloga</th>
+                  <th className="py-2">Zatvoreno u periodu</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.items.map((row) => (
+                  <tr key={row.userId} className="border-b border-gray-50">
+                    <td className="py-2">{row.fullName}</td>
+                    <td className="py-2">{row.role}</td>
+                    <td className="py-2">{row.resolvedCount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {data.periodRows?.length > 0 && data.agentNames?.length > 0 && (
+            <div className="overflow-x-auto">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                {data.bucketGranularityLabel}
+              </p>
+              <table className="text-sm min-w-full">
+                <thead>
+                  <tr className="text-left text-gray-500 border-b">
+                    <th className="py-2 pr-4 whitespace-nowrap">Period</th>
+                    {data.agentNames.map((name) => (
+                      <th key={name} className="py-2 pr-3 whitespace-nowrap">
+                        {name.split(" ")[0]}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.periodRows.map((row) => (
+                    <tr key={row.label} className="border-b border-gray-50">
+                      <td className="py-2 pr-4 whitespace-nowrap">{row.label}</td>
+                      {row.counts.map((count, i) => (
+                        <td key={i} className="py-2 pr-3">{count}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       );
     }
 
     if (reportType === "USER_RATINGS") {
       return (
-        <div className="py-2 space-y-2 text-sm">
+        <div className="py-2 space-y-3 text-sm">
           <p>
             Prosječna ocjena:{" "}
             <span className="font-semibold">
-              {data.averageRating != null
-                ? formatRating(data.averageRating)
-                : "—"}
+              {data.averageRating != null ? formatRating(data.averageRating) : "—"}
             </span>
           </p>
           <p>Ocijenjenih tiketa: {data.ratedTicketsCount ?? 0}</p>
@@ -424,6 +483,33 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
               {d.stars} ★ — {d.count}
             </p>
           ))}
+          {data.buckets?.length > 0 && (
+            <>
+              <p className="text-xs text-gray-500 pt-1">
+                {data.bucketGranularityLabel}
+              </p>
+              <table className="w-full text-sm mt-1">
+                <thead>
+                  <tr className="text-left text-gray-500 border-b">
+                    <th className="py-2">Period</th>
+                    <th className="py-2">Prosj. ocjena</th>
+                    <th className="py-2">Broj</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.buckets.map((row) => (
+                    <tr key={row.label} className="border-b border-gray-50">
+                      <td className="py-2">{row.label}</td>
+                      <td className="py-2">
+                        {row.avgRating != null ? formatRating(row.avgRating) : "—"}
+                      </td>
+                      <td className="py-2">{row.count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
         </div>
       );
     }
@@ -468,6 +554,61 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
                     <td className="py-2">
                       {row.avgFirstResponseMinutes != null
                         ? formatMinutes(row.avgFirstResponseMinutes)
+                        : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-gray-400 italic">
+              Nema podataka po pod-periodima.
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    if (reportType === "AVG_RESOLUTION") {
+      return (
+        <div className="py-2 space-y-3 text-sm">
+          {reportResult.message && (
+            <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+              {reportResult.message}
+            </p>
+          )}
+          <p>
+            Prosječno rješavanje:{" "}
+            <span className="font-semibold">
+              {data.avgResolutionHours != null
+                ? formatHours(data.avgResolutionHours)
+                : "—"}
+            </span>
+          </p>
+          <p>
+            Zatvorenih tiketa: {data.closedTicketsCount ?? 0} /{" "}
+            {data.totalTicketsCount ?? 0}
+          </p>
+          <p className="text-xs text-gray-500">{data.bucketGranularityLabel}</p>
+          {data.buckets?.length > 0 ? (
+            <table className="w-full text-sm mt-2">
+              <thead>
+                <tr className="text-left text-gray-500 border-b">
+                  <th className="py-2">Period</th>
+                  <th className="py-2">Tiketa</th>
+                  <th className="py-2">Zatvoreno</th>
+                  <th className="py-2">Prosj. rješavanje</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.buckets.map((row) => (
+                  <tr key={row.label} className="border-b border-gray-50">
+                    <td className="py-2">{row.label}</td>
+                    <td className="py-2">{row.ticketCount}</td>
+                    <td className="py-2">{row.closedCount}</td>
+                    <td className="py-2">
+                      {row.avgResolutionHours != null
+                        ? formatHours(row.avgResolutionHours)
                         : "—"}
                     </td>
                   </tr>
