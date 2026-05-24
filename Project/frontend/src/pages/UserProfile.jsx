@@ -438,6 +438,153 @@ export default function UserProfile() {
         </div>
       )}
 
+      <section className="grid gap-4 xl:grid-cols-3">
+        {/* PB-52: kada admin gleda klijenta -> Osnovni podaci uzima 1 kolonu, Pretplate 2.
+            U svim ostalim slučajevima Osnovni podaci se proteže preko sve 3 kolone. */}
+        <div className={`rounded-3xl bg-white p-8 shadow-sm border border-slate-200 space-y-5 h-fit ${!canManageSubscriptions ? 'xl:col-span-3 max-w-3xl' : ''}`}>
+          <div className="flex items-center justify-between text-navy-700">
+            <div className="flex items-center gap-3">
+              <User size={18} />
+              <h2 className="text-lg font-semibold">Osnovni podaci</h2>
+            </div>
+            {isEditing && (
+              <div className="flex gap-2">
+                <button onClick={() => setIsEditing(false)} className="p-1 text-slate-400 hover:text-slate-600">
+                  <X size={18} />
+                </button>
+                <button onClick={handleSave} disabled={saving} className="p-1 text-navy-600 hover:text-navy-800 disabled:opacity-50">
+                  <Save size={18} />
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4 text-sm text-slate-700">
+            {isEditing ? (
+              <>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="Ime *" error={fieldErrors.firstName}>
+                    <input type="text" name="firstName" value={editForm.firstName} onChange={handleEditChange} onBlur={handleBlur} style={inputStyle(!!fieldErrors.firstName)} />
+                  </Field>
+                  <Field label="Prezime *" error={fieldErrors.lastName}>
+                    <input type="text" name="lastName" value={editForm.lastName} onChange={handleEditChange} onBlur={handleBlur} style={inputStyle(!!fieldErrors.lastName)} />
+                  </Field>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400 mb-1">Email</p>
+                  <p className="px-3 py-2 bg-slate-50 rounded-xl text-slate-500 cursor-not-allowed border border-slate-200">{profile.email}</p>
+                </div>
+                <div>
+                  <Field label="Telefon" error={fieldErrors.phone} hint="Format: 061234567">
+                    <input type="text" name="phone" value={editForm.phone || ''} onChange={handleEditChange} onBlur={handleBlur} style={inputStyle(!!fieldErrors.phone)} />
+                  </Field>
+                </div>
+                <div>
+                  <Field label="Lokacija">
+                    <select name="location" value={editForm.location || ''} onChange={handleEditChange} onBlur={handleBlur} style={{ ...inputStyle(false), cursor: 'pointer' }}>
+                      <option value="">Odaberite lokaciju...</option>
+                      <option value="SARAJEVO">Sarajevo</option>
+                      <option value="TUZLA">Tuzla</option>
+                      <option value="ZENICA">Zenica</option>
+                      <option value="BIHAC">Bihać</option>
+                      <option value="MOSTAR">Mostar</option>
+                      <option value="BANJA_LUKA">Banja Luka</option>
+                    </select>
+                  </Field>
+                </div>
+                {profile.role === 'AGENT' && (
+                  <div>
+                    <Field label="Ekspertiza (Tim) *" error={fieldErrors.teamId}>
+                      <select name="teamId" value={editForm.teamId || ''} onChange={handleEditChange} onBlur={handleBlur} style={{ ...inputStyle(!!fieldErrors.teamId), cursor: 'pointer' }}>
+                        <option value="">Odaberite ekspertizu...</option>
+                        {teams.map(t => (
+                          <option key={t.teamId} value={t.teamId}>{t.teamName} ({t.specializedCategory})</option>
+                        ))}
+                      </select>
+                    </Field>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Ime</p>
+                  <p>{profile.firstName}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Prezime</p>
+                  <p>{profile.lastName}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Email</p>
+                  <p>{profile.email}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Telefon</p>
+                  <p>{profile.phone || 'Nije unesen'}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Lokacija</p>
+                  <p>{profile.location || 'Nije unesena'}</p>
+                </div>
+                {profile.role === 'AGENT' && profile.expertiseCategory && (
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Ekspertiza</p>
+                    <p>{profile.expertiseCategory}</p>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* PB-52 / US-77: Pretplate sekcija — samo admin nad klijentom. */}
+        {canManageSubscriptions && (
+          <div className="xl:col-span-2">
+            <ClientSubscriptionsSection clientId={profile.userId} />
+          </div>
+        )}
+      </section>
+
+      {profile.role === 'AGENT' || profile.role === 'TECHNICIAN' ? (
+        <UserStatisticsPanel userId={profile.userId} role={profile.role} />
+      ) : (
+        <section className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
+          <div className="flex items-center gap-3 text-navy-700 mb-5">
+            <ClipboardList size={18} />
+            <h2 className="text-lg font-semibold">Historija tiketa korisnika</h2>
+          </div>
+
+          {profile.ticketHistory.length > 0 ? (
+            <div className="space-y-3">
+              {profile.ticketHistory.map((ticket) => (
+                <button
+                  key={ticket.ticketId}
+                  type="button"
+                  onClick={() => navigate(`/tickets/${ticket.ticketId}`)}
+                  className="w-full text-left rounded-3xl border border-gray-100 p-4 hover:border-navy-200 hover:bg-slate-50 transition"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{ticket.title}</p>
+                      <p className="text-xs text-slate-500 mt-1">{ticket.problemCategory} • Kreirano: {new Date(ticket.createdDate).toLocaleDateString('hr-HR')}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge value={ticket.status} />
+                      <Badge value={ticket.priority} />
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-gray-200 p-8 text-sm text-slate-500">
+              <p>Ovaj korisnik još nema historiju tiketa.</p>
+            </div>
+          )}
+        </section>
+      )}
+
     </div>
   )
 }
