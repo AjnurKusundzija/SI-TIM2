@@ -92,7 +92,7 @@ describe('Reports page (/reports)', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Vremenski period')).toBeInTheDocument()
-      expect(screen.getByText('Generisanje izvještaja')).toBeInTheDocument()
+      expect(screen.getByText('Broj tiketa')).toBeInTheDocument()
     })
     expect(mocks.getAdminDashboard).not.toHaveBeenCalled()
     expect(screen.queryByText('Ključne metrike')).not.toBeInTheDocument()
