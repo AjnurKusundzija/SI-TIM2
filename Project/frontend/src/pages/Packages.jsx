@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Package as PackageIcon, Wifi, Tv, Smartphone, Layers, ChevronRight } from 'lucide-react'
+import {
+    Package as PackageIcon,
+    Wifi,
+    Tv,
+    Smartphone,
+    Layers,
+    Calendar,
+    Wallet,
+    ChevronRight,
+} from 'lucide-react'
 import { getMyPackages } from '../services/packageService'
 import EmptyState from '../components/common/EmptyState'
 import Badge from '../components/common/Badge'
@@ -24,6 +33,13 @@ function formatPrice(price) {
     const num = Number(price)
     if (Number.isNaN(num)) return ''
     return `${num.toFixed(2).replace('.', ',')} KM / mjesec`
+}
+
+function formatDate(value) {
+    if (!value) return null
+    const d = new Date(value)
+    if (Number.isNaN(d.getTime())) return null
+    return d.toLocaleDateString('hr-HR')
 }
 
 function PackagesSkeleton() {
@@ -89,11 +105,12 @@ export default function Packages() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {packages.map((pkg) => {
                         const Icon = TYPE_ICONS[pkg.packageType] ?? PackageIcon
+                        const startDate = formatDate(pkg.startDate)
                         return (
                             <button
                                 key={pkg.packageId}
                                 onClick={() => navigate(`/packages/${pkg.packageId}`)}
-                                className="text-left bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:border-navy-200 transition-all group"
+                                className="text-left bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col hover:shadow-md hover:border-navy-200 transition-all group"
                             >
                                 <div className="flex items-start justify-between mb-3">
                                     <div className="h-10 w-10 rounded-lg bg-navy-50 flex items-center justify-center text-navy-700">
@@ -111,7 +128,7 @@ export default function Packages() {
                                 </div>
 
                                 <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                                    {pkg.summary || pkg.packageDescription}
+                                    {pkg.packageDescription || pkg.summary}
                                 </p>
 
                                 {pkg.includedServices?.length > 0 && (
@@ -127,14 +144,23 @@ export default function Packages() {
                                     </div>
                                 )}
 
-                                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                                    <span className="text-sm font-medium text-gray-900">
-                                        {formatPrice(pkg.monthlyPrice)}
-                                    </span>
-                                    <span className="inline-flex items-center gap-1 text-xs font-medium text-navy-700 group-hover:text-navy-900">
-                                        Detalji
-                                        <ChevronRight size={14} />
-                                    </span>
+                                <div className="mt-auto pt-3 border-t border-gray-100 space-y-1.5">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-1.5 text-sm font-medium text-gray-900">
+                                            <Wallet size={14} className="text-gray-400" />
+                                            {formatPrice(pkg.monthlyPrice)}
+                                        </div>
+                                        <span className="inline-flex items-center gap-1 text-xs font-medium text-navy-700 group-hover:text-navy-900">
+                                            Detalji
+                                            <ChevronRight size={14} />
+                                        </span>
+                                    </div>
+                                    {startDate && (
+                                        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                                            <Calendar size={12} />
+                                            Početak pretplate: <strong className="text-gray-700 font-medium">{startDate}</strong>
+                                        </div>
+                                    )}
                                 </div>
                             </button>
                         )

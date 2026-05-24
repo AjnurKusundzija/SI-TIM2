@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Mail, Phone, MapPin, ClipboardList, Package, User } from 'lucide-react'
+import { ArrowLeft, ClipboardList, User } from 'lucide-react'
 import { getUserProfile } from '../services/userService'
 import Badge from '../components/common/Badge'
 import EmptyState from '../components/common/EmptyState'
@@ -85,7 +85,7 @@ export default function UserProfile() {
         </div>
       </header>
 
-      <section className="grid gap-4 xl:grid-cols-3">
+      <section className={`grid gap-4 ${canManageSubscriptions ? 'xl:grid-cols-3' : ''}`}>
         <div className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200 space-y-5">
           <div className="flex items-center gap-3 text-navy-700">
             <User size={18} />
@@ -93,11 +93,11 @@ export default function UserProfile() {
           </div>
 
           <div className="space-y-4 text-sm text-slate-700">
-                        <div>
+            <div>
               <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Ime</p>
               <p>{profile.firstName}</p>
             </div>
-                        <div>
+            <div>
               <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Prezime</p>
               <p>{profile.lastName}</p>
             </div>
@@ -105,57 +105,23 @@ export default function UserProfile() {
               <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Email</p>
               <p>{profile.email}</p>
             </div>
-            {/*   PRIKAZATI NAKON STO UVEDEMO BROJEVE TELEFONA
-            <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Telefon</p>
-              <p>{profile.phone || 'Nije unesen'}</p>
-            </div>
-            */}
             <div>
               <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Lokacija</p>
               <p>{profile.location || 'Nije unesena'}</p>
             </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Uloga</p>
+              <Badge value={profile.role} />
+            </div>
           </div>
         </div>
 
-        <div className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200 xl:col-span-2">
-          <div className="flex items-center gap-3 text-navy-700 mb-5">
-            <Package size={18} />
-            <h2 className="text-lg font-semibold">Aktivni paketi i pretplate</h2>
+        {canManageSubscriptions && (
+          <div className="xl:col-span-2">
+            <ClientSubscriptionsSection clientId={profile.userId} />
           </div>
-
-          {profile.activePackages.length > 0 ? (
-            <div className="space-y-4">
-              {profile.activePackages.map((pkg) => (
-                <div key={pkg.packageId} className="rounded-3xl border border-gray-100 p-4 hover:shadow-sm transition">
-                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500 uppercase tracking-[0.24em]">{pkg.packageType}</p>
-                      <h3 className="text-lg font-semibold text-gray-900 mt-1">{pkg.packageName}</h3>
-                      <p className="text-sm text-slate-500 mt-1">{pkg.packageDescription}</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Badge value={pkg.packageStatus} />
-                      <span className="text-sm font-semibold text-gray-900">{pkg.monthlyPrice} KM/mj</span>
-                    </div>
-                  </div>
-                  {pkg.summary && (
-                    <p className="text-sm text-slate-500 mt-3">{pkg.summary}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-3xl border border-dashed border-gray-200 p-8 text-sm text-slate-500">
-              <p>Korisnik nema aktivne pakete ili pretplate.</p>
-            </div>
-          )}
-        </div>
+        )}
       </section>
-
-      {canManageSubscriptions && (
-        <ClientSubscriptionsSection clientId={profile.userId} />
-      )}
 
       <section className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
         <div className="flex items-center gap-3 text-navy-700 mb-5">

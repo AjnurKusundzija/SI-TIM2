@@ -1,6 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import { CreditCard, PlusCircle, PowerOff } from 'lucide-react'
+import {
+  CreditCard,
+  PlusCircle,
+  PowerOff,
+  Calendar,
+  Tag,
+  Wallet,
+  Package as PackageIcon,
+  Wifi,
+  Tv,
+  Smartphone,
+  Layers,
+} from 'lucide-react'
 import Badge from '../common/Badge'
 import Modal from '../common/Modal'
 import ConfirmDialog from '../common/ConfirmDialog'
@@ -10,6 +22,13 @@ import {
   assignSubscription,
   deactivateSubscription,
 } from '../../services/packageCatalogService'
+
+const TYPE_ICONS = {
+  INTERNET: Wifi,
+  TV: Tv,
+  MOBILE: Smartphone,
+  BUNDLE: Layers,
+}
 
 function formatPrice(price) {
   const num = Number(price)
@@ -137,16 +156,23 @@ export default function ClientSubscriptionsSection({ clientId }) {
   const duplicateGuard =
     !!selectedPackageId && activePackageIds.has(Number(selectedPackageId))
 
+  const activeCount = subscriptions.filter((s) => s.status === 'ACTIVE').length
+
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
+    <section className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200 h-full">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
         <div className="flex items-center gap-3 text-navy-700">
-          <CreditCard size={18} />
-          <h2 className="text-lg font-semibold">Pretplate</h2>
+          <CreditCard size={20} />
+          <div>
+            <h2 className="text-lg font-semibold">Pretplate</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              {activeCount} {activeCount === 1 ? 'aktivna pretplata' : activeCount >= 2 && activeCount <= 4 ? 'aktivne pretplate' : 'aktivnih pretplata'}
+            </p>
+          </div>
         </div>
         <button
           onClick={openAssignModal}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-navy-700 hover:bg-navy-800 text-white text-sm font-medium transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-navy-700 hover:bg-navy-800 text-white text-sm font-medium transition-colors shadow-sm"
         >
           <PlusCircle size={16} />
           Dodijeli paket
@@ -160,49 +186,92 @@ export default function ClientSubscriptionsSection({ clientId }) {
       )}
 
       {loading ? (
-        <div className="text-sm text-slate-500">Učitavanje...</div>
+        <div className="space-y-3">
+          {[0, 1].map((i) => (
+            <div key={i} className="rounded-2xl border border-gray-100 p-5 animate-pulse">
+              <div className="h-5 w-1/3 bg-gray-100 rounded mb-3" />
+              <div className="h-3 w-2/3 bg-gray-100 rounded mb-2" />
+              <div className="h-3 w-1/2 bg-gray-100 rounded" />
+            </div>
+          ))}
+        </div>
       ) : subscriptions.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-gray-200 p-8 text-sm text-slate-500">
-          Klijent trenutno nema dodijeljenih pretplata.
+        <div className="rounded-2xl border-2 border-dashed border-gray-200 p-10 text-center">
+          <div className="mx-auto w-12 h-12 rounded-full bg-navy-50 flex items-center justify-center mb-3">
+            <PackageIcon size={22} className="text-navy-600" />
+          </div>
+          <p className="text-sm font-medium text-gray-700">Nema dodijeljenih pretplata</p>
+          <p className="text-xs text-slate-500 mt-1">Kliknite "Dodijeli paket" za dodjelu prve pretplate ovom klijentu.</p>
         </div>
       ) : (
         <div className="space-y-3">
-          {subscriptions.map((sub) => (
-            <div
-              key={sub.subscriptionId}
-              className="rounded-2xl border border-gray-100 p-4 hover:shadow-sm transition"
-            >
-              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-base font-semibold text-gray-900">{sub.packageName}</h3>
-                    <Badge value={sub.packageType} />
-                    <Badge value={sub.status} />
-                  </div>
-                  {sub.packageDescription && (
-                    <p className="text-sm text-slate-500 mt-1 line-clamp-2">{sub.packageDescription}</p>
-                  )}
-                  <div className="text-xs text-slate-500 mt-2 flex flex-wrap gap-x-4 gap-y-1">
-                    <span>Datum početka: {formatDate(sub.startDate)}</span>
-                    {sub.deactivatedDate && (
-                      <span>Datum ukidanja: {formatDate(sub.deactivatedDate)}</span>
-                    )}
-                    <span>Cijena: {formatPrice(sub.price)}/mj</span>
-                  </div>
-                </div>
+          {subscriptions.map((sub) => {
+            const Icon = TYPE_ICONS[sub.packageType] ?? PackageIcon
+            const isActive = sub.status === 'ACTIVE'
+            return (
+              <div
+                key={sub.subscriptionId}
+                className={`rounded-2xl border p-5 transition ${
+                  isActive
+                    ? 'border-gray-100 hover:border-navy-200 hover:shadow-sm bg-white'
+                    : 'border-gray-100 bg-slate-50/60'
+                }`}
+              >
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div className="flex items-start gap-4 min-w-0 flex-1">
+                    <div className={`flex-shrink-0 h-11 w-11 rounded-xl flex items-center justify-center ${
+                      isActive ? 'bg-navy-50 text-navy-700' : 'bg-gray-100 text-gray-500'
+                    }`}>
+                      <Icon size={20} />
+                    </div>
 
-                {sub.status === 'ACTIVE' && (
-                  <button
-                    onClick={() => setConfirmDeactivate(sub)}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors self-start"
-                  >
-                    <PowerOff size={14} />
-                    Ukini pretplatu
-                  </button>
-                )}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <h3 className="text-base font-semibold text-gray-900 truncate">{sub.packageName}</h3>
+                        <Badge value={sub.packageType} />
+                        <Badge value={sub.status} />
+                      </div>
+
+                      {sub.packageDescription && (
+                        <p className="text-sm text-slate-600 mb-3">{sub.packageDescription}</p>
+                      )}
+
+                      <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-slate-500">
+                        <span className="inline-flex items-center gap-1.5">
+                          <Calendar size={12} />
+                          Početak: <strong className="text-slate-700 font-medium">{formatDate(sub.startDate)}</strong>
+                        </span>
+                        {sub.deactivatedDate && (
+                          <span className="inline-flex items-center gap-1.5">
+                            <Calendar size={12} />
+                            Ukinuto: <strong className="text-slate-700 font-medium">{formatDate(sub.deactivatedDate)}</strong>
+                          </span>
+                        )}
+                        <span className="inline-flex items-center gap-1.5">
+                          <Wallet size={12} />
+                          <strong className="text-slate-700 font-medium">{formatPrice(sub.price)}/mj</strong>
+                        </span>
+                        <span className="inline-flex items-center gap-1.5">
+                          <Tag size={12} />
+                          ID pretplate: <strong className="text-slate-700 font-medium">#{sub.subscriptionId}</strong>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {isActive && (
+                    <button
+                      onClick={() => setConfirmDeactivate(sub)}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors self-start whitespace-nowrap"
+                    >
+                      <PowerOff size={14} />
+                      Ukini pretplatu
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 
