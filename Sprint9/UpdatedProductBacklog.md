@@ -47,7 +47,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-26](#pb-26) | Ocjenjivanje tiketa                                | Feature        | 5         | S         | Done    | Sprint 8  |
 | [PB-27](#pb-27) | Komunikacija kroz tiket                            | Feature        | 1         | M         | Done    | Sprint 6  |
 | [PB-28](#pb-28) | Upravljanje prioritetima tiketa                    | Feature        | 2         | M         | Done    | Sprint 7  |
-| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Backlog | Sprint 10 |
+| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Partial    | Sprint 9  |
 | [PB-30](#pb-30) | Automatska dodjela tiketa                          | Feature        | 3         | XS        | Done    | Sprint 7  |
 | [PB-31](#pb-31) | Prosljeđivanje tiketa                              | Feature        | 2         | M         | Done    | Sprint 7  |
 | [PB-32](#pb-32) | Pregled svih tiketa                                | Feature        | 1         | M         | Done    | Sprint 6  |
@@ -56,40 +56,40 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-35](#pb-35) | Pregled dodijeljenih tiketa (tehničari)            | Feature        | 1         | S         | Done    | Sprint 7  |
 | [PB-36](#pb-36) | Ažuriranje statusa tiketa                          | Feature        | 1         | S         | Done    | Sprint 8  |
 | [PB-37](#pb-37) | Tehničar vidi osnovne informacije                  | Feature        | 2         | S         | Done    | Sprint 7  |
-| [PB-38](#pb-38) | Izvještaj o broju tiketa                           | Feature        | 1         | M         | Partial | Sprint 9  |
-| [PB-39](#pb-39) | Izvještaj po statusu tiketa                        | Feature        | 5         | M         | Partial | Sprint 9  |
-| [PB-40](#pb-40) | Izvještaj po tipu problema                         | Feature        | 3         | S         | Partial | Sprint 9  |
-| [PB-41](#pb-41) | Prosječno vrijeme rješavanja tiketa                | Feature        | 1         | M         | Partial | Sprint 9  |
+| [PB-38](#pb-38) | Izvještaj o broju tiketa                           | Feature        | 1         | M         | Done    | Sprint 9  |
+| [PB-39](#pb-39) | Izvještaj po statusu tiketa                        | Feature        | 5         | M         | Done    | Sprint 9  |
+| [PB-40](#pb-40) | Izvještaj po tipu problema                         | Feature        | 3         | S         | Done    | Sprint 9  |
+| [PB-41](#pb-41) | Prosječno vrijeme rješavanja tiketa                | Feature        | 1         | M         | Done    | Sprint 9  |
 | [PB-42](#pb-42) | Statistika agenta i tehničara                      | Feature        | 2         | M         | Done    | Sprint 8  |
-| [PB-43](#pb-43) | Izvještaj o opterećenju agenata                    | Feature        | 2         | M         | Partial | Sprint 9  |
-| [PB-44](#pb-44) | Izvještaj o ocjenama korisnika                     | Feature        | 2         | S         | Partial | Sprint 9  |
+| [PB-43](#pb-43) | Izvještaj o opterećenju agenata                    | Feature        | 2         | M         | Done    | Sprint 9  |
+| [PB-44](#pb-44) | Izvještaj o ocjenama korisnika                     | Feature        | 2         | S         | Done    | Sprint 9  |
 | [PB-45](#pb-45) | Admin Dashboard sa ključnim metrikama              | Feature        | 1         | L         | Done    | Sprint 9  |
 | [PB-46](#pb-46) | Export izvještaja                                  | Feature        | 5         | S         | Backlog | Sprint 11 |
 | [PB-47](#pb-47) | FAQ segment                                        | Feature        | 3         | S         | Done    | Sprint 6  |
 | [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente    | Feature        | 1         | M         | Done    | Sprint 7  |
 | [PB-49](#pb-49) | Notifikacije                                       | Feature        | 1         | L         | Done    | Sprint 8  |
-| [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature        | 2         | S         | Partial | Sprint 9  |
+| [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature        | 2         | S         | Done    | Sprint 9  |
 
 
 ---
 
-## Modul izvještaja — šta preostaje za zatvaranje svih PB-ova
+## Modul izvještaja — status zatvaranja PB-ova
 
 
-| PB        | Preostalo za puni **Done**                                                                                                                                                                   |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **PB-38** | Trend/grupisanje po danu, sedmici, mjesecu i godini (ne samo ukupan broj u odabranom periodu); opcionalno US-42 za tehničara (samo vlastiti tiketi) ako se u scope-u drži originalni backlog |
-| **PB-39** | Eksplicitan admin izvještaj/testovi prihvatni; US-44 za tehničara (vlastiti tiketi) ako je u scope-u                                                                                         |
-| **PB-40** | US-46 za tehničara (vlastiti tiketi) ako je u scope-u                                                                                                                                        |
-| **PB-41** | Zaseban on-demand izvještaj tipa „prosječno rješavanje“ (trenutno samo KPI na dashboardu); US-48 za tehničara ako je u scope-u                                                               |
-| **PB-43** | Razbreak riješenih tiketa po **danu | sedmici | mjesecu** po agentu (trenutno samo ukupan broj po agentu u periodu)                                                                          |
-| **PB-44** | Proširena analiza ocjena (npr. trend, filteri) ako zahtijeva AC; inače formalno zatvoriti nakon test plana                                                                                   |
-| **PB-45** | Formalno testiranje/prihvat (US-71–US-86); **PB-46** nije dio PB-45 ali blokira „kompletan“ modul                                                                                            |
-| **PB-46** | Implementacija CSV exporta za generisane izvještaje                                                                                                                                          |
-| **PB-50** | On-demand izvještaj / trend po pod-periodima (dnevno, sedmično, mjesečno), ne samo agregat na dashboardu                                                                                     |
+| PB        | Status                                                                                                                |
+| --------- | --------------------------------------------------------------------------------------------------------------------- |
+| **PB-38** | ✅ Done — `TICKET_COUNT` vraća ukupan broj + bucket razbreak (dan/sedmica/mjesec) po periodu kreiranja                |
+| **PB-39** | ✅ Done — `TICKET_STATUS` s breakdown po statusima, postocima, pie chartom i drill-down na `/tickets`                 |
+| **PB-40** | ✅ Done — `PROBLEM_TYPE` s bar chartom i drill-down po kategoriji                                                     |
+| **PB-41** | ✅ Done — `AVG_RESOLUTION` on-demand izvještaj s agregatom i bucket tabelom (dan/sedmica/mjesec)                      |
+| **PB-43** | ✅ Done — `TEAM_WORKLOAD` vraća ukupne zbirove po agentu + pivot tabelu period × agent                                |
+| **PB-44** | ✅ Done — `USER_RATINGS` s prosječnom ocjenom, distribucijom po zvjezdicama i bucket trendom po pod-periodima         |
+| **PB-45** | ✅ Done — Admin Dashboard s KPI karticama, grafovima, globalnim filterom i drill-down                                 |
+| **PB-50** | ✅ Done — `FIRST_RESPONSE` na dashboardu (agregat) + on-demand izvještaj s bucket trendom po pod-periodima            |
+| **PB-46** | ⏳ Backlog (Sprint 11) — CSV export; disabled dugme placeholder je implementirano                                     |
 
 
-**Napomena:** Paralelni izvještaji za **tehničara** (US-42, US-44, US-46, US-48) nisu implementirani — po dogovoru u Sprint 9 admin modul je isključivo za `ADMINISTRATOR`. Ako ih ne planirate, označite ih kao *out of scope* u User Stories, ne kao preostali razvoj PB-38–41.
+**Napomena:** Izvještaji za **tehničara** (US-42, US-44, US-46, US-48) su označeni kao *out of scope* — po dogovoru u Sprint 9 modul izvještaja je isključivo za `ADMINISTRATOR`.
 
 ---
 
@@ -441,8 +441,8 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 10
+- **Status:** Partial
+- **Veza sa sprintom ili release planom:** Sprint 9
 
 ---
 
@@ -550,9 +550,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Partial
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano za admina: ukupan broj tiketa u globalnom periodu (KPI + on-demand `TICKET_COUNT` preko `POST /api/reports/generate`). Nije implementirano: vremenski trend (bucketi dan/sedmica/mjesec/godina unutar izvještaja). US-42 (tehničar) nije urađen.
+- **Napomena:** Implementirano za admina: ukupan broj tiketa (KPI na dashboardu) + on-demand `TICKET_COUNT` izvještaj s agregatom i bucket razreakom po danu/sedmici/mjesecu. US-42 (tehničar) — out of scope po dogovoru.
 
 ---
 
@@ -563,9 +563,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 5
 - **Procjena složenosti ili napora:** M
-- **Status:** Partial
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano za admina: `statusBreakdown` na dashboardu, pie chart, on-demand `TICKET_STATUS`, upozorenje za veliki period. US-44 (tehničar) nije urađen. Ovaj izvještaj gubi smisao za veće vremenske opsege.
+- **Napomena:** Implementirano za admina: `statusBreakdown` na dashboardu, pie chart, on-demand `TICKET_STATUS` s postocima i drill-down, upozorenje za veliki period. US-44 (tehničar) — out of scope po dogovoru.
 
 ---
 
@@ -576,9 +576,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 3
 - **Procjena složenosti ili napora:** S
-- **Status:** Partial
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano za admina: top kategorije na dashboardu, bar chart, on-demand `PROBLEM_TYPE`. US-46 (tehničar) nije urađen.
+- **Napomena:** Implementirano za admina: top kategorije na dashboardu, bar chart s drill-down, on-demand `PROBLEM_TYPE`. US-46 (tehničar) — out of scope po dogovoru.
 
 ---
 
@@ -589,9 +589,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Partial
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano za admina: KPI `avgResolutionHours` na dashboardu (samo zatvoreni tiketi u periodu). Nije implementiran zaseban tip izvještaja u `ReportType`. US-48 (tehničar) nije urađen.
+- **Napomena:** Implementirano za admina: KPI `avgResolutionHours` na dashboardu + novi on-demand `AVG_RESOLUTION` tip izvještaja s agregatom i bucket tabelom (dan/sedmica/mjesec). US-48 (tehničar) — out of scope po dogovoru.
 
 ---
 
@@ -615,9 +615,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
-- **Status:** Partial
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano za admina: ukupan broj riješenih po agentu/tehničaru u periodu (`TEAM_WORKLOAD`, top lista na dashboardu). Nije implementirano: razbreak po danu, sedmici i mjesecu unutar izvještaja.
+- **Napomena:** Implementirano za admina: ukupan broj riješenih po agentu/tehničaru (`TEAM_WORKLOAD`, top lista na dashboardu) + pivot tabela period × agent s razreakom po danu/sedmici/mjesecu.
 
 ---
 
@@ -628,9 +628,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** S
-- **Status:** Partial
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano za admina: KPI prosječne ocjene, on-demand `USER_RATINGS` (prosjek, broj, distribucija po zvjezdicama). Nije implementirana napredna analiza/trend kroz vrijeme.
+- **Napomena:** Implementirano za admina: KPI prosječne ocjene na dashboardu, on-demand `USER_RATINGS` (prosjek, broj, distribucija po zvjezdicama) + trend tabela po pod-periodima (dan/sedmica/mjesec).
 
 ---
 
@@ -706,7 +706,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** S
 - **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano: agregat `avgFirstResponseMinutes` na admin dashboardu (`TicketMetricsHelper`, cijeli sistem u odabranom periodu). Nije implementirano: zaseban on-demand izvještaj ni podaci po pod-periodima (dan/sedmica/mjesec).
+- **Napomena:** Implementirano: KPI `avgFirstResponseMinutes` na dashboardu + on-demand `FIRST_RESPONSE` izvještaj s agregatom i bucket trendom po pod-periodima (sedmica→dan, mjesec→sedmica, godina→mjesec, custom→auto).
 
 ---
 

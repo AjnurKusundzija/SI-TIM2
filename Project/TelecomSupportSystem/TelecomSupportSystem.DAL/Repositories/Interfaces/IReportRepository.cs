@@ -12,6 +12,7 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
         Task<int> GetUnassignedOpenTicketsCountAsync();
         Task<int> GetStaleTicketsCountAsync(DateTime olderThanUtc);
         Task<IReadOnlyList<AgentResolveRow>> GetAgentResolvedCountsAsync(DateTime from, DateTime to);
+        Task<IReadOnlyList<AgentTicketResolutionRow>> GetAgentResolvedDetailsAsync(DateTime from, DateTime to);
         Task<int> GetClosedInPeriodCountAsync(DateTime from, DateTime to);
     }
 
@@ -30,5 +31,15 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
         public string LastName { get; set; } = string.Empty;
         public Role Role { get; set; }
         public int ResolvedCount { get; set; }
+    }
+
+    public class AgentTicketResolutionRow
+    {
+        public int UserId { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public Role Role { get; set; }
+        public DateTime ClosedDate { get; set; }
+        public int TicketId { get; set; }
     }
 }

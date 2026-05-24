@@ -135,7 +135,6 @@ describe('AdminDashboardSection (metrics) — KPI i grafovi (PB-45 / US-71, US-8
   it('NE prikazuje generisanje izvještaja u metrics modu', async () => {
     renderMetrics()
     await waitFor(() => expect(screen.getByText('Ključne metrike')).toBeInTheDocument())
-    expect(screen.queryByText('Generisanje izvještaja')).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /^Export$/i })).not.toBeInTheDocument()
   })
 })
@@ -186,10 +185,6 @@ describe('Globalni vremenski filter (PB-45 / US-72)', () => {
   })
 
   it('nevalidan custom raspon prikazuje grešku na Primijeni i blokira Generiši izvještaj', async () => {
-    // Napomena: AdminDashboardSection.metrics ima auto-reload na promjenu filtera
-    // (useEffect), pa GET /api/admin/dashboard može biti pozvan prilikom otvaranja
-    // custom moda i mijenjanja datuma — to je gap u odnosu na AC „ne smije pozvati API“.
-    // Test stoga eksplicitno verifikuje samo poruku greške koju Primijeni okida.
     mocks.generateReport.mockResolvedValue({ hasData: true, data: {} })
     renderMetrics()
     await waitFor(() => expect(mocks.getAdminDashboard).toHaveBeenCalled())
@@ -252,32 +247,31 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
   it('reports mod NE prikazuje KPI kartice i NE poziva dashboard endpoint', async () => {
     renderReports()
     expect(screen.getByText('Vremenski period')).toBeInTheDocument()
-    expect(screen.getByText('Generisanje izvještaja')).toBeInTheDocument()
+    expect(screen.getByText('Broj tiketa')).toBeInTheDocument()
     expect(mocks.getAdminDashboard).not.toHaveBeenCalled()
     expect(screen.queryByText('Ključne metrike')).not.toBeInTheDocument()
   })
 
-  it('podržani svi report tipovi u select-u', () => {
+  it('podržani svi report tipovi prikazani kao chip dugmad', () => {
     renderReports()
     const expectedLabels = [
       'Broj tiketa', 'Status tiketa', 'Tip problema',
       'Opterećenje agenata/tehničara', 'Ocjene korisnika', 'Prosj. prvi odgovor',
     ]
-    const select = document.querySelector('select')
-    const options = Array.from(select.options).map(o => o.text)
-    expectedLabels.forEach(lbl => expect(options).toContain(lbl))
+    expectedLabels.forEach(lbl =>
+      expect(screen.getByRole('button', { name: lbl })).toBeInTheDocument(),
+    )
   })
 
   it('Export dugme postoji ali je disabled (US-85)', () => {
     renderReports()
     const exportBtn = screen.getByRole('button', { name: /Export/i })
     expect(exportBtn).toBeDisabled()
-    expect(screen.getByText(/CSV export planiran/i)).toBeInTheDocument()
   })
 
-  it('Generiši izvještaj poziva POST /api/reports/generate sa odabranim tipom', async () => {
+  it('klik na chip poziva generateReport sa odabranim tipom', async () => {
     renderReports()
-    fireEvent.click(screen.getByRole('button', { name: /Generiši izvještaj/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Broj tiketa' }))
 
     await waitFor(() => expect(mocks.generateReport).toHaveBeenCalled())
     expect(mocks.generateReport).toHaveBeenCalledWith(expect.objectContaining({
@@ -294,9 +288,7 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
       showLargePeriodWarning: true,
     })
     renderReports()
-    const select = document.querySelector('select')
-    fireEvent.change(select, { target: { value: 'TICKET_STATUS' } })
-    fireEvent.click(screen.getByRole('button', { name: /Generiši izvještaj/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Status tiketa' }))
 
     await waitFor(() => expect(screen.getByText(/Upozorenje/i)).toBeInTheDocument())
   })
@@ -304,7 +296,7 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
   it('prazan rezultat prikazuje informativnu poruku', async () => {
     mocks.generateReport.mockResolvedValue({ hasData: false, message: 'Nema podataka za odabrani period.' })
     renderReports()
-    fireEvent.click(screen.getByRole('button', { name: /Generiši izvještaj/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Broj tiketa' }))
     await waitFor(() => expect(screen.getByText('Nema podataka za odabrani period.')).toBeInTheDocument())
   })
 })

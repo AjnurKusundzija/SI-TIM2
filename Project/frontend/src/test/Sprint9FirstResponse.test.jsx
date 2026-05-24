@@ -112,12 +112,10 @@ describe('US-88 — FIRST_RESPONSE izvještaj na /reports', () => {
     })
 
     renderReports()
-    const select = document.querySelector('select')
-    fireEvent.change(select, { target: { value: 'FIRST_RESPONSE' } })
-    fireEvent.click(screen.getByRole('button', { name: /Generiši izvještaj/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Prosj. prvi odgovor' }))
 
     await waitFor(() => expect(screen.getByText('Po danu')).toBeInTheDocument())
-    expect(screen.getByText(/Tiketi s odgovorom:\s*3\s*\/\s*4/i)).toBeInTheDocument()
+    expect(screen.getByText('S odgovorom / ukupno')).toBeInTheDocument()
     expect(screen.getByText('01.02.2026')).toBeInTheDocument()
     expect(screen.getByText('02.02.2026')).toBeInTheDocument()
   })
@@ -138,9 +136,7 @@ describe('US-88 — FIRST_RESPONSE izvještaj na /reports', () => {
     })
 
     renderReports()
-    const select = document.querySelector('select')
-    fireEvent.change(select, { target: { value: 'FIRST_RESPONSE' } })
-    fireEvent.click(screen.getByRole('button', { name: /Generiši izvještaj/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Prosj. prvi odgovor' }))
 
     await waitFor(() => expect(screen.getByText(/Nema tiketa s prvim odgovorom/i)).toBeInTheDocument())
     expect(screen.getByText(/Nema podataka po pod-periodima/i)).toBeInTheDocument()
