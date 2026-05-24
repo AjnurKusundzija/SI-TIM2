@@ -486,9 +486,6 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     return null;
   };
 
-  const closedInPeriod = dashboard?.statusBreakdown?.find(
-    (s) => s.status === "CLOSED",
-  )?.count;
 
   return (
     <div className="space-y-6">
