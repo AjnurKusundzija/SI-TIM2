@@ -20,6 +20,12 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 | SB-03 | PB-52 Upravljanje katalogom paketa i pretplata | US-76, US-77 | Eldar | To-Do | Admin definiše pakete i dodjeljuje pretplate klijentima |
 | SB-04 | PB-53 Pregled audit log-a aktivnosti | US-78, US-79 | Hana, Lamija | To-Do | Praćenje ključnih akcija u sistemu sa filtriranjem |
 | SB-05 | PB-56 Prilozi na tiketima | US-80, US-81 | Merisa | To-Do | Upload i preuzimanje priloga (slike, dokumenti) na tiketima |
+| SB-06 | PB-38 Izvještaj o broju tiketa | US-41 | Uma | Done | `TICKET_COUNT` vraća ukupan broj + bucket razbreak (dan/sedmica/mjesec) |
+| SB-07 | PB-39 Izvještaj po statusu tiketa | US-43 | Uma | Done | `TICKET_STATUS` s postocima, pie chart, drill-down i upozorenje za veliki period |
+| SB-08 | PB-40 Izvještaj po tipu problema | US-45 | Uma | Done | `PROBLEM_TYPE` s bar chartom i drill-down po kategoriji |
+| SB-09 | PB-41 Prosječno rješavanje — zaseban on-demand izvještaj | US-47 | Uma | Done | Novi `AVG_RESOLUTION` tip izvještaja s agregatom i bucket tabelom |
+| SB-10 | PB-43 Izvještaj o opterećenju agenata | US-94 | Uma | Done | `TEAM_WORKLOAD` vraća ukupne zbirove + pivot tabelu period × agent |
+| SB-11 | PB-44 Izvještaj o ocjenama korisnika | US-95 | Uma | Done | `USER_RATINGS` vraća distribuciju po zvjezdicama + trend tabelu po pod-periodima |
 
 ---
 
@@ -365,6 +371,95 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 - Kada tiket nema priloga, sistem ne smije prikazivati praznu sekciju za priloge
 - Sistem mora prikazati prilog kao dio chronološkog toka poruke ako je priložen uz poruku
 - Sistem ne smije dozvoliti brisanje priloga nakon što je priložen na tiket
+
+---
+
+## PB-38 Izvještaj o broju tiketa
+
+### US-41
+*Kao administrator, želim da imam dnevni, sedmični, mjesečni i godišnji izvještaj o broju tiketa koji su poslani, kako bih imao uvid o situaciji i količini tiketa.*
+
+**Acceptance Criteria:**
+- Kada administrator odabere vremenski period (sedmica/mjesec/godina/prilagođeno), tada se prikazuje ukupan broj tiketa za taj period
+- Kada administrator generiše izvještaj, tada vidi i razbreak po pod-periodima (dan/sedmica/mjesec) u tabeli
+- Kada podaci postoje u sistemu, tada podaci odgovaraju stvarnom stanju u bazi
+- Sistem mora omogućiti pregled izvještaja isključivo administratoru
+- Sistem ne smije prikazati pogrešne ili duplirane podatke
+- Administrator treba dobiti poruku ako nema podataka za odabrani period
+
+---
+
+## PB-39 Izvještaj po statusu tiketa
+
+### US-43
+*Kao administrator, želim da imam izvještaj o statusu tiketa, kako bih mogao lakše analizirati i imati uvid o tiketima.*
+
+**Acceptance Criteria:**
+- Kada administrator otvori izvještaj, tada vidi ukupan broj tiketa po statusima (otvoren, čeka zatvaranje, zatvoren) sa procentualnim udjelom
+- Kada podaci postoje, tada izvještaj odgovara stvarnim podacima u bazi
+- Sistem mora grupisati tikete po statusu i prikazati procentualnu raspodjelu
+- Kada je odabran veliki vremenski opseg (>90 dana), sistem mora prikazati upozorenje o pouzdanosti postotaka
+- Administrator treba dobiti poruku ako nema podataka za odabrani period
+- Sistem ne smije dozvoliti pristup izvještaju korisnicima koji nemaju admin rolu
+
+---
+
+## PB-40 Izvještaj po tipu problema
+
+### US-45
+*Kao administrator, želim da imam izvještaj po tipovima problema u tiketima, kako bih imao uvid o najčešćim tipovima problema i daljnje analize i poboljšanja cijelog telekom sistema.*
+
+**Acceptance Criteria:**
+- Kada administrator otvori izvještaj, tada vidi ukupan broj tiketa po tipu problema (Internet, TV, Mobilna mreža, Računi, Tehnička podrška)
+- Kada podaci postoje, tada su prikazani tačni tipovi i količine
+- Sistem mora grupisati tikete po tipu problema i prikazati ih sortirane po broju (opadajuće)
+- Sistem mora omogućiti drill-down na listu tiketa za odabrani tip problema
+- Administrator treba dobiti poruku ako nema podataka za odabrani period
+- Sistem ne smije dozvoliti pristup izvještaju korisnicima koji nemaju admin rolu
+
+---
+
+## PB-41 Prosječno vrijeme rješavanja tiketa
+
+### US-47
+*Kao administrator, želim da imam uvid o prosječnom vremenu rješavanja (zatvaranja) tiketa, kako bih imao uvid u efikasnost naših radnika.*
+
+**Acceptance Criteria:**
+- Kada administrator generiše izvještaj, tada vidi prosječno vrijeme zatvaranja tiketa za odabrani period
+- Kada administrator generiše izvještaj, tada vidi i razbreak po pod-periodima (dan/sedmica/mjesec) — broj tiketa, broj zatvorenih i prosječno rješavanje po periodu
+- Kada podaci postoje, tada je izračun tačan (ClosedDate − CreatedDate, samo za zatvorene tikete)
+- Sistem ne smije uključiti nezatvorene tikete u izračun prosječnog vremena
+- Kada nema zatvorenih tiketa u periodu, sistem prikazuje odgovarajuću poruku
+- Sistem ne smije dozvoliti pristup izvještaju korisnicima koji nemaju admin rolu
+
+---
+
+## PB-43 Izvještaj o opterećenju agenata
+
+### US-94
+*Kao administrator, želim da vidim izvještaj o opterećenju agenata i tehničara po vremenskim intervalima, kako bih pratio raspoređenost posla i efikasnost tima.*
+
+**Acceptance Criteria:**
+- Kada administrator generiše izvještaj, tada vidi ukupan broj zatvorenih tiketa po agentu/tehničaru za odabrani period
+- Kada administrator generiše izvještaj, tada vidi i pivot tabelu: redovi su pod-periodi (dan/sedmica/mjesec), kolone su agenti — vrijednosti su broj zatvorenih tiketa po agentu u tom pod-periodu
+- Sistem mora prikazati sve agente i tehničare koji su imali riješene tikete u periodu, sortirane po ukupnom broju (opadajuće)
+- Za agente: dodjeljuje se samo posljednjem assigniranom agentu po tiketu; za tehničare: svi assignirani tehničari dobivaju bod
+- Kada nema podataka za period, sistem prikazuje odgovarajuću poruku
+- Sistem ne smije dozvoliti pristup izvještaju korisnicima koji nemaju admin rolu
+
+---
+
+## PB-44 Izvještaj o ocjenama korisnika
+
+### US-95
+*Kao administrator, želim da vidim izvještaj o ocjenama korisnika s trendom kroz vrijeme, kako bih pratio zadovoljstvo korisnika i kvalitet usluge.*
+
+**Acceptance Criteria:**
+- Kada administrator generiše izvještaj, tada vidi prosječnu ocjenu i ukupan broj ocijenjenih tiketa za odabrani period
+- Kada administrator generiše izvještaj, tada vidi distribuciju ocjena po broju zvjezdica (1–5)
+- Kada administrator generiše izvještaj, tada vidi i trend tabelu po pod-periodima: period, prosječna ocjena, broj ocjena
+- Kada nema ocjena u odabranom periodu, sistem prikazuje odgovarajuću poruku
+- Sistem ne smije dozvoliti pristup izvještaju korisnicima koji nemaju admin rolu
 
 ---
 
