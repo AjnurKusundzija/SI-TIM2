@@ -401,7 +401,7 @@ export default function Tickets({ assignedOnly = false }) {
           <div
             className="hidden lg:flex flex-col flex-shrink-0 w-[440px] sticky self-start
                        bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm"
-            style={{ top: '16px', height: 'calc(100vh - 53px - 48px)' }}
+            style={{ top: '69px', height: 'calc(100vh - 85px)' }}
           >
             <TicketPreviewPanel
               ticketId={selectedTicketId}
