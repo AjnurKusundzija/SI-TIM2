@@ -198,7 +198,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const [loading, setLoading] = useState(showMetrics);
   const [error, setError] = useState(null);
 
-  const [reportType, setReportType] = useState("TICKET_COUNT");
+  const [reportType, setReportType] = useState(null);
   const [reportResult, setReportResult] = useState(null);
   const [reportLoading, setReportLoading] = useState(false);
 
@@ -284,7 +284,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     }));
   }, [dashboard]);
 
-  const handleGenerateReport = async () => {
+  const fetchReport = useCallback(async (type) => {
     if (period === "custom" && customFrom > customTo) {
       setPeriodError("Datum kraja mora biti nakon datuma početka.");
       return;
@@ -295,7 +295,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     try {
       const q = buildQuery();
       const result = await generateReport({
-        reportType,
+        reportType: type,
         period: q.period,
         from: q.from,
         to: q.to,
@@ -309,7 +309,12 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     } finally {
       setReportLoading(false);
     }
-  };
+  }, [buildQuery, period, customFrom, customTo]);
+
+  const handleSelectChip = useCallback((type) => {
+    setReportType(type);
+    void fetchReport(type);
+  }, [fetchReport]);
 
   const renderReportTable = () => {
     if (!reportResult) return null;
@@ -322,29 +327,33 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     }
 
     const data = reportResult.data;
+    const th = "py-2.5 px-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide";
+    const td = "py-2.5 px-3 text-sm text-gray-700";
+    const tr = "border-b border-gray-100 hover:bg-gray-50 transition-colors";
 
     if (reportType === "TICKET_COUNT") {
       return (
-        <div className="py-2 space-y-3 text-sm">
-          <p className="text-lg font-bold text-gray-900">
-            Ukupno: {data.totalCount}
-          </p>
-          {data.bucketGranularityLabel && (
-            <p className="text-xs text-gray-500">{data.bucketGranularityLabel}</p>
-          )}
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg px-4 py-3 inline-block">
+            <p className="text-xs text-gray-500 mb-0.5">Ukupno tiketa</p>
+            <p className="text-2xl font-bold text-gray-900">{data.totalCount}</p>
+            {data.bucketGranularityLabel && (
+              <p className="text-xs text-gray-400 mt-0.5">{data.bucketGranularityLabel}</p>
+            )}
+          </div>
           {data.buckets?.length > 0 && (
-            <table className="w-full text-sm mt-1">
+            <table className="w-full">
               <thead>
-                <tr className="text-left text-gray-500 border-b">
-                  <th className="py-2">Period</th>
-                  <th className="py-2">Tiketa</th>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className={th}>Period</th>
+                  <th className={th}>Tiketa</th>
                 </tr>
               </thead>
               <tbody>
                 {data.buckets.map((row) => (
-                  <tr key={row.label} className="border-b border-gray-50">
-                    <td className="py-2">{row.label}</td>
-                    <td className="py-2">{row.ticketCount}</td>
+                  <tr key={row.label} className={tr}>
+                    <td className={td}>{row.label}</td>
+                    <td className={td}>{row.ticketCount}</td>
                   </tr>
                 ))}
               </tbody>
@@ -356,26 +365,24 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
 
     if (reportType === "TICKET_STATUS" && data.items) {
       return (
-        <table className="w-full text-sm mt-2">
+        <table className="w-full">
           <thead>
-            <tr className="text-left text-gray-500 border-b">
-              <th className="py-2">Status</th>
-              <th className="py-2">Broj</th>
-              <th className="py-2">%</th>
+            <tr className="bg-gray-50 border-b border-gray-200">
+              <th className={th}>Status</th>
+              <th className={th}>Broj</th>
+              <th className={th}>%</th>
             </tr>
           </thead>
           <tbody>
             {data.items.map((row) => (
               <tr
                 key={row.status}
-                className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer"
+                className={`${tr} cursor-pointer`}
                 onClick={() => drillDown({ status: row.status })}
               >
-                <td className="py-2">
-                  {STATUS_LABELS[row.status] ?? row.status}
-                </td>
-                <td className="py-2">{row.count}</td>
-                <td className="py-2">{row.percentage}%</td>
+                <td className={td}>{STATUS_LABELS[row.status] ?? row.status}</td>
+                <td className={td}>{row.count}</td>
+                <td className={td}>{row.percentage}%</td>
               </tr>
             ))}
           </tbody>
@@ -385,22 +392,22 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
 
     if (reportType === "PROBLEM_TYPE" && data.items) {
       return (
-        <table className="w-full text-sm mt-2">
+        <table className="w-full">
           <thead>
-            <tr className="text-left text-gray-500 border-b">
-              <th className="py-2">Tip</th>
-              <th className="py-2">Broj</th>
+            <tr className="bg-gray-50 border-b border-gray-200">
+              <th className={th}>Tip problema</th>
+              <th className={th}>Broj</th>
             </tr>
           </thead>
           <tbody>
             {data.items.map((row) => (
               <tr
                 key={row.name}
-                className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer"
+                className={`${tr} cursor-pointer`}
                 onClick={() => drillDown({ problemCategory: row.name })}
               >
-                <td className="py-2">{PROBLEM_LABELS[row.name] ?? row.name}</td>
-                <td className="py-2">{row.count}</td>
+                <td className={td}>{PROBLEM_LABELS[row.name] ?? row.name}</td>
+                <td className={td}>{row.count}</td>
               </tr>
             ))}
           </tbody>
@@ -410,54 +417,113 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
 
     if (reportType === "TEAM_WORKLOAD" && data.items) {
       return (
-        <div className="space-y-5 text-sm py-2">
+        <div className="space-y-6">
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
               Ukupno po agentu / tehničaru
             </p>
-            <table className="w-full text-sm">
+            <table className="w-full">
               <thead>
-                <tr className="text-left text-gray-500 border-b">
-                  <th className="py-2">Agent / Tehničar</th>
-                  <th className="py-2">Uloga</th>
-                  <th className="py-2">Zatvoreno u periodu</th>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className={th}>Agent / Tehničar</th>
+                  <th className={th}>Uloga</th>
+                  <th className={th}>Zatvoreno u periodu</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((row) => (
-                  <tr key={row.userId} className="border-b border-gray-50">
-                    <td className="py-2">{row.fullName}</td>
-                    <td className="py-2">{row.role}</td>
-                    <td className="py-2">{row.resolvedCount}</td>
+                  <tr key={row.userId} className={tr}>
+                    <td className={td}>{row.fullName}</td>
+                    <td className={td}>{row.role}</td>
+                    <td className={td}>{row.resolvedCount}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-
           {data.periodRows?.length > 0 && data.agentNames?.length > 0 && (
-            <div className="overflow-x-auto">
+            <div>
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
                 {data.bucketGranularityLabel}
               </p>
-              <table className="text-sm min-w-full">
-                <thead>
-                  <tr className="text-left text-gray-500 border-b">
-                    <th className="py-2 pr-4 whitespace-nowrap">Period</th>
-                    {data.agentNames.map((name) => (
-                      <th key={name} className="py-2 pr-3 whitespace-nowrap">
-                        {name.split(" ")[0]}
-                      </th>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200">
+                      <th className={`${th} whitespace-nowrap`}>Period</th>
+                      {data.agentNames.map((name) => (
+                        <th key={name} className={`${th} whitespace-nowrap`}>
+                          {name.split(" ")[0]}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.periodRows.map((row) => (
+                      <tr key={row.label} className={tr}>
+                        <td className={`${td} whitespace-nowrap`}>{row.label}</td>
+                        {row.counts.map((count, i) => (
+                          <td key={i} className={td}>{count}</td>
+                        ))}
+                      </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (reportType === "USER_RATINGS") {
+      return (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="bg-gray-50 rounded-lg px-4 py-3">
+              <p className="text-xs text-gray-500 mb-0.5">Prosječna ocjena</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {data.averageRating != null ? formatRating(data.averageRating) : "—"}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg px-4 py-3">
+              <p className="text-xs text-gray-500 mb-0.5">Ocijenjenih tiketa</p>
+              <p className="text-2xl font-bold text-gray-900">{data.ratedTicketsCount ?? 0}</p>
+            </div>
+            {data.distribution?.length > 0 && (
+              <div className="bg-gray-50 rounded-lg px-4 py-3 col-span-2 sm:col-span-1">
+                <p className="text-xs text-gray-500 mb-1">Distribucija</p>
+                <div className="flex flex-wrap gap-x-3 gap-y-0.5">
+                  {data.distribution.map((d) => (
+                    <span key={d.stars} className="text-sm text-gray-700">
+                      {d.stars}★ <span className="font-semibold">{d.count}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          {data.buckets?.length > 0 && (
+            <div>
+              {data.bucketGranularityLabel && (
+                <p className="text-xs text-gray-500 mb-2">{data.bucketGranularityLabel}</p>
+              )}
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    <th className={th}>Period</th>
+                    <th className={th}>Prosj. ocjena</th>
+                    <th className={th}>Broj</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.periodRows.map((row) => (
-                    <tr key={row.label} className="border-b border-gray-50">
-                      <td className="py-2 pr-4 whitespace-nowrap">{row.label}</td>
-                      {row.counts.map((count, i) => (
-                        <td key={i} className="py-2 pr-3">{count}</td>
-                      ))}
+                  {data.buckets.map((row) => (
+                    <tr key={row.label} className={tr}>
+                      <td className={td}>{row.label}</td>
+                      <td className={td}>
+                        {row.avgRating != null ? formatRating(row.avgRating) : "—"}
+                      </td>
+                      <td className={td}>{row.count}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -468,102 +534,63 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
       );
     }
 
-    if (reportType === "USER_RATINGS") {
+    if (reportType === "FIRST_RESPONSE") {
       return (
-        <div className="py-2 space-y-3 text-sm">
-          <p>
-            Prosječna ocjena:{" "}
-            <span className="font-semibold">
-              {data.averageRating != null ? formatRating(data.averageRating) : "—"}
-            </span>
-          </p>
-          <p>Ocijenjenih tiketa: {data.ratedTicketsCount ?? 0}</p>
-          {data.distribution?.map((d) => (
-            <p key={d.stars}>
-              {d.stars} ★ — {d.count}
+        <div className="space-y-4">
+          {reportResult.message && (
+            <p className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+              {reportResult.message}
             </p>
-          ))}
-          {data.buckets?.length > 0 && (
-            <>
-              <p className="text-xs text-gray-500 pt-1">
-                {data.bucketGranularityLabel}
+          )}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-gray-50 rounded-lg px-4 py-3">
+              <p className="text-xs text-gray-500 mb-0.5">Prosj. 1. odgovor</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {data.avgFirstResponseMinutes != null
+                  ? formatMinutes(data.avgFirstResponseMinutes)
+                  : "—"}
               </p>
-              <table className="w-full text-sm mt-1">
+            </div>
+            <div className="bg-gray-50 rounded-lg px-4 py-3">
+              <p className="text-xs text-gray-500 mb-0.5">S odgovorom / ukupno</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {data.ticketsWithResponseCount ?? 0}
+                <span className="text-base font-normal text-gray-400"> / {data.totalTicketsCount ?? 0}</span>
+              </p>
+            </div>
+          </div>
+          {data.buckets?.length > 0 ? (
+            <div>
+              {data.bucketGranularityLabel && (
+                <p className="text-xs text-gray-500 mb-2">{data.bucketGranularityLabel}</p>
+              )}
+              <table className="w-full">
                 <thead>
-                  <tr className="text-left text-gray-500 border-b">
-                    <th className="py-2">Period</th>
-                    <th className="py-2">Prosj. ocjena</th>
-                    <th className="py-2">Broj</th>
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    <th className={th}>Period</th>
+                    <th className={th}>Tiketi</th>
+                    <th className={th}>S odgovorom</th>
+                    <th className={th}>Prosj. vrijeme</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data.buckets.map((row) => (
-                    <tr key={row.label} className="border-b border-gray-50">
-                      <td className="py-2">{row.label}</td>
-                      <td className="py-2">
-                        {row.avgRating != null ? formatRating(row.avgRating) : "—"}
+                    <tr key={row.label} className={tr}>
+                      <td className={td}>{row.label}</td>
+                      <td className={td}>{row.ticketCount}</td>
+                      <td className={td}>{row.ticketsWithResponseCount}</td>
+                      <td className={td}>
+                        {row.avgFirstResponseMinutes != null
+                          ? formatMinutes(row.avgFirstResponseMinutes)
+                          : "—"}
                       </td>
-                      <td className="py-2">{row.count}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            </>
-          )}
-        </div>
-      );
-    }
-
-    if (reportType === "FIRST_RESPONSE") {
-      return (
-        <div className="py-2 space-y-3 text-sm">
-          {reportResult.message && (
-            <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
-              {reportResult.message}
-            </p>
-          )}
-          <p>
-            Prosjek u periodu{period === "custom" ? ` (${customFrom} — ${customTo})` : ""}:{" "}
-            <span className="font-semibold">
-              {data.avgFirstResponseMinutes != null
-                ? formatMinutes(data.avgFirstResponseMinutes)
-                : "—"}
-            </span>
-          </p>
-          <p>
-            Tiketi s odgovorom: {data.ticketsWithResponseCount ?? 0} /{" "}
-            {data.totalTicketsCount ?? 0}
-          </p>
-          <p className="text-xs text-gray-500">{data.bucketGranularityLabel}</p>
-          {data.buckets?.length > 0 ? (
-            <table className="w-full text-sm mt-2">
-              <thead>
-                <tr className="text-left text-gray-500 border-b">
-                  <th className="py-2">Period</th>
-                  <th className="py-2">Tiketi</th>
-                  <th className="py-2">S odgovorom</th>
-                  <th className="py-2">Prosj. vrijeme</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.buckets.map((row) => (
-                  <tr key={row.label} className="border-b border-gray-50">
-                    <td className="py-2">{row.label}</td>
-                    <td className="py-2">{row.ticketCount}</td>
-                    <td className="py-2">{row.ticketsWithResponseCount}</td>
-                    <td className="py-2">
-                      {row.avgFirstResponseMinutes != null
-                        ? formatMinutes(row.avgFirstResponseMinutes)
-                        : "—"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            </div>
           ) : (
-            <p className="text-gray-400 italic">
-              Nema podataka po pod-periodima.
-            </p>
+            <p className="text-sm text-gray-400 italic">Nema podataka po pod-periodima.</p>
           )}
         </div>
       );
@@ -571,54 +598,61 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
 
     if (reportType === "AVG_RESOLUTION") {
       return (
-        <div className="py-2 space-y-3 text-sm">
+        <div className="space-y-4">
           {reportResult.message && (
-            <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+            <p className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
               {reportResult.message}
             </p>
           )}
-          <p>
-            Prosječno rješavanje:{" "}
-            <span className="font-semibold">
-              {data.avgResolutionHours != null
-                ? formatHours(data.avgResolutionHours)
-                : "—"}
-            </span>
-          </p>
-          <p>
-            Zatvorenih tiketa: {data.closedTicketsCount ?? 0} /{" "}
-            {data.totalTicketsCount ?? 0}
-          </p>
-          <p className="text-xs text-gray-500">{data.bucketGranularityLabel}</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-gray-50 rounded-lg px-4 py-3">
+              <p className="text-xs text-gray-500 mb-0.5">Prosj. rješavanje</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {data.avgResolutionHours != null
+                  ? formatHours(data.avgResolutionHours)
+                  : "—"}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg px-4 py-3">
+              <p className="text-xs text-gray-500 mb-0.5">Zatvoreno / ukupno</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {data.closedTicketsCount ?? 0}
+                <span className="text-base font-normal text-gray-400"> / {data.totalTicketsCount ?? 0}</span>
+              </p>
+            </div>
+          </div>
           {data.buckets?.length > 0 ? (
-            <table className="w-full text-sm mt-2">
-              <thead>
-                <tr className="text-left text-gray-500 border-b">
-                  <th className="py-2">Period</th>
-                  <th className="py-2">Tiketa</th>
-                  <th className="py-2">Zatvoreno</th>
-                  <th className="py-2">Prosj. rješavanje</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.buckets.map((row) => (
-                  <tr key={row.label} className="border-b border-gray-50">
-                    <td className="py-2">{row.label}</td>
-                    <td className="py-2">{row.ticketCount}</td>
-                    <td className="py-2">{row.closedCount}</td>
-                    <td className="py-2">
-                      {row.avgResolutionHours != null
-                        ? formatHours(row.avgResolutionHours)
-                        : "—"}
-                    </td>
+            <div>
+              {data.bucketGranularityLabel && (
+                <p className="text-xs text-gray-500 mb-2">{data.bucketGranularityLabel}</p>
+              )}
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    <th className={th}>Period</th>
+                    <th className={th}>Tiketa</th>
+                    <th className={th}>Zatvoreno</th>
+                    <th className={th}>Prosj. rješavanje</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.buckets.map((row) => (
+                    <tr key={row.label} className={tr}>
+                      <td className={td}>{row.label}</td>
+                      <td className={td}>{row.ticketCount}</td>
+                      <td className={td}>{row.closedCount}</td>
+                      <td className={td}>
+                        {row.avgResolutionHours != null
+                          ? formatHours(row.avgResolutionHours)
+                          : "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <p className="text-gray-400 italic">
-              Nema podataka po pod-periodima.
-            </p>
+            <p className="text-sm text-gray-400 italic">Nema podataka po pod-periodima.</p>
           )}
         </div>
       );
@@ -673,13 +707,18 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
               />
             </>
           )}
-          {showMetrics && (
+          {(showMetrics || (showReports && reportType)) && (
             <button
               type="button"
               onClick={() => {
                 if (!validatePeriod()) return;
-                setLoading(true);
-                void loadDashboard();
+                if (showMetrics) {
+                  setLoading(true);
+                  void loadDashboard();
+                }
+                if (showReports && reportType) {
+                  void fetchReport(reportType);
+                }
               }}
               className="px-4 py-2 bg-navy-600 text-white text-sm font-medium rounded-lg hover:bg-navy-700"
             >
@@ -913,63 +952,65 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
       )}
 
       {showReports && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide flex items-center gap-2">
-              <BarChart2 size={16} />
-              Generisanje izvještaja
-            </h3>
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BarChart2 size={16} className="text-gray-400" />
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                Izvještaji
+              </h3>
+            </div>
             <button
               type="button"
               disabled
-              title="Export će biti dostupan u PB-46"
-              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed"
+              title="Export će biti dostupan u budućoj verziji"
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed"
             >
-              <Download size={16} />
+              <Download size={15} />
               Export
             </button>
           </div>
-          <p className="text-xs text-gray-400 mb-3">
-            CSV export planiran (PB-46)
-          </p>
 
-          <div className="flex flex-wrap gap-2 items-center">
-            <select
-              value={reportType}
-              onChange={(e) => setReportType(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
-            >
+          <div className="overflow-x-auto border-b border-gray-100">
+            <div className="flex gap-1.5 px-4 py-3 min-w-max">
               {REPORT_TYPES.map((r) => (
-                <option key={r.value} value={r.value}>
+                <button
+                  key={r.value}
+                  type="button"
+                  onClick={() => handleSelectChip(r.value)}
+                  className={`px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                    reportType === r.value
+                      ? "bg-navy-700 text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
                   {r.label}
-                </option>
+                </button>
               ))}
-            </select>
-            <button
-              type="button"
-              onClick={handleGenerateReport}
-              disabled={reportLoading || !!periodError}
-              className="px-4 py-2 bg-navy-600 text-white text-sm font-medium rounded-lg hover:bg-navy-700 disabled:opacity-50"
-            >
-              {reportLoading ? "Generisanje..." : "Generiši izvještaj"}
-            </button>
+            </div>
           </div>
 
-          {reportResult?.showLargePeriodWarning && (
-            <p className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mt-3">
-              Upozorenje: za veliki vremenski opseg izvještaj po statusu može
-              dati nepouzdanu interpretaciju postotaka.
-            </p>
-          )}
-
-          <div className="mt-4 border-t border-gray-100 pt-4">
-            {reportLoading ? (
+          <div className="p-5">
+            {!reportType && (
+              <p className="text-sm text-gray-400 italic py-2">
+                Odaberi tip izvještaja gore.
+              </p>
+            )}
+            {reportLoading && (
               <div className="flex items-center text-gray-400 text-sm py-4">
                 <Loader2 size={18} className="animate-spin mr-2" />
                 Učitavanje...
               </div>
-            ) : (
-              renderReportTable()
+            )}
+            {!reportLoading && reportType && (
+              <>
+                {reportResult?.showLargePeriodWarning && (
+                  <p className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mb-4">
+                    Upozorenje: za veliki vremenski opseg izvještaj po statusu može dati nepouzdanu interpretaciju postotaka.
+                  </p>
+                )}
+                {renderReportTable()}
+              </>
             )}
           </div>
         </div>
