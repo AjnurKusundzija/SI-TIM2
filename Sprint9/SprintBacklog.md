@@ -26,6 +26,7 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 | SB-09 | PB-41 Prosječno rješavanje — zaseban on-demand izvještaj | US-47 | Uma | Done | Novi `AVG_RESOLUTION` tip izvještaja s agregatom i bucket tabelom |
 | SB-10 | PB-43 Izvještaj o opterećenju agenata | US-94 | Uma | Done | `TEAM_WORKLOAD` vraća ukupne zbirove + pivot tabelu period × agent |
 | SB-11 | PB-44 Izvještaj o ocjenama korisnika | US-95 | Uma | Done | `USER_RATINGS` vraća distribuciju po zvjezdicama + trend tabelu po pod-periodima |
+| SB-12 | PB-29 Preraspodjela agenata po timovima - partial | US-23 | Ajdin | Done | Administrator može preraspodijeliti agente po timovima; pregled raspodjele timova s filtriranjem |
 
 ---
 
@@ -460,6 +461,20 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 - Kada administrator generiše izvještaj, tada vidi i trend tabelu po pod-periodima: period, prosječna ocjena, broj ocjena
 - Kada nema ocjena u odabranom periodu, sistem prikazuje odgovarajuću poruku
 - Sistem ne smije dozvoliti pristup izvještaju korisnicima koji nemaju admin rolu
+
+---
+
+## PB-29 Preraspodjela agenata po timovima
+
+### US-23
+*Kao administrator, želim da preraspodijelim agente po timovima, kako bih optimizirao rad.*
+
+**Acceptance Criteria:**
+- Kada je administrator prijavljen i nalazi se u sekciji upravljanja timovima, ako odabere agenta i premjesti ga u drugi tim, tada sistem mora izvršiti promjenu
+- Sistem mora omogućiti primjenu bez gubitka informacija
+- Kada administrator izvrši preraspodjelu agenta, ako je akcija potvrđena, tada sistem mora evidentirati promjenu sa vremenskim pečatom i imenom administratora
+- Sistem mora omogućiti da ne dođe do promjene podataka ukoliko administrator ne potvrdi akciju promjene agenata
+- Kada administrator izvrši pokušaj preraspodjele agenata, ako dođe do greške ili nemogućnosti odabrane preraspodjele, sistem mora poslati poruku upozorenja
 
 ---
 

@@ -47,7 +47,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-26](#pb-26) | Ocjenjivanje tiketa                                | Feature        | 5         | S         | Done    | Sprint 8  |
 | [PB-27](#pb-27) | Komunikacija kroz tiket                            | Feature        | 1         | M         | Done    | Sprint 6  |
 | [PB-28](#pb-28) | Upravljanje prioritetima tiketa                    | Feature        | 2         | M         | Done    | Sprint 7  |
-| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Backlog | Sprint 10 |
+| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Partial    | Sprint 9  |
 | [PB-30](#pb-30) | Automatska dodjela tiketa                          | Feature        | 3         | XS        | Done    | Sprint 7  |
 | [PB-31](#pb-31) | Prosljeđivanje tiketa                              | Feature        | 2         | M         | Done    | Sprint 7  |
 | [PB-32](#pb-32) | Pregled svih tiketa                                | Feature        | 1         | M         | Done    | Sprint 6  |
@@ -441,8 +441,8 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
-- **Veza sa sprintom ili release planom:** Sprint 10
+- **Status:** Partial
+- **Veza sa sprintom ili release planom:** Sprint 9
 
 ---
 
