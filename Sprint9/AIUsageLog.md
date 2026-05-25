@@ -41,7 +41,7 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 | Polje | Detalji |
 |---|---|
-| Datum | 25.05.2026 |
+| Datum | 21.05.2026 |
 | Sprint broj | Sprint 9 |
 | Alat koji je korišten | Claude Code (Anthropic) |
 | Svrha korištenja | Implementacija admin dashboarda s ključnim metrikama (PB-45) |
@@ -59,7 +59,7 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 | Polje | Detalji |
 |---|---|
-| Datum | 25.05.2026 |
+| Datum | 21.05.2026 |
 | Sprint broj | Sprint 9 |
 | Alat koji je korišten | Claude Code (Anthropic) |
 | Svrha korištenja | Implementacija modula izvještaja (PB-38, PB-39, PB-40, PB-41, PB-43, PB-44) i redizajn UI-a izvještaja |
@@ -76,7 +76,7 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 | Polje | Detalji |
 |---|---|
-| Datum | 25.05.2026 |
+| Datum | 23.05.2026 |
 | Sprint broj | Sprint 9 |
 | Alat koji je korišten | Claude Code (Anthropic, model Opus 4.7) |
 | Svrha korištenja | Full-stack implementacija PB-52 (US-76 Upravljanje katalogom paketa i US-77 Dodjela paketa klijentima) kroz backend (.NET 10, EF Core) i frontend (React 19, Vite, Tailwind), uključujući EF migracije, audit log funkcionalnosti, role-based authorization i rješavanje merge konflikata sa develop granom. |
