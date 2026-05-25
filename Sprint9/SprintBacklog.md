@@ -17,9 +17,9 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 | SB-01 | PB-45 Admin Dashboard sa ključnim metrikama | US-71, US-72, US-82 – US-86 | Uma | Done | Metrike na `/dashboard`; generisanje na `/reports` |
 | SB-00 | PB-50 Prosječno vrijeme prvog odgovora (admin) | US-87, US-88 | Uma | Done | On-demand `FIRST_RESPONSE` + trend po pod-periodima na `/reports` |
 | SB-02 | PB-51 Upravljanje korisničkim nalozima | US-73, US-74, US-75, US-89, US-90, US-91, US-92, US-93 | Ajdin | Done | CRUD operacije nad nalozima agenata, tehničara i klijenata, te logika prosljeđivanja kada postoje deaktivirani agenti |
-| SB-03 | PB-52 Upravljanje katalogom paketa i pretplata | US-76, US-77 | Eldar | To-Do | Admin definiše pakete i dodjeljuje pretplate klijentima |
-| SB-04 | PB-53 Pregled audit log-a aktivnosti | US-78, US-79 | Hana, Lamija | To-Do | Praćenje ključnih akcija u sistemu sa filtriranjem |
-| SB-05 | PB-56 Prilozi na tiketima | US-80, US-81 | Merisa | To-Do | Upload i preuzimanje priloga (slike, dokumenti) na tiketima |
+| SB-03 | PB-52 Upravljanje katalogom paketa i pretplata | US-76, US-77 | Eldar | Done | Admin definiše pakete i dodjeljuje pretplate klijentima |
+| SB-04 | PB-53 Pregled audit log-a aktivnosti | US-78, US-79 | Hana, Lamija | Done | Praćenje ključnih akcija u sistemu sa filtriranjem |
+| SB-05 | PB-56 Prilozi na tiketima | US-80, US-81 | Merisa | Done | Upload i preuzimanje priloga (slike, dokumenti) na tiketima |
 | SB-06 | PB-38 Izvještaj o broju tiketa | US-41 | Uma | Done | `TICKET_COUNT` vraća ukupan broj + bucket razbreak (dan/sedmica/mjesec) |
 | SB-07 | PB-39 Izvještaj po statusu tiketa | US-43 | Uma | Done | `TICKET_STATUS` s postocima, pie chart, drill-down i upozorenje za veliki period |
 | SB-08 | PB-40 Izvještaj po tipu problema | US-45 | Uma | Done | `PROBLEM_TYPE` s bar chartom i drill-down po kategoriji |
