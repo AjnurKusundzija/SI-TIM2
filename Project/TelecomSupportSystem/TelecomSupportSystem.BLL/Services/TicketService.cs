@@ -23,11 +23,13 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ICommentService _commentService;
         private readonly IAuditLogService? _auditLogService;
 
+        // PB-56 + audit log: primarni konstruktor sa IAttachmentRepository i opcionalnim IAuditLogService.
         public TicketService(
             ITicketRepository ticketRepository,
             ITeamRepository teamRepository,
             IUserRepository userRepository,
             INotificationService notificationService,
+            IAttachmentRepository attachmentRepository,
             ICommentService commentService,
             IAuditLogService? auditLogService = null)
         {
@@ -49,7 +51,7 @@ namespace TelecomSupportSystem.BLL.Services
             INotificationService notificationService,
             ICommentService commentService)
             : this(ticketRepository, teamRepository, userRepository, notificationService,
-                   new TelecomSupportSystem.DAL.Repositories.NullAttachmentRepository(), commentService)
+                   new TelecomSupportSystem.DAL.Repositories.NullAttachmentRepository(), commentService, null)
         {
         }
 
@@ -854,6 +856,25 @@ namespace TelecomSupportSystem.BLL.Services
             }
 
             await _ticketRepository.CreateAsync(ticket);
+
+            // PB-56: snimi attachment fajlove i entitete tek nakon što tiket postoji
+            if (attachments is not null && attachments.Any())
+            {
+                var (attachmentEntities, writtenPaths) =
+                    AttachmentStorage.WriteFiles(attachments, ticket.TicketId, null, userId);
+
+                try
+                {
+                    await _attachmentRepository.AddRangeAsync(attachmentEntities);
+                    ticket.Attachments = attachmentEntities;
+                }
+                catch
+                {
+                    // US-80: ako DB save padne, počisti fajlove sa diska
+                    AttachmentStorage.CleanupFiles(writtenPaths);
+                    throw;
+                }
+            }
 
             if (_auditLogService is not null)
             {
