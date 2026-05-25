@@ -104,4 +104,7 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Šta je tim odbacio | Odbačen je prijedlog korištenja istog detaljnog prikaza za sve tipove korisnika bez odvajanja statistike zaposlenika od korisničkih podataka i paketa. |
 | Rizici, problemi ili greške koje su uočene | Identifikovan je potencijalni race condition scenario prilikom dodjele tiketa agentima koji mogu biti deaktivirani između učitavanja liste i potvrde dodjele. Također je uočena potreba za dodatnom backend validacijom kako frontend ograničenja ne bi bila jedina zaštita role-based pristupa. |
 | Ko je koristio alat | Ajdin Dželo |
+
+---
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
