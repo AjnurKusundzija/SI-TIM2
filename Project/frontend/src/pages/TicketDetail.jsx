@@ -367,39 +367,37 @@ export default function TicketDetail() {
         }
     }, [id])
 
-   // Izmena u handleSend da podrži praznu poruku sa fajlovima
-const handleSend = async () => {
-    // Dozvoli slanje ako ima poruke ILI fajlova
-    if ((!message.trim() && files.length === 0) || isSending) return;
+    const handleSend = async () => {
+    // Dozvoli slanje ako ima ILI teksta ILI priloženih fajlova
+    if ((!message.trim() && files.length === 0) || isSending) return
     
-    setSendError(null);
-    setIsSending(true);
+    setSendError(null)
+    setIsSending(true)
+    
     try {
+        // Ako imamo fajlove, prosleđujemo poruku i fajlove
         if (files.length > 0) {
-            // Osiguraj da message nije null/undefined za backend
-            await addCommentWithAttachments(id, message || "", files);
+            await addCommentWithAttachments(id, message.trim(), files)
         } else {
-            await addComment(id, message);
+            // Ako nema fajlova, šaljemo običan tekstualni komentar
+            await addComment(id, message)
         }
-        setMessage('');
-        setFiles([]);
-        setShowFileUpload(false);
+        
+        // Kompletan reset forme nakon uspješnog slanja
+        setMessage('')
+        setFiles([])
+        setShowFileUpload(false)
     } catch (err) {
-        // ... error handling
+        console.error('Failed to send comment', err)
+        setSendError(
+            err.response?.data?.message || 
+            err.response?.data?.poruka || 
+            'Neuspješno slanje poruke. Pokušajte ponovo.'
+        )
     } finally {
-        setIsSending(false);
+        setIsSending(false)
     }
-};
-
-// Izmena na samom dugmetu (JSX deo)
-<button 
-    type="button" 
-    onClick={handleSend} 
-    disabled={(!message.trim() && files.length === 0) || isSending}
-    className="..."
->
-    {isSending ? 'Slanje...' : 'Pošalji'}
-</button>
+}
 
     const handleOpenForward = () => {
         setForwardModalOpen(true)

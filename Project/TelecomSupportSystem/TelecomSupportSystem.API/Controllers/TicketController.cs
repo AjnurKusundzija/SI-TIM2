@@ -459,7 +459,8 @@ namespace TelecomSupportSystem.API.Controllers
                     {
                         FileName = file.FileName,
                         ContentType = file.ContentType ?? "application/octet-stream",
-                        Data = memoryStream.ToArray()
+                        Data = memoryStream.ToArray(),
+                        Size = file.Length
                     });
                 }
             }

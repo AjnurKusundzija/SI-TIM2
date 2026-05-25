@@ -243,8 +243,9 @@ namespace TelecomSupportSystem.BLL.Services
                     FileName = a.FileName,
                     ContentType = a.ContentType,
                     Size = a.Size,
+                    UploadedAt = a.UploadedAt,
                     DownloadUrl = $"/api/attachments/{a.AttachmentId}"
-                })
+                }).ToList()
             };
         }
 
