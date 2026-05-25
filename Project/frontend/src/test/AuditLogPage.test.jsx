@@ -183,13 +183,8 @@ describe('AuditLogPage', () => {
 
     await waitFor(() => {
       const dateFromInputs = screen.getAllByLabelText('Od datuma')
-      const dateToInputs = screen.getAllByLabelText('Do datuma')
       expect(dateFromInputs.length).toBeGreaterThan(0)
     })
-
-    // Find filter inputs (there might be multiple on the page)
-    const dateFromInputs = screen.getAllByDisplayValue('')
-    const dateToInputs = screen.getAllByDisplayValue('')
 
     // Set dateFrom to 2025-05-20 and dateTo to 2025-05-10 (invalid range)
     // This is tricky to test without more specific selectors, so we test the error message display
