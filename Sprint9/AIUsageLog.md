@@ -43,15 +43,33 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 |---|---|
 | Datum | 25.05.2026 |
 | Sprint broj | Sprint 9 |
-| Alat koji je korišten | Claude Code (Anthropic) — Opus 4.7 |
-| Svrha korištenja | Generisanje automatizovanih testova za Sprint 9 user stories (PB-45, PB-50, PB-51) i ažuriranje Proof of Testing dokumenta |
-| Kratak opis zadatka ili upita | Dodati nove backend (xUnit + Moq + EF InMemory + Stopwatch) i frontend (Vitest + React Testing Library) testove za US-71, US-72, US-73, US-74, US-75, US-82, US-83, US-84, US-85, US-86, US-87, US-88, US-89, bez izmjene postojećeg produkcijskog koda i bez izmjene postojećih testova. Pokriti unit, integracijski, sistemski, sigurnosni, performansni i acceptance/smoke nivo. Ažurirati `Sprint9/ProofOfTesting.md` po uzoru na `Sprint7/ProofOfTesting.md` |
-| Šta je AI predložio ili generisao | 10 novih backend test fajlova u `Project/TelecomSupportSystem/TelecomSupportSystem.Tests/Sprint9/` (87 test metoda, sa Theory inline data > 100 slučajeva) — `UserAccountManagementServiceTests`, `UserAccountManagementControllerTests`, `UserAccountManagementIntegrationTests`, `UserAccountManagementSecurityTests`, `FirstResponseReportTests`, `FirstResponseReportIntegrationTests`, `AdminDashboardServiceTests`, `AdminDashboardIntegrationTests`, `AdminDashboardPerformanceTests`, `Sprint9UserStoriesSystemTests`. Pored toga 4 nova frontend test fajla u `Project/frontend/src/test/` (40 testova) — `Sprint9CreateUser.test.jsx`, `Sprint9UsersList.test.jsx`, `Sprint9AdminDashboard.test.jsx`, `Sprint9FirstResponse.test.jsx`. Kompletno prepisan `Sprint9/ProofOfTesting.md` sa tabelama pokrivenih AC za svaki US, vezom sa Test Strategijom, gap evidencijom i komandama za lokalno pokretanje |
-| Šta je tim prihvatio | Prihvaćeni svi generisani test fajlovi (nijedna postojeća produkcijska niti test datoteka nije mijenjana, samo dodani novi fajlovi); prihvaćena cijela struktura `Sprint9/ProofOfTesting.md` |
-| Šta je tim izmijenio | Nakon prvog test run-a popravljena 2 frontend testa: precizniji string match za inline validation poruke u `Sprint9CreateUser.test.jsx`, i dokumentovan gap (auto-reload preko useEffect) u `Sprint9AdminDashboard.test.jsx` umjesto da se mijenja produkcijski kod |
-| Šta je tim odbacio | Odbačen prijedlog da se popravi produkcijski kod kada bi to bilo potrebno za prolaz nekog AC (npr. audit log za izmjenu korisnika u US-74 ili confirm modal za US-89) — umjesto toga, ti slučajevi su evidentirani kao GAP u `ProofOfTesting.md` |
-| Rizici, problemi ili greške koje su uočene | (1) `.NET SDK` nije bio instaliran u trenutnom okruženju pa backend testovi nisu pokrenuti lokalno tokom prve sesije — naknadno instaliran .NET 10.0.300 SDK i potrebno ih je verifikovati. (2) Otkriven gap u `AdminDashboardSection.jsx` (auto-reload na promjenu filtera prije Primijeni — krši AC „ne smije pozvati API“). (3) Otkriven gap: audit log za `Users` izmjene nije implementiran u produkcijskom kodu (US-74 AC). Nije pravljen fix, već gap dokumentovan |
-| Ko je koristio alat | Ajnur Kušundžija |
+| Alat koji je korišten | Claude Code (Anthropic) |
+| Svrha korištenja | Implementacija admin dashboarda s ključnim metrikama (PB-45) |
+| Kratak opis zadatka ili upita | Generisanje React komponente za admin dashboard koja prikazuje KPI kartice (otvoreni tiketi, prosječni odgovor, prosječno rješavanje, ocjene, zastarjeli tiketi), grafove (pie chart po statusu, bar chart po tipu problema i opterećenju agenata) i sekciju aktivnih korisnika po ulozi |
+| Šta je AI predložio ili generisao | Kompletnu `AdminDashboardSection` komponentu s `StatCard` podkomponentom, Recharts integraciju (PieChart, BarChart), shared period filter s preset dugmadima i custom date range, drill-down navigacijom na ticket listu, skeleton loading state i error handling |
+| Šta je tim prihvatio | Cjelokupna struktura komponente, StatCard pattern, period filter logika, Recharts grafovi, drill-down navigacija |
+| Šta je tim izmijenio | Prilagođene boje i labele statusima i kategorijama problema, dodan `closedInPeriodCount` prikaz kao description na StatCard, usklađeni Tailwind class nazivi s ostatkom projekta (navy-600/700 color scheme) |
+| Šta je tim odbacio | — |
+| Rizici, problemi ili greške koje su uočene | Recharts `ResponsiveContainer` zahtijeva mociranje u testovima; `StatCard` s `disabled={!onClick}` okida ESLint upozorenje za button bez explicit tipa |
+| Ko je koristio alat | Uma Mahmutovic |
+
+---
+
+## Unos #3
+
+| Polje | Detalji |
+|---|---|
+| Datum | 25.05.2026 |
+| Sprint broj | Sprint 9 |
+| Alat koji je korišten | Claude Code (Anthropic) |
+| Svrha korištenja | Implementacija modula izvještaja (PB-38, PB-39, PB-40, PB-41, PB-43, PB-44) i redizajn UI-a izvještaja |
+| Kratak opis zadatka ili upita | Kompletiranje svih 7 tipova izvještaja: TICKET_COUNT, TICKET_STATUS, PROBLEM_TYPE, TEAM_WORKLOAD, USER_RATINGS, FIRST_RESPONSE, AVG_RESOLUTION — uključujući backend DTOs, servisne metode, repository metode i frontend prikaz. Zatim iterativni redizajn selektora tipa izvještaja (dropdown → tab bar → accordion → pill chips) |
+| Šta je AI predložio ili generisao | Backend: novi DTOs (`TicketCountReportDto`, `AvgResolutionReportDto`, `ResolutionBucketDto`, `WorkloadPeriodRowDto` itd.), `GetAgentResolvedDetailsAsync` repository metodu za pivot tablicu, `BuildTeamWorkloadReportAsync` s period×agent pivotom, `BuildAvgResolutionReport` i `BuildUserRatingsReport` s bucket trendovima. Frontend: `renderReportTable` s mini-karticama za aggregate statistike i konzistentno stiliziranim tabelama (`bg-gray-50` header, `hover:bg-gray-50` redovi), horizontalno scrollabilni pill chip selector s auto-fetch na klik, `fetchReport`/`handleSelectChip` handleri, "Primijeni" dugme u period filteru za reports mod |
+| Šta je tim prihvatio | Kompletna backend implementacija svih report tipova, pill chip UI, mini-kartice za aggregate stats, poboljšano stiliziranje tabela, auto-fetch logika |
+| Šta je tim izmijenio | Iterativno odbijeni tab bar i accordion u korist pill chips; vraćen disabled Export gumb desno od naslova sekcije |
+| Šta je tim odbacio | Tab bar layout (izgledao kao navbar), accordion layout |
+| Rizici, problemi ili greške koje su uočene | Test `Reports.test.jsx` je pao jer je tražio tekst `'Generisanje izvještaja'` koji je preimenovan u `'Izvještaji'` — popravljen promjenom assertion-a na chip label `'Broj tiketa'`; linter je više puta revertorao izmjene što je uzrokovalo ponovnu primjenu istih promjena |
+| Ko je koristio alat | Uma Mahmutovic |
 
 ---
 

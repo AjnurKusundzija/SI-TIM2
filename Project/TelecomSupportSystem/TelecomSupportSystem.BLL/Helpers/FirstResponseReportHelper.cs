@@ -93,7 +93,7 @@ namespace TelecomSupportSystem.BLL.Helpers
             return result;
         }
 
-        private static List<(DateTime Start, DateTime End, string Label)> GenerateRanges(
+        public static List<(DateTime Start, DateTime End, string Label)> GenerateRanges(
             DateTime from,
             DateTime to,
             ReportBucketGranularity granularity)

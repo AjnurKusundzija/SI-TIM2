@@ -71,6 +71,61 @@ namespace TelecomSupportSystem.DAL.Repositories
                 && t.ClosedDate >= from
                 && t.ClosedDate <= to);
 
+        public async Task<IReadOnlyList<AgentTicketResolutionRow>> GetAgentResolvedDetailsAsync(DateTime from, DateTime to)
+        {
+            var closedTickets = await _context.Tickets
+                .Where(t =>
+                    t.Status == TicketStatus.CLOSED
+                    && t.ClosedDate.HasValue
+                    && t.ClosedDate >= from
+                    && t.ClosedDate <= to)
+                .Select(t => new { t.TicketId, ClosedDate = t.ClosedDate!.Value })
+                .ToListAsync();
+
+            if (closedTickets.Count == 0)
+                return Array.Empty<AgentTicketResolutionRow>();
+
+            var ticketIds = closedTickets.Select(t => t.TicketId).ToList();
+            var closedDateMap = closedTickets.ToDictionary(t => t.TicketId, t => t.ClosedDate);
+
+            var assignments = await _context.TicketUsers
+                .Where(tu => ticketIds.Contains(tu.TicketId))
+                .Join(
+                    _context.Users.Where(u => u.Role == Role.AGENT || u.Role == Role.TECHNICIAN),
+                    tu => tu.UserId,
+                    u => u.UserId,
+                    (tu, u) => new { tu.TicketId, tu.UserId, tu.AssignmentDate, u.FirstName, u.LastName, u.Role })
+                .ToListAsync();
+
+            var agentCredits = assignments
+                .Where(x => x.Role == Role.AGENT)
+                .GroupBy(x => x.TicketId)
+                .Select(g => g.OrderByDescending(x => x.AssignmentDate).First())
+                .Select(x => new AgentTicketResolutionRow
+                {
+                    UserId = x.UserId,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Role = x.Role,
+                    ClosedDate = closedDateMap[x.TicketId],
+                    TicketId = x.TicketId,
+                });
+
+            var techCredits = assignments
+                .Where(x => x.Role == Role.TECHNICIAN)
+                .Select(x => new AgentTicketResolutionRow
+                {
+                    UserId = x.UserId,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Role = x.Role,
+                    ClosedDate = closedDateMap[x.TicketId],
+                    TicketId = x.TicketId,
+                });
+
+            return agentCredits.Concat(techCredits).ToList();
+        }
+
         public async Task<IReadOnlyList<AgentResolveRow>> GetAgentResolvedCountsAsync(DateTime from, DateTime to)
         {
             var closedTicketIds = await _context.Tickets

@@ -67,7 +67,7 @@ describe('Reports page (/reports)', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Izvještaji' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Izvještaji', level: 2 })).toBeInTheDocument()
     })
     expect(screen.getByText(/generisanje izvještaja za odabrani vremenski period/i)).toBeInTheDocument()
   })
@@ -92,7 +92,7 @@ describe('Reports page (/reports)', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Vremenski period')).toBeInTheDocument()
-      expect(screen.getByText('Generisanje izvještaja')).toBeInTheDocument()
+      expect(screen.getByText('Broj tiketa')).toBeInTheDocument()
     })
     expect(mocks.getAdminDashboard).not.toHaveBeenCalled()
     expect(screen.queryByText('Ključne metrike')).not.toBeInTheDocument()

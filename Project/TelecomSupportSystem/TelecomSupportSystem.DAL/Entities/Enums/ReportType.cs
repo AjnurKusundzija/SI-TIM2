@@ -12,5 +12,6 @@ namespace TelecomSupportSystem.DAL.Entities.Enums
         TEAM_WORKLOAD = 4,
         USER_RATINGS = 5,
         FIRST_RESPONSE = 6,
+        AVG_RESOLUTION = 7,
     }
 }
