@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace TelecomSupportSystem.BLL.DTOs.Packages
@@ -12,5 +13,6 @@ namespace TelecomSupportSystem.BLL.DTOs.Packages
         public string PackageDescription { get; set; } = string.Empty;
         public string Summary { get; set; } = string.Empty;
         public List<string> IncludedServices { get; set; } = new List<string>();
+        public DateTime? StartDate { get; set; }
     }
 }

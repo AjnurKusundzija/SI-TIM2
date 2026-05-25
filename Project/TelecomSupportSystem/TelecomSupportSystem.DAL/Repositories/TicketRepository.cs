@@ -35,8 +35,13 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .Include(t => t.Creator)
                 .Include(t => t.Assignments)
                     .ThenInclude(a => a.User)
+                .Include(t => t.Attachments)
+                    .ThenInclude(a => a.User)
                 .Include(t => t.Comments)
                     .ThenInclude(c => c.Author)
+                .Include(t => t.Comments)
+                    .ThenInclude(c => c.Attachments)
+                        .ThenInclude(a => a.User)
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
         }
 
@@ -50,6 +55,7 @@ namespace TelecomSupportSystem.DAL.Repositories
         public async Task<IEnumerable<Ticket>> GetAllAsync()
         {
             return await _context.Tickets
+                .Include(t => t.Assignments)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }

@@ -17,5 +17,9 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 
         // US-TechnicianForwarding: Dohvata tehničare na određenoj lokaciji sa njihovim zaduženjima
         Task<IEnumerable<User>> GetTechniciansByLocationAsync(Location location);
+
+        // PB-51: User Account Management
+        Task CreateAsync(User user);
+        Task<(IEnumerable<User> Users, int TotalCount)> GetUsersPaginatedAsync(Role? role, AccountStatus? status, string? search, Location? location, int page, int pageSize);
     }
 }

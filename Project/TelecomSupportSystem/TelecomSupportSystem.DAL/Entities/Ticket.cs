@@ -30,6 +30,7 @@ namespace TelecomSupportSystem.DAL.Entities
         public Team? Team { get; set; }
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public Rating? Rating { get; set; }
+        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
         public ICollection<TicketUser> Assignments { get; set; } = new List<TicketUser>();
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using TelecomSupportSystem.DAL;
 using TelecomSupportSystem.DAL.Entities;
@@ -27,11 +28,19 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{typeof(Program).Assembly.GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+        options.IncludeXmlComments(xmlPath);
+});
 builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options
+        .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
 /*
 // JWT_KEY: env var (production/CI) takes priority; User Secrets / IConfiguration used in development
@@ -111,12 +120,17 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<ISubscriptionPackageRepository, SubscriptionPackageRepository>();
 builder.Services.AddScoped<IPackageFeatureRepository, PackageFeatureRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IFaqRepository, FaqRepository>();
+// PB-52 / US-76, US-77
+builder.Services.AddScoped<ICatalogPackageRepository, CatalogPackageRepository>();
+builder.Services.AddScoped<IClientSubscriptionRepository, ClientSubscriptionRepository>();
+builder.Services.AddScoped<ISubscriptionAuditLogRepository, SubscriptionAuditLogRepository>();
 
 // Services
 builder.Services.AddScoped<ICommentService, CommentService>();
@@ -130,6 +144,11 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFaqService, FaqService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
+// PB-52 / US-76, US-77
+builder.Services.AddScoped<ICatalogPackageService, CatalogPackageService>();
+builder.Services.AddScoped<IClientSubscriptionService, ClientSubscriptionService>();
+// Audit Log
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 
 var app = builder.Build();
 
@@ -217,6 +236,46 @@ if (app.Environment.IsDevelopment())
         );
         db.SaveChanges();
     }
+
+    var developmentUsers = new[]
+    {
+        new { FirstName = "Admin", LastName = "User", Email = "admin@test.com", Username = "admin", Password = "Admin123!", Location = Location.SARAJEVO, Role = Role.ADMINISTRATOR },
+        new { FirstName = "Agent", LastName = "User", Email = "agent@test.com", Username = "agent", Password = "Agent123!", Location = Location.SARAJEVO, Role = Role.AGENT },
+        new { FirstName = "Client", LastName = "User", Email = "client@test.com", Username = "client", Password = "Client123!", Location = Location.SARAJEVO, Role = Role.CLIENT },
+        new { FirstName = "John", LastName = "Doe", Email = "john@test.com", Username = "Joohnyy", Password = "Johny123!", Location = Location.MOSTAR, Role = Role.CLIENT }
+    };
+
+    foreach (var seedUser in developmentUsers)
+    {
+        var user = db.Users.FirstOrDefault(u => u.Email == seedUser.Email);
+
+        if (user is null)
+        {
+            db.Users.Add(new User
+            {
+                FirstName = seedUser.FirstName,
+                LastName = seedUser.LastName,
+                Email = seedUser.Email,
+                Username = seedUser.Username,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(seedUser.Password),
+                Phone = "",
+                Location = seedUser.Location,
+                Role = seedUser.Role,
+                AccountStatus = AccountStatus.ACTIVE
+            });
+            continue;
+        }
+
+        user.FirstName = seedUser.FirstName;
+        user.LastName = seedUser.LastName;
+        user.Username = seedUser.Username;
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(seedUser.Password);
+        user.Location = seedUser.Location;
+        user.Role = seedUser.Role;
+        user.AccountStatus = AccountStatus.ACTIVE;
+    }
+
+    db.SaveChanges();
 
     if (!db.Tickets.Any())
     {
@@ -451,131 +510,99 @@ if (app.Environment.IsDevelopment())
         }
     }
 
-    // US-6, US-7: Seed paketa i pretplata za testne korisnike (CLIENT, John Doe)
-    if (!db.SubscriptionPackages.Any())
+    // PB-52 / US-76: Seed kataloga paketa (admin-managed)
+    if (!db.CatalogPackages.Any())
     {
-        var clientId = db.Users.First(u => u.Email == "client@test.com").UserId;
-        var johnId   = db.Users.First(u => u.Email == "john@test.com").UserId;
-
-        var now = DateTime.UtcNow;
-
-        var packages = new List<SubscriptionPackage>
-        {
-            // ── CLIENT: mix zasebnih i kombinovanih paketa ────────────────────
-            new SubscriptionPackage
+        db.CatalogPackages.AddRange(
+            new CatalogPackage
             {
-                UserId             = clientId,
-                PackageName        = "Internet Standard 200 Mbps",
-                PackageType        = PackageType.INTERNET,
-                PackageStatus      = PackageStatus.ACTIVE,
-                MonthlyPrice       = 39.90m,
-                PackageDescription = "Optički internet idealan za porodicu — stabilna brzina i niska latencija.",
-                StartDate          = now.AddMonths(-6),
-                EndDate            = now.AddMonths(6),
-                Features = new List<PackageFeature>
-                {
-                    new PackageFeature { Name = "Brzina preuzimanja", Value = "200", Unit = "Mbps", Description = "Maksimalna brzina preuzimanja." },
-                    new PackageFeature { Name = "Brzina slanja",      Value = "50",  Unit = "Mbps", Description = "Maksimalna brzina slanja." },
-                    new PackageFeature { Name = "WiFi ruter",         Value = "Uključen", Unit = "", Description = "Besplatan WiFi 6 ruter." },
-                }
+                Name = "Internet Start 100 Mbps",
+                Type = PackageType.INTERNET,
+                Description = "Optički internet za svakodnevne potrebe — streaming, video pozivi, lagano gaming.",
+                Price = 29.90m,
+                Status = PackageStatus.ACTIVE,
             },
-            new SubscriptionPackage
+            new CatalogPackage
             {
-                UserId             = clientId,
-                PackageName        = "TV Premium",
-                PackageType        = PackageType.TV,
-                PackageStatus      = PackageStatus.ACTIVE,
-                MonthlyPrice       = 24.90m,
-                PackageDescription = "Bogata ponuda kanala uključujući sport i film pakete.",
-                StartDate          = now.AddMonths(-3),
-                EndDate            = now.AddMonths(9),
-                Features = new List<PackageFeature>
-                {
-                    new PackageFeature { Name = "Broj kanala",   Value = "120", Unit = "kanala", Description = "Ukupan broj dostupnih kanala." },
-                    new PackageFeature { Name = "HD kanali",     Value = "60",  Unit = "kanala", Description = "Kanali u HD rezoluciji." },
-                    new PackageFeature { Name = "Sport paket",   Value = "Uključen", Unit = "", Description = "Arena Sport, Sport Klub." },
-                    new PackageFeature { Name = "Film paket",    Value = "Uključen", Unit = "", Description = "HBO, Pickbox, Cinemax." },
-                }
+                Name = "Internet Premium 1 Gbps",
+                Type = PackageType.INTERNET,
+                Description = "Gigabitni optički internet za najzahtjevnije korisnike i timski rad od kuće.",
+                Price = 59.90m,
+                Status = PackageStatus.ACTIVE,
             },
-            new SubscriptionPackage
+            new CatalogPackage
             {
-                UserId             = clientId,
-                PackageName        = "All-in-One paket",
-                PackageType        = PackageType.BUNDLE,
-                PackageStatus      = PackageStatus.ACTIVE,
-                MonthlyPrice       = 79.90m,
-                PackageDescription = "Sve u jednom — najbrži internet, kompletna TV ponuda i mobilni broj.",
-                StartDate          = now.AddMonths(-1),
-                EndDate            = now.AddMonths(11),
-                Features = new List<PackageFeature>
-                {
-                    new PackageFeature { Name = "Internet brzina preuzimanja", Value = "500", Unit = "Mbps", Description = "Brzina preuzimanja u kombinovanom paketu." },
-                    new PackageFeature { Name = "Internet brzina slanja",      Value = "100", Unit = "Mbps", Description = "Brzina slanja u kombinovanom paketu." },
-                    new PackageFeature { Name = "TV broj kanala",              Value = "80",  Unit = "kanala", Description = "Broj TV kanala." },
-                    new PackageFeature { Name = "Mobilni podaci",              Value = "20",  Unit = "GB",     Description = "Mjesečni mobilni internet." },
-                    new PackageFeature { Name = "Mobilni minuti",              Value = "300", Unit = "min",    Description = "Minute prema svim mrežama." },
-                    new PackageFeature { Name = "SMS poruke",                  Value = "200", Unit = "SMS",    Description = "Besplatne SMS poruke mjesečno." },
-                }
+                Name = "TV Basic",
+                Type = PackageType.TV,
+                Description = "Standardna ponuda kanala uključujući domaće i informativne kanale.",
+                Price = 14.90m,
+                Status = PackageStatus.ACTIVE,
             },
-
-            // ── JOHN DOE: zasebni i kombinovani paketi ────────────────────────
-            new SubscriptionPackage
+            new CatalogPackage
             {
-                UserId             = johnId,
-                PackageName        = "Internet Premium 1 Gbps",
-                PackageType        = PackageType.INTERNET,
-                PackageStatus      = PackageStatus.ACTIVE,
-                MonthlyPrice       = 59.90m,
-                PackageDescription = "Gigabitni optički internet za najzahtjevnije korisnike.",
-                StartDate          = now.AddMonths(-12),
-                EndDate            = now.AddMonths(12),
-                Features = new List<PackageFeature>
-                {
-                    new PackageFeature { Name = "Brzina preuzimanja", Value = "1000", Unit = "Mbps", Description = "Gigabitna brzina preuzimanja." },
-                    new PackageFeature { Name = "Brzina slanja",      Value = "200",  Unit = "Mbps", Description = "Brzina slanja." },
-                    new PackageFeature { Name = "Statička IP adresa", Value = "Uključena", Unit = "", Description = "Besplatna statička IPv4 adresa." },
-                }
+                Name = "TV Premium",
+                Type = PackageType.TV,
+                Description = "Bogata ponuda HD kanala — sport, film, dječji i strani sadržaj.",
+                Price = 24.90m,
+                Status = PackageStatus.ACTIVE,
             },
-            new SubscriptionPackage
+            new CatalogPackage
             {
-                UserId             = johnId,
-                PackageName        = "Mobilni L",
-                PackageType        = PackageType.MOBILE,
-                PackageStatus      = PackageStatus.ACTIVE,
-                MonthlyPrice       = 29.90m,
-                PackageDescription = "Neograničeni mobilni razgovori, SMS i veliki paket mobilnih podataka.",
-                StartDate          = now.AddMonths(-4),
-                EndDate            = now.AddMonths(8),
-                Features = new List<PackageFeature>
-                {
-                    new PackageFeature { Name = "Mobilni podaci", Value = "Neograničeno", Unit = "", Description = "Neograničena količina mobilnih podataka." },
-                    new PackageFeature { Name = "Mobilni minuti", Value = "Neograničeno", Unit = "", Description = "Neograničeni razgovori." },
-                    new PackageFeature { Name = "SMS poruke",     Value = "Neograničeno", Unit = "", Description = "Neograničene SMS poruke." },
-                }
+                Name = "Mobilni M",
+                Type = PackageType.MOBILE,
+                Description = "Mjesečni paket sa minutama, SMS porukama i mobilnim podacima.",
+                Price = 19.90m,
+                Status = PackageStatus.ACTIVE,
             },
-            new SubscriptionPackage
+            new CatalogPackage
             {
-                UserId             = johnId,
-                PackageName        = "Duo paket — Internet + TV",
-                PackageType        = PackageType.BUNDLE,
-                PackageStatus      = PackageStatus.ACTIVE,
-                MonthlyPrice       = 54.90m,
-                PackageDescription = "Brz internet u kombinaciji s kvalitetnom TV ponudom.",
-                StartDate          = now.AddMonths(-2),
-                EndDate            = now.AddMonths(10),
-                Features = new List<PackageFeature>
-                {
-                    new PackageFeature { Name = "Internet brzina preuzimanja", Value = "200", Unit = "Mbps",   Description = "Brzina preuzimanja u Duo paketu." },
-                    new PackageFeature { Name = "Internet brzina slanja",      Value = "50",  Unit = "Mbps",   Description = "Brzina slanja u Duo paketu." },
-                    new PackageFeature { Name = "TV broj kanala",              Value = "60",  Unit = "kanala", Description = "Broj uključenih TV kanala." },
-                    new PackageFeature { Name = "Sport paket",                 Value = "Uključen", Unit = "",  Description = "Arena Sport, Sport Klub." },
-                }
+                Name = "Mobilni L Unlimited",
+                Type = PackageType.MOBILE,
+                Description = "Neograničeni razgovori, SMS i mobilni podaci na cijeloj BH mreži.",
+                Price = 34.90m,
+                Status = PackageStatus.ACTIVE,
             },
-        };
-
-        db.SubscriptionPackages.AddRange(packages);
+            new CatalogPackage
+            {
+                Name = "Duo paket Internet + TV",
+                Type = PackageType.BUNDLE,
+                Description = "Kombinacija brzog interneta i kvalitetne TV ponude — povoljnije nego zasebno.",
+                Price = 49.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "All-in-One paket",
+                Type = PackageType.BUNDLE,
+                Description = "Sve usluge u jednom — najbrži internet, kompletna TV ponuda i neograničena mobilna.",
+                Price = 79.90m,
+                Status = PackageStatus.ACTIVE,
+            },
+            new CatalogPackage
+            {
+                Name = "Internet Legacy ADSL",
+                Type = PackageType.INTERNET,
+                Description = "Stari ADSL paket — više nije dostupan za nove klijente.",
+                Price = 19.90m,
+                Status = PackageStatus.INACTIVE,
+            }
+        );
         db.SaveChanges();
     }
+
+    // PB-52: PB-21 legacy seed uklonjen. Pretplate klijenata se sada dodjeljuju
+    // isključivo preko admin sekcije "Pretplate" (US-77).
+    // Stare SubscriptionPackages rows (ako postoje iz prethodnih runova) — obriši ih
+    // da klijentski view bude prazan po default-u, kako bismo izbjegli zbunjujuće
+    // duple stavke iz dvaju izvora.
+    var legacyRows = db.SubscriptionPackages.ToList();
+    if (legacyRows.Count > 0)
+    {
+        db.SubscriptionPackages.RemoveRange(legacyRows);
+        db.SaveChanges();
+    }
+
+    TelecomSupportSystem.API.AuditLogSeed.Seed(db);
 }
 
 app.UseHttpsRedirection();
@@ -588,3 +615,5 @@ app.MapHub<ChatHub>("/chathub");
 app.MapHub<NotificationHub>("/notificationhub");
 
 app.Run();
+
+public partial class Program { }

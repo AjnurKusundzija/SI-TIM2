@@ -17,9 +17,13 @@ public class ApplicationDbContext : DbContext
     public DbSet<Ticket> Tickets => Set<Ticket>();
     public DbSet<TicketUser> TicketUsers => Set<TicketUser>();
     public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<Attachment> Attachments => Set<Attachment>();
     public DbSet<Rating> Ratings => Set<Rating>();
     public DbSet<SubscriptionPackage> SubscriptionPackages => Set<SubscriptionPackage>();
     public DbSet<PackageFeature> PackageFeatures => Set<PackageFeature>();
+    public DbSet<CatalogPackage> CatalogPackages => Set<CatalogPackage>();
+    public DbSet<ClientSubscription> ClientSubscriptions => Set<ClientSubscription>();
+    public DbSet<SubscriptionAuditLog> SubscriptionAuditLogs => Set<SubscriptionAuditLog>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<Report> Reports => Set<Report>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
@@ -107,6 +111,11 @@ public class ApplicationDbContext : DbContext
                 .HasForeignKey(c => c.TicketId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            entity.HasMany(e => e.Attachments)
+                .WithOne(a => a.Ticket)
+                .HasForeignKey(a => a.TicketId)
+                .OnDelete(DeleteBehavior.Restrict); // Ovdje je spriječeno ciklično kaskadiranje
+
             entity.HasOne(e => e.Rating)
                 .WithOne(r => r.Ticket)
                 .HasForeignKey<Rating>(r => r.TicketId)
@@ -122,6 +131,41 @@ public class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.TicketId);
             entity.HasIndex(e => e.DateTime);
+
+            entity.HasMany(e => e.Attachments)
+                .WithOne(a => a.Comment)
+                .HasForeignKey(a => a.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Attachment>(entity =>
+        {
+            entity.HasKey(e => e.AttachmentId);
+
+            entity.Property(e => e.FileName).IsRequired().HasMaxLength(260);
+            entity.Property(e => e.StoredFileName).IsRequired().HasMaxLength(260);
+            entity.Property(e => e.ContentType).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Size).IsRequired();
+            entity.Property(e => e.UploadedAt).IsRequired();
+
+            entity.HasIndex(e => e.TicketId);
+            entity.HasIndex(e => e.CommentId);
+            entity.HasIndex(e => e.UserId);
+
+            entity.HasOne(e => e.Ticket)
+                .WithMany(t => t.Attachments)
+                .HasForeignKey(e => e.TicketId)
+                .OnDelete(DeleteBehavior.Restrict); // Sinkronizirano s Ticket konfiguracijom
+
+            entity.HasOne(e => e.Comment)
+                .WithMany(c => c.Attachments)
+                .HasForeignKey(e => e.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Rating>(entity =>
@@ -186,15 +230,25 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<AuditLog>(entity =>
         {
-            entity.HasKey(e => e.AuditLogId);
+            entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Action).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Table).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.ActionDate).IsRequired();
+            entity.Property(e => e.Timestamp).IsRequired();
+            entity.Property(e => e.ActionType).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.EntityType).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.Description).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.OldValue).HasColumnType("nvarchar(max)");
+            entity.Property(e => e.NewValue).HasColumnType("nvarchar(max)");
+            entity.Property(e => e.IpAddress).HasMaxLength(45);
 
-            entity.HasIndex(e => e.ActionDate);
+            entity.HasIndex(e => e.Timestamp);
             entity.HasIndex(e => e.UserId);
-            entity.HasIndex(e => e.Table);
+            entity.HasIndex(e => e.ActionType);
+            entity.HasIndex(e => e.EntityType);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<RefreshToken>(entity =>
@@ -227,6 +281,57 @@ public class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.IsActive);
             entity.HasIndex(e => e.SortOrder);
+        });
+
+        // PB-52 / US-76
+        modelBuilder.Entity<CatalogPackage>(entity =>
+        {
+            entity.HasKey(e => e.CatalogPackageId);
+
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Description).HasMaxLength(1000);
+            entity.Property(e => e.Price).HasPrecision(18, 2);
+            entity.Property(e => e.CreatedDate).IsRequired();
+
+            entity.HasIndex(e => e.Status);
+            entity.HasIndex(e => e.Type);
+
+            entity.HasMany(e => e.Subscriptions)
+                .WithOne(s => s.CatalogPackage)
+                .HasForeignKey(s => s.CatalogPackageId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // PB-52 / US-77
+        modelBuilder.Entity<ClientSubscription>(entity =>
+        {
+            entity.HasKey(e => e.SubscriptionId);
+
+            entity.Property(e => e.StartDate).IsRequired();
+            entity.Property(e => e.Status).IsRequired();
+
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.CatalogPackageId);
+            entity.HasIndex(e => e.Status);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // PB-52 / US-77 — audit log za promjene pretplata
+        modelBuilder.Entity<SubscriptionAuditLog>(entity =>
+        {
+            entity.HasKey(e => e.SubscriptionAuditLogId);
+
+            entity.Property(e => e.Action).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Timestamp).IsRequired();
+
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.AdminId);
+            entity.HasIndex(e => e.CatalogPackageId);
+            entity.HasIndex(e => e.Timestamp);
         });
 
         modelBuilder.Entity<TicketUser>(entity =>

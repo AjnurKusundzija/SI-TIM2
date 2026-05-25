@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { createTicket } from '../services/ticketService'
+import { createTicket, createTicketWithAttachments } from '../services/ticketService'
 import { CheckCircle } from 'lucide-react'
+import FileUpload from '../components/common/FileUpload'
 
 const PROBLEM_CATEGORIES = [
   { value: 'INTERNET', label: 'Internet' },
@@ -24,10 +25,13 @@ export default function CreateTicket() {
     description: '',
     priority: '',
   })
+  const [files, setFiles] = useState([])
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(null)
+  // PB-56 / US-80: prikaz progress indikatora tokom uploada većih fajlova
+  const [uploadProgress, setUploadProgress] = useState(null)
 
   const validateForm = () => {
     const newErrors = {}
@@ -54,23 +58,35 @@ export default function CreateTicket() {
     setSuccess(false)
 
     try {
-      await createTicket({
+      const ticketData = {
         Subject: formData.subject.trim(),
         Type: formData.type,
         Description: formData.description.trim(),
         Priority: formData.priority,
-      })
+      }
+
+      // PB-56: Ako ima fajlova, koristi endpoint sa attachments-ima
+      if (files.length > 0) {
+        setUploadProgress(0)
+        await createTicketWithAttachments(ticketData, files, (percent) => setUploadProgress(percent))
+      } else {
+        await createTicket(ticketData)
+      }
+
       setSuccess(true)
       setFormData({ subject: '', type: '', description: '', priority: '' })
+      setFiles([])
+      setUploadProgress(null)
     } catch (err) {
       console.error(err)
       if (err.response?.status === 401) {
         setError('Niste ovlašteni. Molimo prijavite se ponovo.')
       } else if (err.response?.status === 400) {
-        setError('Nevažeći podaci. Molimo provjerite unos.')
+        setError(err.response?.data?.message || 'Nevažeći podaci. Molimo provjerite unos.')
       } else {
         setError('Nije uspjelo kreiranje tiketa. Molimo pokušajte ponovo.')
       }
+      setUploadProgress(null)
     } finally {
       setLoading(false)
     }
@@ -157,6 +173,30 @@ export default function CreateTicket() {
             {errors.description && <p className="mt-1 text-xs text-red-600">{errors.description}</p>}
           </div>
 
+          {/* PB-56 / US-80: Upload attachment-ima */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Dodaj prilog (opcionalno)
+            </label>
+            <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={false} />
+          </div>
+
+          {/* PB-56 / US-80: progress indikator tokom uploada */}
+          {uploadProgress !== null && (
+            <div className="space-y-1" data-testid="upload-progress">
+              <div className="flex justify-between text-xs text-gray-600">
+                <span>Upload priloga…</span>
+                <span>{uploadProgress}%</span>
+              </div>
+              <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-navy-600 transition-all"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            </div>
+          )}
+
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
               {error}
@@ -181,6 +221,7 @@ export default function CreateTicket() {
               type="button"
               onClick={() => {
                 setFormData({ subject: '', type: '', description: '', priority: '' })
+                setFiles([])
                 setErrors({})
                 setError(null)
                 setSuccess(false)

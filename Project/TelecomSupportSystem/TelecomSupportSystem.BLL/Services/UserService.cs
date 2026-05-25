@@ -1,7 +1,8 @@
-﻿using TelecomSupportSystem.BLL.DTOs;
+using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Packages;
 using TelecomSupportSystem.BLL.DTOs.Users;
 using TelecomSupportSystem.BLL.Services.Interfaces;
+using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 using Role = TelecomSupportSystem.DAL.Entities.Enums.Role;
@@ -13,12 +14,16 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ITicketRepository _ticketRepository;
         private readonly IUserRepository _userRepository;
         private readonly IPackageService _packageService;
+        private readonly ITeamRepository _teamRepository;
+        private readonly IAuditLogService? _auditLogService;
 
-        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository, IPackageService packageService)
+        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository, IPackageService packageService, ITeamRepository teamRepository, IAuditLogService? auditLogService = null)
         {
             _ticketRepository = ticketRepository;
             _userRepository = userRepository;
             _packageService = packageService;
+            _teamRepository = teamRepository;
+            _auditLogService = auditLogService;
         }
 
         public async Task<AgentStatisticsDto> GetMyStatisticsAsync(int userId, string role)
@@ -124,6 +129,9 @@ namespace TelecomSupportSystem.BLL.Services
                 Phone = user.Phone,
                 Role = user.Role.ToString(),
                 Location = user.Location.ToString(),
+                AccountStatus = user.AccountStatus.ToString(),
+                TeamId = user.TeamId,
+                ExpertiseCategory = user.Team?.SpecializedCategory?.ToString() ?? "",
                 TicketHistory = tickets.Select(t => new MyTicketDto
                 {
                     TicketId = t.TicketId,
@@ -166,6 +174,195 @@ namespace TelecomSupportSystem.BLL.Services
 
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
             await _userRepository.UpdateAsync(user);
+        }
+
+        public async Task CreateUserAsync(CreateUserDto dto, string currentRole, int? currentUserId = null, string? currentUserEmail = null)
+        {
+            if (currentRole != "ADMINISTRATOR")
+                throw new UnauthorizedAccessException("Samo administratori mogu kreirati korisnike.");
+
+            var existing = await _userRepository.GetByEmailAsync(dto.Email);
+            if (existing != null)
+                throw new InvalidOperationException("Email adresa je već zauzeta.");
+
+            var user = new User
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email,
+                Phone = dto.Phone,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                Role = dto.Role,
+                Location = dto.Location ?? Location.SARAJEVO, // Default if null for role client/tech
+                AccountStatus = AccountStatus.ACTIVE,
+                Username = dto.FirstName + "."+ dto.LastName, //username auto fill
+                TeamId = dto.Role == Role.AGENT ? dto.TeamId : null,
+                AvailabilityStatus = (dto.Role == Role.AGENT || dto.Role == Role.TECHNICIAN) ? AvailabilityStatus.AVAILABLE : null
+            };
+
+            await _userRepository.CreateAsync(user);
+
+            if (_auditLogService is not null)
+            {
+                await _auditLogService.LogAsync(
+                    AuditActionType.USER_CREATED,
+                    "User",
+                    user.UserId.ToString(),
+                    $"Korisnik {user.Email} kreiran",
+                    userId: currentUserId,
+                    newValue: new { firstName = user.FirstName, lastName = user.LastName, email = user.Email, role = user.Role.ToString() });
+            }
+        }
+
+        public async Task UpdateUserDetailsAsync(int targetUserId, UpdateUserDetailsDto dto, string currentRole, int? currentUserId = null)
+        {
+            var user = await _userRepository.GetByIdAsync(targetUserId);
+            if (user == null)
+                throw new KeyNotFoundException("Korisnik nije pronađen.");
+
+            if (currentRole != "ADMINISTRATOR" && currentRole != "AGENT")
+                throw new UnauthorizedAccessException("Nemate permisije za ažuriranje ovog korisnika.");
+
+            // Agent can only edit Client
+            if (currentRole == "AGENT" && user.Role != Role.CLIENT && user.Role != Role.TECHNICIAN)
+                throw new UnauthorizedAccessException("Agenti mogu ažurirati samo klijente i tehničare.");
+
+            var oldValue = new
+            {
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                phone = user.Phone,
+                location = user.Location.ToString(),
+                teamId = user.TeamId
+            };
+
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.Phone = dto.Phone;
+            
+            if (dto.Location.HasValue)
+                user.Location = dto.Location.Value;
+
+            if (user.Role == Role.AGENT && dto.TeamId.HasValue)
+                user.TeamId = dto.TeamId.Value;
+
+            await _userRepository.UpdateAsync(user);
+
+            if (_auditLogService is not null)
+            {
+                await _auditLogService.LogAsync(
+                    AuditActionType.USER_UPDATED,
+                    "User",
+                    user.UserId.ToString(),
+                    $"Korisnik {user.Email} ažuriran",
+                    userId: currentUserId,
+                    oldValue: oldValue,
+                    newValue: new
+                    {
+                        firstName = user.FirstName,
+                        lastName = user.LastName,
+                        phone = user.Phone,
+                        location = user.Location.ToString(),
+                        teamId = user.TeamId
+                    });
+            }
+        }
+
+        public async Task ChangeUserStatusAsync(int targetUserId, bool isActive, string currentRole, int currentUserId)
+        {
+            var user = await _userRepository.GetByIdAsync(targetUserId);
+            if (user == null)
+                throw new KeyNotFoundException("Korisnik nije pronađen.");
+
+            if (targetUserId == currentUserId)
+                throw new InvalidOperationException("Ne možete promijeniti status vlastitog naloga.");
+
+            if (currentRole != "ADMINISTRATOR" && currentRole != "AGENT")
+                throw new UnauthorizedAccessException("Nemate permisije.");
+
+            if (currentRole == "AGENT" && user.Role != Role.CLIENT)
+                throw new UnauthorizedAccessException("Agenti mogu deaktivirati samo klijente.");
+
+            if (!isActive && (user.Role == Role.AGENT || user.Role == Role.TECHNICIAN))
+            {
+                var assignedTickets = await _ticketRepository.GetAssignedTicketsForStatsAsync(targetUserId);
+                if (assignedTickets.Any(t => t.Status == TicketStatus.OPEN))
+                {
+                    throw new InvalidOperationException("Korisnik ima otvorene tikete. Potrebno ih je prvo preusmjeriti.");
+                }
+            }
+
+            var oldStatus = user.AccountStatus;
+            user.AccountStatus = isActive ? AccountStatus.ACTIVE : AccountStatus.INACTIVE;
+            await _userRepository.UpdateAsync(user);
+
+            if (_auditLogService is not null && oldStatus != user.AccountStatus)
+            {
+                var actor = await _userRepository.GetByIdAsync(currentUserId);
+                var actorEmail = actor?.Email ?? currentRole;
+                await _auditLogService.LogAsync(
+                    isActive ? AuditActionType.USER_REACTIVATED : AuditActionType.USER_DEACTIVATED,
+                    "User",
+                    user.UserId.ToString(),
+                    isActive
+                        ? $"Korisnik {user.Email} reaktiviran od strane {actorEmail}"
+                        : $"Korisnik {user.Email} deaktiviran od strane {actorEmail}",
+                    userId: currentUserId,
+                    oldValue: new { accountStatus = oldStatus.ToString() },
+                    newValue: new { accountStatus = user.AccountStatus.ToString() });
+            }
+        }
+
+        public async Task<UserListDto> GetUsersPaginatedAsync(string currentRole, string? roleFilter, string? statusFilter, string? search, string? location, int page, int pageSize)
+        {
+            if (currentRole != "ADMINISTRATOR" && currentRole != "AGENT")
+                throw new UnauthorizedAccessException("Nemate permisije.");
+
+            Role? role = null;
+            if (!string.IsNullOrEmpty(roleFilter) && Enum.TryParse<Role>(roleFilter, true, out var parsedRole))
+                role = parsedRole;
+
+            AccountStatus? status = null;
+            if (!string.IsNullOrEmpty(statusFilter) && Enum.TryParse<AccountStatus>(statusFilter, true, out var parsedStatus))
+                status = parsedStatus;
+
+            Location? loc = null;
+            if (!string.IsNullOrEmpty(location) && Enum.TryParse<Location>(location, true, out var parsedLoc))
+                loc = parsedLoc;
+
+            var (users, totalCount) = await _userRepository.GetUsersPaginatedAsync(role, status, search, loc, page, pageSize);
+
+            var items = users.Select(u => new UserListItemDto
+            {
+                UserId = u.UserId,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                Phone = u.Phone,
+                Location = u.Location.ToString(),
+                Role = u.Role.ToString(),
+                AccountStatus = u.AccountStatus.ToString(),
+                ExpertiseCategory = u.Team?.SpecializedCategory?.ToString() ?? ""
+            }).ToList();
+
+            return new UserListDto
+            {
+                Users = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
+        }
+
+        public async Task<IEnumerable<TelecomSupportSystem.BLL.DTOs.Teams.TeamDto>> GetAgentTeamsAsync()
+        {
+            var teams = await _teamRepository.GetAgentTeamsAsync();
+            return teams.Select(t => new TelecomSupportSystem.BLL.DTOs.Teams.TeamDto
+            {
+                TeamId = t.TeamId,
+                TeamName = t.TeamName,
+                SpecializedCategory = t.SpecializedCategory?.ToString() ?? ""
+            });
         }
     }
 }

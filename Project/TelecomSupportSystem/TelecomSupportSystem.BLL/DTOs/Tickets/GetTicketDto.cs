@@ -16,5 +16,6 @@ namespace TelecomSupportSystem.BLL.DTOs.Tickets
         public int? TeamId { get; set; }
         public string? AssignedAgentName { get; set; }
         public string? AssignmentMessage { get; set; }
+        public IEnumerable<TelecomSupportSystem.BLL.DTOs.Attachments.AttachmentDto> Attachments { get; set; } = new List<TelecomSupportSystem.BLL.DTOs.Attachments.AttachmentDto>();
     }
 }
