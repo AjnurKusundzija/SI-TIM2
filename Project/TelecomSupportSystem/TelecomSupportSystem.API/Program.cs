@@ -3,6 +3,7 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using TelecomSupportSystem.DAL;
 using TelecomSupportSystem.DAL.Entities;
@@ -37,7 +38,9 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options
+        .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
 /*
 // JWT_KEY: env var (production/CI) takes priority; User Secrets / IConfiguration used in development
@@ -233,6 +236,46 @@ if (app.Environment.IsDevelopment())
         );
         db.SaveChanges();
     }
+
+    var developmentUsers = new[]
+    {
+        new { FirstName = "Admin", LastName = "User", Email = "admin@test.com", Username = "admin", Password = "Admin123!", Location = Location.SARAJEVO, Role = Role.ADMINISTRATOR },
+        new { FirstName = "Agent", LastName = "User", Email = "agent@test.com", Username = "agent", Password = "Agent123!", Location = Location.SARAJEVO, Role = Role.AGENT },
+        new { FirstName = "Client", LastName = "User", Email = "client@test.com", Username = "client", Password = "Client123!", Location = Location.SARAJEVO, Role = Role.CLIENT },
+        new { FirstName = "John", LastName = "Doe", Email = "john@test.com", Username = "Joohnyy", Password = "Johny123!", Location = Location.MOSTAR, Role = Role.CLIENT }
+    };
+
+    foreach (var seedUser in developmentUsers)
+    {
+        var user = db.Users.FirstOrDefault(u => u.Email == seedUser.Email);
+
+        if (user is null)
+        {
+            db.Users.Add(new User
+            {
+                FirstName = seedUser.FirstName,
+                LastName = seedUser.LastName,
+                Email = seedUser.Email,
+                Username = seedUser.Username,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(seedUser.Password),
+                Phone = "",
+                Location = seedUser.Location,
+                Role = seedUser.Role,
+                AccountStatus = AccountStatus.ACTIVE
+            });
+            continue;
+        }
+
+        user.FirstName = seedUser.FirstName;
+        user.LastName = seedUser.LastName;
+        user.Username = seedUser.Username;
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(seedUser.Password);
+        user.Location = seedUser.Location;
+        user.Role = seedUser.Role;
+        user.AccountStatus = AccountStatus.ACTIVE;
+    }
+
+    db.SaveChanges();
 
     if (!db.Tickets.Any())
     {
