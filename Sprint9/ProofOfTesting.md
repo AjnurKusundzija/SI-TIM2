@@ -72,12 +72,37 @@ Ukupno: 17 passed, 0 failed
 
 Iz root direktorija:
 
-### Backend:
+### Backend (samo Sprint 9 testovi):
+```bash
+cd Project/TelecomSupportSystem && dotnet test TelecomSupportSystem.Tests/ --filter "FullyQualifiedName~Sprint9" --logger "console;verbosity=normal" 2>&1
+```
+
+### Backend (PB-51 — upravljanje korisničkim nalozima):
+```bash
+cd Project/TelecomSupportSystem && dotnet test TelecomSupportSystem.Tests/ --filter "FullyQualifiedName~UserAccountManagement" --logger "console;verbosity=normal" 2>&1
+```
+
+### Backend (PB-50 — prosječno vrijeme prvog odgovora):
+```bash
+cd Project/TelecomSupportSystem && dotnet test TelecomSupportSystem.Tests/ --filter "FullyQualifiedName~FirstResponseReport" --logger "console;verbosity=normal" 2>&1
+```
+
+### Backend (PB-45 — admin dashboard):
+```bash
+cd Project/TelecomSupportSystem && dotnet test TelecomSupportSystem.Tests/ --filter "FullyQualifiedName~AdminDashboard|FullyQualifiedName~Sprint9UserStoriesSystemTests" --logger "console;verbosity=normal" 2>&1
+```
+
+### Backend (kompletan test suite):
 ```bash
 cd Project/TelecomSupportSystem && dotnet test TelecomSupportSystem.Tests/ --logger "console;verbosity=normal" 2>&1
 ```
 
-### Frontend:
+### Frontend (samo Sprint 9 testovi):
+```bash
+cd Project/frontend && npx vitest run src/test/Sprint9CreateUser.test.jsx src/test/Sprint9UsersList.test.jsx src/test/Sprint9AdminDashboard.test.jsx src/test/Sprint9FirstResponse.test.jsx 2>&1
+```
+
+### Frontend (kompletan test suite):
 ```bash
 cd Project/frontend && npx vitest run 2>&1
 ```
