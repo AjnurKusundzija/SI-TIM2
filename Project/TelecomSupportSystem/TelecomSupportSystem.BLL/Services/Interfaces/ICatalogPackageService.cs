@@ -13,15 +13,15 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         Task<IEnumerable<CatalogPackageDto>> GetActiveCatalogAsync();
 
         // US-76
-        Task<CatalogPackageDto> CreateAsync(CreateCatalogPackageDto dto);
+        Task<CatalogPackageDto> CreateAsync(CreateCatalogPackageDto dto, int? adminId = null);
 
         // US-76
-        Task<CatalogPackageDto> UpdateAsync(int id, UpdateCatalogPackageDto dto);
+        Task<CatalogPackageDto> UpdateAsync(int id, UpdateCatalogPackageDto dto, int? adminId = null);
 
         // US-76 — bacanje InvalidOperationException kada paket ima aktivne pretplate
         Task DeleteAsync(int id);
 
         // US-76 — aktivacija / deaktivacija
-        Task<CatalogPackageDto> UpdateStatusAsync(int id, string status);
+        Task<CatalogPackageDto> UpdateStatusAsync(int id, string status, int? adminId = null);
     }
 }

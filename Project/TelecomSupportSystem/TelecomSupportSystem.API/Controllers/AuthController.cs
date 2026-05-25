@@ -24,7 +24,7 @@ namespace TelecomSupportSystem.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _authService.LoginAsync(loginDto);
+            var result = await _authService.LoginAsync(loginDto, ControllerContext.HttpContext?.Connection.RemoteIpAddress?.ToString());
             if (result == null)
                 return Unauthorized(new { message = "Invalid credentials." });
 

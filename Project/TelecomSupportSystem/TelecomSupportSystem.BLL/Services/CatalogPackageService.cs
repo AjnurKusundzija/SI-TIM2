@@ -14,10 +14,12 @@ namespace TelecomSupportSystem.BLL.Services
     public class CatalogPackageService : ICatalogPackageService
     {
         private readonly ICatalogPackageRepository _repository;
+        private readonly IAuditLogService? _auditLogService;
 
-        public CatalogPackageService(ICatalogPackageRepository repository)
+        public CatalogPackageService(ICatalogPackageRepository repository, IAuditLogService? auditLogService = null)
         {
             _repository = repository;
+            _auditLogService = auditLogService;
         }
 
         public async Task<IEnumerable<CatalogPackageDto>> GetCatalogAsync()
@@ -34,7 +36,7 @@ namespace TelecomSupportSystem.BLL.Services
             return packages.Select(p => MapToDto(p, counts.TryGetValue(p.CatalogPackageId, out var c) ? c : 0));
         }
 
-        public async Task<CatalogPackageDto> CreateAsync(CreateCatalogPackageDto dto)
+        public async Task<CatalogPackageDto> CreateAsync(CreateCatalogPackageDto dto, int? adminId = null)
         {
             ValidateNameAndPrice(dto.Name, dto.Price);
             var type = ParseType(dto.Type);
@@ -52,15 +54,26 @@ namespace TelecomSupportSystem.BLL.Services
 
             await _repository.AddAsync(entity);
             await _repository.SaveChangesAsync();
+            if (_auditLogService is not null)
+            {
+                await _auditLogService.LogAsync(
+                    AuditActionType.PACKAGE_CREATED,
+                    "CatalogPackage",
+                    entity.CatalogPackageId.ToString(),
+                    $"Paket '{entity.Name}' kreiran",
+                    userId: adminId,
+                    newValue: new { name = entity.Name, type = entity.Type.ToString(), description = entity.Description, price = entity.Price, status = entity.Status.ToString() });
+            }
             return MapToDto(entity, 0);
         }
 
-        public async Task<CatalogPackageDto> UpdateAsync(int id, UpdateCatalogPackageDto dto)
+        public async Task<CatalogPackageDto> UpdateAsync(int id, UpdateCatalogPackageDto dto, int? adminId = null)
         {
             var entity = await _repository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException($"Paket {id} nije pronađen.");
 
             ValidateNameAndPrice(dto.Name, dto.Price);
+            var oldValue = new { name = entity.Name, type = entity.Type.ToString(), description = entity.Description, price = entity.Price, status = entity.Status.ToString() };
             entity.Name = dto.Name.Trim();
             entity.Type = ParseType(dto.Type);
             entity.Description = dto.Description?.Trim() ?? string.Empty;
@@ -71,6 +84,18 @@ namespace TelecomSupportSystem.BLL.Services
 
             await _repository.UpdateAsync(entity);
             await _repository.SaveChangesAsync();
+
+            if (_auditLogService is not null)
+            {
+                await _auditLogService.LogAsync(
+                    AuditActionType.PACKAGE_UPDATED,
+                    "CatalogPackage",
+                    entity.CatalogPackageId.ToString(),
+                    $"Paket '{entity.Name}' ažuriran",
+                    userId: adminId,
+                    oldValue: oldValue,
+                    newValue: new { name = entity.Name, type = entity.Type.ToString(), description = entity.Description, price = entity.Price, status = entity.Status.ToString() });
+            }
 
             var count = await _repository.CountActiveSubscriptionsAsync(id);
             return MapToDto(entity, count);
@@ -90,7 +115,7 @@ namespace TelecomSupportSystem.BLL.Services
             await _repository.SaveChangesAsync();
         }
 
-        public async Task<CatalogPackageDto> UpdateStatusAsync(int id, string status)
+        public async Task<CatalogPackageDto> UpdateStatusAsync(int id, string status, int? adminId = null)
         {
             var entity = await _repository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException($"Paket {id} nije pronađen.");
@@ -98,11 +123,24 @@ namespace TelecomSupportSystem.BLL.Services
             var parsed = ParseStatus(status)
                 ?? throw new ArgumentException("Nepoznat status paketa.", nameof(status));
 
+            var oldStatus = entity.Status;
             entity.Status = parsed;
             entity.UpdatedDate = DateTime.UtcNow;
 
             await _repository.UpdateAsync(entity);
             await _repository.SaveChangesAsync();
+
+            if (_auditLogService is not null && oldStatus != entity.Status)
+            {
+                await _auditLogService.LogAsync(
+                    entity.Status == PackageStatus.INACTIVE ? AuditActionType.PACKAGE_DEACTIVATED : AuditActionType.PACKAGE_UPDATED,
+                    "CatalogPackage",
+                    entity.CatalogPackageId.ToString(),
+                    entity.Status == PackageStatus.INACTIVE ? $"Paket '{entity.Name}' deaktiviran" : $"Status paketa '{entity.Name}' promijenjen",
+                    userId: adminId,
+                    oldValue: new { status = oldStatus.ToString() },
+                    newValue: new { status = entity.Status.ToString() });
+            }
 
             var count = await _repository.CountActiveSubscriptionsAsync(id);
             return MapToDto(entity, count);

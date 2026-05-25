@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TelecomSupportSystem.BLL.DTOs.Packages;
 using TelecomSupportSystem.BLL.Services.Interfaces;
 
@@ -46,7 +47,7 @@ namespace TelecomSupportSystem.API.Controllers
 
             try
             {
-                var created = await _service.CreateAsync(dto);
+                var created = await _service.CreateAsync(dto, GetUserId());
                 return CreatedAtAction(nameof(GetCatalog), new { id = created.CatalogPackageId }, created);
             }
             catch (ArgumentException ex)
@@ -64,7 +65,7 @@ namespace TelecomSupportSystem.API.Controllers
 
             try
             {
-                var updated = await _service.UpdateAsync(id, dto);
+                var updated = await _service.UpdateAsync(id, dto, GetUserId());
                 return Ok(updated);
             }
             catch (KeyNotFoundException)
@@ -105,7 +106,7 @@ namespace TelecomSupportSystem.API.Controllers
 
             try
             {
-                var updated = await _service.UpdateStatusAsync(id, dto.Status);
+                var updated = await _service.UpdateStatusAsync(id, dto.Status, GetUserId());
                 return Ok(updated);
             }
             catch (KeyNotFoundException)
@@ -116,6 +117,12 @@ namespace TelecomSupportSystem.API.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        private int? GetUserId()
+        {
+            var raw = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(raw, out var id) ? id : null;
         }
     }
 }

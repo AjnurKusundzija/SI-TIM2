@@ -23,6 +23,7 @@ import Reports from './pages/Reports'
 import PackageManagement from './pages/PackageManagement'
 import UsersList from './pages/UsersList'
 import CreateUser from './pages/CreateUser'
+import AuditLogPage from './pages/AuditLog/AuditLogPage'
 
 
 
@@ -65,6 +66,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={['ADMINISTRATOR']}>
               <PackageManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/audit-log"
+          element={
+            <ProtectedRoute allowedRoles={['ADMINISTRATOR']}>
+              <AuditLogPage />
             </ProtectedRoute>
           }
         />

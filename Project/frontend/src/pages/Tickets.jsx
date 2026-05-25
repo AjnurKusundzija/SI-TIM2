@@ -7,6 +7,7 @@ import { Search, Ticket } from "lucide-react";
 import { formatDateOnly } from "../utils/formatDate";
 import EmptyState from "../components/common/EmptyState";
 import Badge from "../components/common/Badge";
+import TicketPreviewPanel from "../components/tickets/TicketPreviewPanel";
 
 const STATUS_LABELS = {
   OPEN: "Otvoren",
@@ -110,6 +111,24 @@ export default function Tickets({ assignedOnly = false }) {
   const [statusFilter, setStatusFilter] = useState(drillStatus ?? "ALL");
   const [typeFilter, setTypeFilter] = useState(drillCategory ?? "ALL");
   const [priorityFilter, setPriorityFilter] = useState("ALL");
+
+  // Preview drawer — staff only; toggle on same row click
+  const [selectedTicketId, setSelectedTicketId] = useState(null);
+
+  const handleRowClick = (ticketId) => {
+    if (isStaff) {
+      setSelectedTicketId((prev) => (prev === ticketId ? null : ticketId));
+    } else {
+      navigate(`/tickets/${ticketId}`);
+    }
+  };
+
+  // Close drawer on Escape
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") setSelectedTicketId(null); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => {
     getAllTickets(assignedOnly)
@@ -243,6 +262,11 @@ export default function Tickets({ assignedOnly = false }) {
         </div>
       </div>
 
+      {/* Flex row: table shrinks, panel appears on the right */}
+      <div className="flex gap-4 items-start">
+
+      {/* ── Table column ── */}
+      <div className="flex-1 min-w-0">
       {loading ? (
         <SkeletonTable hasInternalPriority={isStaff} />
       ) : error ? (
@@ -284,72 +308,125 @@ export default function Tickets({ assignedOnly = false }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {filtered.map((t) => (
-                  <tr
-                    key={t.ticketId}
-                    onClick={() => navigate(`/tickets/${t.ticketId}`)}
-                    className="hover:bg-gray-50 transition-colors cursor-pointer"
-                  >
-                    <td className="px-5 py-3">
-                      <p className="text-sm font-medium text-gray-900 truncate max-w-xs">
-                        {t.title || t.subject}
-                      </p>
-                      <p className="text-xs text-gray-400">{t.ticketId}</p>
-                    </td>
-                    <td className="px-5 py-3">
-                      <Badge value={t.status} />
-                    </td>
-                    <td className="px-5 py-3">
-                      <Badge value={t.priority} />
-                    </td>
-                    {isStaff && (
-                      <td className="px-5 py-3">
-                        {t.internalPriority ? (
-                          <Badge value={t.internalPriority} />
-                        ) : (
-                          <span className="text-xs text-gray-400 italic">
-                            —
-                          </span>
-                        )}
+                {filtered.map((t) => {
+                  const isSelected = t.ticketId === selectedTicketId;
+                  return (
+                    <tr
+                      key={t.ticketId}
+                      onClick={() => handleRowClick(t.ticketId)}
+                      className={`transition-colors cursor-pointer ${
+                        isSelected
+                          ? "bg-blue-50/60 border-l-2 border-l-navy-500"
+                          : "hover:bg-gray-50 border-l-2 border-l-transparent"
+                      }`}
+                    >
+                      <td className={`py-3 ${isSelected ? "pl-[14px] pr-5" : "px-5"}`}>
+                        <p className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                          {t.title || t.subject}
+                        </p>
+                        <p className="text-xs text-gray-400">{t.ticketId}</p>
                       </td>
-                    )}
-                    <td className="px-5 py-3 text-sm text-gray-600">
-                      {TYPE_LABELS[t.problemCategory] ?? t.problemCategory}
-                    </td>
-                    <td className="px-5 py-3 text-sm text-gray-500 whitespace-nowrap">
-                      {t.createdDate ? formatDateOnly(t.createdDate) : "—"}
-                    </td>
-                  </tr>
-                ))}
+                      <td className="px-5 py-3">
+                        <Badge value={t.status} />
+                      </td>
+                      <td className="px-5 py-3">
+                        <Badge value={t.priority} />
+                      </td>
+                      {isStaff && (
+                        <td className="px-5 py-3">
+                          {t.internalPriority ? (
+                            <Badge value={t.internalPriority} />
+                          ) : (
+                            <span className="text-xs text-gray-400 italic">—</span>
+                          )}
+                        </td>
+                      )}
+                      <td className="px-5 py-3 text-sm text-gray-600">
+                        {TYPE_LABELS[t.problemCategory] ?? t.problemCategory}
+                      </td>
+                      <td className="px-5 py-3 text-sm text-gray-500 whitespace-nowrap">
+                        {t.createdDate ? formatDateOnly(t.createdDate) : "—"}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
 
           <div className="md:hidden divide-y divide-gray-50">
-            {filtered.map((t) => (
-              <div
-                key={t.ticketId}
-                onClick={() => navigate(`/tickets/${t.ticketId}`)}
-                className="px-4 py-3 cursor-pointer hover:bg-gray-50"
-              >
-                <p className="text-sm font-medium text-gray-900 truncate">
-                  {t.title || t.subject}
-                </p>
-                <div className="flex flex-wrap items-center gap-2 mt-2">
-                  <Badge value={t.status} />
-                  <Badge value={t.priority} />
-                  {isStaff && t.internalPriority && (
-                    <Badge value={t.internalPriority} />
-                  )}
+            {filtered.map((t) => {
+              const isSelected = t.ticketId === selectedTicketId;
+              return (
+                <div
+                  key={t.ticketId}
+                  onClick={() => handleRowClick(t.ticketId)}
+                  className={`px-4 py-3 cursor-pointer transition-colors ${
+                    isSelected ? "bg-blue-50/60" : "hover:bg-gray-50"
+                  }`}
+                >
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {t.title || t.subject}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-2 mt-2">
+                    <Badge value={t.status} />
+                    <Badge value={t.priority} />
+                    {isStaff && t.internalPriority && (
+                      <Badge value={t.internalPriority} />
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {t.createdDate ? formatDateOnly(t.createdDate) : "—"}
+                  </p>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">
-                  {t.createdDate ? formatDateOnly(t.createdDate) : "—"}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
+      </div>{/* end table column */}
+
+      {/*
+       * ── Preview panel ──
+       * Desktop: sticky column on the right. The explicit height
+       * (viewport minus header 53px and main padding 24px top + 24px bottom)
+       * gives TicketPreviewPanel a defined h-full so its inner flex-1
+       * overflow-y-auto keeps the header/footer pinned while only the
+       * conversation scrolls.
+       * Mobile: full-screen fixed overlay.
+       */}
+      {isStaff && selectedTicketId !== null && (
+        <>
+          {/* Desktop sticky panel */}
+          <div
+            className="hidden lg:flex flex-col flex-shrink-0 w-[440px] sticky self-start
+                       bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm"
+            style={{ top: '69px', height: 'calc(100vh - 85px)' }}
+          >
+            <TicketPreviewPanel
+              ticketId={selectedTicketId}
+              onClose={() => setSelectedTicketId(null)}
+            />
+          </div>
+
+          {/* Mobile fixed overlay */}
+          <div
+            className="lg:hidden fixed inset-x-0 bottom-0 top-[53px] z-30
+                       bg-white border-t border-gray-200 flex flex-col shadow-2xl"
+          >
+            <TicketPreviewPanel
+              ticketId={selectedTicketId}
+              onClose={() => setSelectedTicketId(null)}
+            />
+          </div>
+          <div
+            className="lg:hidden fixed inset-0 z-20 bg-black/20"
+            onClick={() => setSelectedTicketId(null)}
+          />
+        </>
+      )}
+
+      </div>{/* end flex row */}
     </div>
   );
 }

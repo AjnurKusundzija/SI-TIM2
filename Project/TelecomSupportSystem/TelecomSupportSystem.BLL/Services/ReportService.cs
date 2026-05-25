@@ -95,12 +95,13 @@ namespace TelecomSupportSystem.BLL.Services
             result.HasData = true;
             result.Data = reportType switch
             {
-                ReportType.TICKET_COUNT => new TicketCountReportDto { TotalCount = ticketList.Count },
-                ReportType.TICKET_STATUS => new TicketStatusReportDto { Items = BuildStatusBreakdown(ticketList) },
-                ReportType.PROBLEM_TYPE => new ProblemTypeReportDto { Items = BuildProblemTypeSummary(ticketList) },
-                ReportType.TEAM_WORKLOAD => await BuildTeamWorkloadReportAsync(periodFrom, periodTo),
-                ReportType.USER_RATINGS => BuildUserRatingsReport(ticketList),
-                ReportType.FIRST_RESPONSE => BuildFirstResponseReport(ticketList, period, periodFrom, periodTo),
+                ReportType.TICKET_COUNT    => BuildTicketCountReport(ticketList, period, periodFrom, periodTo),
+                ReportType.TICKET_STATUS   => new TicketStatusReportDto { Items = BuildStatusBreakdown(ticketList) },
+                ReportType.PROBLEM_TYPE    => new ProblemTypeReportDto { Items = BuildProblemTypeSummary(ticketList) },
+                ReportType.TEAM_WORKLOAD   => await BuildTeamWorkloadReportAsync(period, periodFrom, periodTo),
+                ReportType.USER_RATINGS    => BuildUserRatingsReport(ticketList, period, periodFrom, periodTo),
+                ReportType.FIRST_RESPONSE  => BuildFirstResponseReport(ticketList, period, periodFrom, periodTo),
+                ReportType.AVG_RESOLUTION  => BuildAvgResolutionReport(ticketList, period, periodFrom, periodTo),
                 _ => throw new ArgumentException("Nepoznat tip izvještaja."),
             };
 
@@ -121,6 +122,12 @@ namespace TelecomSupportSystem.BLL.Services
                 result.HasData = false;
                 result.Message = "Nema podataka za odabrani period.";
                 result.Data = wl;
+            }
+
+            if (result.Data is AvgResolutionReportDto ar && ar.ClosedTicketsCount == 0)
+            {
+                result.HasData = true;
+                result.Message = "Nema zatvorenih tiketa u odabranom periodu.";
             }
 
             return result;
@@ -168,10 +175,41 @@ namespace TelecomSupportSystem.BLL.Services
                 ResolvedCount = r.ResolvedCount,
             }).ToList();
 
-        private async Task<TeamWorkloadReportDto> BuildTeamWorkloadReportAsync(DateTime from, DateTime to)
+        private async Task<TeamWorkloadReportDto> BuildTeamWorkloadReportAsync(
+            string period,
+            DateTime periodFrom,
+            DateTime periodTo)
         {
-            var rows = await _reportRepository.GetAgentResolvedCountsAsync(from, to);
-            return new TeamWorkloadReportDto { Items = MapWorkload(rows) };
+            var totals = await _reportRepository.GetAgentResolvedCountsAsync(periodFrom, periodTo);
+            var details = await _reportRepository.GetAgentResolvedDetailsAsync(periodFrom, periodTo) ?? [];
+
+            var agentTotalsList = MapWorkload(totals);
+            var agentNames = agentTotalsList.Select(a => a.FullName).ToList();
+            var agentIdToName = totals
+                .ToDictionary(r => r.UserId, r => $"{r.FirstName} {r.LastName}".Trim());
+
+            var (granularity, granularityLabel) = FirstResponseReportHelper.ResolveGranularity(period, periodFrom, periodTo);
+            var ranges = FirstResponseReportHelper.GenerateRanges(periodFrom, periodTo, granularity);
+
+            var periodRows = ranges.Select(r =>
+            {
+                var inBucket = details
+                    .Where(d => d.ClosedDate >= r.Start && d.ClosedDate < r.End)
+                    .ToList();
+                var counts = agentNames
+                    .Select(name => inBucket.Count(d =>
+                        agentIdToName.TryGetValue(d.UserId, out var n) && n == name))
+                    .ToList();
+                return new WorkloadPeriodRowDto { Label = r.Label, Counts = counts };
+            }).ToList();
+
+            return new TeamWorkloadReportDto
+            {
+                Items = agentTotalsList,
+                BucketGranularityLabel = granularityLabel,
+                AgentNames = agentNames,
+                PeriodRows = periodRows,
+            };
         }
 
         private static FirstResponseReportDto BuildFirstResponseReport(
@@ -181,11 +219,100 @@ namespace TelecomSupportSystem.BLL.Services
             DateTime periodTo) =>
             FirstResponseReportHelper.Build(tickets, period, periodFrom, periodTo);
 
-        private static UserRatingsReportDto BuildUserRatingsReport(List<DAL.Entities.Ticket> tickets)
+        private static TicketCountReportDto BuildTicketCountReport(
+            List<DAL.Entities.Ticket> tickets,
+            string period,
+            DateTime periodFrom,
+            DateTime periodTo)
+        {
+            var (granularity, granularityLabel) = FirstResponseReportHelper.ResolveGranularity(period, periodFrom, periodTo);
+            var ranges = FirstResponseReportHelper.GenerateRanges(periodFrom, periodTo, granularity);
+            var buckets = ranges
+                .Select(r => new CountBucketDto
+                {
+                    Label = r.Label,
+                    TicketCount = tickets.Count(t => t.CreatedDate >= r.Start && t.CreatedDate < r.End),
+                })
+                .ToList();
+
+            return new TicketCountReportDto
+            {
+                TotalCount = tickets.Count,
+                BucketGranularityLabel = granularityLabel,
+                Buckets = buckets,
+            };
+        }
+
+        private static AvgResolutionReportDto BuildAvgResolutionReport(
+            List<DAL.Entities.Ticket> tickets,
+            string period,
+            DateTime periodFrom,
+            DateTime periodTo)
+        {
+            var closed = tickets.Where(t => t.Status == DAL.Entities.Enums.TicketStatus.CLOSED && t.ClosedDate.HasValue).ToList();
+
+            var (granularity, granularityLabel) = FirstResponseReportHelper.ResolveGranularity(period, periodFrom, periodTo);
+            var ranges = FirstResponseReportHelper.GenerateRanges(periodFrom, periodTo, granularity);
+
+            var buckets = ranges.Select(r =>
+            {
+                var inBucket = tickets.Where(t => t.CreatedDate >= r.Start && t.CreatedDate < r.End).ToList();
+                var closedInBucket = inBucket
+                    .Where(t => t.Status == DAL.Entities.Enums.TicketStatus.CLOSED && t.ClosedDate.HasValue)
+                    .ToList();
+                var avgHours = closedInBucket.Count > 0
+                    ? closedInBucket.Average(t => (t.ClosedDate!.Value - t.CreatedDate).TotalHours)
+                    : (double?)null;
+
+                return new ResolutionBucketDto
+                {
+                    Label = r.Label,
+                    TicketCount = inBucket.Count,
+                    ClosedCount = closedInBucket.Count,
+                    AvgResolutionHours = avgHours.HasValue ? Math.Round(avgHours.Value, 2) : null,
+                };
+            }).ToList();
+
+            return new AvgResolutionReportDto
+            {
+                AvgResolutionHours = TicketMetricsHelper.CalculateAvgResolutionHours(tickets),
+                ClosedTicketsCount = closed.Count,
+                TotalTicketsCount = tickets.Count,
+                BucketGranularityLabel = granularityLabel,
+                Buckets = buckets,
+            };
+        }
+
+        private static UserRatingsReportDto BuildUserRatingsReport(
+            List<DAL.Entities.Ticket> tickets,
+            string period,
+            DateTime periodFrom,
+            DateTime periodTo)
         {
             var rated = tickets.Where(t => t.Rating != null).ToList();
+
+            var (granularity, granularityLabel) = FirstResponseReportHelper.ResolveGranularity(period, periodFrom, periodTo);
+            var ranges = FirstResponseReportHelper.GenerateRanges(periodFrom, periodTo, granularity);
+
+            var buckets = ranges.Select(r =>
+            {
+                var inBucket = rated.Where(t => t.CreatedDate >= r.Start && t.CreatedDate < r.End).ToList();
+                return new RatingBucketDto
+                {
+                    Label = r.Label,
+                    Count = inBucket.Count,
+                    AvgRating = inBucket.Count > 0
+                        ? Math.Round(inBucket.Average(t => (double)t.Rating!.RatingValue), 2)
+                        : null,
+                };
+            }).ToList();
+
             if (rated.Count == 0)
-                return new UserRatingsReportDto();
+                return new UserRatingsReportDto
+                {
+                    BucketGranularityLabel = granularityLabel,
+                    Buckets = buckets,
+                };
 
             var distribution = rated
                 .GroupBy(t => t.Rating!.RatingValue)
@@ -195,9 +322,11 @@ namespace TelecomSupportSystem.BLL.Services
 
             return new UserRatingsReportDto
             {
-                AverageRating = rated.Average(t => t.Rating!.RatingValue),
+                AverageRating = rated.Average(t => (double)t.Rating!.RatingValue),
                 RatedTicketsCount = rated.Count,
                 Distribution = distribution,
+                BucketGranularityLabel = granularityLabel,
+                Buckets = buckets,
             };
         }
     }
