@@ -27,7 +27,13 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{typeof(Program).Assembly.GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+        options.IncludeXmlComments(xmlPath);
+});
 builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -137,6 +143,8 @@ builder.Services.AddScoped<IPackageService, PackageService>();
 // PB-52 / US-76, US-77
 builder.Services.AddScoped<ICatalogPackageService, CatalogPackageService>();
 builder.Services.AddScoped<IClientSubscriptionService, ClientSubscriptionService>();
+// Audit Log
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 
 var app = builder.Build();
 
@@ -549,6 +557,8 @@ if (app.Environment.IsDevelopment())
         db.SubscriptionPackages.RemoveRange(legacyRows);
         db.SaveChanges();
     }
+
+    TelecomSupportSystem.API.AuditLogSeed.Seed(db);
 }
 
 app.UseHttpsRedirection();
@@ -561,3 +571,5 @@ app.MapHub<ChatHub>("/chathub");
 app.MapHub<NotificationHub>("/notificationhub");
 
 app.Run();
+
+public partial class Program { }

@@ -190,10 +190,12 @@ namespace TelecomSupportSystem.API.Controllers
 
             var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (currentRole == null) return Unauthorized();
+            var currentUserId = TryGetUserId(out var parsedUserId) ? parsedUserId : (int?)null;
+            var currentEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
             try
             {
-                await _userService.CreateUserAsync(dto, currentRole);
+                await _userService.CreateUserAsync(dto, currentRole, currentUserId, currentEmail);
                 return Ok(new { message = "Korisnik je uspješno kreiran." });
             }
             catch (UnauthorizedAccessException)
@@ -214,10 +216,11 @@ namespace TelecomSupportSystem.API.Controllers
 
             var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (currentRole == null) return Unauthorized();
+            var currentUserId = TryGetUserId(out var parsedUserId) ? parsedUserId : (int?)null;
 
             try
             {
-                await _userService.UpdateUserDetailsAsync(id, dto, currentRole);
+                await _userService.UpdateUserDetailsAsync(id, dto, currentRole, currentUserId);
                 return Ok(new { message = "Podaci korisnika su uspješno ažurirani." });
             }
             catch (KeyNotFoundException)

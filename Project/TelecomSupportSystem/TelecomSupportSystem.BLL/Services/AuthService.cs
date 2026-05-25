@@ -17,29 +17,63 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly IUserRepository _userRepository;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IConfiguration _configuration;
+        private readonly IAuditLogService _auditLogService;
 
         public AuthService(
             IUserRepository userRepository,
             IRefreshTokenRepository refreshTokenRepository,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IAuditLogService? auditLogService = null)
         {
             _userRepository = userRepository;
             _refreshTokenRepository = refreshTokenRepository;
             _configuration = configuration;
+            _auditLogService = auditLogService ?? new NoOpAuditLogService();
         }
 
-        public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto loginDto)
+        public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto loginDto, string? ipAddress = null)
         {
             var user = await _userRepository.GetByEmailAsync(loginDto.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+            {
+                // Log failed login attempt (without userId since user doesn't exist)
+                await _auditLogService.LogAsync(
+                    AuditActionType.USER_LOGIN_FAILED,
+                    "User",
+                    null,
+                    $"Neuspješan pokušaj prijave za: {loginDto.Email}",
+                    ipAddress: ipAddress
+                );
                 return null;
+            }
 
             if (user.AccountStatus == AccountStatus.INACTIVE)
+            {
+                // Log failed login for inactive account
+                await _auditLogService.LogAsync(
+                    AuditActionType.USER_LOGIN_FAILED,
+                    "User",
+                    user.UserId.ToString(),
+                    $"Pokušaj prijave za neaktivan nalog: {user.Email}",
+                    userId: user.UserId,
+                    ipAddress: ipAddress
+                );
                 return null;
+            }
 
             var accessToken = GenerateAccessToken(user);
             var refreshToken = await CreateRefreshTokenAsync(user.UserId);
+
+            // Log successful login
+            await _auditLogService.LogAsync(
+                AuditActionType.USER_LOGIN,
+                "User",
+                user.UserId.ToString(),
+                $"Korisnik {user.FirstName} {user.LastName} se prijavio",
+                userId: user.UserId,
+                ipAddress: ipAddress
+            );
 
             return new LoginResponseDto
             {
@@ -89,6 +123,12 @@ namespace TelecomSupportSystem.BLL.Services
                 return false;
 
             await _refreshTokenRepository.RevokeAsync(stored);
+            await _auditLogService.LogAsync(
+                AuditActionType.USER_LOGOUT,
+                "User",
+                stored.UserId.ToString(),
+                $"Korisnik {stored.User.Email} se odjavio",
+                userId: stored.UserId);
             return true;
         }
 
@@ -138,6 +178,15 @@ namespace TelecomSupportSystem.BLL.Services
         {
             var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(token));
             return Convert.ToBase64String(bytes);
+        }
+
+        private sealed class NoOpAuditLogService : IAuditLogService
+        {
+            public Task LogAsync(AuditActionType actionType, string entityType, string? entityId, string description, int? userId = null, object? oldValue = null, object? newValue = null, string? ipAddress = null) => Task.CompletedTask;
+            public Task<DTOs.AuditLogs.AuditLogResponseDto> GetAuditLogsAsync(DTOs.AuditLogs.AuditLogFilterDto filter) => throw new NotSupportedException();
+            public Task<DTOs.AuditLogs.AuditLogDetailDto?> GetAuditLogDetailAsync(int id) => throw new NotSupportedException();
+            public Task<List<string>> GetActionTypesAsync() => throw new NotSupportedException();
+            public Task<List<DTOs.AuditLogs.AuditLogUserDto>> GetAuditLogUsersAsync() => throw new NotSupportedException();
         }
     }
 }

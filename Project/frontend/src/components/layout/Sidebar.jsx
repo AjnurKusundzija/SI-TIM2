@@ -18,7 +18,8 @@ import {
   Users,
   UserMinus,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  History
 } from 'lucide-react';
 
 const navConfig = {
@@ -71,6 +72,7 @@ const navConfig = {
     ],
   },
   { to: '/admin/packages', label: 'Upravljanje paketima', icon: Package },
+  { to: '/audit-log', label: 'Audit log', icon: History },
   { to: '/faq', label: 'FAQ', icon: HelpCircle },
   { to: '/notifications', label: 'Notifikacije', icon: Bell },
 ],
