@@ -64,11 +64,21 @@ namespace TelecomSupportSystem.BLL.Services
             }
         }
 
-        // PB-56: sanitizacija imena fajla — Path.GetFileName uklanja eventualnu putanju
-        // (zaštita od path traversal-a), pa potom mijenjamo opasne karaktere podvlakom.
+        // PB-56: sanitizacija imena fajla — zaštita od path traversal-a + zamjena opasnih karaktera.
+        // Path.GetFileName na Linuxu ne tretira '\' kao separator, pa cross-platform najprije ručno
+        // strip-amo putanju (i '/' i '\'), tek onda primijenimo OS-specifičnu validaciju karaktera.
         public static string SanitizeFileName(string fileName)
         {
-            var name = Path.GetFileName(fileName ?? string.Empty);
+            var input = fileName ?? string.Empty;
+
+            // Normaliziraj sve slash-eve i uzmi posljednji segment — radi i na Linuxu i na Windowsu.
+            var lastSlash = input.LastIndexOfAny(new[] { '/', '\\' });
+            var name = lastSlash >= 0 ? input.Substring(lastSlash + 1) : input;
+
+            // Drive prefix (npr. "C:" ako neko proslijedi "C:zlocesto.txt" bez slash-a) takođe odbacujemo.
+            if (name.Length >= 2 && name[1] == ':')
+                name = name.Substring(2);
+
             if (string.IsNullOrWhiteSpace(name))
                 name = "prilog";
 
