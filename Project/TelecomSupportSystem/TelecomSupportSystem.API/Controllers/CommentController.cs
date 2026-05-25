@@ -113,64 +113,35 @@ namespace TelecomSupportSystem.API.Controllers
             if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
                 return Unauthorized();
 
-            if (string.IsNullOrWhiteSpace(request.Content))
-                return BadRequest("Content cannot be empty.");
+            var hasAttachments = request.Attachments is not null && request.Attachments.Count > 0;
+            // PB-56: dozvoli slanje samo priloga (bez teksta). Tekst je obavezan samo ako nema fajlova.
+            if (string.IsNullOrWhiteSpace(request.Content) && !hasAttachments)
+                return BadRequest("Poruka mora imati tekst ili barem jedan prilog.");
 
             try
             {
+                // PB-56: validacija/sanitizacija je centralizovana u BLL (AttachmentStorage).
+                // Controller samo čita fajlove u memoriju i prosljeđuje servisu.
                 var fileUploads = new List<FileUploadDto>();
-
                 if (request.Attachments is not null && request.Attachments.Count > 0)
                 {
-                    // US-80: Ograničenje na maksimalno 5 priloga po poruci
-                    if (request.Attachments.Count > 5)
-                    {
-                        return BadRequest("Maksimalan broj priloga po jednoj poruci je 5.");
-                    }
-
-                    // Definišemo dozvoljene i strogo zabranjene ekstenzije fajlova
-                    var allowedExtensions = new HashSet<string> { ".png", ".jpg", ".jpeg", ".pdf", ".docx", ".txt" };
-                    var forbiddenExtensions = new HashSet<string> { ".exe", ".bat", ".sh", ".cmd", ".com" };
-
                     foreach (var file in request.Attachments)
                     {
-                        var extension = Path.GetExtension(file.FileName).ToLower();
-
-                        // US-80: Maksimalna veličina pojedinačnog fajla je 5 MB (5 * 1024 * 1024 bajta)
-                        if (file.Length > 5242880)
-                        {
-                            return BadRequest($"Fajl '{file.FileName}' prelazi maksimalnu dozvoljenu veličinu od 5 MB.");
-                        }
-
-                        // US-80: Explicitna zabrana izvršnih fajlova zbog sigurnosti sistema
-                        if (forbiddenExtensions.Contains(extension))
-                        {
-                            return BadRequest($"Upload izvršnih fajlova ({extension}) je najstrožije zabranjen.");
-                        }
-
-                        // US-80: Dozvoljavaju se samo slike i dokumenti navedeni u zahtjevima
-                        if (!allowedExtensions.Contains(extension))
-                        {
-                            return BadRequest($"Format fajla '{extension}' nije podržan. Dozvoljeni formati: PNG, JPG, JPEG, PDF, DOCX, TXT.");
-                        }
-
-                        // US-80: Sanitizacija naziva fajla (uklanjanje razmaka i specijalnih karaktera)
-                        var sanitizedFileName = SanitizeFileName(file.FileName);
-
                         using var ms = new MemoryStream();
                         await file.CopyToAsync(ms);
-
                         fileUploads.Add(new FileUploadDto
                         {
-                            FileName = sanitizedFileName,
+                            FileName = file.FileName,
                             ContentType = file.ContentType ?? "application/octet-stream",
                             Data = ms.ToArray(),
-                            Size = file.Length // Proslijeđena veličina fajla koju servisi zahtijevaju
+                            Size = file.Length
                         });
                     }
                 }
 
-                var commentDto = await _commentService.AddCommentAsync(ticketId, userId, role, request.Content, fileUploads);
+                // Ako tekst nije unesen ali postoje prilozi, šaljemo prazan content kroz servis.
+                var content = request.Content ?? string.Empty;
+                var commentDto = await _commentService.AddCommentAsync(ticketId, userId, role, content, fileUploads);
 
                 // Emit to SignalR group
                 await hubContext.Clients.Group($"ticket_{ticketId}").SendAsync("ReceiveComment", commentDto);
@@ -195,25 +166,5 @@ namespace TelecomSupportSystem.API.Controllers
             }
         }
 
-        // Pomoćna metoda za čišćenje i sanitizaciju naziva fajlova
-        private static string SanitizeFileName(string fileName)
-        {
-            var nameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
-            var extension = Path.GetExtension(fileName);
-
-            // Dozvoli samo slova, brojeve, crtice i donje crte
-            var cleanName = System.Text.RegularExpressions.Regex.Replace(nameWithoutExt, @"[^a-zA-Z0-9_\-]", "");
-
-            // Zamjena naših karaktera da ne lome URL encoding
-            cleanName = cleanName.Replace("š", "s").Replace("đ", "d").Replace("č", "c").Replace("ć", "c").Replace("ž", "z")
-                                 .Replace("Š", "S").Replace("Đ", "D").Replace("Č", "C").Replace("Ć", "C").Replace("Ž", "Z");
-
-            if (string.IsNullOrWhiteSpace(cleanName))
-            {
-                cleanName = "prilog_" + Guid.NewGuid().ToString().Substring(0, 8);
-            }
-
-            return cleanName + extension;
-        }
     }
 }

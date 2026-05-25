@@ -30,6 +30,8 @@ export default function CreateTicket() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(null)
+  // PB-56 / US-80: prikaz progress indikatora tokom uploada većih fajlova
+  const [uploadProgress, setUploadProgress] = useState(null)
 
   const validateForm = () => {
     const newErrors = {}
@@ -65,7 +67,8 @@ export default function CreateTicket() {
 
       // PB-56: Ako ima fajlova, koristi endpoint sa attachments-ima
       if (files.length > 0) {
-        await createTicketWithAttachments(ticketData, files)
+        setUploadProgress(0)
+        await createTicketWithAttachments(ticketData, files, (percent) => setUploadProgress(percent))
       } else {
         await createTicket(ticketData)
       }
@@ -73,6 +76,7 @@ export default function CreateTicket() {
       setSuccess(true)
       setFormData({ subject: '', type: '', description: '', priority: '' })
       setFiles([])
+      setUploadProgress(null)
     } catch (err) {
       console.error(err)
       if (err.response?.status === 401) {
@@ -82,6 +86,7 @@ export default function CreateTicket() {
       } else {
         setError('Nije uspjelo kreiranje tiketa. Molimo pokušajte ponovo.')
       }
+      setUploadProgress(null)
     } finally {
       setLoading(false)
     }
@@ -175,6 +180,22 @@ export default function CreateTicket() {
             </label>
             <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={false} />
           </div>
+
+          {/* PB-56 / US-80: progress indikator tokom uploada */}
+          {uploadProgress !== null && (
+            <div className="space-y-1" data-testid="upload-progress">
+              <div className="flex justify-between text-xs text-gray-600">
+                <span>Upload priloga…</span>
+                <span>{uploadProgress}%</span>
+              </div>
+              <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-navy-600 transition-all"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            </div>
+          )}
 
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">

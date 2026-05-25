@@ -38,6 +38,19 @@ namespace TelecomSupportSystem.BLL.Services
             _commentService      = commentService;
         }
 
+        // PB-56: kompatibilni overload za postojeće testove koji ne testiraju attachment funkcionalnost.
+        // Tester koji ne treba pratiti upload priloga ne mora mockovati IAttachmentRepository.
+        public TicketService(
+            ITicketRepository ticketRepository,
+            ITeamRepository teamRepository,
+            IUserRepository userRepository,
+            INotificationService notificationService,
+            ICommentService commentService)
+            : this(ticketRepository, teamRepository, userRepository, notificationService,
+                   new TelecomSupportSystem.DAL.Repositories.NullAttachmentRepository(), commentService)
+        {
+        }
+
         // US-11: Dohvata tikete iz repozitorija i mapira ih u DTO.
         // Enum se pretvara u string (.ToString()) da frontend ne mora
         // raditi numeričko mapiranje (npr. 0 → "OPEN").
@@ -101,82 +114,7 @@ namespace TelecomSupportSystem.BLL.Services
                 .ToList();
         }
 
-        private static readonly string[] AllowedAttachmentExtensions =
-        {
-            ".jpg", ".jpeg", ".png", ".pdf", ".docx", ".xlsx", ".txt"
-        };
-
-        private const long MaxAttachmentSizeBytes = 5 * 1024 * 1024;
-        private const int MaxTicketAttachments = 5;
-
-        private static void ValidateAttachments(IEnumerable<FileUploadDto> attachments, int maxCount)
-        {
-            var attachmentList = attachments.ToList();
-
-            if (attachmentList.Count > maxCount)
-                throw new ArgumentException($"Moguće je poslati najviše {maxCount} priloga.");
-
-            foreach (var attachment in attachmentList)
-            {
-                if (attachment.Data is null || attachment.Data.Length == 0)
-                    throw new ArgumentException($"Prilog '{attachment.FileName}' je prazan.");
-
-                if (attachment.Size > MaxAttachmentSizeBytes)
-                    throw new ArgumentException($"Prilog '{attachment.FileName}' ne može biti veći od 5 MB.");
-
-                var extension = Path.GetExtension(attachment.FileName).ToLowerInvariant();
-                if (!AllowedAttachmentExtensions.Contains(extension))
-                    throw new ArgumentException($"Prilog '{attachment.FileName}' nije podržan.");
-            }
-        }
-
-        private static string GetStoredFileName(string originalFileName)
-        {
-            var extension = Path.GetExtension(originalFileName);
-            if (string.IsNullOrWhiteSpace(extension))
-                extension = ".bin";
-
-            return $"{Guid.NewGuid():N}{extension}";
-        }
-
-        private static string SanitizeFileName(string fileName)
-        {
-            var name = Path.GetFileName(fileName) ?? "attachment";
-            foreach (var invalidChar in Path.GetInvalidFileNameChars())
-            {
-                name = name.Replace(invalidChar, '_');
-            }
-            return name;
-        }
-
-        private static IEnumerable<Attachment> CreateAttachmentEntities(IEnumerable<FileUploadDto> uploads, int ticketId, int? commentId = null)
-        {
-            var targetFolder = Path.Combine(Directory.GetCurrentDirectory(), "Attachments");
-            if (!Directory.Exists(targetFolder))
-                Directory.CreateDirectory(targetFolder);
-
-            var attachments = new List<Attachment>();
-            foreach (var upload in uploads)
-            {
-                var sanitizedFile = SanitizeFileName(upload.FileName);
-                var storedFileName = GetStoredFileName(sanitizedFile);
-                var fullPath = Path.Combine(targetFolder, storedFileName);
-                File.WriteAllBytes(fullPath, upload.Data);
-
-                attachments.Add(new Attachment
-                {
-                    TicketId = ticketId,
-                    CommentId = commentId,
-                    FileName = sanitizedFile,
-                    StoredFileName = storedFileName,
-                    ContentType = upload.ContentType,
-                    Size = upload.Size,
-                    UploadedAt = DateTime.UtcNow
-                });
-            }
-
-            return attachments;
-        }
+        // PB-56: validacija/upis attachmenta je centralizovana u AttachmentStorage.
         // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
         public async Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role)
         {
@@ -244,7 +182,11 @@ namespace TelecomSupportSystem.BLL.Services
                     ContentType = a.ContentType,
                     Size = a.Size,
                     UploadedAt = a.UploadedAt,
-                    DownloadUrl = $"/api/attachments/{a.AttachmentId}"
+                    DownloadUrl = $"/api/attachments/{a.AttachmentId}",
+                    UploadedByUserId = a.UserId,
+                    UploadedByName = a.User is null
+                        ? string.Empty
+                        : $"{a.User.FirstName} {a.User.LastName}".Trim()
                 }).ToList()
             };
         }
@@ -803,14 +745,30 @@ namespace TelecomSupportSystem.BLL.Services
                 TeamId          = team?.TeamId
             };
 
+            // PB-56: validaciju izvršavamo PRIJE kreiranja tiketa kako ne bismo ostavili siroče tikete u DB
+            if (attachments is not null && attachments.Any())
+            {
+                AttachmentStorage.Validate(attachments, AttachmentStorage.MaxAttachmentsPerTicket);
+            }
+
             await _ticketRepository.CreateAsync(ticket);
 
             if (attachments is not null && attachments.Any())
             {
-                ValidateAttachments(attachments, MaxTicketAttachments);
-                var attachmentEntities = CreateAttachmentEntities(attachments, ticket.TicketId);
-                await _attachmentRepository.AddRangeAsync(attachmentEntities);
-                ticket.Attachments = attachmentEntities.ToList();
+                var (attachmentEntities, writtenPaths) =
+                    AttachmentStorage.WriteFiles(attachments, ticket.TicketId, null, userId);
+
+                try
+                {
+                    await _attachmentRepository.AddRangeAsync(attachmentEntities);
+                    ticket.Attachments = attachmentEntities;
+                }
+                catch
+                {
+                    // US-80: ako DB save padne, počisti fajlove sa diska
+                    AttachmentStorage.CleanupFiles(writtenPaths);
+                    throw;
+                }
             }
 
             string? assignedAgentName = null;

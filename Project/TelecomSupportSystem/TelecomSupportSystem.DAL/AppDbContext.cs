@@ -150,6 +150,7 @@ public class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.TicketId);
             entity.HasIndex(e => e.CommentId);
+            entity.HasIndex(e => e.UserId);
 
             entity.HasOne(e => e.Ticket)
                 .WithMany(t => t.Attachments)
@@ -160,6 +161,11 @@ public class ApplicationDbContext : DbContext
                 .WithMany(c => c.Attachments)
                 .HasForeignKey(e => e.CommentId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Rating>(entity =>

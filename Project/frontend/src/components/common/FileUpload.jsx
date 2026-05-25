@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Upload, X, AlertCircle, CheckCircle, Loader } from 'lucide-react'
+import { Upload, X, AlertCircle } from 'lucide-react'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
 const MAX_FILES = 5

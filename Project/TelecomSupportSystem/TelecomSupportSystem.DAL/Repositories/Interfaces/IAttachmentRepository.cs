@@ -8,6 +8,9 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
     {
         Task AddAsync(Attachment attachment);
         Task AddRangeAsync(IEnumerable<Attachment> attachments);
-        Task<Attachment?> GetByIdAsync(int id); // Dodana metoda koju AttachmentsController traži
+        Task<Attachment?> GetByIdAsync(int id);
+
+        // PB-56 / US-81: dohvati prilog sa svim navigacijama (Ticket + Comment + Comment.Ticket + Ticket.Assignments + User)
+        Task<Attachment?> GetByIdWithRelationsAsync(int id);
     }
 }

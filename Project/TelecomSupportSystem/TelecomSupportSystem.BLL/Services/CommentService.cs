@@ -4,6 +4,7 @@ using TelecomSupportSystem.BLL.DTOs.Attachments;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,78 +34,27 @@ namespace TelecomSupportSystem.BLL.Services
             _chatPusher = chatPusher;
         }
 
-        private static readonly string[] AllowedAttachmentExtensions =
+        // PB-56: kompatibilni overload-i za postojeće testove koji ne koriste attachment funkcionalnost.
+        public CommentService(
+            ICommentRepository commentRepository,
+            ITicketRepository ticketRepository,
+            INotificationService notificationService,
+            IChatPusher chatPusher)
+            : this(commentRepository, ticketRepository, notificationService, new NullAttachmentRepository(), chatPusher)
         {
-            ".jpg", ".jpeg", ".png", ".pdf", ".docx", ".xlsx", ".txt"
-        };
-
-        private const long MaxAttachmentSizeBytes = 5 * 1024 * 1024;
-        private const int MaxCommentAttachments = 3;
-
-        private static void ValidateAttachments(IEnumerable<FileUploadDto> attachments, int maxCount)
-        {
-            var attachmentList = attachments.ToList();
-            if (attachmentList.Count > maxCount)
-                throw new ArgumentException($"Moguće je poslati najviše {maxCount} priloga.");
-
-            foreach (var attachment in attachmentList)
-            {
-                if (attachment.Data is null || attachment.Data.Length == 0)
-                    throw new ArgumentException($"Prilog '{attachment.FileName}' je prazan.");
-                if (attachment.Size > MaxAttachmentSizeBytes)
-                    throw new ArgumentException($"Prilog '{attachment.FileName}' ne može biti veći od 5 MB.");
-
-                var extension = Path.GetExtension(attachment.FileName).ToLowerInvariant();
-                if (!AllowedAttachmentExtensions.Contains(extension))
-                    throw new ArgumentException($"Prilog '{attachment.FileName}' nije podržan.");
-            }
         }
 
-        private static string SanitizeFileName(string fileName)
+        public CommentService(
+            ICommentRepository commentRepository,
+            ITicketRepository ticketRepository,
+            INotificationService notificationService)
+            : this(commentRepository, ticketRepository, notificationService, new NullAttachmentRepository(), new NullChatPusher())
         {
-            var name = Path.GetFileName(fileName) ?? "attachment";
-            foreach (var invalidChar in Path.GetInvalidFileNameChars())
-            {
-                name = name.Replace(invalidChar, '_');
-            }
-            return name;
         }
 
-        private static string GetStoredFileName(string originalFileName)
+        private sealed class NullChatPusher : IChatPusher
         {
-            var extension = Path.GetExtension(originalFileName);
-            if (string.IsNullOrWhiteSpace(extension))
-                extension = ".bin";
-            return $"{Guid.NewGuid():N}{extension}";
-        }
-
-        private static IEnumerable<Attachment> CreateAttachmentEntities(IEnumerable<FileUploadDto> uploads, int ticketId, int commentId)
-        {
-            var targetFolder = Path.Combine(Directory.GetCurrentDirectory(), "Attachments");
-            if (!Directory.Exists(targetFolder))
-                Directory.CreateDirectory(targetFolder);
-
-            var attachments = new List<Attachment>();
-            foreach (var upload in uploads)
-            {
-                var sanitizedFile = SanitizeFileName(upload.FileName);
-                var storedFileName = GetStoredFileName(sanitizedFile);
-                var fullPath = Path.Combine(targetFolder, storedFileName);
-                File.WriteAllBytes(fullPath, upload.Data);
-
-                attachments.Add(new Attachment
-                {
-                    TicketId = ticketId,
-                    CommentId = commentId,
-                    FileName = sanitizedFile,
-                    StoredFileName = storedFileName,
-                    ContentType = upload.ContentType,
-                    Size = upload.Size,
-                    UploadedAt = DateTime.UtcNow
-                });
-            }
-
-            return attachments;
+            public System.Threading.Tasks.Task PushCommentAsync(int ticketId, CommentDto dto) => System.Threading.Tasks.Task.CompletedTask;
         }
 
         // US-15: Ista logika pristupa kao i za tiket (CLIENT → vlastiti, AGENT/TECHNICIAN → dodijeljeni, ADMIN → svi)
@@ -137,26 +87,31 @@ namespace TelecomSupportSystem.BLL.Services
                 AuthorName      = c.IsSystemMessage ? string.Empty : $"{c.Author!.FirstName} {c.Author.LastName}",
                 AuthorRole      = c.IsSystemMessage ? string.Empty : c.Author!.Role.ToString(),
                 IsSystemMessage = c.IsSystemMessage,
-                Attachments     = c.Attachments.Select(a => new AttachmentDto
-                {
-                    AttachmentId = a.AttachmentId,
-                    FileName = a.FileName,
-                    ContentType = a.ContentType,
-                    Size = a.Size,
-                    UploadedAt = a.UploadedAt,
-                    DownloadUrl = $"/api/attachments/{a.AttachmentId}"
-                }).ToList()
+                Attachments     = c.Attachments.Select(MapAttachment).ToList()
             });
         }
+
+        private static AttachmentDto MapAttachment(Attachment a) => new()
+        {
+            AttachmentId = a.AttachmentId,
+            FileName = a.FileName,
+            ContentType = a.ContentType,
+            Size = a.Size,
+            UploadedAt = a.UploadedAt,
+            DownloadUrl = $"/api/attachments/{a.AttachmentId}",
+            UploadedByUserId = a.UserId,
+            UploadedByName = a.User is null ? string.Empty : $"{a.User.FirstName} {a.User.LastName}".Trim()
+        };
 
         public async Task<CommentDto> AddCommentAsync(int ticketId, int userId, string role, string content, IEnumerable<FileUploadDto>? attachments = null)
         {
             if (content.Length > 1000)
                 throw new ArgumentException("Poruka ne može biti duža od 1000 znakova.");
 
+            // PB-56: validacija prije bilo kakve write operacije
             if (attachments is not null && attachments.Any())
             {
-                ValidateAttachments(attachments, MaxCommentAttachments);
+                AttachmentStorage.Validate(attachments, AttachmentStorage.MaxAttachmentsPerComment);
             }
 
             var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId);
@@ -203,17 +158,12 @@ namespace TelecomSupportSystem.BLL.Services
             // Basic sanitization
             var offensiveWords = new[]
             {
-                // English common profanity
                 "ass", "asshole", "bastard", "bitch", "bullshit",
                 "dick", "cock", "pussy", "shit", "fuck",
                 "motherfucker", "fucker", "damn", "prick",
                 "douchebag", "jackass", "slut", "whore",
                 "twat", "wank", "jerkoff", "handjob",
-
-                // Sexual explicit terms
                 "penis", "vagina", "cum", "cunt", "anal",
-
-                // Bosnian / regional profanity
                 "jebem", "jebo", "jebi", "jebiga",
                 "kurac", "pička", "picka", "pickica",
                 "sranje", "serem", "seronja",
@@ -238,8 +188,19 @@ namespace TelecomSupportSystem.BLL.Services
 
             if (attachments is not null && attachments.Any())
             {
-                var attachmentEntities = CreateAttachmentEntities(attachments, ticketId, comment.CommentId);
-                await _attachmentRepository.AddRangeAsync(attachmentEntities);
+                var (attachmentEntities, writtenPaths) =
+                    AttachmentStorage.WriteFiles(attachments, ticketId, comment.CommentId, userId);
+
+                try
+                {
+                    await _attachmentRepository.AddRangeAsync(attachmentEntities);
+                }
+                catch
+                {
+                    // US-80: ako DB save padne, počisti fajlove sa diska
+                    AttachmentStorage.CleanupFiles(writtenPaths);
+                    throw;
+                }
             }
 
             // Fetch the created comment to get author details
@@ -278,15 +239,7 @@ namespace TelecomSupportSystem.BLL.Services
                 AuthorId   = createdComment.AuthorId,
                 AuthorName = $"{createdComment.Author!.FirstName} {createdComment.Author.LastName}",
                 AuthorRole = createdComment.Author.Role.ToString(),
-                Attachments = createdComment.Attachments.Select(a => new AttachmentDto
-                {
-                    AttachmentId = a.AttachmentId,
-                    FileName = a.FileName,
-                    ContentType = a.ContentType,
-                    Size = a.Size,
-                    UploadedAt = a.UploadedAt,
-                    DownloadUrl = $"/api/attachments/{a.AttachmentId}"
-                }).ToList()
+                Attachments = createdComment.Attachments.Select(MapAttachment).ToList()
             };
         }
 

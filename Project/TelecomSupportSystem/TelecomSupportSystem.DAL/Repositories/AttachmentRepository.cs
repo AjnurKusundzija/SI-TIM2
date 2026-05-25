@@ -31,5 +31,17 @@ namespace TelecomSupportSystem.DAL.Repositories
         {
             return await _context.Attachments.FirstOrDefaultAsync(a => a.AttachmentId == id);
         }
+
+        public async Task<Attachment?> GetByIdWithRelationsAsync(int id)
+        {
+            return await _context.Attachments
+                .Include(a => a.User)
+                .Include(a => a.Ticket)
+                    .ThenInclude(t => t!.Assignments)
+                .Include(a => a.Comment)
+                    .ThenInclude(c => c!.Ticket)
+                        .ThenInclude(t => t.Assignments)
+                .FirstOrDefaultAsync(a => a.AttachmentId == id);
+        }
     }
 }
