@@ -56,7 +56,11 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task CreateUser_ShouldReturnOk_WhenAdminAndValidDto()
         {
             SetUser(1, "ADMINISTRATOR");
-            _userService.Setup(s => s.CreateUserAsync(It.IsAny<CreateUserDto>(), "ADMINISTRATOR"))
+            _userService.Setup(s => s.CreateUserAsync(
+                    It.IsAny<CreateUserDto>(),
+                    "ADMINISTRATOR",
+                    It.IsAny<int?>(),
+                    It.IsAny<string?>()))
                 .Returns(Task.CompletedTask);
 
             var result = await _controller.CreateUser(MakeCreateDto());
@@ -68,7 +72,11 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task CreateUser_ShouldReturnForbid_WhenAgentTriesToCreate()
         {
             SetUser(2, "AGENT");
-            _userService.Setup(s => s.CreateUserAsync(It.IsAny<CreateUserDto>(), "AGENT"))
+            _userService.Setup(s => s.CreateUserAsync(
+                    It.IsAny<CreateUserDto>(),
+                    "AGENT",
+                    It.IsAny<int?>(),
+                    It.IsAny<string?>()))
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             var result = await _controller.CreateUser(MakeCreateDto());
@@ -95,7 +103,11 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task CreateUser_ShouldReturnConflict_WhenEmailAlreadyTaken()
         {
             SetUser(1, "ADMINISTRATOR");
-            _userService.Setup(s => s.CreateUserAsync(It.IsAny<CreateUserDto>(), "ADMINISTRATOR"))
+            _userService.Setup(s => s.CreateUserAsync(
+                    It.IsAny<CreateUserDto>(),
+                    "ADMINISTRATOR",
+                    It.IsAny<int?>(),
+                    It.IsAny<string?>()))
                 .ThrowsAsync(new InvalidOperationException("Email zauzet."));
 
             var result = await _controller.CreateUser(MakeCreateDto());
@@ -120,7 +132,11 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task UpdateUserDetails_ShouldReturnOk_WhenAdminEdits()
         {
             SetUser(1, "ADMINISTRATOR");
-            _userService.Setup(s => s.UpdateUserDetailsAsync(2, It.IsAny<UpdateUserDetailsDto>(), "ADMINISTRATOR"))
+            _userService.Setup(s => s.UpdateUserDetailsAsync(
+                    2,
+                    It.IsAny<UpdateUserDetailsDto>(),
+                    "ADMINISTRATOR",
+                    It.IsAny<int?>()))
                 .Returns(Task.CompletedTask);
 
             var result = await _controller.UpdateUserDetails(2, new UpdateUserDetailsDto
@@ -136,7 +152,11 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task UpdateUserDetails_ShouldReturnNotFound_WhenUserDoesNotExist()
         {
             SetUser(1, "ADMINISTRATOR");
-            _userService.Setup(s => s.UpdateUserDetailsAsync(404, It.IsAny<UpdateUserDetailsDto>(), "ADMINISTRATOR"))
+            _userService.Setup(s => s.UpdateUserDetailsAsync(
+                    404,
+                    It.IsAny<UpdateUserDetailsDto>(),
+                    "ADMINISTRATOR",
+                    It.IsAny<int?>()))
                 .ThrowsAsync(new KeyNotFoundException());
 
             var result = await _controller.UpdateUserDetails(404, new UpdateUserDetailsDto
@@ -152,7 +172,11 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task UpdateUserDetails_ShouldReturnForbid_WhenServiceThrowsUnauthorized()
         {
             SetUser(99, "AGENT");
-            _userService.Setup(s => s.UpdateUserDetailsAsync(5, It.IsAny<UpdateUserDetailsDto>(), "AGENT"))
+            _userService.Setup(s => s.UpdateUserDetailsAsync(
+                    5,
+                    It.IsAny<UpdateUserDetailsDto>(),
+                    "AGENT",
+                    It.IsAny<int?>()))
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             var result = await _controller.UpdateUserDetails(5, new UpdateUserDetailsDto
