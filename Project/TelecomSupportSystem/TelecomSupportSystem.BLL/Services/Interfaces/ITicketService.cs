@@ -1,5 +1,6 @@
 using TelecomSupportSystem.BLL.DTOs;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
+using TelecomSupportSystem.BLL.DTOs.Attachments;
 using TelecomSupportSystem.DAL.Entities.Enums;
 
 namespace TelecomSupportSystem.BLL.Services.Interfaces
@@ -10,7 +11,7 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         Task<IEnumerable<MyTicketDto>> GetMyTicketsAsync(int userId);
 
         // PB-22
-        Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId);
+        Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId, IEnumerable<DTOs.Attachments.FileUploadDto>? attachments = null);
 
         // US-14, US-30: Detaljan prikaz tiketa — pristup ovisi o roli
         Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role);

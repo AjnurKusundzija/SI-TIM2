@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Ticket> Tickets => Set<Ticket>();
     public DbSet<TicketUser> TicketUsers => Set<TicketUser>();
     public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<Attachment> Attachments => Set<Attachment>();
     public DbSet<Rating> Ratings => Set<Rating>();
     public DbSet<SubscriptionPackage> SubscriptionPackages => Set<SubscriptionPackage>();
     public DbSet<PackageFeature> PackageFeatures => Set<PackageFeature>();
@@ -110,6 +111,11 @@ public class ApplicationDbContext : DbContext
                 .HasForeignKey(c => c.TicketId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            entity.HasMany(e => e.Attachments)
+                .WithOne(a => a.Ticket)
+                .HasForeignKey(a => a.TicketId)
+                .OnDelete(DeleteBehavior.Restrict); // Ovdje je spriječeno ciklično kaskadiranje
+
             entity.HasOne(e => e.Rating)
                 .WithOne(r => r.Ticket)
                 .HasForeignKey<Rating>(r => r.TicketId)
@@ -125,6 +131,35 @@ public class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.TicketId);
             entity.HasIndex(e => e.DateTime);
+
+            entity.HasMany(e => e.Attachments)
+                .WithOne(a => a.Comment)
+                .HasForeignKey(a => a.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Attachment>(entity =>
+        {
+            entity.HasKey(e => e.AttachmentId);
+
+            entity.Property(e => e.FileName).IsRequired().HasMaxLength(260);
+            entity.Property(e => e.StoredFileName).IsRequired().HasMaxLength(260);
+            entity.Property(e => e.ContentType).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Size).IsRequired();
+            entity.Property(e => e.UploadedAt).IsRequired();
+
+            entity.HasIndex(e => e.TicketId);
+            entity.HasIndex(e => e.CommentId);
+
+            entity.HasOne(e => e.Ticket)
+                .WithMany(t => t.Attachments)
+                .HasForeignKey(e => e.TicketId)
+                .OnDelete(DeleteBehavior.Restrict); // Sinkronizirano s Ticket konfiguracijom
+
+            entity.HasOne(e => e.Comment)
+                .WithMany(c => c.Attachments)
+                .HasForeignKey(e => e.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Rating>(entity =>

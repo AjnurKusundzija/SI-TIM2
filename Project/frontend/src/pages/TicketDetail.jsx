@@ -19,6 +19,7 @@ import {
 import * as signalR from '@microsoft/signalr'
 import {
     addComment,
+    addCommentWithAttachments,
     getTicketById,
     autoForwardTicket,
     forwardTicketToAgent,
@@ -40,6 +41,8 @@ import Badge from '../components/common/Badge'
 import ConfirmDialog from '../components/common/ConfirmDialog'
 import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/common/Modal'
+import AttachmentList from '../components/common/AttachmentList'
+import FileUpload from '../components/common/FileUpload'
 import { formatDateTime } from '../utils/formatDate'
 
 const MAX_COMMENT_LENGTH = 1000
@@ -200,6 +203,8 @@ export default function TicketDetail() {
     const [error, setError] = useState(null)
 
     const [message, setMessage] = useState('')
+    const [files, setFiles] = useState([])
+    const [showFileUpload, setShowFileUpload] = useState(false)
     const [isSending, setIsSending] = useState(false)
     const [sendError, setSendError] = useState(null)
 
@@ -362,20 +367,39 @@ export default function TicketDetail() {
         }
     }, [id])
 
-    const handleSend = async () => {
-        if (!message.trim() || isSending) return
-        setSendError(null)
-        setIsSending(true)
-        try {
-            await addComment(id, message)
-            setMessage('')
-        } catch (err) {
-            console.error('Failed to send comment', err)
-            setSendError(err.response?.data || 'Neuspješno slanje poruke. Pokušajte ponovo.')
-        } finally {
-            setIsSending(false)
+   // Izmena u handleSend da podrži praznu poruku sa fajlovima
+const handleSend = async () => {
+    // Dozvoli slanje ako ima poruke ILI fajlova
+    if ((!message.trim() && files.length === 0) || isSending) return;
+    
+    setSendError(null);
+    setIsSending(true);
+    try {
+        if (files.length > 0) {
+            // Osiguraj da message nije null/undefined za backend
+            await addCommentWithAttachments(id, message || "", files);
+        } else {
+            await addComment(id, message);
         }
+        setMessage('');
+        setFiles([]);
+        setShowFileUpload(false);
+    } catch (err) {
+        // ... error handling
+    } finally {
+        setIsSending(false);
     }
+};
+
+// Izmena na samom dugmetu (JSX deo)
+<button 
+    type="button" 
+    onClick={handleSend} 
+    disabled={(!message.trim() && files.length === 0) || isSending}
+    className="..."
+>
+    {isSending ? 'Slanje...' : 'Pošalji'}
+</button>
 
     const handleOpenForward = () => {
         setForwardModalOpen(true)
@@ -628,7 +652,9 @@ export default function TicketDetail() {
         authorName: clientName,
         authorRole: 'CLIENT',
         dateTime: ticket.createdDate,
-        content: ticket.description || 'Nema opisa za ovaj tiket.'
+        content: ticket.description || 'Nema opisa za ovaj tiket.',
+        // PB-56 / US-81: Prikaži attachments iz originalnog tiketa
+        attachments: ticket.attachments || []
     }
     const allComments = [initialComment, ...comments]
 
@@ -940,6 +966,11 @@ export default function TicketDetail() {
                                     <p className="text-sm text-gray-600 mt-1 leading-6">
                                         {comment.content}
                                     </p>
+
+                                    {/* PB-56 / US-81: Prikazi attachments ako postoje */}
+                                    {comment.attachments && comment.attachments.length > 0 && (
+                                        <AttachmentList attachments={comment.attachments} />
+                                    )}
                                 </div>
                             </div>
                         )
@@ -968,6 +999,35 @@ export default function TicketDetail() {
                                 <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
                                     <AlertCircle size={13} />
                                     {sendError}
+                                </div>
+                            )}
+
+                            {/* PB-56 / US-80: Upload attachment-ima uz poruku */}
+                            {files.length > 0 && (
+                                <div>
+                                    <p className="text-xs font-medium text-gray-600 mb-2">Odabrani fajlovi:</p>
+                                    <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={true} />
+                                </div>
+                            )}
+
+                            {files.length === 0 && !showFileUpload && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowFileUpload(true)}
+                                    className="text-xs text-navy-600 hover:text-navy-700 font-medium"
+                                >
+                                    + Dodaj prilog
+                                </button>
+                            )}
+
+                            {showFileUpload && files.length === 0 && (
+                                <div>
+                                    <FileUpload onFilesSelected={(selectedFiles) => {
+                                        setFiles(selectedFiles)
+                                        if (selectedFiles.length > 0) {
+                                            setShowFileUpload(false)
+                                        }
+                                    }} maxFiles={5} compact={true} />
                                 </div>
                             )}
 

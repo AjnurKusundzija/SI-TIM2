@@ -4,6 +4,11 @@ using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using TelecomSupportSystem.BLL.DTOs.Attachments;
 using NotificationType = TelecomSupportSystem.DAL.Entities.Enums.NotificationType;
 
 namespace TelecomSupportSystem.BLL.Services
@@ -14,6 +19,7 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ITeamRepository _teamRepository;
         private readonly IUserRepository _userRepository;
         private readonly INotificationService _notificationService;
+        private readonly IAttachmentRepository _attachmentRepository;
         private readonly ICommentService _commentService;
 
         public TicketService(
@@ -21,12 +27,14 @@ namespace TelecomSupportSystem.BLL.Services
             ITeamRepository teamRepository,
             IUserRepository userRepository,
             INotificationService notificationService,
+            IAttachmentRepository attachmentRepository,
             ICommentService commentService)
         {
             _ticketRepository    = ticketRepository;
             _teamRepository      = teamRepository;
             _userRepository      = userRepository;
             _notificationService = notificationService;
+            _attachmentRepository = attachmentRepository;
             _commentService      = commentService;
         }
 
@@ -77,7 +85,6 @@ namespace TelecomSupportSystem.BLL.Services
                 .OrderBy(a => a.AssignmentDate)
                 .ThenBy(a => a.AssignmentId)
                 .ToList();
-
             var latestAssignment = orderedAssignments.LastOrDefault();
             if (latestAssignment is null)
                 return Enumerable.Empty<int>();
@@ -94,6 +101,82 @@ namespace TelecomSupportSystem.BLL.Services
                 .ToList();
         }
 
+        private static readonly string[] AllowedAttachmentExtensions =
+        {
+            ".jpg", ".jpeg", ".png", ".pdf", ".docx", ".xlsx", ".txt"
+        };
+
+        private const long MaxAttachmentSizeBytes = 5 * 1024 * 1024;
+        private const int MaxTicketAttachments = 5;
+
+        private static void ValidateAttachments(IEnumerable<FileUploadDto> attachments, int maxCount)
+        {
+            var attachmentList = attachments.ToList();
+
+            if (attachmentList.Count > maxCount)
+                throw new ArgumentException($"Moguće je poslati najviše {maxCount} priloga.");
+
+            foreach (var attachment in attachmentList)
+            {
+                if (attachment.Data is null || attachment.Data.Length == 0)
+                    throw new ArgumentException($"Prilog '{attachment.FileName}' je prazan.");
+
+                if (attachment.Size > MaxAttachmentSizeBytes)
+                    throw new ArgumentException($"Prilog '{attachment.FileName}' ne može biti veći od 5 MB.");
+
+                var extension = Path.GetExtension(attachment.FileName).ToLowerInvariant();
+                if (!AllowedAttachmentExtensions.Contains(extension))
+                    throw new ArgumentException($"Prilog '{attachment.FileName}' nije podržan.");
+            }
+        }
+
+        private static string GetStoredFileName(string originalFileName)
+        {
+            var extension = Path.GetExtension(originalFileName);
+            if (string.IsNullOrWhiteSpace(extension))
+                extension = ".bin";
+
+            return $"{Guid.NewGuid():N}{extension}";
+        }
+
+        private static string SanitizeFileName(string fileName)
+        {
+            var name = Path.GetFileName(fileName) ?? "attachment";
+            foreach (var invalidChar in Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(invalidChar, '_');
+            }
+            return name;
+        }
+
+        private static IEnumerable<Attachment> CreateAttachmentEntities(IEnumerable<FileUploadDto> uploads, int ticketId, int? commentId = null)
+        {
+            var targetFolder = Path.Combine(Directory.GetCurrentDirectory(), "Attachments");
+            if (!Directory.Exists(targetFolder))
+                Directory.CreateDirectory(targetFolder);
+
+            var attachments = new List<Attachment>();
+            foreach (var upload in uploads)
+            {
+                var sanitizedFile = SanitizeFileName(upload.FileName);
+                var storedFileName = GetStoredFileName(sanitizedFile);
+                var fullPath = Path.Combine(targetFolder, storedFileName);
+                File.WriteAllBytes(fullPath, upload.Data);
+
+                attachments.Add(new Attachment
+                {
+                    TicketId = ticketId,
+                    CommentId = commentId,
+                    FileName = sanitizedFile,
+                    StoredFileName = storedFileName,
+                    ContentType = upload.ContentType,
+                    Size = upload.Size,
+                    UploadedAt = DateTime.UtcNow
+                });
+            }
+
+            return attachments;
+        }
         // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
         public async Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role)
         {
@@ -154,6 +237,14 @@ namespace TelecomSupportSystem.BLL.Services
                     ? $"{technicianAssignment.User.FirstName} {technicianAssignment.User.LastName}"
                     : string.Empty,
                 AssignedTechnicianId = technicianAssignment?.UserId,
+                Attachments = ticket.Attachments.Select(a => new AttachmentDto
+                {
+                    AttachmentId = a.AttachmentId,
+                    FileName = a.FileName,
+                    ContentType = a.ContentType,
+                    Size = a.Size,
+                    DownloadUrl = $"/api/attachments/{a.AttachmentId}"
+                })
             };
         }
 
@@ -208,6 +299,7 @@ namespace TelecomSupportSystem.BLL.Services
                 ticket.CreatorId,
                 "Promjena statusa tiketa",
                 $"Status vašeg tiketa \"{ticket.Title}\" je promijenjen na '{newStatus}'.",
+            // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
                 NotificationType.STATUS_CHANGED,
                 ticket.TicketId);
         }
@@ -694,7 +786,7 @@ namespace TelecomSupportSystem.BLL.Services
         }
 
         // US-25: Kreira tiket i automatski ga dodjeljuje agentu prema kategoriji
-        public async Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId)
+        public async Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId, IEnumerable<FileUploadDto>? attachments = null)
         {
             var team = await _teamRepository.GetBySpecializedCategoryAsync(createTicketDto.Type);
 
@@ -711,6 +803,14 @@ namespace TelecomSupportSystem.BLL.Services
             };
 
             await _ticketRepository.CreateAsync(ticket);
+
+            if (attachments is not null && attachments.Any())
+            {
+                ValidateAttachments(attachments, MaxTicketAttachments);
+                var attachmentEntities = CreateAttachmentEntities(attachments, ticket.TicketId);
+                await _attachmentRepository.AddRangeAsync(attachmentEntities);
+                ticket.Attachments = attachmentEntities.ToList();
+            }
 
             string? assignedAgentName = null;
             string? assignmentMessage = null;
@@ -776,3 +876,5 @@ namespace TelecomSupportSystem.BLL.Services
         }
     }
 }
+
+

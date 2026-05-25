@@ -18,6 +18,7 @@ namespace TelecomSupportSystem.DAL.Repositories
         {
             return await _context.Comments
                 .Include(c => c.Author)
+                .Include(c => c.Attachments)
                 .Where(c => c.TicketId == ticketId && !c.IsInternal)
                 .OrderBy(c => c.DateTime)
                 .ToListAsync();

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using TelecomSupportSystem.BLL.DTOs.Tickets;
 using TelecomSupportSystem.BLL.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace TelecomSupportSystem.API.Controllers
 {
@@ -415,6 +417,65 @@ namespace TelecomSupportSystem.API.Controllers
 
             var ticket = await _ticketService.CreateTicketAsync(createTicketDto, userId);
             return CreatedAtAction(nameof(GetMyTickets), new { }, ticket);
+        }
+
+        public class CreateTicketWithAttachmentsDto
+        {
+            [Required]
+            public string Subject { get; set; } = string.Empty;
+
+            [Required]
+            public TelecomSupportSystem.DAL.Entities.Enums.ProblemCategory Type { get; set; }
+
+            [Required]
+            public string Description { get; set; } = string.Empty;
+
+            [Required]
+            public TelecomSupportSystem.DAL.Entities.Enums.Priority Priority { get; set; }
+
+            public IFormFileCollection? Attachments { get; set; }
+        }
+
+        [HttpPost("attachments")]
+        [RequestSizeLimit(52428800)]
+        public async Task<IActionResult> CreateTicketWithAttachments([FromForm] CreateTicketWithAttachmentsDto createTicketDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var fileUploads = new List<TelecomSupportSystem.BLL.DTOs.Attachments.FileUploadDto>();
+            if (createTicketDto.Attachments is not null)
+            {
+                foreach (var file in createTicketDto.Attachments)
+                {
+                    using var memoryStream = new MemoryStream();
+                    await file.CopyToAsync(memoryStream);
+                    fileUploads.Add(new TelecomSupportSystem.BLL.DTOs.Attachments.FileUploadDto
+                    {
+                        FileName = file.FileName,
+                        ContentType = file.ContentType ?? "application/octet-stream",
+                        Data = memoryStream.ToArray()
+                    });
+                }
+            }
+
+            var ticket = await _ticketService.CreateTicketAsync(
+                new CreateTicketDto
+                {
+                    Subject = createTicketDto.Subject,
+                    Type = createTicketDto.Type,
+                    Description = createTicketDto.Description,
+                    Priority = createTicketDto.Priority
+                },
+                userId,
+                fileUploads);
+
+            return CreatedAtAction(nameof(GetTicketById), new { id = ticket.TicketId }, ticket);
         }
     }
 }

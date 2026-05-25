@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { createTicket } from '../services/ticketService'
+import { createTicket, createTicketWithAttachments } from '../services/ticketService'
 import { CheckCircle } from 'lucide-react'
+import FileUpload from '../components/common/FileUpload'
 
 const PROBLEM_CATEGORIES = [
   { value: 'INTERNET', label: 'Internet' },
@@ -24,6 +25,7 @@ export default function CreateTicket() {
     description: '',
     priority: '',
   })
+  const [files, setFiles] = useState([])
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -54,20 +56,29 @@ export default function CreateTicket() {
     setSuccess(false)
 
     try {
-      await createTicket({
+      const ticketData = {
         Subject: formData.subject.trim(),
         Type: formData.type,
         Description: formData.description.trim(),
         Priority: formData.priority,
-      })
+      }
+
+      // PB-56: Ako ima fajlova, koristi endpoint sa attachments-ima
+      if (files.length > 0) {
+        await createTicketWithAttachments(ticketData, files)
+      } else {
+        await createTicket(ticketData)
+      }
+
       setSuccess(true)
       setFormData({ subject: '', type: '', description: '', priority: '' })
+      setFiles([])
     } catch (err) {
       console.error(err)
       if (err.response?.status === 401) {
         setError('Niste ovlašteni. Molimo prijavite se ponovo.')
       } else if (err.response?.status === 400) {
-        setError('Nevažeći podaci. Molimo provjerite unos.')
+        setError(err.response?.data?.message || 'Nevažeći podaci. Molimo provjerite unos.')
       } else {
         setError('Nije uspjelo kreiranje tiketa. Molimo pokušajte ponovo.')
       }
@@ -157,6 +168,14 @@ export default function CreateTicket() {
             {errors.description && <p className="mt-1 text-xs text-red-600">{errors.description}</p>}
           </div>
 
+          {/* PB-56 / US-80: Upload attachment-ima */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Dodaj prilog (opcionalno)
+            </label>
+            <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={false} />
+          </div>
+
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
               {error}
@@ -181,6 +200,7 @@ export default function CreateTicket() {
               type="button"
               onClick={() => {
                 setFormData({ subject: '', type: '', description: '', priority: '' })
+                setFiles([])
                 setErrors({})
                 setError(null)
                 setSuccess(false)

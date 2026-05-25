@@ -35,8 +35,11 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .Include(t => t.Creator)
                 .Include(t => t.Assignments)
                     .ThenInclude(a => a.User)
+                .Include(t => t.Attachments)
                 .Include(t => t.Comments)
                     .ThenInclude(c => c.Author)
+                .Include(t => t.Comments)
+                    .ThenInclude(c => c.Attachments)
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
         }
 

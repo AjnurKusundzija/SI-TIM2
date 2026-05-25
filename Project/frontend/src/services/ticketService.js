@@ -18,6 +18,24 @@ export async function createTicket(ticketData) {
   return response.data
 }
 
+// PB-56 / US-80: Kreiraj novi tiket sa attachment-ima
+export async function createTicketWithAttachments(ticketData, files) {
+  const formData = new FormData()
+  formData.append('Subject', ticketData.Subject)
+  formData.append('Type', ticketData.Type)
+  formData.append('Description', ticketData.Description)
+  formData.append('Priority', ticketData.Priority)
+  
+  files.forEach((file) => {
+    formData.append('Attachments', file)
+  })
+  
+  const response = await api.post('/tickets/attachments', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+  return response.data
+}
+
 // US-14, US-30: Dohvati detalje jednog tiketa — backend provjerava pristup prema roli
 export async function getTicketById(ticketId) {
   const response = await api.get(`/tickets/${ticketId}`)
@@ -35,6 +53,22 @@ export async function addComment(ticketId, content) {
   const response = await api.post(`/comment/tickets/${ticketId}`, { content })
   return response.data
 }
+
+// PB-56 / US-80: Dodaj novi komentar sa attachment-ima
+export async function addCommentWithAttachments(ticketId, content, files) {
+  const formData = new FormData()
+  formData.append('Content', content)
+  
+  files.forEach((file) => {
+    formData.append('Attachments', file)
+  })
+  
+  const response = await api.post(`/comment/tickets/${ticketId}/attachments`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+  return response.data
+}
+
 // US-53: Dohvati otvorene tikete dodijeljene agentu
 export async function getOpenAssignedTickets() {
   const response = await api.get('/tickets/assigned/open')
