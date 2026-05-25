@@ -9,5 +9,6 @@ namespace TelecomSupportSystem.BLL.DTOs.Comments
         public string AuthorName { get; set; } = string.Empty;
         public string AuthorRole { get; set; } = string.Empty;
         public bool IsSystemMessage { get; set; }
+        public IEnumerable<TelecomSupportSystem.BLL.DTOs.Attachments.AttachmentDto> Attachments { get; set; } = new List<TelecomSupportSystem.BLL.DTOs.Attachments.AttachmentDto>();
     }
 }

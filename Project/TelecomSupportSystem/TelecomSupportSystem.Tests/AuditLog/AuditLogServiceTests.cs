@@ -94,6 +94,7 @@ public class AuditLogServiceTests
             teamRepository.Object,
             userRepository.Object,
             Mock.Of<INotificationService>(),
+            new TelecomSupportSystem.DAL.Repositories.NullAttachmentRepository(),
             Mock.Of<ICommentService>(),
             auditLogService.Object);
 

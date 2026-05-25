@@ -19,6 +19,7 @@ import {
 import * as signalR from '@microsoft/signalr'
 import {
     addComment,
+    addCommentWithAttachments,
     getTicketById,
     autoForwardTicket,
     forwardTicketToAgent,
@@ -40,6 +41,8 @@ import Badge from '../components/common/Badge'
 import ConfirmDialog from '../components/common/ConfirmDialog'
 import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/common/Modal'
+import AttachmentList from '../components/common/AttachmentList'
+import FileUpload from '../components/common/FileUpload'
 import { formatDateTime } from '../utils/formatDate'
 
 const MAX_COMMENT_LENGTH = 1000
@@ -202,8 +205,12 @@ export default function TicketDetail() {
     const [error, setError] = useState(null)
 
     const [message, setMessage] = useState('')
+    const [files, setFiles] = useState([])
+    const [showFileUpload, setShowFileUpload] = useState(false)
     const [isSending, setIsSending] = useState(false)
     const [sendError, setSendError] = useState(null)
+    // PB-56 / US-80: prikaz progress indikatora tokom uploada većih fajlova uz poruku
+    const [commentUploadProgress, setCommentUploadProgress] = useState(null)
 
     // Forward modal state
     const [forwardModalOpen, setForwardModalOpen] = useState(false)
@@ -365,19 +372,39 @@ export default function TicketDetail() {
     }, [id])
 
     const handleSend = async () => {
-        if (!message.trim() || isSending) return
-        setSendError(null)
-        setIsSending(true)
-        try {
+    // Dozvoli slanje ako ima ILI teksta ILI priloženih fajlova
+    if ((!message.trim() && files.length === 0) || isSending) return
+    
+    setSendError(null)
+    setIsSending(true)
+    
+    try {
+        // Ako imamo fajlove, prosleđujemo poruku i fajlove
+        if (files.length > 0) {
+            setCommentUploadProgress(0)
+            await addCommentWithAttachments(id, message.trim(), files, (percent) => setCommentUploadProgress(percent))
+        } else {
+            // Ako nema fajlova, šaljemo običan tekstualni komentar
             await addComment(id, message)
-            setMessage('')
-        } catch (err) {
-            console.error('Failed to send comment', err)
-            setSendError(err.response?.data || 'Neuspješno slanje poruke. Pokušajte ponovo.')
-        } finally {
-            setIsSending(false)
         }
+
+        // Kompletan reset forme nakon uspješnog slanja
+        setMessage('')
+        setFiles([])
+        setShowFileUpload(false)
+        setCommentUploadProgress(null)
+    } catch (err) {
+        console.error('Failed to send comment', err)
+        setSendError(
+            err.response?.data?.message ||
+            err.response?.data?.poruka ||
+            'Neuspješno slanje poruke. Pokušajte ponovo.'
+        )
+        setCommentUploadProgress(null)
+    } finally {
+        setIsSending(false)
     }
+}
 
     const handleOpenForward = () => {
         setForwardModalOpen(true)
@@ -630,7 +657,9 @@ export default function TicketDetail() {
         authorName: clientName,
         authorRole: 'CLIENT',
         dateTime: ticket.createdDate,
-        content: ticket.description || 'Nema opisa za ovaj tiket.'
+        content: ticket.description || 'Nema opisa za ovaj tiket.',
+        // PB-56 / US-81: Prikaži attachments iz originalnog tiketa
+        attachments: ticket.attachments || []
     }
     const allComments = [initialComment, ...comments]
 
@@ -722,6 +751,8 @@ export default function TicketDetail() {
                                             <p className="text-sm text-gray-600 mt-1 leading-6">
                                                 {comment.content}
                                             </p>
+                                            {/* PB-56 / US-81: prilozi uz komentar/inicijalni opis ostaju u hronološkom toku */}
+                                            <AttachmentList attachments={comment.attachments} />
                                         </div>
                                     </div>
                                 )
@@ -752,6 +783,52 @@ export default function TicketDetail() {
                                         {sendError}
                                     </div>
                                 )}
+
+                                {/* PB-56 / US-80: Upload attachment-ima uz poruku */}
+                                {files.length > 0 && (
+                                    <div>
+                                        <p className="text-xs font-medium text-gray-600 mb-2">Odabrani fajlovi:</p>
+                                        <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={true} />
+                                    </div>
+                                )}
+
+                                {files.length === 0 && !showFileUpload && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowFileUpload(true)}
+                                        className="text-xs text-navy-600 hover:text-navy-700 font-medium"
+                                    >
+                                        + Dodaj prilog
+                                    </button>
+                                )}
+
+                                {showFileUpload && files.length === 0 && (
+                                    <div>
+                                        <FileUpload onFilesSelected={(selectedFiles) => {
+                                            setFiles(selectedFiles)
+                                            if (selectedFiles.length > 0) {
+                                                setShowFileUpload(false)
+                                            }
+                                        }} maxFiles={5} compact={true} />
+                                    </div>
+                                )}
+
+                                {/* PB-56 / US-80: progress indikator tokom uploada priloga uz poruku */}
+                                {commentUploadProgress !== null && (
+                                    <div className="space-y-1" data-testid="comment-upload-progress">
+                                        <div className="flex justify-between text-[11px] text-gray-500">
+                                            <span>Upload priloga…</span>
+                                            <span>{commentUploadProgress}%</span>
+                                        </div>
+                                        <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-navy-600 transition-all"
+                                                style={{ width: `${commentUploadProgress}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="flex items-center justify-between">
                                     <span className={`text-xs ${message.length >= MAX_COMMENT_LENGTH ? 'text-red-500 font-medium' : 'text-gray-400'}`}>
                                         {message.length} / {MAX_COMMENT_LENGTH}
@@ -759,7 +836,7 @@ export default function TicketDetail() {
                                     <button
                                         type="button"
                                         onClick={handleSend}
-                                        disabled={!message.trim() || isSending}
+                                        disabled={(!message.trim() && files.length === 0) || isSending}
                                         className="inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
                                     >
                                         <Send size={16} />

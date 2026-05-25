@@ -17,5 +17,6 @@ namespace TelecomSupportSystem.DAL.Entities
 
         public User? Author { get; set; }
         public Ticket Ticket { get; set; } = null!;
+        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
     }
 }

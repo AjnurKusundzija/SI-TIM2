@@ -4,6 +4,11 @@ using TelecomSupportSystem.BLL.Services.Interfaces;
 using TelecomSupportSystem.DAL.Entities;
 using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using TelecomSupportSystem.BLL.DTOs.Attachments;
 using NotificationType = TelecomSupportSystem.DAL.Entities.Enums.NotificationType;
 
 namespace TelecomSupportSystem.BLL.Services
@@ -14,14 +19,17 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ITeamRepository _teamRepository;
         private readonly IUserRepository _userRepository;
         private readonly INotificationService _notificationService;
+        private readonly IAttachmentRepository _attachmentRepository;
         private readonly ICommentService _commentService;
         private readonly IAuditLogService? _auditLogService;
 
+        // PB-56 + audit log: primarni konstruktor sa IAttachmentRepository i opcionalnim IAuditLogService.
         public TicketService(
             ITicketRepository ticketRepository,
             ITeamRepository teamRepository,
             IUserRepository userRepository,
             INotificationService notificationService,
+            IAttachmentRepository attachmentRepository,
             ICommentService commentService,
             IAuditLogService? auditLogService = null)
         {
@@ -29,8 +37,22 @@ namespace TelecomSupportSystem.BLL.Services
             _teamRepository      = teamRepository;
             _userRepository      = userRepository;
             _notificationService = notificationService;
+            _attachmentRepository = attachmentRepository;
             _commentService      = commentService;
             _auditLogService     = auditLogService;
+        }
+
+        // PB-56: kompatibilni overload za postojeće testove koji ne testiraju attachment funkcionalnost.
+        // Tester koji ne treba pratiti upload priloga ne mora mockovati IAttachmentRepository.
+        public TicketService(
+            ITicketRepository ticketRepository,
+            ITeamRepository teamRepository,
+            IUserRepository userRepository,
+            INotificationService notificationService,
+            ICommentService commentService)
+            : this(ticketRepository, teamRepository, userRepository, notificationService,
+                   new TelecomSupportSystem.DAL.Repositories.NullAttachmentRepository(), commentService, null)
+        {
         }
 
         // US-11: Dohvata tikete iz repozitorija i mapira ih u DTO.
@@ -80,7 +102,6 @@ namespace TelecomSupportSystem.BLL.Services
                 .OrderBy(a => a.AssignmentDate)
                 .ThenBy(a => a.AssignmentId)
                 .ToList();
-
             var latestAssignment = orderedAssignments.LastOrDefault();
             if (latestAssignment is null)
                 return Enumerable.Empty<int>();
@@ -97,6 +118,7 @@ namespace TelecomSupportSystem.BLL.Services
                 .ToList();
         }
 
+        // PB-56: validacija/upis attachmenta je centralizovana u AttachmentStorage.
         // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
         public async Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role)
         {
@@ -157,6 +179,19 @@ namespace TelecomSupportSystem.BLL.Services
                     ? $"{technicianAssignment.User.FirstName} {technicianAssignment.User.LastName}"
                     : string.Empty,
                 AssignedTechnicianId = technicianAssignment?.UserId,
+                Attachments = ticket.Attachments.Select(a => new AttachmentDto
+                {
+                    AttachmentId = a.AttachmentId,
+                    FileName = a.FileName,
+                    ContentType = a.ContentType,
+                    Size = a.Size,
+                    UploadedAt = a.UploadedAt,
+                    DownloadUrl = $"/api/attachments/{a.AttachmentId}",
+                    UploadedByUserId = a.UserId,
+                    UploadedByName = a.User is null
+                        ? string.Empty
+                        : $"{a.User.FirstName} {a.User.LastName}".Trim()
+                }).ToList()
             };
         }
 
@@ -213,6 +248,7 @@ namespace TelecomSupportSystem.BLL.Services
                 ticket.CreatorId,
                 "Promjena statusa tiketa",
                 $"Status vašeg tiketa \"{ticket.Title}\" je promijenjen na '{newStatus}'.",
+            // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
                 NotificationType.STATUS_CHANGED,
                 ticket.TicketId);
         }
@@ -797,7 +833,7 @@ namespace TelecomSupportSystem.BLL.Services
         }
 
         // US-25: Kreira tiket i automatski ga dodjeljuje agentu prema kategoriji
-        public async Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId)
+        public async Task<GetTicketDto> CreateTicketAsync(CreateTicketDto createTicketDto, int userId, IEnumerable<FileUploadDto>? attachments = null)
         {
             var team = await _teamRepository.GetBySpecializedCategoryAsync(createTicketDto.Type);
 
@@ -813,7 +849,32 @@ namespace TelecomSupportSystem.BLL.Services
                 TeamId          = team?.TeamId
             };
 
+            // PB-56: validaciju izvršavamo PRIJE kreiranja tiketa kako ne bismo ostavili siroče tikete u DB
+            if (attachments is not null && attachments.Any())
+            {
+                AttachmentStorage.Validate(attachments, AttachmentStorage.MaxAttachmentsPerTicket);
+            }
+
             await _ticketRepository.CreateAsync(ticket);
+
+            // PB-56: snimi attachment fajlove i entitete tek nakon što tiket postoji
+            if (attachments is not null && attachments.Any())
+            {
+                var (attachmentEntities, writtenPaths) =
+                    AttachmentStorage.WriteFiles(attachments, ticket.TicketId, null, userId);
+
+                try
+                {
+                    await _attachmentRepository.AddRangeAsync(attachmentEntities);
+                    ticket.Attachments = attachmentEntities;
+                }
+                catch
+                {
+                    // US-80: ako DB save padne, počisti fajlove sa diska
+                    AttachmentStorage.CleanupFiles(writtenPaths);
+                    throw;
+                }
+            }
 
             if (_auditLogService is not null)
             {
@@ -911,3 +972,5 @@ namespace TelecomSupportSystem.BLL.Services
         }
     }
 }
+
+

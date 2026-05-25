@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelecomSupportSystem.DAL;
 
@@ -11,9 +12,11 @@ using TelecomSupportSystem.DAL;
 namespace TelecomSupportSystem.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260524195931_AddAttachmentsTable")]
+    partial class AddAttachmentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,55 +25,99 @@ namespace TelecomSupportSystem.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.AuditLog", b =>
+            modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Attachment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AttachmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttachmentId"));
 
-                    b.Property<string>("ActionType")
+                    b.Property<int?>("CommentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
 
-                    b.Property<string>("EntityId")
+                    b.Property<string>("FilePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EntityType")
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredFileName")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
 
-                    b.Property<string>("IpAddress")
-                        .HasMaxLength(45)
-                        .HasColumnType("nvarchar(45)");
+                    b.Property<int?>("TicketId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("NewValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OldValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTime>("UploadedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AttachmentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("Attachments");
+                });
+
+            modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.AuditLog", b =>
+                {
+                    b.Property<int>("AuditLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuditLogId"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IpAdress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LogId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Table")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UserAgent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("ActionType");
+                    b.HasKey("AuditLogId");
 
-                    b.HasIndex("EntityType");
+                    b.HasIndex("ActionDate");
 
-                    b.HasIndex("Timestamp");
+                    b.HasIndex("Table");
 
                     b.HasIndex("UserId");
 
@@ -706,14 +753,21 @@ namespace TelecomSupportSystem.DAL.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.AuditLog", b =>
+            modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Attachment", b =>
                 {
-                    b.HasOne("TelecomSupportSystem.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                    b.HasOne("TelecomSupportSystem.DAL.Entities.Comment", "Comment")
+                        .WithMany("Attachments")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("User");
+                    b.HasOne("TelecomSupportSystem.DAL.Entities.Ticket", "Ticket")
+                        .WithMany("Attachments")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.ClientSubscription", b =>
@@ -876,6 +930,11 @@ namespace TelecomSupportSystem.DAL.Migrations
                     b.Navigation("Subscriptions");
                 });
 
+            modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Comment", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.SubscriptionPackage", b =>
                 {
                     b.Navigation("Features");
@@ -893,6 +952,8 @@ namespace TelecomSupportSystem.DAL.Migrations
             modelBuilder.Entity("TelecomSupportSystem.DAL.Entities.Ticket", b =>
                 {
                     b.Navigation("Assignments");
+
+                    b.Navigation("Attachments");
 
                     b.Navigation("Comments");
 
