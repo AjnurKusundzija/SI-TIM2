@@ -15,13 +15,15 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly IUserRepository _userRepository;
         private readonly IPackageService _packageService;
         private readonly ITeamRepository _teamRepository;
+        private readonly IAuditLogService? _auditLogService;
 
-        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository, IPackageService packageService, ITeamRepository teamRepository)
+        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository, IPackageService packageService, ITeamRepository teamRepository, IAuditLogService? auditLogService = null)
         {
             _ticketRepository = ticketRepository;
             _userRepository = userRepository;
             _packageService = packageService;
             _teamRepository = teamRepository;
+            _auditLogService = auditLogService;
         }
 
         public async Task<AgentStatisticsDto> GetMyStatisticsAsync(int userId, string role)
@@ -174,7 +176,7 @@ namespace TelecomSupportSystem.BLL.Services
             await _userRepository.UpdateAsync(user);
         }
 
-        public async Task CreateUserAsync(CreateUserDto dto, string currentRole)
+        public async Task CreateUserAsync(CreateUserDto dto, string currentRole, int? currentUserId = null, string? currentUserEmail = null)
         {
             if (currentRole != "ADMINISTRATOR")
                 throw new UnauthorizedAccessException("Samo administratori mogu kreirati korisnike.");
@@ -199,9 +201,20 @@ namespace TelecomSupportSystem.BLL.Services
             };
 
             await _userRepository.CreateAsync(user);
+
+            if (_auditLogService is not null)
+            {
+                await _auditLogService.LogAsync(
+                    AuditActionType.USER_CREATED,
+                    "User",
+                    user.UserId.ToString(),
+                    $"Korisnik {user.Email} kreiran",
+                    userId: currentUserId,
+                    newValue: new { firstName = user.FirstName, lastName = user.LastName, email = user.Email, role = user.Role.ToString() });
+            }
         }
 
-        public async Task UpdateUserDetailsAsync(int targetUserId, UpdateUserDetailsDto dto, string currentRole)
+        public async Task UpdateUserDetailsAsync(int targetUserId, UpdateUserDetailsDto dto, string currentRole, int? currentUserId = null)
         {
             var user = await _userRepository.GetByIdAsync(targetUserId);
             if (user == null)
@@ -214,6 +227,15 @@ namespace TelecomSupportSystem.BLL.Services
             if (currentRole == "AGENT" && user.Role != Role.CLIENT && user.Role != Role.TECHNICIAN)
                 throw new UnauthorizedAccessException("Agenti mogu ažurirati samo klijente i tehničare.");
 
+            var oldValue = new
+            {
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                phone = user.Phone,
+                location = user.Location.ToString(),
+                teamId = user.TeamId
+            };
+
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
             user.Phone = dto.Phone;
@@ -225,6 +247,25 @@ namespace TelecomSupportSystem.BLL.Services
                 user.TeamId = dto.TeamId.Value;
 
             await _userRepository.UpdateAsync(user);
+
+            if (_auditLogService is not null)
+            {
+                await _auditLogService.LogAsync(
+                    AuditActionType.USER_UPDATED,
+                    "User",
+                    user.UserId.ToString(),
+                    $"Korisnik {user.Email} ažuriran",
+                    userId: currentUserId,
+                    oldValue: oldValue,
+                    newValue: new
+                    {
+                        firstName = user.FirstName,
+                        lastName = user.LastName,
+                        phone = user.Phone,
+                        location = user.Location.ToString(),
+                        teamId = user.TeamId
+                    });
+            }
         }
 
         public async Task ChangeUserStatusAsync(int targetUserId, bool isActive, string currentRole, int currentUserId)
@@ -251,8 +292,25 @@ namespace TelecomSupportSystem.BLL.Services
                 }
             }
 
+            var oldStatus = user.AccountStatus;
             user.AccountStatus = isActive ? AccountStatus.ACTIVE : AccountStatus.INACTIVE;
             await _userRepository.UpdateAsync(user);
+
+            if (_auditLogService is not null && oldStatus != user.AccountStatus)
+            {
+                var actor = await _userRepository.GetByIdAsync(currentUserId);
+                var actorEmail = actor?.Email ?? currentRole;
+                await _auditLogService.LogAsync(
+                    isActive ? AuditActionType.USER_REACTIVATED : AuditActionType.USER_DEACTIVATED,
+                    "User",
+                    user.UserId.ToString(),
+                    isActive
+                        ? $"Korisnik {user.Email} reaktiviran od strane {actorEmail}"
+                        : $"Korisnik {user.Email} deaktiviran od strane {actorEmail}",
+                    userId: currentUserId,
+                    oldValue: new { accountStatus = oldStatus.ToString() },
+                    newValue: new { accountStatus = user.AccountStatus.ToString() });
+            }
         }
 
         public async Task<UserListDto> GetUsersPaginatedAsync(string currentRole, string? roleFilter, string? statusFilter, string? search, string? location, int page, int pageSize)

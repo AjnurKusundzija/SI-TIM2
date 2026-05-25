@@ -17,17 +17,20 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly ICatalogPackageRepository _catalogRepository;
         private readonly ISubscriptionAuditLogRepository _auditRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IAuditLogService? _auditLogService;
 
         public ClientSubscriptionService(
             IClientSubscriptionRepository subscriptionRepository,
             ICatalogPackageRepository catalogRepository,
             ISubscriptionAuditLogRepository auditRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IAuditLogService? auditLogService = null)
         {
             _subscriptionRepository = subscriptionRepository;
             _catalogRepository = catalogRepository;
             _auditRepository = auditRepository;
             _userRepository = userRepository;
+            _auditLogService = auditLogService;
         }
 
         public async Task<IEnumerable<ClientSubscriptionDto>> GetByClientIdAsync(int clientId)
@@ -72,6 +75,18 @@ namespace TelecomSupportSystem.BLL.Services
             });
             await _auditRepository.SaveChangesAsync();
 
+            if (_auditLogService is not null)
+            {
+                var client = await _userRepository.GetByIdAsync(clientId);
+                await _auditLogService.LogAsync(
+                    AuditActionType.SUBSCRIPTION_ASSIGNED,
+                    "ClientSubscription",
+                    subscription.SubscriptionId.ToString(),
+                    $"Paket '{catalog.Name}' dodijeljen klijentu {client?.Email ?? clientId.ToString()}",
+                    userId: adminId,
+                    newValue: new { clientId, catalogPackageId = catalog.CatalogPackageId, packageName = catalog.Name, startDate = subscription.StartDate, status = subscription.Status.ToString() });
+            }
+
             subscription.CatalogPackage = catalog;
             return MapToDto(subscription);
         }
@@ -102,6 +117,19 @@ namespace TelecomSupportSystem.BLL.Services
                 Timestamp = DateTime.UtcNow,
             });
             await _auditRepository.SaveChangesAsync();
+
+            if (_auditLogService is not null)
+            {
+                var client = await _userRepository.GetByIdAsync(clientId);
+                await _auditLogService.LogAsync(
+                    AuditActionType.SUBSCRIPTION_DEACTIVATED,
+                    "ClientSubscription",
+                    subscription.SubscriptionId.ToString(),
+                    $"Pretplata na paket '{subscription.CatalogPackage?.Name ?? subscription.CatalogPackageId.ToString()}' deaktivirana za {client?.Email ?? clientId.ToString()}",
+                    userId: adminId,
+                    oldValue: new { status = PackageStatus.ACTIVE.ToString() },
+                    newValue: new { status = subscription.Status.ToString(), deactivatedDate = subscription.DeactivatedDate });
+            }
 
             return MapToDto(subscription);
         }

@@ -189,15 +189,25 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<AuditLog>(entity =>
         {
-            entity.HasKey(e => e.AuditLogId);
+            entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Action).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Table).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.ActionDate).IsRequired();
+            entity.Property(e => e.Timestamp).IsRequired();
+            entity.Property(e => e.ActionType).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.EntityType).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.Description).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.OldValue).HasColumnType("nvarchar(max)");
+            entity.Property(e => e.NewValue).HasColumnType("nvarchar(max)");
+            entity.Property(e => e.IpAddress).HasMaxLength(45);
 
-            entity.HasIndex(e => e.ActionDate);
+            entity.HasIndex(e => e.Timestamp);
             entity.HasIndex(e => e.UserId);
-            entity.HasIndex(e => e.Table);
+            entity.HasIndex(e => e.ActionType);
+            entity.HasIndex(e => e.EntityType);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<RefreshToken>(entity =>
