@@ -72,5 +72,21 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Ko je koristio alat | Uma Mahmutovic |
 
 ---
+## Unos #4
 
+| Polje | Detalji |
+|---|---|
+| Datum | 25.05.2026 |
+| Sprint broj | Sprint 9 |
+| Alat koji je korišten | Claude Code (Anthropic, model Opus 4.7) |
+| Svrha korištenja | Full-stack implementacija PB-52 (US-76 Upravljanje katalogom paketa i US-77 Dodjela paketa klijentima) kroz backend (.NET 10, EF Core) i frontend (React 19, Vite, Tailwind), uključujući EF migracije, audit log funkcionalnosti, role-based authorization i rješavanje merge konflikata sa develop granom. |
+| Kratak opis zadatka ili upita | AI alat korišten je za implementaciju novog kataloga paketa i pretplata odvojenog od legacy SubscriptionPackages sistema, razvoj CRUD operacija nad paketima i pretplatama, validaciju duplicate dodjela, implementaciju audit log sistema za promjene pretplata, razvoj administratorskog UI-a za upravljanje paketima i pretplatama, kao i rješavanje merge konflikata nastalih integracijom sa develop granom. |
+| Šta je AI predložio ili generisao | AI je generisao nove DAL entity klase CatalogPackage, ClientSubscription i SubscriptionAuditLog zajedno sa DbContext konfiguracijom i EF migracijom `20260523103345_AddCatalogPackagesAndSubscriptions`. Generisani su repozitoriji i servisi (`CatalogPackageRepository`, `ClientSubscriptionRepository`, `SubscriptionAuditLogRepository`, `CatalogPackageService`, `ClientSubscriptionService`), REST API kontroleri (`PackageCatalogController`, `ClientSubscriptionController`), DTO klase za pakete i pretplate, server-side validacija i HTTP 409 Conflict logika za duplicate dodjele i brisanje aktivnih paketa. Na frontend strani generisane su stranice `PackageManagement.jsx`, `ClientSubscriptionsSection.jsx`, novi servisi `packageCatalogService.js`, seed podaci za katalog paketa, kao i merge rješenja za konfliktne fajlove (`Sidebar.jsx`, `App.jsx`, `UserProfile.jsx`). |
+| Šta je tim prihvatio | Tim je prihvatio većinu predložene arhitekture, uključujući odvajanje novih tabela od legacy sistema, audit log implementaciju na servisnom nivou, administratorsku autorizaciju preko `[Authorize(Roles = "ADMINISTRATOR")]`, UI gating kroz `canManageSubscriptions` prop, refresh-key pattern za rerender liste nakon CRUD operacija i layout organizaciju korisničkog profila sa sekcijama za osnovne podatke i pretplate. |
+| Šta je tim izmijenio | Izmijenjena je logika tako da `PackageService.GetMyPackagesAsync` koristi isključivo `ClientSubscriptions` tabelu umjesto legacy `SubscriptionPackages` sistema. Kartice paketa na klijentskoj stranici ponovo su postavljene kao klikabilne sa detaljnim prikazom paketa. `GetPackageByIdAsync` metoda preusmjerena je na novi subscription model. Dodatno je unaprijeđen UI `ClientSubscriptionsSection` komponente kroz ikonice po tipu paketa, prikaz datuma, skeleton loader i prazna stanja sa CTA porukama. |
+| Šta je tim odbacio | Odbačena je početna AI sugestija da kartice paketa budu non-clickable bez detaljnog prikaza, kao i prijedlog paralelnog prikaza dvije sekcije za pretplate radi izbjegavanja duplikacije podataka i komplikovanja korisničkog interfejsa. |
+| Rizici, problemi ili greške koje su uočene | Uočeni su problemi sa frontend rutama prilikom korištenja negativnog `PackageId` kao route diskriminatora, što je izazivalo 404 greške. Problem je riješen refaktorisanjem na pozitivni `SubscriptionId`. Pojavio se i 500 status na `GET /api/users/{id}` zbog neprimijenjene migracije i nerebuildanog Docker kontejnera. Dodatno su riješene ESLint greške vezane za `setState` pozive unutar `useEffect` hookova. Nakon merge-a sa develop granom pojavili su se problemi sa nedostajućim helperima i state varijablama unutar `UserProfile.jsx`, što je riješeno spajanjem kompletnih JSX blokova. Također je evidentirano da legacy `SubscriptionPackages` tabela još uvijek postoji u šemi baze podataka i preporučeno je njeno potpuno uklanjanje u budućim migracijama. |
+| Ko je koristio alat | Eldar Hadžiselimović |
+
+---
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
