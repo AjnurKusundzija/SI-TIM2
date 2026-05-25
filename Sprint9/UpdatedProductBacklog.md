@@ -47,7 +47,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-26](#pb-26) | Ocjenjivanje tiketa                                | Feature        | 5         | S         | Done    | Sprint 8  |
 | [PB-27](#pb-27) | Komunikacija kroz tiket                            | Feature        | 1         | M         | Done    | Sprint 6  |
 | [PB-28](#pb-28) | Upravljanje prioritetima tiketa                    | Feature        | 2         | M         | Done    | Sprint 7  |
-| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Partial    | Sprint 9  |
+| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Done    | Sprint 9  |
 | [PB-30](#pb-30) | Automatska dodjela tiketa                          | Feature        | 3         | XS        | Done    | Sprint 7  |
 | [PB-31](#pb-31) | Prosljeđivanje tiketa                              | Feature        | 2         | M         | Done    | Sprint 7  |
 | [PB-32](#pb-32) | Pregled svih tiketa                                | Feature        | 1         | M         | Done    | Sprint 6  |
@@ -69,6 +69,10 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-48](#pb-48) | Pregled historije dodijeljenih tiketa za agente    | Feature        | 1         | M         | Done    | Sprint 7  |
 | [PB-49](#pb-49) | Notifikacije                                       | Feature        | 1         | L         | Done    | Sprint 8  |
 | [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature        | 2         | S         | Done    | Sprint 9  |
+| [PB-51](#pb-51) | Upravljanje korisničkim nalozima                   | Feature        | 1         | L         | Done    | Sprint 9  |
+| [PB-52](#pb-52) | Upravljanje katalogom paketa i pretplata           | Feature        | 2         | M         | Done    | Sprint 9  |
+| [PB-53](#pb-53) | Pregled audit log-a aktivnosti                     | Feature        | 2         | M         | Done    | Sprint 9  |
+| [PB-56](#pb-56) | Prilozi na tiketima                                | Feature        | 2         | M         | Done    | Sprint 9  |
 
 
 ---
@@ -441,8 +445,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 1
 - **Procjena složenosti ili napora:** M
-- **Status:** Partial
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano: administrator može preraspodijeliti agente između timova; pregled raspodjele timova s filtriranjem; promjena se evidentira sa timestamp-om i imenom administratora; UI potvrda prije primjene promjene.
 
 ---
 
@@ -707,6 +712,58 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
 - **Napomena:** Implementirano: KPI `avgFirstResponseMinutes` na dashboardu + on-demand `FIRST_RESPONSE` izvještaj s agregatom i bucket trendom po pod-periodima (sedmica→dan, mjesec→sedmica, godina→mjesec, custom→auto).
+
+---
+
+### PB-51
+
+- **Naziv Stavke:** Upravljanje korisničkim nalozima
+- **Opis:** Implementirati administratorske funkcionalnosti za kreiranje, pregled, uređivanje, deaktivaciju i reaktivaciju korisničkih naloga za klijente, agente i tehničare. Sistem mora podržavati validaciju jedinstvenosti emaila i minimalne sigurnosne zahtjeve za lozinku, sprječavanje izmjene role postojećeg korisnika, evidenciju izmjena u audit log, te zabranu prijave deaktiviranim korisnicima.
+- **Tip Stavke:** Feature
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** L
+- **Status:** Done
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano: backend CRUD endpointi (`/api/users`, `/api/users/{id}`, deaktivacija/reaktivacija), role-based authorization, audit log evidencija svih izmjena, sigurnost (deaktivirani korisnici dobijaju 401 pri prijavi); frontend lista korisnika sa pretragom, filtrima i detaljnim prikazom; statistički prikaz za agente i tehničare umjesto paketa. Pokriveno automatskim testovima (68 backend + 10 frontend testova).
+
+---
+
+### PB-52
+
+- **Naziv Stavke:** Upravljanje katalogom paketa i pretplata
+- **Opis:** Implementirati administratorske funkcionalnosti za definisanje i uređivanje kataloga paketa (Internet, TV, mobilni) sa validacijom naziva i cijene, te dodjelu i ukidanje pretplata klijentima. Sistem mora sprječavati duplikatne aktivne pretplate na isti paket, evidentirati svaku promjenu u audit log i osigurati da klijent vidi ažurirane pakete na svom profilu odmah nakon promjene.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** Done
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano: novi entiteti `CatalogPackage`, `ClientSubscription`, `SubscriptionAuditLog`; EF migracija `AddCatalogPackagesAndSubscriptions`; REST API kontroleri (`PackageCatalogController`, `ClientSubscriptionController`); administratorski UI (`PackageManagement.jsx`, `ClientSubscriptionsSection.jsx`); 409 Conflict za duplikate. Funkcionalnost je verifikovana manualno kroz UI; automatizovani testovi su evidentirani kao tehnički dug za naredni sprint.
+
+---
+
+### PB-53
+
+- **Naziv Stavke:** Pregled audit log-a aktivnosti
+- **Opis:** Implementirati administratorsku funkcionalnost za pregled historije ključnih akcija u sistemu (prijava korisnika, kreiranje/zatvaranje/prosljeđivanje tiketa, izmjena korisničkih naloga, izmjena paketa, dodjela pretplate). Audit log mora biti paginirano sortiran po vremenu, omogućavati filtriranje po tipu akcije, korisniku i vremenskom periodu, te pretragu po opisu. Sistem ne smije dozvoliti izmjenu ili brisanje zapisa.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** Done
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano: backend `AuditLogService` + `AuditLogController` sa paginiranom listom, kombinovanim filterima i pretragom; frontend stranica audit log-a sa filterima, tabelom i modalom za detalje. Pristup ograničen na ADMINISTRATOR (403 za ostale role). Pokriveno automatskim testovima (10 backend + 52 frontend testa).
+
+---
+
+### PB-56
+
+- **Naziv Stavke:** Prilozi na tiketima
+- **Opis:** Implementirati upload i preuzimanje priloga (slika i dokumenata) na tikete i poruke. Sistem mora podržavati formate PNG, JPG, JPEG, PDF, DOCX i TXT, ograničiti veličinu pojedinačnog priloga na 5 MB i maksimalan broj priloga na 5 po tiketu/poruci, zabraniti upload izvršnih fajlova (.exe, .bat, .sh), sanitizirati nazive fajlova i prikazivati thumbnail za slike. Sistem ne smije dozvoliti brisanje priloga ni pristup prilozima korisnicima bez prava pregleda tiketa.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** Done
+- **Veza sa sprintom ili release planom:** Sprint 9
+- **Napomena:** Implementirano: backend entitet `Attachment`, `AttachmentService` sa whitelist validacijom, `AttachmentController` (upload/list/download) sa role-based autorizacijom, EF migracija `Pb56_AttachmentUserId`; frontend `FileUpload` (progress bar, error display) i `AttachmentList` (thumbnail + lightbox za slike, ikone i preuzimanje za dokumente) integrirani u kreiranje tiketa i poruke. Pokriveno automatskim testovima (27 backend + 16 frontend testova).
 
 ---
 

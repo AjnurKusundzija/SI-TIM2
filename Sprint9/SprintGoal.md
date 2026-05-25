@@ -2,7 +2,7 @@
 
 ## Sprint cilj
 
-Cilj sprinta je implementirati administratorski dio sistema kroz razvoj centralizovanog admin dashboarda sa ključnim operativnim i analitičkim metrikama, omogućiti upravljanje korisničkim nalozima i preraspodjelu agenata po timovima, te implementirati sistem izvještaja za analizu rada helpdesk sistema.
+Cilj sprinta je implementirati administratorski dio sistema kroz razvoj centralizovanog admin dashboarda sa ključnim operativnim i analitičkim metrikama, omogućiti upravljanje korisničkim nalozima, upravljanje katalogom paketa i pretplata, audit log aktivnosti i preraspodjelu agenata po timovima, omogućiti dodavanje priloga na tikete, te implementirati sistem izvještaja za analizu rada helpdesk sistema.
 
 Sprint je fokusiran na proširenje sistema administratorskim i analitičkim funkcionalnostima koje omogućavaju administratorima bolji pregled rada sistema, korisnika, agenata, tehničara i tiketa kroz dashboard i reporting module. Poseban fokus stavljen je na razvoj KPI metrika, dashboard prikaza i izvještaja koji omogućavaju detaljnu analizu stanja sistema kroz različite vremenske periode.
 
@@ -46,6 +46,9 @@ Sprint također obuhvata integraciju frontend i backend administratorskih modula
 - PB-45 Admin Dashboard sa ključnim metrikama
 - PB-50 Prosječno vrijeme prvog odgovora
 - PB-51 Upravljanje korisničkim nalozima
+- PB-52 Upravljanje katalogom paketa i pretplata
+- PB-53 Pregled audit log-a aktivnosti
+- PB-56 Prilozi na tiketima
 - PB-38 Izvještaj o broju tiketa
 - PB-39 Izvještaj po statusu tiketa
 - PB-40 Izvještaj po tipu problema

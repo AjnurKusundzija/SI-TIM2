@@ -107,4 +107,40 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 ---
 
+## Unos #6
+
+| Polje | Detalji |
+|---|---|
+| Datum | 22.05.2026 |
+| Sprint broj | Sprint 9 |
+| Alat koji je korišten | Claude Code (Anthropic, model Opus 4.7) |
+| Svrha korištenja | Implementacija PB-56 — Prilozi na tiketima (US-80, US-81) |
+| Kratak opis zadatka ili upita | AI alat korišten je za full-stack implementaciju funkcionalnosti dodavanja i preuzimanja priloga (slika i dokumenata) na tikete i poruke. Obuhvaćeno je: backend (entitet `Attachment`, EF Core konfiguracija, migracija, `AttachmentService`, `AttachmentController` sa endpointima za upload/list/download), validacija formata (PNG, JPG, JPEG, PDF, DOCX, TXT), validacija veličine (5 MB) i broja priloga (max 5 po tiketu/poruci), sanitizacija naziva fajla i zaštita od izvršnih ekstenzija (.exe, .bat, .sh). Na frontend strani razvijene su `FileUpload` komponenta sa indikatorom napretka i prikazom greške, `AttachmentList` komponenta sa thumbnail prikazom slika, `LightboxImage` modal za pregled slika u uvećanom prikazu i integracija u formu kreiranja tiketa i komunikacijsku sekciju. |
+| Šta je AI predložio ili generisao | Backend: `Attachment` entitet sa poljima (FileName, ContentType, SizeBytes, StoragePath, UploadedBy, UploadedAt, TicketId/CommentId), `IAttachmentRepository`+`AttachmentRepository`, `AttachmentService` sa metodama `UploadAsync`, `GetByTicketIdAsync`, `DownloadAsync` i validacijom (whitelist ekstenzija, MIME check, max size, max count, sanitizacija), `AttachmentController` (POST `/api/attachments`, GET `/api/attachments/ticket/{id}`, GET `/api/attachments/{id}/download`), DTOs, role-based authorization (CLIENT/AGENT/TECHNICIAN sa pravom pregleda tiketa), centralizovano čuvanje fajlova u `wwwroot/uploads` van git history. Frontend: `FileUpload.jsx` (drag&drop, progress bar, error display), `AttachmentList.jsx` (thumbnail za slike, ikone za dokumente, metadata), `LightboxImage.jsx` (modal pregled), `ticketService.uploadAttachment/downloadAttachment` sa FormData, integracija u `CreateTicket` i `TicketDetail` stranice. Testovi: 27 backend xUnit testova i 16 Vitest testova. |
+| Šta je tim prihvatio | Prihvaćena je kompletna struktura entiteta i servisa, whitelist pristup validaciji formata (umjesto blacklist), pohrana fajlova u `wwwroot/uploads` sa generisanim UUID nazivima, thumbnail+lightbox UX za slike, validacija na backendu kao "single source of truth", testovi pokrivenost (43 ukupno). |
+| Šta je tim izmijenio | Smanjen je default max size sa 10 MB na 5 MB radi usklađenosti sa AC; dodana sanitizacija unicode karaktera u nazivima fajlova; `AttachmentList` izmijenjen tako da skriva cijelu sekciju ako nema priloga (umjesto prikaza praznog state-a) — ispunjava AC US-81. Backend MIME check pooštren tako da provjerava i ekstenziju i Content-Type da se spriječi spoofing. |
+| Šta je tim odbacio | Odbačena AI sugestija da se prilozi mogu brisati nakon uploada (kontradiktorno AC US-81); odbačen prijedlog cloud storage integracije (S3/Azure Blob) za MVP — file system pohrana je dovoljna. |
+| Rizici, problemi ili greške koje su uočene | Identifikovan je potencijalni rizik exhaustion-a diska bez quote po korisniku — preporučeno uvođenje per-user storage limita u narednom sprintu. Uočeno je da `LightboxImage` u testu generiše React `act()` upozorenje koje ne utječe na PASS rezultat ali zahtijeva refaktor u nared. sprintu. Path traversal napad spriječen normalizacijom putanje fajla na serveru. |
+| Ko je koristio alat | Merisa Ogrić |
+
+---
+
+## Unos #7
+
+| Polje | Detalji |
+|---|---|
+| Datum | 25.05.2026 |
+| Sprint broj | Sprint 9 |
+| Alat koji je korišten | Claude Code (Anthropic, model Opus 4.7) |
+| Svrha korištenja | Pomoć pri testiranju i ažuriranju Proof of Testing dokumenta — provjera pokrivenosti testovima za PBI stavke koje nisu bile evidentirane u prvobitnoj verziji ProofOfTesting.md (PB-51 upravljanje korisničkim nalozima, PB-52 paketi, PB-53 audit log, PB-56 prilozi, PB-29 preraspodjela timova) prema Test Strategy dokumentu. |
+| Kratak opis zadatka ili upita | AI je korišten za: (1) analizu postojećeg `ProofOfTesting.md` i identifikaciju PBI stavki koje nisu pokrivene; (2) mapiranje test fajlova u backend (`TelecomSupportSystem.Tests`) i frontend (`Project/frontend/src/test`) na konkretne PBI; (3) pokretanje backend (dotnet test) i frontend (vitest) test suite-a sa odgovarajućim filterima; (4) prikupljanje broja prošlih testova po grupama (UserAccountManagement, Attachment, AuditLog, TeamManagement, AdminUserProfile, Sprint9 frontend); (5) ažuriranje `ProofOfTesting.md` sa novim sekcijama za svaki PBI, sa povezivanjem na US/AC, listu test fajlova i izvršenih komandi; (6) ažuriranje sažetka testiranja i ukupnih rezultata. |
+| Šta je AI predložio ili generisao | AI je generisao proširene sekcije ProofOfTesting.md za PB-51, PB-53, PB-56 i PB-29 sa tablicama "Pokriveni AC" (kolone: Nivo, US, AC fokus, Test koji pokriva, Status), listom fajlova i izvršenim test komandama. Dodatno je generisana posebna sekcija za PB-52 sa eksplicitnom napomenom o nedostatku automatizovanih testova i pokrivenost kroz manualno testiranje + Sprint Review demo. Ažuriran je ukupan broj testova sa 36 na 251 i proširen sažetak za sve nove PBI stavke. Pokrenute su komande: `dotnet test --filter "FullyQualifiedName~UserAccountManagement\|...\|TeamManagement"` (116 testova PASS) i `npx vitest run` za audit log/attachment/user list frontend (78 testova PASS) i Sprint9 (31 test PASS). |
+| Šta je tim prihvatio | Prihvaćena cjelokupna proširena struktura `ProofOfTesting.md` sa zasebnim sekcijama po PBI, povezivanje testova sa US/AC kriterijima i sažetna tabela u "Veza sa Test Strategijom" sekciji. |
+| Šta je tim izmijenio | Eksplicitno označeno da PB-52 nema automatizovane testove (samo manualno + Sprint Review), kako bi se izbjegao lažni dojam pokrivenosti. |
+| Šta je tim odbacio | — |
+| Rizici, problemi ili greške koje su uočene | Uočen je nedostatak automatizovanih testova za PB-52 (paketi/pretplate); preporučeno uvođenje u tehnički dug za naredni sprint. Frontend `npm install` je inicijalno bio potreban jer node_modules nije bio postavljen. Backend build je zahtijevao `dotnet restore` prije prvog test run-a (MVC.Testing reference greška se sama rješava nakon restore-a). |
+| Ko je koristio alat | Ajnur Kušundžija |
+
+---
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.

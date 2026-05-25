@@ -26,7 +26,7 @@ Implementirati administratorski dio sistema kroz kontrolni panel sa ključnim me
 | SB-09 | PB-41 Prosječno rješavanje — zaseban on-demand izvještaj | US-47 | Uma | Done | Novi `AVG_RESOLUTION` tip izvještaja s agregatom i bucket tabelom |
 | SB-10 | PB-43 Izvještaj o opterećenju agenata | US-94 | Uma | Done | `TEAM_WORKLOAD` vraća ukupne zbirove + pivot tabelu period × agent |
 | SB-11 | PB-44 Izvještaj o ocjenama korisnika | US-95 | Uma | Done | `USER_RATINGS` vraća distribuciju po zvjezdicama + trend tabelu po pod-periodima |
-| SB-12 | PB-29 Preraspodjela agenata po timovima - partial | US-23 | Ajdin | Done | Administrator može preraspodijeliti agente po timovima; pregled raspodjele timova s filtriranjem |
+| SB-12 | PB-29 Preraspodjela agenata po timovima | US-23 | Ajdin | Done | Administrator može preraspodijeliti agente po timovima; pregled raspodjele timova s filtriranjem |
 
 ---
 
