@@ -89,4 +89,19 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 | Ko je koristio alat | Eldar Hadžiselimović |
 
 ---
+## Unos #5
+
+| Polje | Detalji |
+|---|---|
+| Datum | 21.05.2026 |
+| Sprint broj | Sprint 9 |
+| Alat koji je korišten | Claude Code (Anthropic, model Opus 4.7) |
+| Svrha korištenja | Full-stack implementacija PB-51 funkcionalnosti upravljanja korisničkim nalozima |
+| Kratak opis zadatka ili upita | AI alat korišten je za implementaciju administratorskog i agentskog upravljanja korisnicima kroz backend (.NET, EF Core) i frontend (React, Tailwind), uključujući kreiranje korisnika, uređivanje korisničkih profila, deaktivaciju i reaktivaciju naloga, role-based authorization, audit log evidenciju i validaciju aktivnih korisnika pri dodjeli tiketa. Poseban fokus stavljen je na reuse postojećeg korisničkog profila i implementaciju posebnog prikaza za agente i tehničare sa statističkim podacima umjesto korisničkih paketa i historije tiketa. |
+| Šta je AI predložio ili generisao | AI je generisao backend i frontend implementaciju za upravljanje klijentima, agentima i tehničarima, uključujući role-based API autorizaciju, validaciju aktivnih korisnika, audit log funkcionalnosti i filtriranje deaktiviranih naloga. Predložena je nadogradnja postojećeg detaljnog prikaza korisnika umjesto kreiranja potpuno novog UI-a. Generisana je logika koja sprječava korisnike da uređuju vlastito ime, prezime i broj telefona, dok administratori i agenti mogu uređivati te podatke drugim korisnicima. Za agente i tehničare generisan je poseban profilni prikaz sa statističkim komponentama koje koriste postojeće dashboard/statistics komponente sistema. Također je generisana backend validacija koja sprječava dodjelu tiketa deaktiviranim agentima čak i u slučaju kada je agent deaktiviran nakon učitavanja liste dostupnih agenata. |
+| Šta je tim prihvatio | Prihvaćen je role-based pristup upravljanju korisnicima, reuse postojećih profile komponenti, audit log evidencija, validacija deaktiviranih korisnika i poseban statistički prikaz za agente i tehničare. Prihvaćena je i backend validacija dodjele tiketa samo aktivnim agentima. |
+| Šta je tim izmijenio | Dodatno su prilagođeni UI detalji i validacijska pravila kako bi bili usklađeni sa postojećim dizajnom sistema i postojećim korisničkim workflow-ima. |
+| Šta je tim odbacio | Odbačen je prijedlog korištenja istog detaljnog prikaza za sve tipove korisnika bez odvajanja statistike zaposlenika od korisničkih podataka i paketa. |
+| Rizici, problemi ili greške koje su uočene | Identifikovan je potencijalni race condition scenario prilikom dodjele tiketa agentima koji mogu biti deaktivirani između učitavanja liste i potvrde dodjele. Također je uočena potreba za dodatnom backend validacijom kako frontend ograničenja ne bi bila jedina zaštita role-based pristupa. |
+| Ko je koristio alat | Ajdin Dželo |
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
