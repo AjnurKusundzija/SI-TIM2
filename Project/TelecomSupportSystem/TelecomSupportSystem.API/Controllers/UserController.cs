@@ -190,6 +190,10 @@ namespace TelecomSupportSystem.API.Controllers
 
             var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (currentRole == null) return Unauthorized();
+
+            if (currentRole != "ADMINISTRATOR")
+                return Forbid();
+
             var currentUserId = TryGetUserId(out var parsedUserId) ? parsedUserId : (int?)null;
             var currentEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
@@ -216,6 +220,10 @@ namespace TelecomSupportSystem.API.Controllers
 
             var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (currentRole == null) return Unauthorized();
+
+            if (currentRole != "ADMINISTRATOR" && currentRole != "AGENT")
+                return Forbid();
+
             var currentUserId = TryGetUserId(out var parsedUserId) ? parsedUserId : (int?)null;
 
             try
@@ -239,6 +247,9 @@ namespace TelecomSupportSystem.API.Controllers
             if (!TryGetUserId(out var currentUserId)) return Unauthorized();
             var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (currentRole == null) return Unauthorized();
+
+            if (currentRole != "ADMINISTRATOR" && currentRole != "AGENT")
+                return Forbid();
 
             try
             {
@@ -265,6 +276,9 @@ namespace TelecomSupportSystem.API.Controllers
             if (!TryGetUserId(out var currentUserId)) return Unauthorized();
             var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (currentRole == null) return Unauthorized();
+
+            if (currentRole != "ADMINISTRATOR")
+                return Forbid();
 
             try
             {
