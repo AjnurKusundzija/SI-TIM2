@@ -5,6 +5,7 @@ import {
     ArrowRightLeft,
     Bot,
     CheckCircle,
+    UserPlus,
     Clock,
     MessageCircle,
     Send,
@@ -27,6 +28,7 @@ import {
     getAgentScores,
     getTicketComments,
     forwardTicketToTechnician,
+    selfAssignTicket,
     updateInternalPriority,
     closeTicket,
     requestTicketClosure,
@@ -472,6 +474,28 @@ export default function TicketDetail() {
             setForwardError(err.response?.data?.poruka || 'Prosljeđivanje nije uspješno.')
         } finally {
             setForwardLoading(false)
+        }
+    }
+
+    // PB-62 / US-105: Agent preuzima nedodijeljeni tiket
+    const [selfAssignLoading, setSelfAssignLoading] = useState(false)
+    const [selfAssignError, setSelfAssignError] = useState(null)
+
+    const handleSelfAssign = async () => {
+        setSelfAssignLoading(true)
+        setSelfAssignError(null)
+        try {
+            await selfAssignTicket(Number(id))
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+            setStatusNotification({ type: 'success', message: 'Tiket je dodijeljen vama.' })
+            setTimeout(() => setStatusNotification(null), 3000)
+        } catch (err) {
+            const msg = err.response?.data?.poruka || 'Tiket nije dostupan ili je već dodijeljen drugom agentu.'
+            setSelfAssignError(msg)
+            setTimeout(() => setSelfAssignError(null), 5000)
+        } finally {
+            setSelfAssignLoading(false)
         }
     }
 
@@ -1009,6 +1033,29 @@ export default function TicketDetail() {
                                                             {timeLeftMs !== null && timeLeftMs <= 86400000 && (
                                                                 <AlertCircle size={12} className="ml-0.5" />
                                                             )}
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+                                            {/* PB-62 / US-105: Agent samodjelovanje — vidljivo samo kad je tiket otvoren i nedodijeljen */}
+                                            {user?.role === 'AGENT'
+                                                && ticket.status === 'OPEN'
+                                                && !ticket.assignedAgentId
+                                                && !ticket.assignedTechnicianId && (
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        disabled={selfAssignLoading}
+                                                        onClick={handleSelfAssign}
+                                                        className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <UserPlus size={15} />
+                                                        {selfAssignLoading ? 'Preuzimanje...' : 'Preuzmi tiket'}
+                                                    </button>
+                                                    {selfAssignError && (
+                                                        <div role="alert" className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+                                                            <AlertCircle size={13} />
+                                                            {selfAssignError}
                                                         </div>
                                                     )}
                                                 </>

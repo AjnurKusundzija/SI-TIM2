@@ -3,10 +3,20 @@ import { render, screen, waitFor } from '@testing-library/react'
 
 const mocks = vi.hoisted(() => ({
   getFaqs: vi.fn(),
+  getAllFaqs: vi.fn(),
+  useAuth: vi.fn(() => ({ user: { role: 'CLIENT' } })),
 }))
 
 vi.mock('../../services/faqService', () => ({
   getFaqs: mocks.getFaqs,
+  getAllFaqs: mocks.getAllFaqs,
+  createFaq: vi.fn(),
+  updateFaq: vi.fn(),
+  deleteFaq: vi.fn(),
+}))
+
+vi.mock('../../context/AuthContext', () => ({
+  useAuth: mocks.useAuth,
 }))
 
 import Faq from '../../pages/Faq'
