@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy-50: #f0f3f9;
-  --color-navy-100: #d9e0ef;
-  --color-navy-200: #b3c1df;
-  --color-navy-300: #8da2cf;
-  --color-navy-400: #6783bf;
-  --color-navy-500: #4164af;
-  --color-navy-600: #34508c;
-  --color-navy-700: #273c69;
-  --color-navy-800: #1a2846;
-  --color-navy-900: #0d1423;
-  --color-navy-950: #070a12;
+  --color-navy-50:  #eef2f9;
+  --color-navy-100: #d5dff0;
+  --color-navy-200: #adc0e1;
+  --color-navy-300: #7fa0d0;
+  --color-navy-400: #5580bd;
+  --color-navy-500: #3662a7;
+  --color-navy-600: #2a4f8c;
+  --color-navy-700: #1f3d72;
+  --color-navy-800: #162d58;
+  --color-navy-900: #0d1e3d;
+  --color-navy-950: #070f1f;
 }
 
 body {
@@ -19,16 +19,19 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f3f4f6;
+  background-color: #e8edf5;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: #c0cad9;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
 }

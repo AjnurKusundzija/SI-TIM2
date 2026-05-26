@@ -8,13 +8,14 @@ namespace TelecomSupportSystem.BLL.Helpers
 
             return period?.ToLowerInvariant() switch
             {
+                "day" => (now.AddDays(-1), now, "Dan"),
                 "week" => (now.AddDays(-7), now, "Sedmica"),
                 "month" => (now.AddDays(-30), now, "Mjesec"),
                 "year" => (now.AddDays(-365), now, "Godina"),
                 "alltime" => (DateTime.MinValue, now, "Svi tiketi"),
                 "custom" when from.HasValue && to.HasValue =>
                     ValidateCustom(from.Value, to.Value),
-                _ => throw new ArgumentException("Neispravan vremenski period. Dozvoljeno: week, month, year, alltime, custom."),
+                _ => throw new ArgumentException("Neispravan vremenski period. Dozvoljeno: day, week, month, year, alltime, custom."),
             };
         }
 
