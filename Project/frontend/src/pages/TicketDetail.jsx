@@ -765,7 +765,15 @@ export default function TicketDetail() {
                         </div>
 
                         {/* Reply footer or closed notice */}
-                        {ticket.status !== 'CLOSED' ? (
+                        {ticket.status === 'CLOSED' ? (
+                            <div className="border-t border-gray-100 px-6 py-3 bg-gray-50 text-center">
+                                <p className="text-xs text-gray-400">Tiket je zatvoren — razgovor je arhiviran.</p>
+                            </div>
+                        ) : user?.role === 'ADMINISTRATOR' ? (
+                            <div className="border-t border-gray-100 px-6 py-3 bg-gray-50 text-center">
+                                <p className="text-xs text-gray-400">Administrator može pratiti razgovor, ali ne može slati poruke.</p>
+                            </div>
+                        ) : (
                             <div className="border-t border-gray-100 px-6 py-4 bg-gray-50/40 space-y-2">
                                 <textarea
                                     value={message}
@@ -862,10 +870,6 @@ export default function TicketDetail() {
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        ) : (
-                            <div className="border-t border-gray-100 px-6 py-3 bg-gray-50 text-center">
-                                <p className="text-xs text-gray-400">Tiket je zatvoren — razgovor je arhiviran.</p>
                             </div>
                         )}
                     </div>
@@ -1009,16 +1013,16 @@ export default function TicketDetail() {
                                                     )}
                                                 </>
                                             )}
-                                            {user?.role === 'AGENT' && ticket.status === 'OPEN' && (
+                                            {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR') && ticket.status === 'OPEN' && (
                                                 <button
                                                     type="button"
-                                                    disabled={closureLoading || ticket.assignedAgentId !== user?.userId}
+                                                    disabled={closureLoading || (user?.role === 'AGENT' && ticket.assignedAgentId !== user?.userId)}
                                                     onClick={handleOpenForward}
-                                                    title={ticket.assignedAgentId !== user?.userId ? 'Samo dodijeljeni agent može proslijediti tiket' : undefined}
+                                                    title={user?.role === 'AGENT' && ticket.assignedAgentId !== user?.userId ? 'Samo dodijeljeni agent može proslijediti tiket' : undefined}
                                                     className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
                                                 >
                                                     <ArrowRightLeft size={15} />
-                                                    Proslijedi tiket
+                                                    {user?.role === 'ADMINISTRATOR' ? 'Prerasporedi agenta/tehničara' : 'Proslijedi tiket'}
                                                 </button>
                                             )}
                                         </>

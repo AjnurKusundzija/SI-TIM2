@@ -73,6 +73,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-52](#pb-52) | Upravljanje katalogom paketa i pretplata           | Feature        | 2         | M         | Done    | Sprint 9  |
 | [PB-53](#pb-53) | Pregled audit log-a aktivnosti                     | Feature        | 2         | M         | Done    | Sprint 9  |
 | [PB-56](#pb-56) | Prilozi na tiketima                                | Feature        | 2         | M         | Done    | Sprint 9  |
+| [PB-57](#pb-57) | AI prijedlog odgovora za agente i tehničare        | Feature        | 2         | M         | Done    | Sprint 10 |
+| [PB-58](#pb-58) | AI uvidi za administratore                         | Feature        | 2         | L         | Done    | Sprint 10 |
+| [PB-59](#pb-59) | Redizajn korisničkog sučelja                       | Feature        | 3         | L         | Done    | Sprint 10 |
 
 
 ---
@@ -472,6 +475,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** M
 - **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 7
+- **Napomena:** Prošireno u Sprint 10 (US-101): administrator može koristiti isti forward modal za preraspodjelu agenta/tehničara na tiket bez ograničenja `assignedAgentId` provjere.
 
 ---
 
@@ -648,7 +652,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** L
 - **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano: proširenje `/dashboard` za `ADMINISTRATOR`, `GET /api/admin/dashboard`, globalni filter (sedmica/mjesec/godina/custom), KPI kartice, grafovi, on-demand izvještaji (`POST /api/reports/generate`), drill-down na `/tickets`, disabled Export (čeka PB-46). Preostaje: formalno prihvatno testiranje (US-71–US-86), performans test < 5 s na većem datasetu.
+- **Napomena:** Implementirano: proširenje `/dashboard` za `ADMINISTRATOR`, `GET /api/admin/dashboard`, globalni filter (sedmica/mjesec/godina/custom), KPI kartice, grafovi, on-demand izvještaji (`POST /api/reports/generate`), drill-down na `/tickets`, disabled Export (čeka PB-46). Vizualni redizajn i AI panel integracija završeni u Sprint 10 (PB-58, PB-59).
 
 ---
 
@@ -661,7 +665,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** S
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 11
-- **Napomena:** Na dashboardu postoji samo disabled dugme „Export“ (placeholder). CSV generisanje i preuzimanje nije implementirano.
+- **Napomena:** Na dashboardu postoji samo disabled dugme „Export" (placeholder). CSV generisanje i preuzimanje nije implementirano.
 
 ---
 
@@ -767,3 +771,41 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 
 ---
 
+### PB-57
+
+- **Naziv Stavke:** AI prijedlog odgovora za agente i tehničare
+- **Opis:** Implementirati AI-potpomognutu funkcionalnost koja agentima i tehničarima predlaže odgovor na tiket na osnovu tipa problema i historije komunikacije. Sistem koristi internu knowledge base telekomunikacijskih rješenja (Internet, TV, mobilna mreža, naplata, tehnička podrška). Agent ili tehničar može prihvatiti, urediti ili odbaciti prijedlog — slanje ostaje eksplicitna radnja korisnika.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** Done
+- **Veza sa sprintom ili release planom:** Sprint 10
+- **Napomena:** Implementirano: backend `IAIService`/`AIService` s metodom `GetAgentSuggestionAsync`, `AIController` (POST `/api/ai/agent-suggestion`), DTOs (`AgentSuggestionRequestDto`, `AgentSuggestionResponseDto`), interna knowledge base za 6 kategorija problema; frontend `AISuggestionModal.jsx` s dugmetom „Kopiraj u poruku", `aiService.js` API layer, integracija u `TicketDetail.jsx` (samo za AGENT i TECHNICIAN role).
+
+---
+
+### PB-58
+
+- **Naziv Stavke:** AI uvidi za administratore
+- **Opis:** Implementirati AI-generisane uvide o stanju helpdesk sistema za administratore na admin dashboardu. Uvidi moraju pružati inteligentnu analizu na osnovu trenutnih metrika (broj tiketa, statusi, prosječna rješavanja, ocjene korisnika, opterećenje agenata) i sadržavati sažetak stanja, identifikovane trendove i preporuke za akciju.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** L
+- **Status:** Done
+- **Veza sa sprintom ili release planom:** Sprint 10
+- **Napomena:** Implementirano: backend `AIService.GetAdminInsightsAsync`, `AIController` (POST `/api/ai/admin-insights`), DTOs (`AdminInsightsRequestDto`, `AdminInsightsResponseDto`); frontend `AIInsightsPanel.jsx` i `AIInsightsCard.jsx` komponente, „AI Uvidi" dugme u `Header.jsx` (vidljivo samo administratorima), inline panel ispod KPI kartica u `AdminDashboardSection.jsx`, `uiStore.js` Zustand store za dijeljeno stanje panela između Headera i dashboarda.
+
+---
+
+### PB-59
+
+- **Naziv Stavke:** Redizajn korisničkog sučelja
+- **Opis:** Izvršiti kompletni vizualni revamp korisničkog sučelja sistema s fokusom na moderan, pregledan dizajn inspirisan profesionalnim dashboard layoutima. Redizajn obuhvata: novi color scheme s tamnom navy paletom, world-class sidebar s navigacijom i statusnim chipom, redesigniran header s pretragom i notifikacijama, te poboljšan admin dashboard s trend indikatorima na stat karticama i key highlights sekcijom.
+- **Tip Stavke:** Feature
+- **Prioritet:** 3
+- **Procjena složenosti ili napora:** L
+- **Status:** Done
+- **Veza sa sprintom ili release planom:** Sprint 10
+- **Napomena:** Implementirano: `Sidebar.jsx` — `bg-[#f0f2f5]`, navy-800 logo i avatar, aktivne stavke s navy-50, status chip (amber/zeleni) s navigacijom na filtrirane tikete; `Header.jsx` — `bg-[#f4f6f9]`, desktop search bar, AI Uvidi dugme, notifikacijski dropdown; `AppLayout.jsx` — konzistentne boje i prošireni pageTitles; `AdminDashboardSection.jsx` — StatCard s ikonom/trendom/brojem/labelom, dismissabilni alert banner (u cijelosti klikabilan), inline AI panel, key highlights sekcija; `uiStore.js` — novi Zustand store za `aiPanelOpen` i `alertTicketCount/Url`; `index.css` — navy palette s realnim tamnim hex vrijednostima (navy-800: `#162d58`).
+
+---
