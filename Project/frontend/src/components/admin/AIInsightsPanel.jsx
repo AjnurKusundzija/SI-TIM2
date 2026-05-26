@@ -17,8 +17,11 @@ export default function AIInsightsPanel({ onClose, dashboard, onDrillDown }) {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setInsights(null)
-    setError(null)
+    function reset() {
+      setInsights(null)
+      setError(null)
+    }
+    reset()
   }, [dashboard])
 
   useEffect(() => {

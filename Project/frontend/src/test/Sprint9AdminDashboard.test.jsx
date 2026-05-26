@@ -126,7 +126,7 @@ describe('AdminDashboardSection (metrics) — KPI i grafovi (PB-45 / US-71, US-8
 
   it('prikazuje grafove na metrics modu', async () => {
     renderMetrics()
-    await waitFor(() => expect(screen.getByText('Grafovi')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText('Analiza tiketa')).toBeInTheDocument())
     expect(screen.getByText('Po statusu')).toBeInTheDocument()
     expect(screen.getByText('Top tipovi problema')).toBeInTheDocument()
     expect(screen.getByText('Opterećenje agenata')).toBeInTheDocument()
@@ -147,8 +147,8 @@ describe('AdminDashboardSection (metrics) — prazno stanje (PB-45 / US-71)', ()
 
   it('grafovi prikazuju poruku umjesto praznog grafikona', async () => {
     renderMetrics()
-    await waitFor(() => expect(screen.getByText('Grafovi')).toBeInTheDocument())
-    expect(screen.getAllByText(/Nema podataka za grafikon/i).length).toBeGreaterThan(0)
+    await waitFor(() => expect(screen.getByText('Analiza tiketa')).toBeInTheDocument())
+    expect(screen.getAllByText(/Nema podataka/i).length).toBeGreaterThan(0)
   })
 
   it('Prosj. 1. odgovor KPI prikazuje empty poruku kada nema odgovora', async () => {
@@ -246,7 +246,7 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
 
   it('reports mod NE prikazuje KPI kartice i NE poziva dashboard endpoint', async () => {
     renderReports()
-    expect(screen.getByText('Vremenski period')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Sedmica' })).toBeInTheDocument()
     expect(screen.getByText('Broj tiketa')).toBeInTheDocument()
     expect(mocks.getAdminDashboard).not.toHaveBeenCalled()
     expect(screen.queryByText('Ključne metrike')).not.toBeInTheDocument()
@@ -256,7 +256,7 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
     renderReports()
     const expectedLabels = [
       'Broj tiketa', 'Status tiketa', 'Tip problema',
-      'Opterećenje agenata/tehničara', 'Ocjene korisnika', 'Prosj. prvi odgovor',
+      'Opterećenje tima', 'Ocjene korisnika', 'Prosj. prvi odgovor',
     ]
     expectedLabels.forEach(lbl =>
       expect(screen.getByRole('button', { name: lbl })).toBeInTheDocument(),

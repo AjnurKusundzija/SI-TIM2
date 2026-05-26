@@ -10,8 +10,11 @@ export default function AIInsightsCard({ dashboard, onDrillDown }) {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setInsights(null)
-    setError(null)
+    function reset() {
+      setInsights(null)
+      setError(null)
+    }
+    reset()
   }, [dashboard])
 
   async function fetchInsights() {
