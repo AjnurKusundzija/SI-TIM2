@@ -76,6 +76,16 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-57](#pb-57) | AI prijedlog odgovora za agente i tehničare        | Feature        | 2         | M         | Done    | Sprint 10 |
 | [PB-58](#pb-58) | AI uvidi za administratore                         | Feature        | 2         | L         | Done    | Sprint 10 |
 | [PB-59](#pb-59) | Redizajn korisničkog sučelja                       | Feature        | 3         | L         | Done    | Sprint 10 |
+| [PB-60](#pb-60) | Interni komentari na tiketima                      | Feature        | 1         | S         | Backlog | Sprint 10 |
+| [PB-61](#pb-61) | Admin CRUD FAQ                                     | Feature        | 2         | S         | Backlog | Sprint 10 |
+| [PB-62](#pb-62) | Assign to me — samodjelovanje tiketa               | Feature        | 2         | S         | Backlog | Sprint 10 |
+| [PB-63](#pb-63) | Agent availability status                          | Feature        | 3         | S         | Backlog | Sprint 10 |
+| [PB-64](#pb-64) | Linked Tickets — veza između tiketa                | Feature        | 2         | M         | Backlog | Sprint 11 |
+| [PB-65](#pb-65) | SLA praćenje i upozorenja                          | Feature        | 2         | M         | Backlog | Sprint 11 |
+| [PB-66](#pb-66) | Bulk akcije na tiketima                            | Feature        | 3         | M         | Backlog | Sprint 11 |
+| [PB-67](#pb-67) | Login via broj telefona                            | Feature        | 2         | M         | Backlog | Sprint 11 |
+| [PB-68](#pb-68) | Reset lozinke putem emaila                         | Feature        | 4         | S         | Backlog | Sprint 11 |
+| [PB-69](#pb-69) | AI Chatbot za klijente (Groq)                      | Feature        | 3         | M         | Backlog | Sprint 11 |
 
 
 ---
@@ -450,7 +460,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** M
 - **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
-- **Napomena:** Implementirano: administrator može preraspodijeliti agente između timova; pregled raspodjele timova s filtriranjem; promjena se evidentira sa timestamp-om i imenom administratora; UI potvrda prije primjene promjene.
+- **Napomena:** Implementirano (Sprint 9): administrator može preraspodijeliti agente između timova; pregled raspodjele timova s filtriranjem; promjena se evidentira sa timestamp-om i imenom administratora; UI potvrda prije primjene promjene. Sprint 10 dopuna (US-24 — SB-05): admin vidi sve timove s članovima, filtrima, statusom aktivnosti tima i statusom dostupnosti agenata direktno iz sekcije Timovi (In Progress).
 
 ---
 
@@ -807,5 +817,125 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 10
 - **Napomena:** Implementirano: `Sidebar.jsx` — `bg-[#f0f2f5]`, navy-800 logo i avatar, aktivne stavke s navy-50, status chip (amber/zeleni) s navigacijom na filtrirane tikete; `Header.jsx` — `bg-[#f4f6f9]`, desktop search bar, AI Uvidi dugme, notifikacijski dropdown; `AppLayout.jsx` — konzistentne boje i prošireni pageTitles; `AdminDashboardSection.jsx` — StatCard s ikonom/trendom/brojem/labelom, dismissabilni alert banner (u cijelosti klikabilan), inline AI panel, key highlights sekcija; `uiStore.js` — novi Zustand store za `aiPanelOpen` i `alertTicketCount/Url`; `index.css` — navy palette s realnim tamnim hex vrijednostima (navy-800: `#162d58`).
+
+---
+
+### PB-60
+
+- **Naziv Stavke:** Interni komentari na tiketima
+- **Opis:** Implementirati funkcionalnost za dodavanje internih komentara na tikete koji su vidljivi isključivo osoblju (agenti, tehničari, administratori), a potpuno skriveni od klijenata. Interni komentari prikazuju se u hronološkom toku razgovora uz jasnu vizualnu razliku od regularnih poruka (drugačija boja, labela „Interno").
+- **Tip Stavke:** Feature
+- **Prioritet:** 1
+- **Procjena složenosti ili napora:** S
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 10
+
+---
+
+### PB-61
+
+- **Naziv Stavke:** Admin CRUD FAQ
+- **Opis:** Implementirati administratorske funkcionalnosti za kreiranje, uređivanje i brisanje FAQ stavki direktno iz sučelja sistema, bez potrebe za intervencijom u kodu ili bazi podataka. Sistem mora validirati da pitanje i odgovor nisu prazni, zahtijevati potvrdu prije brisanja, te odmah prikazati promjene svim korisnicima. Pristup CRUD operacijama ograničen isključivo na administratore.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** S
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 10
+
+---
+
+### PB-62
+
+- **Naziv Stavke:** Assign to me — samodjelovanje tiketa
+- **Opis:** Implementirati funkcionalnost koja agentu omogućuje preuzimanje nedodijeljenog tiketa jednim klikom, bez potrebe za manualnom dodjelom od strane administratora. Sistem evidentiuje dodjelu u historiji tiketa, šalje notifikacije relevantnim stranama i ne smije dozvoliti preuzimanje tiketa koji je već dodijeljen drugom agentu.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** S
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 10
+
+---
+
+### PB-63
+
+- **Naziv Stavke:** Agent availability status
+- **Opis:** Implementirati funkcionalnost koja agentu omogućuje postavljanje vlastitog statusa dostupnosti (Dostupan, Zauzet, Nedostupan), vidljivog u timskom pregledu i profilu agenta. Kada agent postavi status „Nedostupan" (odmor, van radnog vremena), sistem automatski preraspodjeljuje sve njegove otvorene tikete — svaki zasebno po algoritmu automatske dodjele (najboljim dostupnim agentom). Sistem ne smije dodjeljivati nove tikete odsutnim agentima, status se resetuje na „Dostupan" pri ponovnoj prijavi, a administrator vidi statuse svih agenata s mogućnošću filtriranja.
+- **Tip Stavke:** Feature
+- **Prioritet:** 3
+- **Procjena složenosti ili napora:** S
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 10
+
+---
+
+### PB-64
+
+- **Naziv Stavke:** Linked Tickets — veza između tiketa
+- **Opis:** Implementirati mogućnost povezivanja tiketa koji se odnose na isti problem ili su na drugi način međusobno zavisni. Agent ili tehničar može kreirati bidirekcionalnu vezu između tiketa (npr. „duplikat od", „nastavak od", „vezan uz"), pregledati linked tikete direktno iz detalja tiketa i ukloniti vezu. Sistem mora spriječiti ciklične veze i samopovezivanje tiketa.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 11
+
+---
+
+### PB-65
+
+- **Naziv Stavke:** SLA praćenje i upozorenja
+- **Opis:** Implementirati praćenje SLA rokova (Service Level Agreement) za tikete na osnovu prioriteta i tipa problema. Sistem mora izračunavati preostalo SLA vrijeme, vizualno upozoravati agente i administratore kada se SLA rok bliži ili je prekoračen, evidentirati SLA breacheve u statistici i spriječiti automatsku dodjelu tiketa agentima čiji bi workload prekršio SLA.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 11
+
+---
+
+### PB-66
+
+- **Naziv Stavke:** Bulk akcije na tiketima
+- **Opis:** Implementirati mogućnost masovnog upravljanja tiketima (zatvaranje, promjena prioriteta, dodjela agentu, prosljeđivanje timu) kroz checkboxe na listi tiketa. Bulk akcije dostupne su isključivo administratorima i agentima, sistem mora tražiti potvrdu za destruktivne operacije i prikazati sažetak rezultata nakon izvršavanja.
+- **Tip Stavke:** Feature
+- **Prioritet:** 3
+- **Procjena složenosti ili napora:** M
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 11
+
+---
+
+### PB-67
+
+- **Naziv Stavke:** Login via broj telefona
+- **Opis:** Proširiti autentikaciju klijenta na mogućnost prijave putem broja telefona umjesto emaila. Sistem mora podržavati unos broja u međunarodnom formatu, validirati jedinstvenost broja i dozvoliti korisniku da se prijavi s bilo kojim od dva identifikatora (email ili telefon) uz istu lozinku.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** M
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 11
+
+---
+
+### PB-68
+
+- **Naziv Stavke:** Reset lozinke putem emaila
+- **Opis:** Implementirati tok za oporavak lozinke: korisnik unosi email, prima link za reset s vremenski ograničenim tokenom (npr. 1 sat), otvara stranicu za unos nove lozinke i potvrđuje promjenu. Sistem mora invalidovati iskorištene tokene, validirati jačinu nove lozinke i obavijestiti korisnika o uspješnoj promjeni.
+- **Tip Stavke:** Feature
+- **Prioritet:** 4
+- **Procjena složenosti ili napora:** S
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 11
+
+---
+
+### PB-69
+
+- **Naziv Stavke:** AI Chatbot za klijente (Groq)
+- **Opis:** Implementirati AI chatbot koji klijentima pruža automatske odgovore na česta pitanja i vodi ih kroz proces prijave problema prije kreiranja tiketa. Chatbot koristi Groq LLM integraciju, bazu znanja telekomunikacijskih rješenja i FAQ sadržaj. Ako chatbot ne može riješiti problem, nudi klijentu mogućnost kreiranja tiketa s prethodno prikupljenim kontekstom.
+- **Tip Stavke:** Feature
+- **Prioritet:** 3
+- **Procjena složenosti ili napora:** M
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 11
 
 ---
