@@ -118,6 +118,12 @@ export async function forwardTicketToTechnician(ticketId) {
   return response.data
 }
 
+// PB-62 / US-105: Agent preuzima nedodijeljeni tiket sebi
+export async function selfAssignTicket(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/self-assign`)
+  return response.data
+}
+
 // Internal Priority Management
 export async function updateInternalPriority(ticketId, priority) {
   const response = await api.post(`/tickets/${ticketId}/internal-priority`, { priority })

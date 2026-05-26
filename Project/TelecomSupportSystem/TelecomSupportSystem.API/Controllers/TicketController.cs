@@ -253,6 +253,39 @@ namespace TelecomSupportSystem.API.Controllers
             }
         }
 
+        // PB-62 / US-105: POST /api/tickets/{id}/self-assign
+        // Agent jednim klikom preuzima nedodijeljeni tiket sebi
+        [HttpPost("{id:int}/self-assign")]
+        public async Task<IActionResult> SelfAssignTicket(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            if (role != "AGENT")
+                return Forbid();
+
+            try
+            {
+                var result = await _ticketService.SelfAssignTicketAsync(id, userId);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { poruka = ex.Message });
+            }
+        }
+
         // POST /api/tickets/{id}/internal-priority
         [HttpPost("{id:int}/internal-priority")]
         public async Task<IActionResult> UpdateInternalPriority(int id, [FromBody] UpdateInternalPriorityDto dto)

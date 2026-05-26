@@ -37,6 +37,9 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         // US-TechnicianForwarding: Proslijedi tiket tehničaru na lokaciji kreatora tiketa
         Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, int currentAgentId);
 
+        // PB-62 / US-105: Agent jednim klikom preuzima nedodijeljeni tiket sebi
+        Task<AgentScoreDto> SelfAssignTicketAsync(int ticketId, int agentId);
+
         // Internal Priority Management
         Task UpdateInternalPriorityAsync(int ticketId, InternalPriority priority, int userId, string role);
 

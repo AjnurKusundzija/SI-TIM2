@@ -8,7 +8,7 @@ vi.mock('../services/api', () => ({
 }))
 
 import api from '../services/api'
-import { getMyTickets, createTicket, getAllTickets, getTicketById, getTicketComments, addComment } from '../services/ticketService'
+import { getMyTickets, createTicket, getAllTickets, getTicketById, getTicketComments, addComment, selfAssignTicket } from '../services/ticketService'
 
 describe('ticketService', () => {
   beforeEach(() => {
@@ -149,5 +149,24 @@ describe('ticketService', () => {
     const result = await addComment(5, 'Nova poruka')
 
     expect(result).toEqual(comment)
+  })
+
+  // ─── selfAssignTicket (PB-62 / US-105) ───────────────────────────────────
+
+  it('selfAssignTicket() calls POST /tickets/:id/self-assign', async () => {
+    api.post.mockResolvedValueOnce({ data: { userId: 10, fullName: 'Agent Test' } })
+
+    await selfAssignTicket(42)
+
+    expect(api.post).toHaveBeenCalledWith('/tickets/42/self-assign')
+  })
+
+  it('selfAssignTicket() returns assignment response from API', async () => {
+    const response = { userId: 10, fullName: 'Agent Test', scorePercent: 100 }
+    api.post.mockResolvedValueOnce({ data: response })
+
+    const result = await selfAssignTicket(42)
+
+    expect(result).toEqual(response)
   })
 })
