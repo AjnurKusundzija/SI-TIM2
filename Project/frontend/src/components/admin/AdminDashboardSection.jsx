@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAdminDashboard, generateReport } from "../../services/adminService";
+import AIInsightsPanel from "./AIInsightsPanel";
 import {
   Ticket,
   CheckCircle,
@@ -12,6 +13,7 @@ import {
   BarChart2,
   Loader2,
   Download,
+  Bot,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -201,6 +203,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const [reportType, setReportType] = useState(null);
   const [reportResult, setReportResult] = useState(null);
   const [reportLoading, setReportLoading] = useState(false);
+  const [aiPanelOpen, setAiPanelOpen] = useState(false);
 
   const buildQuery = useCallback(() => {
     const q = { period };
@@ -665,11 +668,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   return (
     <div className="space-y-6">
       {/* US-72: globalni filter */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-          Vremenski period
-        </h3>
-        <div className="flex flex-wrap gap-2 items-end">
+      <div className="flex flex-wrap gap-1.5 items-center">
           {[
             { value: "week", label: "Sedmica" },
             { value: "month", label: "Mjesec" },
@@ -681,10 +680,10 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
               key={opt.value}
               type="button"
               onClick={() => setPeriod(opt.value)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
                 period === opt.value
                   ? "bg-navy-700 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-white border border-gray-200 text-gray-500 hover:bg-gray-50"
               }`}
             >
               {opt.label}
@@ -696,14 +695,14 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
                 type="date"
                 value={customFrom}
                 onChange={(e) => setCustomFrom(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                className="px-2 py-1 border border-gray-200 rounded-md text-xs text-gray-600"
               />
-              <span className="text-gray-400 text-sm">—</span>
+              <span className="text-gray-300 text-xs">—</span>
               <input
                 type="date"
                 value={customTo}
                 onChange={(e) => setCustomTo(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                className="px-2 py-1 border border-gray-200 rounded-md text-xs text-gray-600"
               />
             </>
           )}
@@ -720,16 +719,15 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
                   void fetchReport(reportType);
                 }
               }}
-              className="px-4 py-2 bg-navy-600 text-white text-sm font-medium rounded-lg hover:bg-navy-700"
+              className="px-2.5 py-1 bg-navy-600 text-white text-xs font-medium rounded-md hover:bg-navy-700"
             >
               Primijeni
             </button>
           )}
         </div>
         {periodError && (
-          <p className="text-sm text-red-600 mt-2">{periodError}</p>
+          <p className="text-xs text-red-500 mt-1">{periodError}</p>
         )}
-      </div>
 
       {showMetrics && error && (
         <div className="flex items-center gap-2 text-red-500 bg-red-50 border border-red-100 rounded-xl p-4">
@@ -741,213 +739,241 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
       {showMetrics && loading && <SkeletonGrid />}
 
       {showMetrics && !loading && dashboard && (
+        /* PB-58 / US-98, US-99: flex red — main content + sticky AI panel */
         <>
-          {/* US-71 / US-86: KPI kartice */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Ključne metrike
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              <StatCard
-                icon={Ticket}
-                label="Kreirani tiketi"
-                value={dashboard.totalTicketsInPeriod}
-                color="bg-navy-600"
-                onClick={() => drillDown()}
-                emptyMessage="Nema tiketa u periodu"
-              />
-              <StatCard
-                icon={MessageSquare}
-                label="Prosj. 1. odgovor"
-                value={formatMinutes(dashboard.avgFirstResponseMinutes)}
-                color="bg-violet-500"
-                emptyMessage="Nema odgovora u periodu"
-              />
-              <StatCard
-                icon={Clock}
-                label="Prosj. rješavanje"
-                value={formatHours(dashboard.avgResolutionHours)}
-                description={dashboard.closedInPeriodCount != null ? `${dashboard.closedInPeriodCount} zatvorenih tiketa` : undefined}
-                color="bg-blue-500"
-                emptyMessage="Nema zatvorenih tiketa"
-              />
-              <StatCard
-                icon={Star}
-                label="Prosj. ocjena"
-                value={formatRating(dashboard.avgRating)}
-                color="bg-yellow-500"
-                emptyMessage="Nema ocjena u periodu"
-              />
-              <StatCard
-                icon={CheckCircle}
-                label="Otvoreni (trenutno)"
-                value={dashboard.openTicketsCount}
-                color="bg-emerald-500"
-                onClick={() => drillDown({ status: "OPEN", snapshot: "true" })}
-              />
-              <StatCard
-                icon={AlertCircle}
-                label="Čeka zatvaranje"
-                value={dashboard.closureRequestedCount}
-                color="bg-amber-500"
-                onClick={() =>
-                  drillDown({ status: "CLOSURE_REQUESTED", snapshot: "true" })
-                }
-              />
-              <StatCard
-                icon={CheckCircle}
-                label="Zatvoreni"
-                value={dashboard.closedInPeriodCount ?? 0}
-                color="bg-emerald-600"
-                onClick={() => drillDown({ status: "CLOSED" })}
-                emptyMessage="Nema zatvorenih u periodu"
-              />
-              <StatCard
-                icon={Clock}
-                label="Zastarjeli (7+ dana)"
-                value={dashboard.staleTicketsCount}
-                color="bg-red-500"
-                onClick={() => drillDown({ stale: "true", snapshot: "true" })}
-              />
-            </div>
-          </div>
+        {/* Floating AI toggle dugme */}
+        <button
+          type="button"
+          onClick={() => setAiPanelOpen((o) => !o)}
+          className={`fixed top-[68px] right-4 z-[35] inline-flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg transition-all text-sm font-semibold ${
+            aiPanelOpen
+              ? "bg-violet-100 text-violet-700 border border-violet-200 shadow-violet-100"
+              : "bg-violet-600 text-white hover:bg-violet-700"
+          }`}
+        >
+          <Bot size={15} />
+          AI Uvidi
+        </button>
 
-          <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Aktivni korisnici
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                {
-                  label: "Klijenti",
-                  value: dashboard.activeUsersByRole?.clients,
-                },
-                { label: "Agenti", value: dashboard.activeUsersByRole?.agents },
-                {
-                  label: "Tehničari",
-                  value: dashboard.activeUsersByRole?.technicians,
-                },
-                {
-                  label: "Admini",
-                  value: dashboard.activeUsersByRole?.administrators,
-                },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="bg-white rounded-lg px-4 py-3 border border-gray-100 shadow-sm"
-                >
-                  <p className="text-xs text-gray-400">{item.label}</p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {item.value ?? 0}
-                  </p>
+        <div className="flex gap-5 items-start">
+
+          {/* ── Glavni sadržaj ── */}
+          <div className="flex-1 min-w-0 space-y-6">
+
+            {/* US-71 / US-86: KPI kartice */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                Ključne metrike
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                <StatCard
+                  icon={Ticket}
+                  label="Kreirani tiketi"
+                  value={dashboard.totalTicketsInPeriod}
+                  color="bg-navy-600"
+                  onClick={() => drillDown()}
+                  emptyMessage="Nema tiketa u periodu"
+                />
+                <StatCard
+                  icon={MessageSquare}
+                  label="Prosj. 1. odgovor"
+                  value={formatMinutes(dashboard.avgFirstResponseMinutes)}
+                  color="bg-violet-500"
+                  emptyMessage="Nema odgovora u periodu"
+                />
+                <StatCard
+                  icon={Clock}
+                  label="Prosj. rješavanje"
+                  value={formatHours(dashboard.avgResolutionHours)}
+                  description={dashboard.closedInPeriodCount != null ? `${dashboard.closedInPeriodCount} zatvorenih tiketa` : undefined}
+                  color="bg-blue-500"
+                  emptyMessage="Nema zatvorenih tiketa"
+                />
+                <StatCard
+                  icon={Star}
+                  label="Prosj. ocjena"
+                  value={formatRating(dashboard.avgRating)}
+                  color="bg-yellow-500"
+                  emptyMessage="Nema ocjena u periodu"
+                />
+                <StatCard
+                  icon={CheckCircle}
+                  label="Otvoreni (trenutno)"
+                  value={dashboard.openTicketsCount}
+                  color="bg-emerald-500"
+                  onClick={() => drillDown({ status: "OPEN", snapshot: "true" })}
+                />
+                <StatCard
+                  icon={AlertCircle}
+                  label="Čeka zatvaranje"
+                  value={dashboard.closureRequestedCount}
+                  color="bg-amber-500"
+                  onClick={() =>
+                    drillDown({ status: "CLOSURE_REQUESTED", snapshot: "true" })
+                  }
+                />
+                <StatCard
+                  icon={CheckCircle}
+                  label="Zatvoreni"
+                  value={dashboard.closedInPeriodCount ?? 0}
+                  color="bg-emerald-600"
+                  onClick={() => drillDown({ status: "CLOSED" })}
+                  emptyMessage="Nema zatvorenih u periodu"
+                />
+                <StatCard
+                  icon={Clock}
+                  label="Zastarjeli (7+ dana)"
+                  value={dashboard.staleTicketsCount}
+                  color="bg-red-500"
+                  onClick={() => drillDown({ stale: "true", snapshot: "true" })}
+                />
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                Aktivni korisnici
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[
+                  { label: "Klijenti",   value: dashboard.activeUsersByRole?.clients },
+                  { label: "Agenti",     value: dashboard.activeUsersByRole?.agents },
+                  { label: "Tehničari",  value: dashboard.activeUsersByRole?.technicians },
+                  { label: "Admini",     value: dashboard.activeUsersByRole?.administrators },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="bg-white rounded-lg px-4 py-3 border border-gray-100 shadow-sm"
+                  >
+                    <p className="text-xs text-gray-400">{item.label}</p>
+                    <p className="text-lg font-bold text-gray-900">{item.value ?? 0}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* US-82: grafovi */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                Grafovi
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">Po statusu</p>
+                  {statusChartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={200}>
+                      <PieChart>
+                        <Pie
+                          data={statusChartData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={45}
+                          outerRadius={75}
+                          dataKey="value"
+                          onClick={(_, index) =>
+                            drillDown({ status: statusChartData[index]?.status })
+                          }
+                          style={{ cursor: "pointer" }}
+                        >
+                          {statusChartData.map((entry) => (
+                            <Cell key={entry.name} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip content={<ChartTooltip />} />
+                        <Legend iconType="circle" iconSize={8} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <p className="text-sm text-gray-400 italic py-8 text-center">
+                      Nema podataka za grafikon.
+                    </p>
+                  )}
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* US-82: grafovi */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Grafovi
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
-                  Po statusu
-                </p>
-                {statusChartData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={200}>
-                    <PieChart>
-                      <Pie
-                        data={statusChartData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={45}
-                        outerRadius={75}
-                        dataKey="value"
-                        onClick={(_, index) =>
-                          drillDown({ status: statusChartData[index]?.status })
-                        }
-                        style={{ cursor: "pointer" }}
-                      >
-                        {statusChartData.map((entry) => (
-                          <Cell key={entry.name} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip content={<ChartTooltip />} />
-                      <Legend iconType="circle" iconSize={8} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="text-sm text-gray-400 italic py-8 text-center">
-                    Nema podataka za grafikon.
-                  </p>
-                )}
-              </div>
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">Top tipovi problema</p>
+                  {problemChartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={200}>
+                      <BarChart data={problemChartData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                        <YAxis tick={{ fontSize: 10 }} width={28} />
+                        <Tooltip content={<ChartTooltip />} />
+                        <Bar
+                          dataKey="value"
+                          fill="#3b82f6"
+                          radius={[4, 4, 0, 0]}
+                          onClick={(data) => drillDown({ problemCategory: data.category })}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <p className="text-sm text-gray-400 italic py-8 text-center">
+                      Nema podataka za grafikon.
+                    </p>
+                  )}
+                </div>
 
-              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
-                  Top tipovi problema
-                </p>
-                {problemChartData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={200}>
-                    <BarChart data={problemChartData}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="#f0f0f0"
-                        vertical={false}
-                      />
-                      <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                      <YAxis tick={{ fontSize: 10 }} width={28} />
-                      <Tooltip content={<ChartTooltip />} />
-                      <Bar
-                        dataKey="value"
-                        fill="#3b82f6"
-                        radius={[4, 4, 0, 0]}
-                        onClick={(data) =>
-                          drillDown({ problemCategory: data.category })
-                        }
-                        style={{ cursor: "pointer" }}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="text-sm text-gray-400 italic py-8 text-center">
-                    Nema podataka za grafikon.
-                  </p>
-                )}
-              </div>
-
-              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
-                  Opterećenje agenata
-                </p>
-                {workloadChartData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={200}>
-                    <BarChart data={workloadChartData}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="#f0f0f0"
-                        vertical={false}
-                      />
-                      <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                      <YAxis tick={{ fontSize: 10 }} width={28} />
-                      <Tooltip content={<ChartTooltip />} />
-                      <Bar
-                        dataKey="value"
-                        fill="#8b5cf6"
-                        radius={[4, 4, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="text-sm text-gray-400 italic py-8 text-center">
-                    Nema podataka za grafikon.
-                  </p>
-                )}
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">Opterećenje agenata</p>
+                  {workloadChartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={200}>
+                      <BarChart data={workloadChartData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                        <YAxis tick={{ fontSize: 10 }} width={28} />
+                        <Tooltip content={<ChartTooltip />} />
+                        <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <p className="text-sm text-gray-400 italic py-8 text-center">
+                      Nema podataka za grafikon.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+
+          </div>{/* end main column */}
+
+          {/* ── AI panel kolona ── */}
+          {aiPanelOpen && (
+            <>
+              {/* Desktop: sticky kolona */}
+              <div
+                className="hidden lg:flex flex-col flex-shrink-0 w-[400px] sticky self-start
+                           bg-white border border-violet-100 rounded-xl overflow-hidden shadow-sm"
+                style={{ top: "69px", height: "calc(100vh - 85px)" }}
+              >
+                <AIInsightsPanel
+                  dashboard={dashboard}
+                  onClose={() => setAiPanelOpen(false)}
+                  onDrillDown={(extra) => drillDown(extra)}
+                />
+              </div>
+
+              {/* Mobile: fixed overlay */}
+              <div
+                className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-violet-100
+                           flex flex-col shadow-2xl overflow-hidden"
+                style={{ top: "57px" }}
+              >
+                <AIInsightsPanel
+                  dashboard={dashboard}
+                  onClose={() => setAiPanelOpen(false)}
+                  onDrillDown={(extra) => drillDown(extra)}
+                />
+              </div>
+              <div
+                className="lg:hidden fixed inset-0 z-[39] bg-black/20"
+                onClick={() => setAiPanelOpen(false)}
+              />
+            </>
+          )}
+
+        </div>
         </>
       )}
 

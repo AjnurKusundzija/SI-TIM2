@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
     ArrowLeft,
     ArrowRightLeft,
+    Bot,
     CheckCircle,
     Clock,
     MessageCircle,
@@ -43,6 +44,7 @@ import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/common/Modal'
 import AttachmentList from '../components/common/AttachmentList'
 import FileUpload from '../components/common/FileUpload'
+import AISuggestionModal from '../components/common/AISuggestionModal'
 import { formatDateTime } from '../utils/formatDate'
 
 const MAX_COMMENT_LENGTH = 1000
@@ -211,6 +213,9 @@ export default function TicketDetail() {
     const [sendError, setSendError] = useState(null)
     // PB-56 / US-80: prikaz progress indikatora tokom uploada većih fajlova uz poruku
     const [commentUploadProgress, setCommentUploadProgress] = useState(null)
+
+    // PB-57 / US-96: AI suggestion modal
+    const [aiModalOpen, setAiModalOpen] = useState(false)
 
     // Forward modal state
     const [forwardModalOpen, setForwardModalOpen] = useState(false)
@@ -833,15 +838,29 @@ export default function TicketDetail() {
                                     <span className={`text-xs ${message.length >= MAX_COMMENT_LENGTH ? 'text-red-500 font-medium' : 'text-gray-400'}`}>
                                         {message.length} / {MAX_COMMENT_LENGTH}
                                     </span>
-                                    <button
-                                        type="button"
-                                        onClick={handleSend}
-                                        disabled={(!message.trim() && files.length === 0) || isSending}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
-                                    >
-                                        <Send size={16} />
-                                        {isSending ? 'Slanje...' : 'Pošalji'}
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        {/* PB-57 / US-96: AI suggestion button — visible only to AGENT and TECHNICIAN */}
+                                        {(user?.role === 'AGENT' || user?.role === 'TECHNICIAN') && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setAiModalOpen(true)}
+                                                title="AI prijedlog odgovora"
+                                                className="inline-flex items-center gap-1.5 px-3 py-2 border border-violet-200 text-violet-600 hover:bg-violet-50 text-sm font-medium rounded-lg transition-colors"
+                                            >
+                                                <Bot size={15} />
+                                                AI Prijedlog
+                                            </button>
+                                        )}
+                                        <button
+                                            type="button"
+                                            onClick={handleSend}
+                                            disabled={(!message.trim() && files.length === 0) || isSending}
+                                            className="inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+                                        >
+                                            <Send size={16} />
+                                            {isSending ? 'Slanje...' : 'Pošalji'}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
@@ -1426,6 +1445,16 @@ export default function TicketDetail() {
                 cancelText="Odustani"
                 variant="danger"
             />
+
+            {/* PB-57 / US-96, US-97: AI suggestion modal */}
+            {aiModalOpen && ticket && (
+                <AISuggestionModal
+                    ticket={ticket}
+                    comments={comments}
+                    onUse={(text) => setMessage(text)}
+                    onClose={() => setAiModalOpen(false)}
+                />
+            )}
         </div>
     )
 }

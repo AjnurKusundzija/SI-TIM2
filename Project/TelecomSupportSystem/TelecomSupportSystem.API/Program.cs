@@ -149,6 +149,8 @@ builder.Services.AddScoped<ICatalogPackageService, CatalogPackageService>();
 builder.Services.AddScoped<IClientSubscriptionService, ClientSubscriptionService>();
 // Audit Log
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+// PB-57, PB-58: AI suggestions (Gemini)
+builder.Services.AddHttpClient<IAIService, AIService>();
 
 var app = builder.Build();
 
