@@ -163,9 +163,10 @@ describe('Globalni vremenski filter (PB-45 / US-72)', () => {
     mocks.getAdminDashboard.mockResolvedValue(FULL_DASHBOARD)
   })
 
-  it('prikazuje brze periode (Sedmica / Mjesec / Godina) i prilagođeno', async () => {
+  it('prikazuje brze periode (Dan / Sedmica / Mjesec / Godina) i prilagođeno', async () => {
     renderMetrics()
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Sedmica' })).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Dan' })).toBeInTheDocument())
+    expect(screen.getByRole('button', { name: 'Sedmica' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Mjesec' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Godina' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Prilagođeno' })).toBeInTheDocument()
@@ -276,7 +277,7 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
     await waitFor(() => expect(mocks.generateReport).toHaveBeenCalled())
     expect(mocks.generateReport).toHaveBeenCalledWith(expect.objectContaining({
       reportType: 'TICKET_COUNT',
-      period: 'month',
+      period: 'week',
     }))
   })
 

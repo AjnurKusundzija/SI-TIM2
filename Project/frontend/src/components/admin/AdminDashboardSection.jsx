@@ -212,7 +212,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const showMetrics = mode === "metrics";
   const showReports = mode === "reports";
   const navigate = useNavigate();
-  const [period, setPeriod] = useState("month");
+  const [period, setPeriod] = useState("week");
   const [customFrom, setCustomFrom] = useState(() =>
     toDateInputValue(new Date(Date.now() - 30 * 86400000)),
   );
@@ -677,6 +677,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
       <div className="flex flex-wrap gap-2 items-center">
         <div className="flex gap-1 bg-white border border-gray-100 rounded-xl p-1 shadow-sm">
           {[
+            { value: "day", label: "Dan" },
             { value: "week", label: "Sedmica" },
             { value: "month", label: "Mjesec" },
             { value: "year", label: "Godina" },
