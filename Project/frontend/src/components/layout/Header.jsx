@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Bell, Menu, X, Check, CheckCheck, Bot, Search } from 'lucide-react'
+import { Bell, Menu, X, Check, CheckCheck, Bot, Search, Sparkles } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useNotifications } from '../../context/NotificationContext'
 import { useUIStore } from '../../store/uiStore'
@@ -11,7 +11,7 @@ export default function Header({ onMenuToggle, title }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications()
-  const { aiPanelOpen, toggleAiPanel } = useUIStore()
+  const { aiPanelOpen, toggleAiPanel, adminCopilotOpen, toggleAdminCopilot } = useUIStore()
   const isAdmin = user?.role === 'ADMINISTRATOR'
 
   function ticketPath(ticketId) {
@@ -126,6 +126,22 @@ export default function Header({ onMenuToggle, title }) {
             >
               <Bot size={14} />
               AI Uvidi
+            </button>
+          )}
+
+          {/* MCP Copilot — samo za admina (PB-70) */}
+          {isAdmin && (
+            <button
+              onClick={toggleAdminCopilot}
+              title="MCP Admin Copilot — pitaj o živim podacima"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                adminCopilotOpen
+                  ? 'bg-navy-100 text-navy-700 border border-navy-200'
+                  : 'bg-navy-800 text-white hover:bg-navy-900'
+              }`}
+            >
+              <Sparkles size={14} />
+              MCP Copilot
             </button>
           )}
 

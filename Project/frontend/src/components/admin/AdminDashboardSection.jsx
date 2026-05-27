@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAdminDashboard, generateReport } from "../../services/adminService";
 import AIInsightsPanel from "./AIInsightsPanel";
+import AdminCopilotPanel from "./AdminCopilotPanel";
 import { useUIStore } from "../../store/uiStore";
 import {
   Ticket,
@@ -227,7 +228,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const [reportResult, setReportResult] = useState(null);
   const [reportLoading, setReportLoading] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
-  const { aiPanelOpen, closeAiPanel, setAlert } = useUIStore();
+  const { aiPanelOpen, closeAiPanel, setAlert, adminCopilotOpen, closeAdminCopilot } = useUIStore();
 
   const buildQuery = useCallback(() => {
     const q = { period };
@@ -863,6 +864,16 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
                 dashboard={dashboard}
                 onClose={closeAiPanel}
                 onDrillDown={(extra) => drillDown(extra)}
+              />
+            </div>
+          )}
+
+          {/* PB-70 — MCP Admin Copilot chat panel (inline, ne resetuje dashboard filtere) */}
+          {adminCopilotOpen && (
+            <div className="bg-white rounded-2xl border border-navy-200 shadow-sm overflow-hidden">
+              <AdminCopilotPanel
+                onClose={closeAdminCopilot}
+                context={{ dashboardContext: `period=${period}` }}
               />
             </div>
           )}
