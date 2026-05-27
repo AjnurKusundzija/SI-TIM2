@@ -37,3 +37,15 @@ export async function getAdminInsights(dashboardData) {
   const response = await api.post('/ai/admin-insights', payload)
   return response.data
 }
+
+// PB-70 / US-108..US-111: Admin postavlja slobodno pitanje MCP Admin Copilotu
+export async function adminCopilotQuery(question, context = {}) {
+  const payload = {
+    question,
+    periodFrom: context.periodFrom ?? null,
+    periodTo: context.periodTo ?? null,
+    dashboardContext: context.dashboardContext ?? null,
+  }
+  const response = await api.post('/ai/admin-copilot/query', payload)
+  return response.data
+}

@@ -151,6 +151,9 @@ builder.Services.AddScoped<IClientSubscriptionService, ClientSubscriptionService
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 // PB-57, PB-58: AI suggestions (Gemini)
 builder.Services.AddHttpClient<IAIService, AIService>();
+// PB-70 / US-108..US-111: MCP Admin Copilot (koristi GROQ_API_KEY_2 + MCP server)
+builder.Services.AddHttpClient<IMcpClient, TelecomSupportSystem.BLL.Services.Mcp.McpClient>();
+builder.Services.AddHttpClient<IAdminCopilotService, AdminCopilotService>();
 
 var app = builder.Build();
 
