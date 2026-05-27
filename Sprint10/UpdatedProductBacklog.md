@@ -86,6 +86,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-67](#pb-67) | Login via broj telefona                            | Feature        | 2         | M         | Backlog | Sprint 11 |
 | [PB-68](#pb-68) | Reset lozinke putem emaila                         | Feature        | 4         | S         | Backlog | Sprint 11 |
 | [PB-69](#pb-69) | AI Chatbot za klijente (Groq)                      | Feature        | 3         | M         | Backlog | Sprint 11 |
+| [PB-70](#pb-70) | MCP Admin Copilot                                  | Feature        | 2         | XL        | Backlog | Sprint 10 |
 
 
 ---
@@ -937,5 +938,18 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** M
 - **Status:** Backlog
 - **Veza sa sprintom ili release planom:** Sprint 11
+
+---
+
+### PB-70
+
+- **Naziv Stavke:** MCP Admin Copilot
+- **Opis:** Implementirati administratorski chat interfejs koji koristi Model Context Protocol (MCP) za kontrolisano čitanje živih podataka iz sistema. Administrator može postavljati pitanja slobodnim tekstom, a sistem preko MCP alata dohvaća relevantne podatke iz tiketa, timova, FAQ sadržaja i postojećih report/admin metrika. AI sloj ne smije izmišljati podatke, nego samo tumači strukturirane rezultate MCP alata, formatira odgovor, prikazuje izvore i predlaže narednu administratorsku akciju.
+- **Tip Stavke:** Feature
+- **Prioritet:** 2
+- **Procjena složenosti ili napora:** XL
+- **Status:** Backlog
+- **Veza sa sprintom ili release planom:** Sprint 10
+- **Napomena:** Scope za prvu implementaciju obuhvata US-108, US-109, US-110 i US-111. Implementacija MCP servera treba koristiti zvanični Model Context Protocol TypeScript SDK i dokumentaciju za TypeScript. U prvoj verziji MCP alati su read-only i služe za čitanje podataka, bez automatskog mijenjanja tiketa, FAQ stavki, timova ili korisnika.
 
 ---
