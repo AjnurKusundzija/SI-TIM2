@@ -24,6 +24,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - JWT_KEY=${JWT_KEY}
       - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+      - GROQ_API_KEY=${GROQ_API_KEY}
     depends_on:
       - sqlserver
     restart: unless-stopped
