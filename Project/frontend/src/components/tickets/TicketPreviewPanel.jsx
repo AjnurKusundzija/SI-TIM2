@@ -7,6 +7,7 @@ import {
     ArrowUpRight,
     Clock,
     Info,
+    Lock,
     Send,
     X,
 } from 'lucide-react'
@@ -121,8 +122,13 @@ export default function TicketPreviewPanel({ ticketId, onClose }) {
 
     useEffect(() => {
         if (!ticketId) return
+        // US-102: Panel se koristi isključivo od osoblja; pretplaćujemo se i na staff-only
+        // grupu kako bi se interni komentari prikazali u realnom vremenu.
+        const isStaff = user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR'
         const conn = new signalR.HubConnectionBuilder()
-            .withUrl('/chathub')
+            .withUrl('/chathub', {
+                accessTokenFactory: () => sessionStorage.getItem('accessToken') || '',
+            })
             .withAutomaticReconnect()
             .build()
 
@@ -130,16 +136,24 @@ export default function TicketPreviewPanel({ ticketId, onClose }) {
             .then(() => {
                 conn.invoke('JoinTicketGroup', String(ticketId)).catch(console.error)
                 conn.on('ReceiveComment', c => setComments(prev => [...prev, c]))
+
+                if (isStaff) {
+                    conn.invoke('JoinTicketStaffGroup', String(ticketId)).catch(console.error)
+                    conn.on('ReceiveInternalComment', c => setComments(prev => [...prev, c]))
+                }
             })
             .catch(console.error)
 
         return () => {
             if (conn.state === signalR.HubConnectionState.Connected) {
                 conn.invoke('LeaveTicketGroup', String(ticketId)).catch(console.error)
+                if (isStaff) {
+                    conn.invoke('LeaveTicketStaffGroup', String(ticketId)).catch(console.error)
+                }
             }
             conn.stop()
         }
-    }, [ticketId])
+    }, [ticketId, user?.role])
 
     useEffect(() => {
         // Scroll to bottom only when a new real-time comment arrives,
@@ -280,6 +294,36 @@ export default function TicketPreviewPanel({ ticketId, onClose }) {
                                     {comment.content}
                                 </span>
                                 <div className="flex-1 border-t border-gray-100" />
+                            </div>
+                        )
+                    }
+
+                    if (comment.isInternal) {
+                        return (
+                            <div
+                                key={comment.commentId}
+                                data-testid="internal-comment"
+                                className="flex gap-3 rounded-lg border border-amber-200 bg-amber-50/70 px-3 py-2.5"
+                            >
+                                <Avatar name={comment.authorName} role={comment.authorRole} />
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-baseline justify-between gap-3 mb-1">
+                                        <span className="text-xs font-semibold text-amber-900 truncate flex items-center gap-1.5">
+                                            {comment.authorName}
+                                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide bg-amber-200 text-amber-900">
+                                                <Lock size={9} />
+                                                Interno
+                                            </span>
+                                        </span>
+                                        <span className="text-[10px] text-amber-700/80 flex-shrink-0 flex items-center gap-1">
+                                            <Clock size={9} />
+                                            {formatDateTime(comment.dateTime)}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-amber-900 leading-relaxed break-words whitespace-pre-wrap">
+                                        {comment.content}
+                                    </p>
+                                </div>
                             </div>
                         )
                     }
