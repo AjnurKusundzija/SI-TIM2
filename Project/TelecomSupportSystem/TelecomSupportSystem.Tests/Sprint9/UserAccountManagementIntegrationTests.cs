@@ -47,7 +47,9 @@ namespace TelecomSupportSystem.Tests.Sprint9
                 new TicketRepository(context),
                 new UserRepository(context),
                 new Mock<IPackageService>().Object,
-                new TeamRepository(context));
+                new TeamRepository(context),
+                new Mock<ITicketService>().Object,
+                new Mock<INotificationService>().Object);
 
             var controller = new UserController(service);
             controller.ControllerContext = new ControllerContext
@@ -159,7 +161,7 @@ namespace TelecomSupportSystem.Tests.Sprint9
 
             var controller = CreateUserController(context, 1, "ADMINISTRATOR");
 
-            var result = await controller.GetUsersList(null, "ACTIVE", null, null, 1, 10);
+            var result = await controller.GetUsersList(null, "ACTIVE", null, null, null, 1, 10);
 
             var ok = result.Should().BeOfType<OkObjectResult>().Subject;
             var list = ok.Value.Should().BeOfType<UserListDto>().Subject;
@@ -180,11 +182,11 @@ namespace TelecomSupportSystem.Tests.Sprint9
 
             var controller = CreateUserController(context, 1, "ADMINISTRATOR");
 
-            var byLocation = await controller.GetUsersList(null, "ACTIVE", null, "MOSTAR", 1, 10);
+            var byLocation = await controller.GetUsersList(null, "ACTIVE", null, null, "MOSTAR", 1, 10);
             var byLocationDto = ((OkObjectResult)byLocation).Value.Should().BeOfType<UserListDto>().Subject;
             byLocationDto.Users.Should().OnlyContain(u => u.Location == "MOSTAR");
 
-            var byPhoneSearch = await controller.GetUsersList(null, "ACTIVE", "222", null, 1, 10);
+            var byPhoneSearch = await controller.GetUsersList(null, "ACTIVE", null, "222", null, 1, 10);
             var byPhoneSearchDto = ((OkObjectResult)byPhoneSearch).Value.Should().BeOfType<UserListDto>().Subject;
             byPhoneSearchDto.Users.Should().ContainSingle(u => u.Phone == "061222333");
         }
