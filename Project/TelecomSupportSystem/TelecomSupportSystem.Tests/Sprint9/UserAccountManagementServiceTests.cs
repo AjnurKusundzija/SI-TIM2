@@ -338,7 +338,7 @@ namespace TelecomSupportSystem.Tests.Sprint9
                     1, 10))
                 .ReturnsAsync((Enumerable.Empty<User>(), 0));
 
-            var result = await _service.GetUsersPaginatedAsync("ADMINISTRATOR", "AGENT", "ACTIVE", null, "SARAJEVO", null, 1, 10);
+            var result = await _service.GetUsersPaginatedAsync("ADMINISTRATOR", "AGENT", "ACTIVE", null, null, "SARAJEVO", 1, 10);
 
             result.Users.Should().BeEmpty();
             _userRepo.VerifyAll();
