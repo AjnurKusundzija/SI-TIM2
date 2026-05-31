@@ -32,7 +32,9 @@ namespace TelecomSupportSystem.Tests.Services
                 _ticketRepoMock.Object,
                 _userRepoMock.Object,
                 _packageServiceMock.Object,
-                new Mock<TelecomSupportSystem.DAL.Repositories.Interfaces.ITeamRepository>().Object);
+                new Mock<TelecomSupportSystem.DAL.Repositories.Interfaces.ITeamRepository>().Object,
+                new Mock<ITicketService>().Object,
+                new Mock<INotificationService>().Object);
         }
 
         private static User MakeUser(int id, Role role, string email = "") => new()

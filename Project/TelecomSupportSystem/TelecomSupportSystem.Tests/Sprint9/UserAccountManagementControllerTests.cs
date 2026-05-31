@@ -256,10 +256,10 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task GetUsersList_ShouldReturnOk_WhenAdminCalls()
         {
             SetUser(1, "ADMINISTRATOR");
-            _userService.Setup(s => s.GetUsersPaginatedAsync("ADMINISTRATOR", null, null, null, null, 1, 10))
+            _userService.Setup(s => s.GetUsersPaginatedAsync("ADMINISTRATOR", null, null, null, null, null, 1, 10))
                 .ReturnsAsync(new UserListDto { Users = new List<UserListItemDto>(), TotalCount = 0, Page = 1, PageSize = 10 });
 
-            var result = await _controller.GetUsersList(null, null, null, null, 1, 10);
+            var result = await _controller.GetUsersList(null, null, null, null, null, 1, 10);
 
             result.Should().BeOfType<OkObjectResult>();
         }
@@ -268,10 +268,10 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task GetUsersList_ShouldReturnForbid_WhenClientCalls()
         {
             SetUser(1, "CLIENT");
-            _userService.Setup(s => s.GetUsersPaginatedAsync("CLIENT", null, null, null, null, 1, 10))
+            _userService.Setup(s => s.GetUsersPaginatedAsync("CLIENT", null, null, null, null, null, 1, 10))
                 .ThrowsAsync(new UnauthorizedAccessException());
 
-            var result = await _controller.GetUsersList(null, null, null, null, 1, 10);
+            var result = await _controller.GetUsersList(null, null, null, null, null, 1, 10);
 
             result.Should().BeOfType<ForbidResult>();
         }

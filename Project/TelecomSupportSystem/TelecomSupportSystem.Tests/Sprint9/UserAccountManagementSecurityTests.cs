@@ -35,7 +35,9 @@ namespace TelecomSupportSystem.Tests.Sprint9
                 new TicketRepository(context),
                 new UserRepository(context),
                 new Mock<IPackageService>().Object,
-                new TeamRepository(context));
+                new TeamRepository(context),
+                new Mock<ITicketService>().Object,
+                new Mock<INotificationService>().Object);
 
             var controller = new UserController(service);
             controller.ControllerContext = new ControllerContext
@@ -146,7 +148,7 @@ namespace TelecomSupportSystem.Tests.Sprint9
             await context.SaveChangesAsync();
 
             var controller = CreateUserController(context, 1, "CLIENT");
-            var result = await controller.GetUsersList(null, null, null, null, 1, 10);
+            var result = await controller.GetUsersList(null, null, null, null, null, 1, 10);
 
             result.Should().BeOfType<ForbidResult>();
         }

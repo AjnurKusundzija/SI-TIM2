@@ -48,7 +48,9 @@ namespace TelecomSupportSystem.Tests.Security
                 new TicketRepository(context),
                 new UserRepository(context),
                 new Mock<IPackageService>().Object,
-                new TeamRepository(context));
+                new TeamRepository(context),
+                new Mock<ITicketService>().Object,
+                new Mock<INotificationService>().Object);
 
             var controller = new UserController(service);
             SetClaims(controller, userId, role);

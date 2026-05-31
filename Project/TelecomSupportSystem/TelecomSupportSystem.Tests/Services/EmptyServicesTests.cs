@@ -47,7 +47,9 @@ namespace TelecomSupportSystem.Tests.Services
                 new Mock<ITicketRepository>().Object,
                 new Mock<IUserRepository>().Object,
                 new Mock<IPackageService>().Object,
-                new Mock<TelecomSupportSystem.DAL.Repositories.Interfaces.ITeamRepository>().Object);
+                new Mock<TelecomSupportSystem.DAL.Repositories.Interfaces.ITeamRepository>().Object,
+                new Mock<ITicketService>().Object,
+                new Mock<INotificationService>().Object);
 
             // Assert
             service.Should().NotBeNull();

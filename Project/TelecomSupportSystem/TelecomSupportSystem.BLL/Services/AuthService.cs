@@ -75,6 +75,20 @@ namespace TelecomSupportSystem.BLL.Services
                 ipAddress: ipAddress
             );
 
+            // Reset availability to AVAILABLE on login for agents/technicians
+            try
+            {
+                if (user.Role == Role.AGENT || user.Role == Role.TECHNICIAN)
+                {
+                    user.AvailabilityStatus = AvailabilityStatus.AVAILABLE;
+                    await _userRepository.UpdateAsync(user);
+                }
+            }
+            catch
+            {
+                // Non-fatal, don't block login if update fails
+            }
+
             return new LoginResponseDto
             {
                 AccessToken = accessToken,

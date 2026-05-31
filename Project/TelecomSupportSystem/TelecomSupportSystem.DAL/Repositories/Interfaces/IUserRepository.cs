@@ -20,6 +20,6 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 
         // PB-51: User Account Management
         Task CreateAsync(User user);
-        Task<(IEnumerable<User> Users, int TotalCount)> GetUsersPaginatedAsync(Role? role, AccountStatus? status, string? search, Location? location, int page, int pageSize);
+        Task<(IEnumerable<User> Users, int TotalCount)> GetUsersPaginatedAsync(Role? role, AccountStatus? status, TelecomSupportSystem.DAL.Entities.Enums.AvailabilityStatus? availability, string? search, Location? location, int page, int pageSize);
     }
 }
