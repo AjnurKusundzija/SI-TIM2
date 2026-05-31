@@ -161,7 +161,7 @@ export default function Profile() {
                     try {
                       await setMyAvailability(val)
                       setAvailability(val)
-                    } catch (err) {
+                    } catch {
                       // ignore UI error for now
                     }
                   }}
