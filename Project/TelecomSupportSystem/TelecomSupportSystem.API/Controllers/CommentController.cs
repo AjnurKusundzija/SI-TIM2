@@ -102,6 +102,46 @@ namespace TelecomSupportSystem.API.Controllers
             }
         }
 
+        // US-102: POST /api/comment/tickets/{ticketId}/internal — dodaje interni komentar.
+        // Dozvoljeno samo za AGENT, TECHNICIAN, ADMINISTRATOR. Klijent dobiva 403.
+        // Interni komentar se nikad ne emituje u javnu "ticket_{id}" grupu —
+        // emituje se isključivo u staff-only grupu preko IChatPusher.PushInternalCommentAsync.
+        [HttpPost("tickets/{ticketId:int}/internal")]
+        [Authorize(Roles = "AGENT,TECHNICIAN,ADMINISTRATOR")]
+        public async Task<IActionResult> AddInternalComment(int ticketId, [FromBody] CreateCommentRequest request)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId) || role is null)
+                return Unauthorized();
+
+            if (string.IsNullOrWhiteSpace(request.Content))
+                return BadRequest(new { poruka = "Interni komentar ne može biti prazan." });
+
+            try
+            {
+                var dto = await _commentService.AddInternalCommentAsync(ticketId, userId, role, request.Content);
+                return Ok(dto);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { poruka = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { poruka = ex.Message });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { poruka = "Tiket nije pronađen." });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
         // PB-27 (alternative): POST /api/comment/tickets/{ticketId}/attachments - multipart/form-data with files
         [HttpPost("tickets/{ticketId:int}/attachments")]
         [RequestSizeLimit(31457280)] // ~30MB ukupni limit za čitav request (dovoljno za 5 fajlova po 5MB + tekst)

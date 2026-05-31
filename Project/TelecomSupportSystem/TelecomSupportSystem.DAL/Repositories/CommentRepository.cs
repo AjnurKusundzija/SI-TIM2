@@ -13,14 +13,21 @@ namespace TelecomSupportSystem.DAL.Repositories
             _context = context;
         }
 
-        // US-15: Komentari za tiket, hronološki (najstariji prvi), sa autorom
-        public async Task<IEnumerable<Comment>> GetByTicketIdAsync(int ticketId)
+        // US-15 / US-103: Komentari za tiket, hronološki (najstariji prvi), sa autorom.
+        // includeInternal=false → vraća samo regularne poruke (npr. za klijenta).
+        // includeInternal=true  → vraća i interne komentare (osoblje: AGENT/TECHNICIAN/ADMINISTRATOR).
+        public async Task<IEnumerable<Comment>> GetByTicketIdAsync(int ticketId, bool includeInternal = false)
         {
-            return await _context.Comments
+            var query = _context.Comments
                 .Include(c => c.Author)
                 .Include(c => c.Attachments)
                     .ThenInclude(a => a.User)
-                .Where(c => c.TicketId == ticketId && !c.IsInternal)
+                .Where(c => c.TicketId == ticketId);
+
+            if (!includeInternal)
+                query = query.Where(c => !c.IsInternal);
+
+            return await query
                 .OrderBy(c => c.DateTime)
                 .ToListAsync();
         }

@@ -79,7 +79,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             {
                 var accessToken = context.Request.Query["access_token"];
                 var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/notificationhub"))
+                // US-102: ChatHub također treba podržavati JWT iz query stringa
+                // kako bi staff-only grupa internih komentara mogla autorizovati rolu.
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    (path.StartsWithSegments("/notificationhub") || path.StartsWithSegments("/chathub")))
                     context.Token = accessToken;
                 return Task.CompletedTask;
             }
