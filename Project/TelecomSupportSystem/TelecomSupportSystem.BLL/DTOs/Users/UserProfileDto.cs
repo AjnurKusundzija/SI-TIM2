@@ -16,6 +16,7 @@ namespace TelecomSupportSystem.BLL.DTOs.Users
         public string AccountStatus { get; set; } = string.Empty;
         public int? TeamId { get; set; }
         public string ExpertiseCategory { get; set; } = string.Empty;
+        public string? Availability { get; set; }
         public IEnumerable<MyTicketDto> TicketHistory { get; set; } = new List<MyTicketDto>();
         public IEnumerable<PackageSummaryDto> ActivePackages { get; set; } = new List<PackageSummaryDto>();
     }

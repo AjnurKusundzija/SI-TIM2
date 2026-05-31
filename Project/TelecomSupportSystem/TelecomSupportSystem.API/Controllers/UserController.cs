@@ -300,19 +300,49 @@ namespace TelecomSupportSystem.API.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> GetUsersList([FromQuery] string? role, [FromQuery] string? status, [FromQuery] string? search, [FromQuery] string? location, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetUsersList([FromQuery] string? role, [FromQuery] string? status, [FromQuery] string? availability, [FromQuery] string? search, [FromQuery] string? location, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             var currentRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (currentRole == null) return Unauthorized();
 
             try
             {
-                var result = await _userService.GetUsersPaginatedAsync(currentRole, role, status, search, location, page, pageSize);
+                var result = await _userService.GetUsersPaginatedAsync(currentRole, role, status, availability, search, location, page, pageSize);
                 return Ok(result);
             }
             catch (UnauthorizedAccessException)
             {
                 return Forbid();
+            }
+        }
+
+        [HttpPut("me/availability")]
+        public async Task<IActionResult> SetMyAvailability([FromBody] Dictionary<string,string> dto)
+        {
+            if (!TryGetUserId(out var userId)) return Unauthorized();
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (role == null) return Unauthorized();
+
+            // Expecting body: { availability: "AVAILABLE" }
+            if (dto == null || !dto.TryGetValue("availability", out var availability))
+                return BadRequest(new { message = "Neispravan payload." });
+
+            try
+            {
+                await _userService.SetAvailabilityAsync(userId, availability, role, userId);
+                return Ok(new { message = "Status dostupnosti je ažuriran." });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = "Korisnik nije pronađen." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
 

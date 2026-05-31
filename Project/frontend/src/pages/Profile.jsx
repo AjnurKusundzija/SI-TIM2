@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { Eye, EyeOff } from 'lucide-react'
-import { getMyProfile, updateEmail, updatePassword } from '../services/userService'
+import { getMyProfile, updateEmail, updatePassword, setMyAvailability } from '../services/userService'
+import Badge from '../components/common/Badge'
 
 function getErrorMessage(error) {
   return (
@@ -19,6 +20,7 @@ export default function Profile() {
     location: '',
     role: user?.role || '',
   })
+  const [availability, setAvailability] = useState(null)
   const [newEmail, setNewEmail] = useState(user?.email || '')
   const [emailStatus, setEmailStatus] = useState(null)
   const [emailError, setEmailError] = useState(null)
@@ -37,6 +39,7 @@ export default function Profile() {
         const data = await getMyProfile()
         setProfile(data)
         setNewEmail(data.email)
+        setAvailability(data.availability || null)
       } catch (error) {
         setEmailError(getErrorMessage(error))
       }
@@ -104,6 +107,11 @@ export default function Profile() {
               Profil
             </p>
             <h1 className="text-3xl font-semibold text-navy-900">Podaci o korisniku</h1>
+            {availability && (
+              <div className="mt-2">
+                <Badge value={availability} />
+              </div>
+            )}
             <p className="max-w-2xl text-sm text-slate-500">
               Ovdje možete pregledati svoj profil i promijeniti email adresu ili lozinku.
             </p>
@@ -143,6 +151,28 @@ export default function Profile() {
 
           <div className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
             <p className="text-sm font-semibold text-navy-700 mb-6">Ažuriranje profila</p>
+            {user?.role === 'AGENT' || user?.role === 'TECHNICIAN' ? (
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-slate-700 mb-2">Status dostupnosti</label>
+                <select
+                  value={availability || 'AVAILABLE'}
+                  onChange={async (e) => {
+                    const val = e.target.value
+                    try {
+                      await setMyAvailability(val)
+                      setAvailability(val)
+                    } catch (err) {
+                      // ignore UI error for now
+                    }
+                  }}
+                  className="rounded-2xl border border-slate-300 px-4 py-2 text-sm bg-white"
+                >
+                  <option value="AVAILABLE">Dostupan</option>
+                  <option value="BUSY">Zauzet</option>
+                  <option value="UNAVAILABLE">Nedostupan</option>
+                </select>
+              </div>
+            ) : null}
             <form onSubmit={handleEmailSubmit} className="space-y-4">
               <label className="block text-sm font-medium text-slate-700">
                 Nova email adresa

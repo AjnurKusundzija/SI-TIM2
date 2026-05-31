@@ -65,15 +65,18 @@ namespace TelecomSupportSystem.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<(IEnumerable<User> Users, int TotalCount)> GetUsersPaginatedAsync(Role? role, AccountStatus? status, string? search, Location? location, int page, int pageSize)
+        public async Task<(IEnumerable<User> Users, int TotalCount)> GetUsersPaginatedAsync(Role? role, AccountStatus? status, TelecomSupportSystem.DAL.Entities.Enums.AvailabilityStatus? availability, string? search, Location? location, int page, int pageSize)
         {
             var query = _context.Users.AsQueryable();
 
             if (role.HasValue)
                 query = query.Where(u => u.Role == role.Value);
-            
+
             if (status.HasValue)
                 query = query.Where(u => u.AccountStatus == status.Value);
+
+            if (availability.HasValue)
+                query = query.Where(u => u.AvailabilityStatus == availability.Value);
 
             if (location.HasValue)
                 query = query.Where(u => u.Location == location.Value);
