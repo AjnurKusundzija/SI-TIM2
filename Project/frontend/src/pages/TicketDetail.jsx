@@ -46,7 +46,7 @@ import Badge from '../components/common/Badge'
 import ConfirmDialog from '../components/common/ConfirmDialog'
 import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/common/Modal'
-import AttachmentList from '../components/common/AttachmentList'
+import AttachmentList, { FilesDrivePanel, AttachmentLightbox } from '../components/common/AttachmentList'
 import FileUpload from '../components/common/FileUpload'
 import AISuggestionModal from '../components/common/AISuggestionModal'
 import { formatDateTime } from '../utils/formatDate'
@@ -210,6 +210,7 @@ export default function TicketDetail() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
+    const [lightboxId, setLightboxId] = useState(null)
     const [message, setMessage] = useState('')
     const [files, setFiles] = useState([])
     const [showFileUpload, setShowFileUpload] = useState(false)
@@ -715,6 +716,10 @@ export default function TicketDetail() {
         attachments: ticket.attachments || []
     }
     const allComments = [initialComment, ...comments]
+    const allAttachments = ticket.attachments || []
+    const lightboxIndex = lightboxId != null
+        ? allAttachments.findIndex(a => a.attachmentId === lightboxId)
+        : -1
 
     return (
         <div className="max-w-5xl mx-auto space-y-4">
@@ -847,8 +852,10 @@ export default function TicketDetail() {
                                             <p className="text-sm text-gray-600 mt-1 leading-6">
                                                 {comment.content}
                                             </p>
-                                            {/* PB-56 / US-81: prilozi uz komentar/inicijalni opis ostaju u hronološkom toku */}
-                                            <AttachmentList attachments={comment.attachments} />
+                                            {/* Inicijalni komentar ne prikazuje attachmente inline — svi su u sidebar panelu */}
+                                            {comment.commentId !== 'initial' && (
+                                                <AttachmentList attachments={comment.attachments} onOpenAttachment={setLightboxId} />
+                                            )}
                                         </div>
                                     </div>
                                 )
@@ -938,13 +945,6 @@ export default function TicketDetail() {
                                 {/* PB-56 / US-80: Prilozi su dozvoljeni samo za javne poruke (ne za interne komentare) */}
                                 {composerMode === 'public' && (
                                     <>
-                                        {files.length > 0 && (
-                                            <div>
-                                                <p className="text-xs font-medium text-gray-600 mb-2">Odabrani fajlovi:</p>
-                                                <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={true} />
-                                            </div>
-                                        )}
-
                                         {files.length === 0 && !showFileUpload && (
                                             <button
                                                 type="button"
@@ -955,14 +955,12 @@ export default function TicketDetail() {
                                             </button>
                                         )}
 
-                                        {showFileUpload && files.length === 0 && (
+                                        {(showFileUpload || files.length > 0) && (
                                             <div>
-                                                <FileUpload onFilesSelected={(selectedFiles) => {
-                                                    setFiles(selectedFiles)
-                                                    if (selectedFiles.length > 0) {
-                                                        setShowFileUpload(false)
-                                                    }
-                                                }} maxFiles={5} compact={true} />
+                                                {files.length > 0 && (
+                                                    <p className="text-xs font-medium text-gray-600 mb-2">Odabrani fajlovi:</p>
+                                                )}
+                                                <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={true} />
                                             </div>
                                         )}
 
@@ -1074,6 +1072,9 @@ export default function TicketDetail() {
                                 </div>
                             </dl>
                         </div>
+
+                        {/* Svi prilozi — agregiran Drive prikaz */}
+                        <FilesDrivePanel attachments={allAttachments} onOpenAttachment={setLightboxId} />
 
                         {/* Closure notification — always visible when set */}
                         {closureNotification && (
@@ -1631,6 +1632,15 @@ export default function TicketDetail() {
                     comments={comments}
                     onUse={(text) => setMessage(text)}
                     onClose={() => setAiModalOpen(false)}
+                />
+            )}
+
+            {lightboxIndex >= 0 && (
+                <AttachmentLightbox
+                    attachments={allAttachments}
+                    index={lightboxIndex}
+                    onClose={() => setLightboxId(null)}
+                    onChange={(idx) => setLightboxId(allAttachments[idx].attachmentId)}
                 />
             )}
         </div>

@@ -317,7 +317,7 @@ describe('TicketDetail — PB-62 self-assign', () => {
     mocks.getTicketById
       .mockResolvedValueOnce(UNASSIGNED_OPEN_TICKET)
       .mockResolvedValueOnce(assignedTicket)
-    mocks.getTicketComments.mockResolvedValueOnce([])
+    mocks.getTicketComments.mockResolvedValue([])
     mocks.selfAssignTicket.mockResolvedValueOnce({ userId: 11, fullName: 'Selma Mujić' })
 
     renderTicketDetail({ role: 'AGENT', userId: 11 }, '5')

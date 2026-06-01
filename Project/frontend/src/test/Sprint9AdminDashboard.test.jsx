@@ -1,6 +1,6 @@
 // PB-45 / US-71, US-72, US-82, US-86 + PB-50 / US-87 — Frontend testovi
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 
 const mocks = vi.hoisted(() => ({
@@ -177,8 +177,10 @@ describe('Globalni vremenski filter (PB-45 / US-72)', () => {
     await waitFor(() => expect(mocks.getAdminDashboard).toHaveBeenCalled())
     mocks.getAdminDashboard.mockClear()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Sedmica' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Primijeni' }))
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Sedmica' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Primijeni' }))
+    })
 
     await waitFor(() =>
       expect(mocks.getAdminDashboard).toHaveBeenCalledWith(expect.objectContaining({ period: 'week' })),
@@ -189,14 +191,19 @@ describe('Globalni vremenski filter (PB-45 / US-72)', () => {
     mocks.generateReport.mockResolvedValue({ hasData: true, data: {} })
     renderMetrics()
     await waitFor(() => expect(mocks.getAdminDashboard).toHaveBeenCalled())
-    fireEvent.click(screen.getByRole('button', { name: 'Prilagođeno' }))
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Prilagođeno' }))
+    })
 
     const dateInputs = document.querySelectorAll('input[type="date"]')
     expect(dateInputs.length).toBe(2)
-    fireEvent.change(dateInputs[0], { target: { value: '2026-12-31' } })
-    fireEvent.change(dateInputs[1], { target: { value: '2026-01-01' } })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Primijeni' }))
+    await act(async () => {
+      fireEvent.change(dateInputs[0], { target: { value: '2026-12-31' } })
+      fireEvent.change(dateInputs[1], { target: { value: '2026-01-01' } })
+      fireEvent.click(screen.getByRole('button', { name: 'Primijeni' }))
+    })
 
     await waitFor(() =>
       expect(screen.getByText(/Datum kraja mora biti nakon datuma početka/i)).toBeInTheDocument(),
