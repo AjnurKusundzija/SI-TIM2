@@ -61,7 +61,7 @@ function SupportIllustration() {
       <ellipse cx="280" cy="256" rx="10" ry="20" fill="#2d1b0e" />
 
       {/* Headset band */}
-      <path d="M207 243 Q240 217 273 243" stroke="#0d1e3d" stroke-width="7" stroke-linecap="round" />
+      <path d="M207 243 Q240 217 273 243" stroke="#0d1e3d" strokeWidth="7" strokeLinecap="round" />
 
       {/* Left earpiece */}
       <rect x="193" y="240" width="20" height="26" rx="8" fill="#162d58" />
@@ -72,7 +72,7 @@ function SupportIllustration() {
       <rect x="271" y="244" width="12" height="18" rx="5" fill="#0d1e3d" />
 
       {/* Mic arm */}
-      <path d="M287 255 Q306 265 310 280" stroke="#0d1e3d" stroke-width="4" stroke-linecap="round" />
+      <path d="M287 255 Q306 265 310 280" stroke="#0d1e3d" strokeWidth="4" strokeLinecap="round" />
       <ellipse cx="311" cy="284" rx="7" ry="7" fill="#162d58" />
       <ellipse cx="311" cy="284" rx="3.5" ry="3.5" fill="#3662a7" />
 
@@ -85,12 +85,12 @@ function SupportIllustration() {
       <circle cx="257.5" cy="255" r="1.8" fill="white" />
 
       {/* Smile */}
-      <path d="M226 272 Q240 283 254 272" stroke="#c4956a" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M226 272 Q240 283 254 272" stroke="#c4956a" strokeWidth="2.5" strokeLinecap="round" />
 
       {/* Arms */}
-      <path d="M175 340 Q138 335 115 300" stroke="#3662a7" stroke-width="22" stroke-linecap="round" />
+      <path d="M175 340 Q138 335 115 300" stroke="#3662a7" strokeWidth="22" strokeLinecap="round" />
       <ellipse cx="108" cy="294" rx="17" ry="12" fill="#FDDCB5" />
-      <path d="M305 340 Q342 335 365 300" stroke="#3662a7" stroke-width="22" stroke-linecap="round" />
+      <path d="M305 340 Q342 335 365 300" stroke="#3662a7" strokeWidth="22" strokeLinecap="round" />
       <ellipse cx="372" cy="294" rx="17" ry="12" fill="#FDDCB5" />
 
       {/* Keyboard hints under hands */}
@@ -99,7 +99,7 @@ function SupportIllustration() {
 
       {/* Floating chat bubble - top right */}
       <rect x="365" y="100" width="100" height="58" rx="14" fill="white" opacity="0.1" />
-      <rect x="365" y="100" width="100" height="58" rx="14" stroke="white" stroke-width="1.5" opacity="0.25" />
+      <rect x="365" y="100" width="100" height="58" rx="14" stroke="white" strokeWidth="1.5" opacity="0.25" />
       <rect x="379" y="116" width="58" height="5" rx="3" fill="white" opacity="0.6" />
       <rect x="379" y="127" width="42" height="5" rx="3" fill="white" opacity="0.4" />
       <rect x="379" y="138" width="65" height="5" rx="3" fill="white" opacity="0.35" />
@@ -107,7 +107,7 @@ function SupportIllustration() {
 
       {/* Floating notification - top left */}
       <rect x="18" y="110" width="95" height="48" rx="12" fill="white" opacity="0.08" />
-      <rect x="18" y="110" width="95" height="48" rx="12" stroke="white" stroke-width="1.5" opacity="0.2" />
+      <rect x="18" y="110" width="95" height="48" rx="12" stroke="white" strokeWidth="1.5" opacity="0.2" />
       <circle cx="38" cy="134" r="11" fill="#3662a7" opacity="0.7" />
       <rect x="55" y="126" width="45" height="5" rx="3" fill="white" opacity="0.5" />
       <rect x="55" y="135" width="32" height="5" rx="3" fill="white" opacity="0.35" />
@@ -121,9 +121,9 @@ function SupportIllustration() {
       <circle cx="70" cy="216" r="3" fill="white" opacity="0.1" />
 
       {/* Signal waves */}
-      <path d="M418 42 Q427 31 436 42" stroke="#7fa0d0" stroke-width="3" stroke-linecap="round" opacity="0.65" />
-      <path d="M411 42 Q425 25 437 42" stroke="#7fa0d0" stroke-width="3" stroke-linecap="round" opacity="0.45" />
-      <path d="M404 42 Q423 18 439 42" stroke="#7fa0d0" stroke-width="3" stroke-linecap="round" opacity="0.28" />
+      <path d="M418 42 Q427 31 436 42" stroke="#7fa0d0" strokeWidth="3" strokeLinecap="round" opacity="0.65" />
+      <path d="M411 42 Q425 25 437 42" stroke="#7fa0d0" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
+      <path d="M404 42 Q423 18 439 42" stroke="#7fa0d0" strokeWidth="3" strokeLinecap="round" opacity="0.28" />
       <circle cx="427" cy="48" r="4" fill="#7fa0d0" opacity="0.75" />
     </svg>
   )
