@@ -152,6 +152,8 @@ builder.Services.AddScoped<ICatalogPackageService, CatalogPackageService>();
 builder.Services.AddScoped<IClientSubscriptionService, ClientSubscriptionService>();
 // Audit Log
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+// US-24: Team Overview and Agent Reassignment
+builder.Services.AddScoped<ITeamService, TeamService>();
 // PB-57, PB-58: AI suggestions (Gemini)
 builder.Services.AddHttpClient<IAIService, AIService>();
 // PB-70 / US-108..US-111: MCP Admin Copilot (koristi GROQ_API_KEY_2 + MCP server)

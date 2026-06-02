@@ -17,6 +17,11 @@ export const actionTypeLabels: Record<string, string> = {
   PACKAGE_DEACTIVATED: 'Deaktivacija paketa',
   SUBSCRIPTION_ASSIGNED: 'Dodjela pretplate',
   SUBSCRIPTION_DEACTIVATED: 'Deaktivacija pretplate',
+  REASSIGNMENT_REQUESTED: 'Zahtjev za premještanje',
+  REASSIGNMENT_APPROVED: 'Zahtjev odobren',
+  REASSIGNMENT_REJECTED: 'Zahtjev odbijen',
+  REASSIGNMENT_COMPLETED: 'Premještanje završeno',
+  AGENT_REASSIGNED: 'Premještanje agenta',
 }
 
 export function getActionTypeLabel(actionType: string): string {
