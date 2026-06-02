@@ -109,4 +109,75 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 ---
 
+## Unos #6
+
+| Polje | Detalji |
+|---|---|
+| Datum | 27.05.2026 |
+| Sprint broj | Sprint 10 |
+| Alat koji je korišten | ChatGPT (GPT-5.5) |
+| Svrha korištenja | Pomoć pri organizaciji i pisanju Scrum dokumentacije za Sprint 10. |
+| Kratak opis zadatka ili upita | AI je korišten za strukturisanje Sprint Goal dokumenta, proširenje Sprint Backloga, organizaciju AI Usage Log unosa, Decision Log napomena i pripremu dokumentacije vezane za AI funkcionalnosti, redizajn korisničkog sučelja i administratorska proširenja. |
+| Šta je AI predložio ili generisao | Predložena je struktura Sprint Goal dokumenta, opis sprint cilja, fokus sprinta, očekivani deliverable-i, review kriteriji i održani sastanci. AI je također pomogao u formulisanju dokumentacije tako da bude usklađena sa Sprint 10 backlog stavkama. |
+| Šta je tim prihvatio | Prihvaćena je struktura dokumentacije, prošireni opis sprint cilja, organizacija sekcija i većina formulacija vezanih za sprint artefakte. |
+| Šta je tim izmijenio | Tim je prilagodio pojedine nazive PB i US stavki, odgovorne osobe i tehničke detalje kako bi dokumentacija odgovarala stvarnoj implementaciji. |
+| Šta je tim odbacio | Odbačeni su prijedlozi koji nisu bili direktno vezani za Sprint 10 scope. |
+| Rizici, problemi ili greške koje su uočene | Potrebna je dodatna provjera konzistentnosti između Sprint Backloga, Product Backloga i AI Usage Log dokumenata. |
+| Ko je koristio alat | Lejan Kozlić |
+
+---
+
+
+## Unos #7
+
+| Polje | Detalji |
+|---|---|
+| Datum | 27.05.2026 |
+| Sprint broj | Sprint 10 |
+| Alat koji je korišten | ChatGPT / GitHub Copilot |
+| Svrha korištenja | Dovršetak PB-29 funkcionalnosti pregleda rasporeda timova za administratora. |
+| Kratak opis zadatka ili upita | AI je korišten za pomoć pri organizaciji prikaza timova, članova timova, filtera i administratorske preraspodjele agenata kroz sekciju Timovi. |
+| Šta je AI predložio ili generisao | Predložena je struktura UI prikaza timova, filteri za pregled agenata po timu, osnovna logika za prikaz članova tima i organizacija backend endpointa za dohvat timova i agenata. |
+| Šta je tim prihvatio | Prihvaćen je prikaz timova sa članovima i filterima, kao i logika da administrator može pregledati raspored timova i vršiti preraspodjelu agenata. |
+| Šta je tim izmijenio | Tim je prilagodio nazive polja, prikaz filtera i način prikaza članova tima prema postojećem dizajnu aplikacije. |
+| Šta je tim odbacio | Odbačeni su prijedlozi koji su uvodili previše kompleksan team management van trenutnog scope-a Sprinta 10. |
+| Rizici, problemi ili greške koje su uočene | Potencijalni rizik bio je neusklađenost prikaza timova sa postojećim podacima u bazi i potreba da se ne izgube postojeće dodjele agenata. |
+| Ko je koristio alat | Ajdin Dželo|
+
+---
+
+## Unos #8
+
+| Polje | Detalji |
+|---|---|
+| Datum | 24.05.2026 |
+| Sprint broj | Sprint 10 |
+| Alat koji je korišten | Claude Code / GitHub Copilot |
+| Svrha korištenja | Implementacija PB-60 internih komentara na tiketima. |
+| Kratak opis zadatka ili upita | AI je korišten za implementaciju internih komentara koji su vidljivi samo osoblju, odnosno agentima, tehničarima i administratorima, dok su skriveni od klijenata. |
+| Šta je AI predložio ili generisao | Predložene su izmjene modela poruka, dodatno polje za označavanje interne bilješke, backend validacija vidljivosti komentara, frontend prikaz internih komentara i vizualno razlikovanje od običnih poruka. |
+| Šta je tim prihvatio | Prihvaćena je logika da interni komentari budu dio ticket komunikacije, ali da budu jasno odvojeni od regularnih poruka i potpuno skriveni od klijenta. |
+| Šta je tim izmijenio | Tim je prilagodio vizualni prikaz internih komentara i način prikaza oznake “Internal note” kako bi se uklopio u redizajnirani UI. |
+| Šta je tim odbacio | Odbačeno je prikazivanje internih komentara klijentu u bilo kojem obliku, čak i kao sistemske poruke. |
+| Rizici, problemi ili greške koje su uočene | Glavni rizik bio je slučajno curenje internih komentara klijentima, pa je dodatno provjerena autorizacija i frontend filtriranje poruka. |
+| Ko je koristio alat | Eldar Hadžiselimović|
+
+---
+
+## Unos #9
+
+| Polje | Detalji |
+|---|---|
+| Datum | 25.05.2026 |
+| Sprint broj | Sprint 10 |
+| Alat koji je korišten | GitHub Copilot / ChatGPT |
+| Svrha korištenja | Implementacija PB-63 Agent availability status funkcionalnosti. |
+| Kratak opis zadatka ili upita | AI je korišten za pomoć pri implementaciji statusa dostupnosti agenata, gdje agent može postaviti vlastiti availability status, a admin i drugi agenti mogu vidjeti statuse u timskom pregledu. |
+| Šta je AI predložio ili generisao | Predložene su izmjene korisničkog modela ili DTO strukture za availability status, backend endpointi za promjenu statusa, frontend UI kontrole za postavljanje dostupnosti i prikaz statusa u timskom pregledu. |
+| Šta je tim prihvatio | Prihvaćena je osnovna logika da agent samostalno mijenja svoj status dostupnosti, dok admin i agenti mogu pregledati statuse kroz timski prikaz. |
+| Šta je tim izmijenio | Tim je prilagodio nazive statusa, vizualni prikaz badge oznaka i uslove prikaza statusa prema postojećim rolama i dizajnu aplikacije. |
+| Šta je tim odbacio | Odbačena je kompleksnija automatizacija statusa dostupnosti, jer nije bila dio trenutnog scope-a sprinta. |
+| Rizici, problemi ili greške koje su uočene | Potencijalni rizik bio je da se nedostupni agenti i dalje prikazuju kao kandidati za dodjelu tiketa, pa je dodatno provjerena povezanost availability statusa sa prikazom timova i agenata. |
+| Ko je koristio alat | Merisa Ogrić|
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
