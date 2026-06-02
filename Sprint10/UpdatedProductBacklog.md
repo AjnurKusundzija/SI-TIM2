@@ -47,7 +47,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-26](#pb-26) | Ocjenjivanje tiketa                                | Feature        | 5         | S         | Done    | Sprint 8  |
 | [PB-27](#pb-27) | Komunikacija kroz tiket                            | Feature        | 1         | M         | Done    | Sprint 6  |
 | [PB-28](#pb-28) | Upravljanje prioritetima tiketa                    | Feature        | 2         | M         | Done    | Sprint 7  |
-| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Done    | Sprint 9  |
+| [PB-29](#pb-29) | Preraspodjela agenata po timovima                  | Feature        | 1         | M         | Done    | Sprint 9-10  |
 | [PB-30](#pb-30) | Automatska dodjela tiketa                          | Feature        | 3         | XS        | Done    | Sprint 7  |
 | [PB-31](#pb-31) | Prosljeđivanje tiketa                              | Feature        | 2         | M         | Done    | Sprint 7  |
 | [PB-32](#pb-32) | Pregled svih tiketa                                | Feature        | 1         | M         | Done    | Sprint 6  |
@@ -76,10 +76,10 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-57](#pb-57) | AI prijedlog odgovora za agente i tehničare        | Feature        | 2         | M         | Done    | Sprint 10 |
 | [PB-58](#pb-58) | AI uvidi za administratore                         | Feature        | 2         | L         | Done    | Sprint 10 |
 | [PB-59](#pb-59) | Redizajn korisničkog sučelja                       | Feature        | 3         | L         | Done    | Sprint 10 |
-| [PB-60](#pb-60) | Interni komentari na tiketima                      | Feature        | 1         | S         | Backlog | Sprint 10 |
-| [PB-61](#pb-61) | Admin CRUD FAQ                                     | Feature        | 2         | S         | Backlog | Sprint 10 |
-| [PB-62](#pb-62) | Assign to me — samodjelovanje tiketa               | Feature        | 2         | S         | Backlog | Sprint 10 |
-| [PB-63](#pb-63) | Agent availability status                          | Feature        | 3         | S         | Backlog | Sprint 10 |
+| [PB-60](#pb-60) | Interni komentari na tiketima                      | Feature        | 1         | S         | Done    | Sprint 10 |
+| [PB-61](#pb-61) | Admin CRUD FAQ                                     | Feature        | 2         | S         | Done    | Sprint 10 |
+| [PB-62](#pb-62) | Assign to me — samodjelovanje tiketa               | Feature        | 2         | S         | Done    | Sprint 10 |
+| [PB-63](#pb-63) | Agent availability status                          | Feature        | 3         | S         | Done    | Sprint 10 |
 | [PB-64](#pb-64) | Linked Tickets — veza između tiketa                | Feature        | 2         | M         | Backlog | Sprint 11 |
 | [PB-65](#pb-65) | SLA praćenje i upozorenja                          | Feature        | 2         | M         | Backlog | Sprint 11 |
 | [PB-66](#pb-66) | Bulk akcije na tiketima                            | Feature        | 3         | M         | Backlog | Sprint 11 |
@@ -87,27 +87,6 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-68](#pb-68) | Reset lozinke putem emaila                         | Feature        | 4         | S         | Backlog | Sprint 11 |
 | [PB-69](#pb-69) | AI Chatbot za klijente (Groq)                      | Feature        | 3         | M         | Backlog | Sprint 11 |
 | [PB-70](#pb-70) | MCP Admin Copilot                                  | Feature        | 2         | XL        | Backlog | Sprint 10 |
-
-
----
-
-## Modul izvještaja — status zatvaranja PB-ova
-
-
-| PB        | Status                                                                                                                |
-| --------- | --------------------------------------------------------------------------------------------------------------------- |
-| **PB-38** | ✅ Done — `TICKET_COUNT` vraća ukupan broj + bucket razbreak (dan/sedmica/mjesec) po periodu kreiranja                |
-| **PB-39** | ✅ Done — `TICKET_STATUS` s breakdown po statusima, postocima, pie chartom i drill-down na `/tickets`                 |
-| **PB-40** | ✅ Done — `PROBLEM_TYPE` s bar chartom i drill-down po kategoriji                                                     |
-| **PB-41** | ✅ Done — `AVG_RESOLUTION` on-demand izvještaj s agregatom i bucket tabelom (dan/sedmica/mjesec)                      |
-| **PB-43** | ✅ Done — `TEAM_WORKLOAD` vraća ukupne zbirove po agentu + pivot tabelu period × agent                                |
-| **PB-44** | ✅ Done — `USER_RATINGS` s prosječnom ocjenom, distribucijom po zvjezdicama i bucket trendom po pod-periodima         |
-| **PB-45** | ✅ Done — Admin Dashboard s KPI karticama, grafovima, globalnim filterom i drill-down                                 |
-| **PB-50** | ✅ Done — `FIRST_RESPONSE` na dashboardu (agregat) + on-demand izvještaj s bucket trendom po pod-periodima            |
-| **PB-46** | ⏳ Backlog (Sprint 11) — CSV export; disabled dugme placeholder je implementirano                                     |
-
-
-**Napomena:** Izvještaji za **tehničara** (US-42, US-44, US-46, US-48) su označeni kao *out of scope* — po dogovoru u Sprint 9 modul izvještaja je isključivo za `ADMINISTRATOR`.
 
 ---
 
