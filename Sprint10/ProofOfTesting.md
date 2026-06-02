@@ -43,7 +43,6 @@ Dokument evidentira dokaze testiranja za Sprint 10 funkcionalnosti: AI prijedlog
 | **Backend unit (PB-62)** | `TicketT/SelfAssignServiceTests.cs` | **7** | **Prošlo** |
 | **Backend integracija (PB-62)** | `Integration/SelfAssignIntegrationTests.cs` | **5** | **Prošlo** |
 | **Frontend unit (PB-62)** | `TicketDetail.test.jsx` (proširen), `ticketService.test.js` | **10** | **Prošlo** |
-| **Ukupno novih testova Sprint 10 (PB-61 + PB-62)** | | **64** | **Prošlo (64/64)** |
 | **Backend test suite** | `TelecomSupportSystem.Tests` | 521 | 520 prošlo / 1 flaky (`AuthPerformanceTests` — nije vezano za PB-61/PB-62) |
 | **Frontend test suite** | `Project/frontend` | 324 | 324 prošlo |
 
