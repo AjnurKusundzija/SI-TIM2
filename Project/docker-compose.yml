@@ -24,6 +24,26 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - JWT_KEY=${JWT_KEY}
       - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      # PB-70 — MCP Admin Copilot koristi zaseban Groq ključ i MCP server
+      - GROQ_API_KEY_2=${GROQ_API_KEY_2}
+      - MCP_SERVER_URL=http://mcp-server:3001/mcp
+    depends_on:
+      - sqlserver
+      - mcp-server
+    restart: unless-stopped
+
+  # PB-70 / US-109 — read-only MCP server (TypeScript, zvanični MCP SDK)
+  mcp-server:
+    build:
+      context: ./mcp-server
+    container_name: telecom-mcp-server
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - MCP_DB_CONNECTION_STRING=${ConnectionStrings__DefaultConnection}
     depends_on:
       - sqlserver
     restart: unless-stopped

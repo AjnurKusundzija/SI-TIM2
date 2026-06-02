@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AuditLogFilters, AuditLogUserDto } from './auditLog.types'
+import { getActionTypeLabel } from './auditLog.utils'
 
 interface Props {
   filters: AuditLogFilters
@@ -79,7 +80,7 @@ export default function AuditLogFilters({
               <option value="">Sve akcije</option>
               {actionTypes.map((type) => (
                 <option key={type} value={type}>
-                  {type}
+                  {getActionTypeLabel(type)}
                 </option>
               ))}
             </select>

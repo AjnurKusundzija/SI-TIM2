@@ -9,6 +9,18 @@ const pageTitles = {
   '/tickets': 'Tiketi',
   '/create-ticket': 'Kreiraj tiket',
   '/faq': 'FAQ',
+  '/reports': 'Izvještaji',
+  '/assigned': 'Dodijeljeni meni',
+  '/profile': 'Profil',
+  '/statistics': 'Statistika',
+  '/notifications': 'Notifikacije',
+  '/packages': 'Moji paketi',
+  '/admin/packages': 'Upravljanje paketima',
+  '/audit-log': 'Audit log',
+  '/users/clients': 'Klijenti',
+  '/users/agents': 'Agenti',
+  '/users/technicians': 'Tehničari',
+  '/users/deactivated': 'Deaktivirani korisnici',
 };
 
 export default function AppLayout() {
@@ -25,14 +37,14 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f4f6f9]">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="lg:ml-64">
+      <div className="lg:ml-60 flex flex-col min-h-screen">
         <Header
           onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
           title={getTitle()}
         />
-        <main className="p-4 lg:p-6">
+        <main className="flex-1 p-4 lg:p-6">
           <Outlet />
         </main>
       </div>

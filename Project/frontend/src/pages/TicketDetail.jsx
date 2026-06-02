@@ -3,7 +3,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
     ArrowLeft,
     ArrowRightLeft,
+    Bot,
     CheckCircle,
+    UserPlus,
     Clock,
     MessageCircle,
     Send,
@@ -15,17 +17,20 @@ import {
     Zap,
     AlertCircle,
     Info,
+    Lock,
 } from 'lucide-react'
 import * as signalR from '@microsoft/signalr'
 import {
     addComment,
     addCommentWithAttachments,
+    addInternalComment,
     getTicketById,
     autoForwardTicket,
     forwardTicketToAgent,
     getAgentScores,
     getTicketComments,
     forwardTicketToTechnician,
+    selfAssignTicket,
     updateInternalPriority,
     closeTicket,
     requestTicketClosure,
@@ -41,8 +46,9 @@ import Badge from '../components/common/Badge'
 import ConfirmDialog from '../components/common/ConfirmDialog'
 import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/common/Modal'
-import AttachmentList from '../components/common/AttachmentList'
+import AttachmentList, { FilesDrivePanel, AttachmentLightbox } from '../components/common/AttachmentList'
 import FileUpload from '../components/common/FileUpload'
+import AISuggestionModal from '../components/common/AISuggestionModal'
 import { formatDateTime } from '../utils/formatDate'
 
 const MAX_COMMENT_LENGTH = 1000
@@ -204,13 +210,20 @@ export default function TicketDetail() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
+    const [lightboxId, setLightboxId] = useState(null)
     const [message, setMessage] = useState('')
     const [files, setFiles] = useState([])
     const [showFileUpload, setShowFileUpload] = useState(false)
     const [isSending, setIsSending] = useState(false)
     const [sendError, setSendError] = useState(null)
+    // US-102: način slanja — 'public' (poruka klijentu) ili 'internal' (interni komentar)
+    const [composerMode, setComposerMode] = useState('public')
+    const isStaff = user?.role === 'AGENT' || user?.role === 'TECHNICIAN' || user?.role === 'ADMINISTRATOR'
     // PB-56 / US-80: prikaz progress indikatora tokom uploada većih fajlova uz poruku
     const [commentUploadProgress, setCommentUploadProgress] = useState(null)
+
+    // PB-57 / US-96: AI suggestion modal
+    const [aiModalOpen, setAiModalOpen] = useState(false)
 
     // Forward modal state
     const [forwardModalOpen, setForwardModalOpen] = useState(false)
@@ -349,8 +362,13 @@ export default function TicketDetail() {
     useEffect(() => {
         if (!id) return
 
+        // US-102: osoblje (AGENT/TECHNICIAN/ADMINISTRATOR) se pretplaćuje i na staff-only
+        // grupu za prijem internih komentara. Klijent NIKAD ne ulazi u tu grupu — server
+        // dodatno provjerava rolu iz JWT-a prije nego doda konekciju u grupu.
         const newConnection = new signalR.HubConnectionBuilder()
-            .withUrl('/chathub')
+            .withUrl('/chathub', {
+                accessTokenFactory: () => sessionStorage.getItem('accessToken') || '',
+            })
             .withAutomaticReconnect()
             .build()
 
@@ -360,31 +378,45 @@ export default function TicketDetail() {
                 newConnection.on('ReceiveComment', (comment) => {
                     setComments((prev) => [...prev, comment])
                 })
+
+                if (isStaff) {
+                    newConnection.invoke('JoinTicketStaffGroup', id).catch(e => console.error(e))
+                    newConnection.on('ReceiveInternalComment', (comment) => {
+                        setComments((prev) => [...prev, comment])
+                    })
+                }
             })
             .catch(e => console.error('SignalR Connection Error: ', e))
 
         return () => {
             if (newConnection.state === signalR.HubConnectionState.Connected) {
                 newConnection.invoke('LeaveTicketGroup', id).catch(console.error)
+                if (isStaff) {
+                    newConnection.invoke('LeaveTicketStaffGroup', id).catch(console.error)
+                }
             }
             newConnection.stop()
         }
-    }, [id])
+    }, [id, isStaff])
 
     const handleSend = async () => {
-    // Dozvoli slanje ako ima ILI teksta ILI priloženih fajlova
-    if ((!message.trim() && files.length === 0) || isSending) return
-    
+    // US-102: interni komentari ne podržavaju attachment-e i moraju imati tekst
+    if (composerMode === 'internal') {
+        if (!message.trim() || isSending) return
+    } else if ((!message.trim() && files.length === 0) || isSending) {
+        return
+    }
+
     setSendError(null)
     setIsSending(true)
-    
+
     try {
-        // Ako imamo fajlove, prosleđujemo poruku i fajlove
-        if (files.length > 0) {
+        if (composerMode === 'internal') {
+            await addInternalComment(id, message.trim())
+        } else if (files.length > 0) {
             setCommentUploadProgress(0)
             await addCommentWithAttachments(id, message.trim(), files, (percent) => setCommentUploadProgress(percent))
         } else {
-            // Ako nema fajlova, šaljemo običan tekstualni komentar
             await addComment(id, message)
         }
 
@@ -396,8 +428,8 @@ export default function TicketDetail() {
     } catch (err) {
         console.error('Failed to send comment', err)
         setSendError(
-            err.response?.data?.message ||
             err.response?.data?.poruka ||
+            err.response?.data?.message ||
             'Neuspješno slanje poruke. Pokušajte ponovo.'
         )
         setCommentUploadProgress(null)
@@ -467,6 +499,28 @@ export default function TicketDetail() {
             setForwardError(err.response?.data?.poruka || 'Prosljeđivanje nije uspješno.')
         } finally {
             setForwardLoading(false)
+        }
+    }
+
+    // PB-62 / US-105: Agent preuzima nedodijeljeni tiket
+    const [selfAssignLoading, setSelfAssignLoading] = useState(false)
+    const [selfAssignError, setSelfAssignError] = useState(null)
+
+    const handleSelfAssign = async () => {
+        setSelfAssignLoading(true)
+        setSelfAssignError(null)
+        try {
+            await selfAssignTicket(Number(id))
+            const updatedTicket = await getTicketById(Number(id))
+            setTicket(updatedTicket)
+            setStatusNotification({ type: 'success', message: 'Tiket je dodijeljen vama.' })
+            setTimeout(() => setStatusNotification(null), 3000)
+        } catch (err) {
+            const msg = err.response?.data?.poruka || 'Tiket nije dostupan ili je već dodijeljen drugom agentu.'
+            setSelfAssignError(msg)
+            setTimeout(() => setSelfAssignError(null), 5000)
+        } finally {
+            setSelfAssignLoading(false)
         }
     }
 
@@ -662,6 +716,10 @@ export default function TicketDetail() {
         attachments: ticket.attachments || []
     }
     const allComments = [initialComment, ...comments]
+    const allAttachments = ticket.attachments || []
+    const lightboxIndex = lightboxId != null
+        ? allAttachments.findIndex(a => a.attachmentId === lightboxId)
+        : -1
 
     return (
         <div className="max-w-5xl mx-auto space-y-4">
@@ -729,6 +787,49 @@ export default function TicketDetail() {
                                         : comment.authorName.slice(0, 2)
                                 ).toUpperCase()
 
+                                // US-102 / US-103: interni komentari su vizualno odvojeni
+                                // (amber pozadina, lock ikona, "Interno" badge) i prikazuju se
+                                // u istom hronološkom toku zajedno s regularnim porukama.
+                                if (comment.isInternal) {
+                                    return (
+                                        <div
+                                            key={comment.commentId}
+                                            data-testid="internal-comment"
+                                            className="flex gap-3 rounded-lg border border-amber-200 bg-amber-50/70 px-3 py-3"
+                                        >
+                                            <div className="w-9 h-9 rounded-full bg-amber-200 text-amber-800 flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                                                {initials}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <span className="text-sm font-semibold text-amber-900">
+                                                            {comment.authorName}
+                                                        </span>
+                                                        {comment.authorRole && (
+                                                            <Badge value={comment.authorRole} />
+                                                        )}
+                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-amber-200 text-amber-900">
+                                                            <Lock size={10} />
+                                                            Interno
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-xs text-amber-700/80">
+                                                        {formatDateTime(comment.dateTime)}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-amber-900 mt-1 leading-6 whitespace-pre-wrap break-words">
+                                                    {comment.content}
+                                                </p>
+                                                <p className="mt-2 text-[11px] text-amber-700/80 italic flex items-center gap-1">
+                                                    <Lock size={10} />
+                                                    Vidljivo samo osoblju — klijent ne vidi ovaj komentar.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+
                                 return (
                                     <div key={comment.commentId} className="flex gap-3">
                                         <div className="w-9 h-9 rounded-full bg-navy-100 text-navy-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
@@ -751,8 +852,10 @@ export default function TicketDetail() {
                                             <p className="text-sm text-gray-600 mt-1 leading-6">
                                                 {comment.content}
                                             </p>
-                                            {/* PB-56 / US-81: prilozi uz komentar/inicijalni opis ostaju u hronološkom toku */}
-                                            <AttachmentList attachments={comment.attachments} />
+                                            {/* Inicijalni komentar ne prikazuje attachmente inline — svi su u sidebar panelu */}
+                                            {comment.commentId !== 'initial' && (
+                                                <AttachmentList attachments={comment.attachments} onOpenAttachment={setLightboxId} />
+                                            )}
                                         </div>
                                     </div>
                                 )
@@ -760,8 +863,57 @@ export default function TicketDetail() {
                         </div>
 
                         {/* Reply footer or closed notice */}
-                        {ticket.status !== 'CLOSED' ? (
-                            <div className="border-t border-gray-100 px-6 py-4 bg-gray-50/40 space-y-2">
+                        {ticket.status === 'CLOSED' ? (
+                            <div className="border-t border-gray-100 px-6 py-3 bg-gray-50 text-center">
+                                <p className="text-xs text-gray-400">Tiket je zatvoren — razgovor je arhiviran.</p>
+                            </div>
+                        ) : user?.role === 'ADMINISTRATOR' ? (
+                            <div className="border-t border-gray-100 px-6 py-3 bg-gray-50 text-center">
+                                <p className="text-xs text-gray-400">Administrator može pratiti razgovor, ali ne može slati poruke.</p>
+                            </div>
+                        ) : (
+                            <div className={`border-t border-gray-100 px-6 py-4 space-y-2 transition-colors ${composerMode === 'internal' ? 'bg-amber-50/60' : 'bg-gray-50/40'}`}>
+                                {/* US-102: Toggle između javne poruke klijentu i internog komentara —
+                                    vidljiv samo agentima i tehničarima. Klijent uvijek vidi standardni unos. */}
+                                {(user?.role === 'AGENT' || user?.role === 'TECHNICIAN') && (
+                                    <div className="inline-flex rounded-lg bg-white border border-gray-200 p-0.5 shadow-sm">
+                                        <button
+                                            type="button"
+                                            onClick={() => { setComposerMode('public'); setSendError(null) }}
+                                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+                                                composerMode === 'public'
+                                                    ? 'bg-navy-700 text-white shadow'
+                                                    : 'text-gray-600 hover:text-navy-700'
+                                            }`}
+                                        >
+                                            <Send size={13} />
+                                            Pošalji poruku klijentu
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => { setComposerMode('internal'); setSendError(null); setFiles([]); setShowFileUpload(false) }}
+                                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+                                                composerMode === 'internal'
+                                                    ? 'bg-amber-500 text-white shadow'
+                                                    : 'text-gray-600 hover:text-amber-700'
+                                            }`}
+                                        >
+                                            <Lock size={13} />
+                                            Dodaj interni komentar
+                                        </button>
+                                    </div>
+                                )}
+
+                                {composerMode === 'internal' && (
+                                    <div className="flex items-start gap-2 text-xs text-amber-800 bg-amber-100/80 border border-amber-200 rounded-lg px-3 py-2">
+                                        <Lock size={13} className="mt-0.5 flex-shrink-0" />
+                                        <span>
+                                            <strong>Interni način:</strong> ovaj komentar vidjet će samo
+                                            agenti, tehničari i administratori. Klijent ga nikad neće vidjeti.
+                                        </span>
+                                    </div>
+                                )}
+
                                 <textarea
                                     value={message}
                                     onChange={(e) => {
@@ -774,8 +926,14 @@ export default function TicketDetail() {
                                         if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleSend()
                                     }}
                                     rows={3}
-                                    placeholder="Unesite vašu poruku... (Ctrl+Enter za slanje)"
-                                    className="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none resize-none bg-white"
+                                    placeholder={composerMode === 'internal'
+                                        ? 'Unesite interni komentar (samo za osoblje)… (Ctrl+Enter za slanje)'
+                                        : 'Unesite vašu poruku... (Ctrl+Enter za slanje)'}
+                                    className={`w-full px-3 py-3 border rounded-lg text-sm outline-none resize-none bg-white transition-colors ${
+                                        composerMode === 'internal'
+                                            ? 'border-amber-300 focus:ring-2 focus:ring-amber-400 focus:border-amber-400'
+                                            : 'border-gray-200 focus:ring-2 focus:ring-navy-500 focus:border-navy-500'
+                                    }`}
                                 />
                                 {sendError && (
                                     <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
@@ -784,69 +942,83 @@ export default function TicketDetail() {
                                     </div>
                                 )}
 
-                                {/* PB-56 / US-80: Upload attachment-ima uz poruku */}
-                                {files.length > 0 && (
-                                    <div>
-                                        <p className="text-xs font-medium text-gray-600 mb-2">Odabrani fajlovi:</p>
-                                        <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={true} />
-                                    </div>
-                                )}
+                                {/* PB-56 / US-80: Prilozi su dozvoljeni samo za javne poruke (ne za interne komentare) */}
+                                {composerMode === 'public' && (
+                                    <>
+                                        {files.length === 0 && !showFileUpload && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowFileUpload(true)}
+                                                className="text-xs text-navy-600 hover:text-navy-700 font-medium"
+                                            >
+                                                + Dodaj prilog
+                                            </button>
+                                        )}
 
-                                {files.length === 0 && !showFileUpload && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowFileUpload(true)}
-                                        className="text-xs text-navy-600 hover:text-navy-700 font-medium"
-                                    >
-                                        + Dodaj prilog
-                                    </button>
-                                )}
+                                        {(showFileUpload || files.length > 0) && (
+                                            <div>
+                                                {files.length > 0 && (
+                                                    <p className="text-xs font-medium text-gray-600 mb-2">Odabrani fajlovi:</p>
+                                                )}
+                                                <FileUpload onFilesSelected={setFiles} maxFiles={5} compact={true} />
+                                            </div>
+                                        )}
 
-                                {showFileUpload && files.length === 0 && (
-                                    <div>
-                                        <FileUpload onFilesSelected={(selectedFiles) => {
-                                            setFiles(selectedFiles)
-                                            if (selectedFiles.length > 0) {
-                                                setShowFileUpload(false)
-                                            }
-                                        }} maxFiles={5} compact={true} />
-                                    </div>
-                                )}
-
-                                {/* PB-56 / US-80: progress indikator tokom uploada priloga uz poruku */}
-                                {commentUploadProgress !== null && (
-                                    <div className="space-y-1" data-testid="comment-upload-progress">
-                                        <div className="flex justify-between text-[11px] text-gray-500">
-                                            <span>Upload priloga…</span>
-                                            <span>{commentUploadProgress}%</span>
-                                        </div>
-                                        <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                                            <div
-                                                className="h-full bg-navy-600 transition-all"
-                                                style={{ width: `${commentUploadProgress}%` }}
-                                            />
-                                        </div>
-                                    </div>
+                                        {commentUploadProgress !== null && (
+                                            <div className="space-y-1" data-testid="comment-upload-progress">
+                                                <div className="flex justify-between text-[11px] text-gray-500">
+                                                    <span>Upload priloga…</span>
+                                                    <span>{commentUploadProgress}%</span>
+                                                </div>
+                                                <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                                    <div
+                                                        className="h-full bg-navy-600 transition-all"
+                                                        style={{ width: `${commentUploadProgress}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
 
                                 <div className="flex items-center justify-between">
                                     <span className={`text-xs ${message.length >= MAX_COMMENT_LENGTH ? 'text-red-500 font-medium' : 'text-gray-400'}`}>
                                         {message.length} / {MAX_COMMENT_LENGTH}
                                     </span>
-                                    <button
-                                        type="button"
-                                        onClick={handleSend}
-                                        disabled={(!message.trim() && files.length === 0) || isSending}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
-                                    >
-                                        <Send size={16} />
-                                        {isSending ? 'Slanje...' : 'Pošalji'}
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        {/* PB-57 / US-96: AI suggestion button — visible only to AGENT and TECHNICIAN (samo za javne poruke) */}
+                                        {(user?.role === 'AGENT' || user?.role === 'TECHNICIAN') && composerMode === 'public' && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setAiModalOpen(true)}
+                                                title="AI prijedlog odgovora"
+                                                className="inline-flex items-center gap-1.5 px-3 py-2 border border-violet-200 text-violet-600 hover:bg-violet-50 text-sm font-medium rounded-lg transition-colors"
+                                            >
+                                                <Bot size={15} />
+                                                AI Prijedlog
+                                            </button>
+                                        )}
+                                        <button
+                                            type="button"
+                                            onClick={handleSend}
+                                            disabled={
+                                                composerMode === 'internal'
+                                                    ? !message.trim() || isSending
+                                                    : (!message.trim() && files.length === 0) || isSending
+                                            }
+                                            className={`inline-flex items-center gap-2 px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors ${
+                                                composerMode === 'internal'
+                                                    ? 'bg-amber-600 hover:bg-amber-700'
+                                                    : 'bg-navy-700 hover:bg-navy-800'
+                                            }`}
+                                        >
+                                            {composerMode === 'internal' ? <Lock size={16} /> : <Send size={16} />}
+                                            {isSending
+                                                ? 'Slanje...'
+                                                : (composerMode === 'internal' ? 'Pošalji interno' : 'Pošalji')}
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        ) : (
-                            <div className="border-t border-gray-100 px-6 py-3 bg-gray-50 text-center">
-                                <p className="text-xs text-gray-400">Tiket je zatvoren — razgovor je arhiviran.</p>
                             </div>
                         )}
                     </div>
@@ -900,6 +1072,9 @@ export default function TicketDetail() {
                                 </div>
                             </dl>
                         </div>
+
+                        {/* Svi prilozi — agregiran Drive prikaz */}
+                        <FilesDrivePanel attachments={allAttachments} onOpenAttachment={setLightboxId} />
 
                         {/* Closure notification — always visible when set */}
                         {closureNotification && (
@@ -990,16 +1165,39 @@ export default function TicketDetail() {
                                                     )}
                                                 </>
                                             )}
-                                            {user?.role === 'AGENT' && ticket.status === 'OPEN' && (
+                                            {/* PB-62 / US-105: Agent samodjelovanje — vidljivo samo kad je tiket otvoren i nedodijeljen */}
+                                            {user?.role === 'AGENT'
+                                                && ticket.status === 'OPEN'
+                                                && !ticket.assignedAgentId
+                                                && !ticket.assignedTechnicianId && (
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        disabled={selfAssignLoading}
+                                                        onClick={handleSelfAssign}
+                                                        className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <UserPlus size={15} />
+                                                        {selfAssignLoading ? 'Preuzimanje...' : 'Preuzmi tiket'}
+                                                    </button>
+                                                    {selfAssignError && (
+                                                        <div role="alert" className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+                                                            <AlertCircle size={13} />
+                                                            {selfAssignError}
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+                                            {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR') && ticket.status === 'OPEN' && (
                                                 <button
                                                     type="button"
-                                                    disabled={closureLoading || ticket.assignedAgentId !== user?.userId}
+                                                    disabled={closureLoading || (user?.role === 'AGENT' && ticket.assignedAgentId !== user?.userId)}
                                                     onClick={handleOpenForward}
-                                                    title={ticket.assignedAgentId !== user?.userId ? 'Samo dodijeljeni agent može proslijediti tiket' : undefined}
+                                                    title={user?.role === 'AGENT' && ticket.assignedAgentId !== user?.userId ? 'Samo dodijeljeni agent može proslijediti tiket' : undefined}
                                                     className="w-full inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-lg transition-colors disabled:opacity-50"
                                                 >
                                                     <ArrowRightLeft size={15} />
-                                                    Proslijedi tiket
+                                                    {user?.role === 'ADMINISTRATOR' ? 'Prerasporedi agenta/tehničara' : 'Proslijedi tiket'}
                                                 </button>
                                             )}
                                         </>
@@ -1426,6 +1624,25 @@ export default function TicketDetail() {
                 cancelText="Odustani"
                 variant="danger"
             />
+
+            {/* PB-57 / US-96, US-97: AI suggestion modal */}
+            {aiModalOpen && ticket && (
+                <AISuggestionModal
+                    ticket={ticket}
+                    comments={comments}
+                    onUse={(text) => setMessage(text)}
+                    onClose={() => setAiModalOpen(false)}
+                />
+            )}
+
+            {lightboxIndex >= 0 && (
+                <AttachmentLightbox
+                    attachments={allAttachments}
+                    index={lightboxIndex}
+                    onClose={() => setLightboxId(null)}
+                    onChange={(idx) => setLightboxId(allAttachments[idx].attachmentId)}
+                />
+            )}
         </div>
     )
 }

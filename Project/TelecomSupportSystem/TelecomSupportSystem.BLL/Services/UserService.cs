@@ -16,14 +16,18 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly IPackageService _packageService;
         private readonly ITeamRepository _teamRepository;
         private readonly IAuditLogService? _auditLogService;
+        private readonly ITicketService _ticketService;
+        private readonly INotificationService _notificationService;
 
-        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository, IPackageService packageService, ITeamRepository teamRepository, IAuditLogService? auditLogService = null)
+        public UserService(ITicketRepository ticketRepository, IUserRepository userRepository, IPackageService packageService, ITeamRepository teamRepository, ITicketService ticketService, INotificationService notificationService, IAuditLogService? auditLogService = null)
         {
             _ticketRepository = ticketRepository;
             _userRepository = userRepository;
             _packageService = packageService;
             _teamRepository = teamRepository;
             _auditLogService = auditLogService;
+            _ticketService = ticketService;
+            _notificationService = notificationService;
         }
 
         public async Task<AgentStatisticsDto> GetMyStatisticsAsync(int userId, string role)
@@ -132,6 +136,7 @@ namespace TelecomSupportSystem.BLL.Services
                 AccountStatus = user.AccountStatus.ToString(),
                 TeamId = user.TeamId,
                 ExpertiseCategory = user.Team?.SpecializedCategory?.ToString() ?? "",
+                Availability = user.AvailabilityStatus?.ToString(),
                 TicketHistory = tickets.Select(t => new MyTicketDto
                 {
                     TicketId = t.TicketId,
@@ -313,7 +318,7 @@ namespace TelecomSupportSystem.BLL.Services
             }
         }
 
-        public async Task<UserListDto> GetUsersPaginatedAsync(string currentRole, string? roleFilter, string? statusFilter, string? search, string? location, int page, int pageSize)
+        public async Task<UserListDto> GetUsersPaginatedAsync(string currentRole, string? roleFilter, string? statusFilter, string? availabilityFilter, string? search, string? location, int page, int pageSize)
         {
             if (currentRole != "ADMINISTRATOR" && currentRole != "AGENT")
                 throw new UnauthorizedAccessException("Nemate permisije.");
@@ -326,24 +331,34 @@ namespace TelecomSupportSystem.BLL.Services
             if (!string.IsNullOrEmpty(statusFilter) && Enum.TryParse<AccountStatus>(statusFilter, true, out var parsedStatus))
                 status = parsedStatus;
 
+            TelecomSupportSystem.DAL.Entities.Enums.AvailabilityStatus? availability = null;
+            if (!string.IsNullOrEmpty(availabilityFilter) && Enum.TryParse<TelecomSupportSystem.DAL.Entities.Enums.AvailabilityStatus>(availabilityFilter, true, out var parsedAvailability))
+                availability = parsedAvailability;
+
             Location? loc = null;
             if (!string.IsNullOrEmpty(location) && Enum.TryParse<Location>(location, true, out var parsedLoc))
                 loc = parsedLoc;
 
-            var (users, totalCount) = await _userRepository.GetUsersPaginatedAsync(role, status, search, loc, page, pageSize);
-
-            var items = users.Select(u => new UserListItemDto
+            var (users, totalCount) = await _userRepository.GetUsersPaginatedAsync(role, status, availability, search, loc, page, pageSize);
+            var items = new List<UserListItemDto>();
+            foreach (var u in users)
             {
-                UserId = u.UserId,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email,
-                Phone = u.Phone,
-                Location = u.Location.ToString(),
-                Role = u.Role.ToString(),
-                AccountStatus = u.AccountStatus.ToString(),
-                ExpertiseCategory = u.Team?.SpecializedCategory?.ToString() ?? ""
-            }).ToList();
+                var openTickets = await _ticketRepository.GetOpenAssignedTicketsAsync(u.UserId);
+                items.Add(new UserListItemDto
+                {
+                    UserId = u.UserId,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    Phone = u.Phone,
+                    Location = u.Location.ToString(),
+                    Role = u.Role.ToString(),
+                    AccountStatus = u.AccountStatus.ToString(),
+                    ExpertiseCategory = u.Team?.SpecializedCategory?.ToString() ?? "",
+                    Availability = u.AvailabilityStatus?.ToString(),
+                    OpenAssignedTicketsCount = openTickets.Count()
+                });
+            }
 
             return new UserListDto
             {
@@ -352,6 +367,77 @@ namespace TelecomSupportSystem.BLL.Services
                 Page = page,
                 PageSize = pageSize
             };
+        }
+
+        public async Task SetAvailabilityAsync(int userId, string availability, string role, int actingUserId)
+        {
+            if (role != "ADMINISTRATOR" && role != "AGENT" && role != "TECHNICIAN")
+                throw new UnauthorizedAccessException("Nemate permisije.");
+
+            if (!Enum.TryParse<TelecomSupportSystem.DAL.Entities.Enums.AvailabilityStatus>(availability, true, out var parsedAvailability))
+                throw new InvalidOperationException("Neispravan status dostupnosti.");
+
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new KeyNotFoundException("Korisnik nije pronađen.");
+
+            // Only admins or the user themself can change availability
+            if (role != "ADMINISTRATOR" && actingUserId != userId)
+                throw new UnauthorizedAccessException("Možete mijenjati samo vlastiti status.");
+
+            if (user.Role != Role.AGENT && user.Role != Role.TECHNICIAN)
+                throw new InvalidOperationException("Samo agenti i tehničari imaju status dostupnosti.");
+
+            var oldAvailability = user.AvailabilityStatus;
+            user.AvailabilityStatus = parsedAvailability;
+            await _userRepository.UpdateAsync(user);
+
+            if (_auditLogService is not null && oldAvailability != user.AvailabilityStatus)
+            {
+                await _auditLogService.LogAsync(
+                    AuditActionType.USER_UPDATED,
+                    "User",
+                    user.UserId.ToString(),
+                    $"Korisnik {user.Email} promijenio status dostupnosti na {user.AvailabilityStatus}",
+                    userId: actingUserId,
+                    oldValue: new { availability = oldAvailability?.ToString() },
+                    newValue: new { availability = user.AvailabilityStatus.ToString() });
+            }
+
+            // If user becomes UNAVAILABLE, reassign open tickets
+            if (user.AvailabilityStatus == TelecomSupportSystem.DAL.Entities.Enums.AvailabilityStatus.UNAVAILABLE)
+            {
+                var openTickets = await _ticketRepository.GetOpenAssignedTicketsAsync(userId);
+                foreach (var t in openTickets)
+                {
+                    try
+                    {
+                        await _ticketService.AutoForwardTicketAsync(t.TicketId, userId);
+                    }
+                    catch
+                    {
+                        // If no available agents, create notification for admins (handled below)
+                    }
+                }
+            }
+
+            // Notify administrators about the change so their UI can refresh in real-time
+            var (admins, _) = await _userRepository.GetUsersPaginatedAsync(Role.ADMINISTRATOR, AccountStatus.ACTIVE, null, null, null, 1, 1000);
+            foreach (var a in admins)
+            {
+                await _notificationService.SendNotificationAsync(
+                    a.UserId,
+                    "Promjena statusa agenta",
+                    $"Agent {user.FirstName} {user.LastName} promijenio je status dostupnosti na {user.AvailabilityStatus}.",
+                    NotificationType.STATUS_CHANGED);
+            }
+
+            // Notify the user themself
+            await _notificationService.SendNotificationAsync(
+                user.UserId,
+                "Vaš status dostupnosti je promijenjen",
+                $"Vaš status dostupnosti je sada: {user.AvailabilityStatus}.",
+                NotificationType.STATUS_CHANGED);
         }
 
         public async Task<IEnumerable<TelecomSupportSystem.BLL.DTOs.Teams.TeamDto>> GetAgentTeamsAsync()

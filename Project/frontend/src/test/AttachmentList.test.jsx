@@ -71,7 +71,7 @@ describe('AttachmentList', () => {
     expect(screen.getByText('ugovor.pdf')).toBeInTheDocument()
   })
 
-  it('triggers authenticated download when document is clicked', async () => {
+  it('calls onOpenAttachment when document is clicked', () => {
     const attachments = [
       {
         attachmentId: 5,
@@ -81,12 +81,11 @@ describe('AttachmentList', () => {
         downloadUrl: '/api/attachments/5',
       },
     ]
-    render(<AttachmentList attachments={attachments} />)
+    const onOpenAttachment = vi.fn()
+    render(<AttachmentList attachments={attachments} onOpenAttachment={onOpenAttachment} />)
 
     fireEvent.click(screen.getByTestId('attachment-doc'))
-    await waitFor(() => {
-      expect(downloadAttachment).toHaveBeenCalledWith(5, 'ugovor.pdf')
-    })
+    expect(onOpenAttachment).toHaveBeenCalledWith(5)
   })
 
   it('shows uploadedBy and uploadedAt in meta line', () => {
@@ -108,7 +107,7 @@ describe('AttachmentList', () => {
     expect(meta[0].textContent).toContain('Amina Begić')
   })
 
-  it('opens lightbox when image thumbnail is clicked', async () => {
+  it('calls onOpenAttachment when image thumbnail is clicked', async () => {
     const attachments = [
       {
         attachmentId: 4,
@@ -120,11 +119,12 @@ describe('AttachmentList', () => {
         uploadedByName: 'Klijent',
       },
     ]
-    render(<AttachmentList attachments={attachments} />)
+    const onOpenAttachment = vi.fn()
+    render(<AttachmentList attachments={attachments} onOpenAttachment={onOpenAttachment} />)
 
     const thumbButton = await screen.findByLabelText('Otvori sliku velika.jpg')
     fireEvent.click(thumbButton)
 
-    expect(screen.getByTestId('attachment-lightbox')).toBeInTheDocument()
+    expect(onOpenAttachment).toHaveBeenCalledWith(4)
   })
 })

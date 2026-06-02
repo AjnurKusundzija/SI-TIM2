@@ -739,6 +739,75 @@ namespace TelecomSupportSystem.BLL.Services
             return targetScore;
         }
 
+        // PB-62 / US-105: Agent jednim klikom preuzima nedodijeljeni tiket sebi.
+        // Dozvoljeno samo kada tiket nije zatvoren i nema nijednu postojeću dodjelu.
+        public async Task<AgentScoreDto> SelfAssignTicketAsync(int ticketId, int agentId)
+        {
+            var ticket = await _ticketRepository.GetByIdWithDetailsAsync(ticketId)
+                ?? throw new KeyNotFoundException($"Tiket {ticketId} nije pronađen.");
+
+            if (ticket.Status == TicketStatus.CLOSED)
+                throw new InvalidOperationException("Zatvoreni tiket se ne može preuzeti.");
+
+            if (ticket.Assignments.Any())
+                throw new InvalidOperationException("Tiket je već dodijeljen drugom agentu.");
+
+            var agent = await _userRepository.GetByIdAsync(agentId)
+                ?? throw new KeyNotFoundException($"Agent {agentId} nije pronađen.");
+
+            if (agent.Role != Role.AGENT)
+                throw new UnauthorizedAccessException("Samo agent može preuzeti tiket.");
+
+            var teamId = agent.TeamId ?? ticket.TeamId;
+            if (teamId is null)
+                throw new InvalidOperationException("Agent nema dodijeljen tim — preuzimanje nije moguće.");
+
+            var newAssignment = new TicketUser
+            {
+                TicketId       = ticketId,
+                UserId         = agent.UserId,
+                TeamId         = teamId.Value,
+                AssignmentDate = DateTime.UtcNow,
+                AssignmentType = AssignmentType.MANUAL,
+                Note           = "Agent samodjelovanje tiketa"
+            };
+
+            if (agent.TeamId.HasValue)
+                ticket.TeamId = agent.TeamId;
+
+            await _ticketRepository.AddAssignmentAsync(newAssignment);
+
+            await _commentService.AddSystemCommentAsync(
+                ticketId,
+                $"Tiket je preuzeo agent: {agent.FirstName} {agent.LastName}");
+
+            await _notificationService.SendNotificationAsync(
+                ticket.CreatorId,
+                "Tiket dodijeljen agentu",
+                $"Vaš tiket \"{ticket.Title}\" je preuzeo agent {agent.FirstName} {agent.LastName}.",
+                NotificationType.TICKET_ASSIGNED,
+                ticket.TicketId);
+
+            if (_auditLogService is not null)
+            {
+                await _auditLogService.LogAsync(
+                    AuditActionType.TICKET_FORWARDED,
+                    "Ticket",
+                    ticket.TicketId.ToString(),
+                    $"Tiket #{ticket.TicketId} preuzeo agent {agent.FirstName} {agent.LastName} (samodjelovanje)",
+                    userId: agentId,
+                    oldValue: new { userId = (int?)null },
+                    newValue: new { userId = agent.UserId, teamId = teamId });
+            }
+
+            return new AgentScoreDto
+            {
+                UserId   = agent.UserId,
+                FullName = $"{agent.FirstName} {agent.LastName}",
+                ScorePercent = 100
+            };
+        }
+
         // US-TechnicianForwarding: Proslijedi tiket tehničaru na lokaciji kreatora tiketa
         public async Task<AgentScoreDto> ForwardTicketToTechnicianAsync(int ticketId, int currentAgentId)
         {

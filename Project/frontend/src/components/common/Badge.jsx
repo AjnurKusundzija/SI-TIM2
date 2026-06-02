@@ -28,6 +28,10 @@ const variants = {
   // Account / package status
   ACTIVE: 'bg-emerald-100 text-emerald-800',
   INACTIVE: 'bg-red-100 text-red-800',
+  // Availability statuses
+  AVAILABLE: 'bg-emerald-100 text-emerald-800',
+  BUSY: 'bg-amber-100 text-amber-800',
+  UNAVAILABLE: 'bg-gray-100 text-gray-800',
   // Default
   default: 'bg-gray-100 text-gray-800',
 };
@@ -53,6 +57,9 @@ const labels = {
   // Account / package status
   ACTIVE: 'AKTIVAN',
   INACTIVE: 'NEAKTIVAN',
+  AVAILABLE: 'DOSTUPAN',
+  BUSY: 'ZAUZET',
+  UNAVAILABLE: 'NEDOSTUPAN',
   // Package types
   MOBILE: 'Mobilni',
   BUNDLE: 'Kombinovani',

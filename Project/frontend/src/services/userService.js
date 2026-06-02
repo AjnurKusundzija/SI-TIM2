@@ -72,3 +72,8 @@ export async function getAgentTeams() {
   const response = await api.get('/users/agent-teams')
   return response.data
 }
+
+export async function setMyAvailability(availability) {
+  const response = await api.put('/users/me/availability', { availability })
+  return response.data
+}

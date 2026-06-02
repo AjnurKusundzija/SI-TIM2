@@ -28,6 +28,7 @@ export default function UsersList() {
   const [search, setSearch] = useState('')
   const [locationFilter, setLocationFilter] = useState('')
   const [deactivatedRoleFilter, setDeactivatedRoleFilter] = useState('')
+  const [availabilityFilter, setAvailabilityFilter] = useState('')
 
   useEffect(() => {
     // Agents cannot access /agents or /deactivated
@@ -57,6 +58,7 @@ export default function UsersList() {
           pageSize: 10,
           role: activeRole,
           status: statusFilter,
+          availability: availabilityFilter || undefined,
           search: search || undefined,
           location: locationFilter || undefined
         }
@@ -77,7 +79,7 @@ export default function UsersList() {
     }, 300) // debounce search
 
     return () => clearTimeout(timer)
-  }, [page, search, locationFilter, roleFilter, statusFilter, deactivatedRoleFilter, isDeactivated])
+  }, [page, search, locationFilter, roleFilter, statusFilter, deactivatedRoleFilter, availabilityFilter, isDeactivated])
 
   let pageTitle = 'Korisnici'
   if (isClients) pageTitle = 'Klijenti'
@@ -122,6 +124,21 @@ export default function UsersList() {
           </div>
           
           <div className="flex flex-wrap gap-3">
+              {user?.role === 'ADMINISTRATOR' && (
+                <select
+                  value={availabilityFilter}
+                  onChange={(e) => {
+                    setAvailabilityFilter(e.target.value)
+                    setPage(1)
+                  }}
+                  className="rounded-2xl border border-slate-300 px-4 py-2 text-sm focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-200 bg-white"
+                >
+                  <option value="">Sve dostupnosti</option>
+                  <option value="AVAILABLE">Dostupan</option>
+                  <option value="BUSY">Zauzet</option>
+                  <option value="UNAVAILABLE">Nedostupan</option>
+                </select>
+              )}
             {isDeactivated && (
                <select
                value={deactivatedRoleFilter}
@@ -181,7 +198,9 @@ export default function UsersList() {
                   <th className="px-4 py-3 font-medium">Email</th>
                   <th className="px-4 py-3 font-medium">Telefon</th>
                   <th className="px-4 py-3 font-medium">Lokacija</th>
+                  <th className="px-4 py-3 font-medium">Dostupnost</th>
                   {(!roleFilter || isDeactivated) && <th className="px-4 py-3 font-medium">Uloga</th>}
+                  {isAgents && <th className="px-4 py-3 font-medium">Otvoreni tiketi</th>}
                   {isAgents && <th className="px-4 py-3 font-medium">Ekspertiza</th>}
                   <th className="px-4 py-3 font-medium text-right rounded-tr-2xl">Akcije</th>
                 </tr>
@@ -195,13 +214,17 @@ export default function UsersList() {
                     <td className="px-4 py-4">{u.email}</td>
                     <td className="px-4 py-4">{u.phone || '-'}</td>
                     <td className="px-4 py-4">{u.location || '-'}</td>
+                    <td className="px-4 py-4">{u.availability ? <Badge value={u.availability} /> : '-'}</td>
                     {(!roleFilter || isDeactivated) && (
                       <td className="px-4 py-4">
                         <Badge value={u.role} />
                       </td>
                     )}
                     {isAgents && (
+                      <>
                       <td className="px-4 py-4 text-xs font-semibold uppercase text-slate-500">{u.expertiseCategory || '-'}</td>
+                      <td className="px-4 py-4 text-sm font-medium text-navy-700">{u.openAssignedTicketsCount ?? 0}</td>
+                      </>
                     )}
                     <td className="px-4 py-4 text-right">
                       <button

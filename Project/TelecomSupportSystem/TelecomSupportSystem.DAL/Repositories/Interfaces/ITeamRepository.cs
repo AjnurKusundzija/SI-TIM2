@@ -7,5 +7,15 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
     {
         Task<Team?> GetBySpecializedCategoryAsync(ProblemCategory category);
         Task<IEnumerable<Team>> GetAgentTeamsAsync();
+
+        /// <summary>
+        /// Returns all teams with their active members (AccountStatus == ACTIVE) included.
+        /// </summary>
+        Task<IEnumerable<Team>> GetAllWithMembersAsync();
+
+        /// <summary>
+        /// Returns a single team by ID with its active members included.
+        /// </summary>
+        Task<Team?> GetByIdAsync(int teamId);
     }
 }

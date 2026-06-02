@@ -23,7 +23,13 @@ namespace TelecomSupportSystem.Tests.Sprint9
 
         public UserAccountManagementServiceTests()
         {
-            _service = new UserService(_ticketRepo.Object, _userRepo.Object, _packageService.Object, _teamRepo.Object);
+            _service = new UserService(
+                _ticketRepo.Object,
+                _userRepo.Object,
+                _packageService.Object,
+                _teamRepo.Object,
+                new Mock<ITicketService>().Object,
+                new Mock<INotificationService>().Object);
         }
 
         private static User MakeUser(int id, Role role, AccountStatus status = AccountStatus.ACTIVE) => new()
@@ -302,17 +308,17 @@ namespace TelecomSupportSystem.Tests.Sprint9
         public async Task GetUsersPaginatedAsync_ShouldThrowUnauthorized_WhenClientCalls()
         {
             await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
-                _service.GetUsersPaginatedAsync("CLIENT", null, null, null, null, 1, 10));
+                _service.GetUsersPaginatedAsync("CLIENT", null, null, null, null, null, 1, 10));
         }
 
         [Fact]
         public async Task GetUsersPaginatedAsync_ShouldReturnItemsAndPagination_WhenAdminCalls()
         {
             var users = new[] { MakeUser(1, Role.AGENT), MakeUser(2, Role.CLIENT) };
-            _userRepo.Setup(r => r.GetUsersPaginatedAsync(null, null, null, null, 1, 10))
+            _userRepo.Setup(r => r.GetUsersPaginatedAsync(null, null, null, null, null, 1, 10))
                 .ReturnsAsync((users, 2));
 
-            var result = await _service.GetUsersPaginatedAsync("ADMINISTRATOR", null, null, null, null, 1, 10);
+            var result = await _service.GetUsersPaginatedAsync("ADMINISTRATOR", null, null, null, null, null, 1, 10);
 
             result.Users.Should().HaveCount(2);
             result.TotalCount.Should().Be(2);
@@ -326,12 +332,13 @@ namespace TelecomSupportSystem.Tests.Sprint9
             _userRepo.Setup(r => r.GetUsersPaginatedAsync(
                     It.Is<Role?>(rl => rl == Role.AGENT),
                     It.Is<AccountStatus?>(s => s == AccountStatus.ACTIVE),
+                    It.IsAny<TelecomSupportSystem.DAL.Entities.Enums.AvailabilityStatus?>(),
                     It.IsAny<string?>(),
                     It.Is<Location?>(l => l == Location.SARAJEVO),
                     1, 10))
                 .ReturnsAsync((Enumerable.Empty<User>(), 0));
 
-            var result = await _service.GetUsersPaginatedAsync("ADMINISTRATOR", "AGENT", "ACTIVE", null, "SARAJEVO", 1, 10);
+            var result = await _service.GetUsersPaginatedAsync("ADMINISTRATOR", "AGENT", "ACTIVE", null, null, "SARAJEVO", 1, 10);
 
             result.Users.Should().BeEmpty();
             _userRepo.VerifyAll();

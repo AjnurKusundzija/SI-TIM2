@@ -13,5 +13,7 @@ namespace TelecomSupportSystem.BLL.DTOs.Users
         public string Role { get; set; } = string.Empty;
         public string AccountStatus { get; set; } = string.Empty;
         public string ExpertiseCategory { get; set; } = string.Empty;
+        public string? Availability { get; set; }
+        public int OpenAssignedTicketsCount { get; set; }
     }
 }

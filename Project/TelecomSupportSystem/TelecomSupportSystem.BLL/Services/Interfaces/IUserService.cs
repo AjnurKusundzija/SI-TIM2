@@ -15,7 +15,8 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         Task CreateUserAsync(CreateUserDto dto, string currentRole, int? currentUserId = null, string? currentUserEmail = null);
         Task UpdateUserDetailsAsync(int targetUserId, UpdateUserDetailsDto dto, string currentRole, int? currentUserId = null);
         Task ChangeUserStatusAsync(int targetUserId, bool isActive, string currentRole, int currentUserId);
-        Task<UserListDto> GetUsersPaginatedAsync(string currentRole, string? roleFilter, string? statusFilter, string? search, string? location, int page, int pageSize);
+        Task<UserListDto> GetUsersPaginatedAsync(string currentRole, string? roleFilter, string? statusFilter, string? availabilityFilter, string? search, string? location, int page, int pageSize);
+        Task SetAvailabilityAsync(int userId, string availability, string role, int actingUserId);
         Task<IEnumerable<TelecomSupportSystem.BLL.DTOs.Teams.TeamDto>> GetAgentTeamsAsync();
     }
 }

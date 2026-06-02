@@ -79,7 +79,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             {
                 var accessToken = context.Request.Query["access_token"];
                 var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/notificationhub"))
+                // US-102: ChatHub također treba podržavati JWT iz query stringa
+                // kako bi staff-only grupa internih komentara mogla autorizovati rolu.
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    (path.StartsWithSegments("/notificationhub") || path.StartsWithSegments("/chathub")))
                     context.Token = accessToken;
                 return Task.CompletedTask;
             }
@@ -149,6 +152,13 @@ builder.Services.AddScoped<ICatalogPackageService, CatalogPackageService>();
 builder.Services.AddScoped<IClientSubscriptionService, ClientSubscriptionService>();
 // Audit Log
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+// US-24: Team Overview and Agent Reassignment
+builder.Services.AddScoped<ITeamService, TeamService>();
+// PB-57, PB-58: AI suggestions (Gemini)
+builder.Services.AddHttpClient<IAIService, AIService>();
+// PB-70 / US-108..US-111: MCP Admin Copilot (koristi GROQ_API_KEY_2 + MCP server)
+builder.Services.AddHttpClient<IMcpClient, TelecomSupportSystem.BLL.Services.Mcp.McpClient>();
+builder.Services.AddHttpClient<IAdminCopilotService, AdminCopilotService>();
 
 var app = builder.Build();
 

@@ -61,6 +61,13 @@ export async function addComment(ticketId, content) {
   return response.data
 }
 
+// US-102: Dodaj interni komentar na tiket (vidljiv samo osoblju).
+// Backend dozvoljava samo AGENT/TECHNICIAN/ADMINISTRATOR; klijent dobija 403.
+export async function addInternalComment(ticketId, content) {
+  const response = await api.post(`/comment/tickets/${ticketId}/internal`, { content })
+  return response.data
+}
+
 // PB-56 / US-80: Dodaj novi komentar sa attachment-ima
 export async function addCommentWithAttachments(ticketId, content, files, onUploadProgress) {
   const formData = new FormData()
@@ -115,6 +122,12 @@ export async function forwardTicketToAgent(ticketId, targetAgentId) {
 // US-TechnicianForwarding: Automatski proslijedi tiket tehničaru na lokaciji kreatora
 export async function forwardTicketToTechnician(ticketId) {
   const response = await api.post(`/tickets/${ticketId}/forward/technician`)
+  return response.data
+}
+
+// PB-62 / US-105: Agent preuzima nedodijeljeni tiket sebi
+export async function selfAssignTicket(ticketId) {
+  const response = await api.post(`/tickets/${ticketId}/self-assign`)
   return response.data
 }
 

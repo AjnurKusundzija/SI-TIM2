@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   getTicketComments: vi.fn(),
   addComment: vi.fn(),
   getTicketRating: vi.fn(),
+  selfAssignTicket: vi.fn(),
   useAuth: vi.fn(),
   HubConnectionBuilder: vi.fn(),
 }))
@@ -16,6 +17,7 @@ vi.mock('../services/ticketService', () => ({
   getTicketComments: mocks.getTicketComments,
   addComment: mocks.addComment,
   getTicketRating: mocks.getTicketRating,
+  selfAssignTicket: mocks.selfAssignTicket,
   createTicketRating: vi.fn(),
   closeTicket: vi.fn(),
   requestTicketClosure: vi.fn(),
@@ -217,5 +219,136 @@ describe('TicketDetail page — PB-24, PB-27', () => {
 
     const sendButton = screen.getByText(/pošalji/i).closest('button')
     expect(sendButton).toBeDisabled()
+  })
+})
+
+// PB-62 / US-105: Samodjelovanje tiketa za agente („Preuzmi tiket")
+describe('TicketDetail — PB-62 self-assign', () => {
+  const UNASSIGNED_OPEN_TICKET = {
+    ticketId: 5,
+    title: 'Internet ne radi',
+    description: 'Opis problema.',
+    status: 'OPEN',
+    priority: 'HIGH',
+    problemCategory: 'INTERNET',
+    createdDate: '2026-05-01T10:00:00Z',
+    clientName: 'Merjem Omerović',
+    assignedAgentName: '',
+    assignedAgentId: null,
+    assignedTechnicianName: '',
+    assignedTechnicianId: null,
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mocks.getTicketRating.mockResolvedValue(null)
+  })
+
+  it('shows "Preuzmi tiket" button for AGENT when ticket is open and unassigned', async () => {
+    mocks.getTicketById.mockResolvedValueOnce(UNASSIGNED_OPEN_TICKET)
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    renderTicketDetail({ role: 'AGENT', userId: 11 }, '5')
+
+    await waitFor(() => expect(screen.getByText('Internet ne radi')).toBeInTheDocument())
+
+    expect(screen.getByRole('button', { name: /preuzmi tiket/i })).toBeInTheDocument()
+  })
+
+  it('hides "Preuzmi tiket" button for CLIENT', async () => {
+    mocks.getTicketById.mockResolvedValueOnce({ ...UNASSIGNED_OPEN_TICKET, creatorId: 1 })
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    renderTicketDetail({ role: 'CLIENT', userId: 1 }, '5')
+
+    await waitFor(() => expect(screen.getByText('Internet ne radi')).toBeInTheDocument())
+
+    expect(screen.queryByRole('button', { name: /preuzmi tiket/i })).not.toBeInTheDocument()
+  })
+
+  it('hides "Preuzmi tiket" button for TECHNICIAN', async () => {
+    mocks.getTicketById.mockResolvedValueOnce(UNASSIGNED_OPEN_TICKET)
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    renderTicketDetail({ role: 'TECHNICIAN', userId: 8 }, '5')
+
+    await waitFor(() => expect(screen.getByText('Internet ne radi')).toBeInTheDocument())
+
+    expect(screen.queryByRole('button', { name: /preuzmi tiket/i })).not.toBeInTheDocument()
+  })
+
+  it('hides "Preuzmi tiket" button for ADMINISTRATOR', async () => {
+    mocks.getTicketById.mockResolvedValueOnce(UNASSIGNED_OPEN_TICKET)
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    renderTicketDetail({ role: 'ADMINISTRATOR', userId: 1 }, '5')
+
+    await waitFor(() => expect(screen.getByText('Internet ne radi')).toBeInTheDocument())
+
+    expect(screen.queryByRole('button', { name: /preuzmi tiket/i })).not.toBeInTheDocument()
+  })
+
+  it('hides "Preuzmi tiket" button when ticket already has assigned agent', async () => {
+    mocks.getTicketById.mockResolvedValueOnce({
+      ...UNASSIGNED_OPEN_TICKET,
+      assignedAgentId: 99,
+      assignedAgentName: 'Druga Osoba',
+    })
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    renderTicketDetail({ role: 'AGENT', userId: 11 }, '5')
+
+    await waitFor(() => expect(screen.getByText('Internet ne radi')).toBeInTheDocument())
+
+    expect(screen.queryByRole('button', { name: /preuzmi tiket/i })).not.toBeInTheDocument()
+  })
+
+  it('hides "Preuzmi tiket" button when ticket is closed', async () => {
+    mocks.getTicketById.mockResolvedValueOnce({ ...UNASSIGNED_OPEN_TICKET, status: 'CLOSED' })
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    renderTicketDetail({ role: 'AGENT', userId: 11 }, '5')
+
+    await waitFor(() => expect(screen.getByText('Internet ne radi')).toBeInTheDocument())
+
+    expect(screen.queryByRole('button', { name: /preuzmi tiket/i })).not.toBeInTheDocument()
+  })
+
+  it('clicking "Preuzmi tiket" calls selfAssignTicket and refreshes ticket', async () => {
+    const assignedTicket = {
+      ...UNASSIGNED_OPEN_TICKET,
+      assignedAgentId: 11,
+      assignedAgentName: 'Selma Mujić',
+    }
+    mocks.getTicketById
+      .mockResolvedValueOnce(UNASSIGNED_OPEN_TICKET)
+      .mockResolvedValueOnce(assignedTicket)
+    mocks.getTicketComments.mockResolvedValue([])
+    mocks.selfAssignTicket.mockResolvedValueOnce({ userId: 11, fullName: 'Selma Mujić' })
+
+    renderTicketDetail({ role: 'AGENT', userId: 11 }, '5')
+
+    await waitFor(() => expect(screen.getByRole('button', { name: /preuzmi tiket/i })).toBeInTheDocument())
+
+    fireEvent.click(screen.getByRole('button', { name: /preuzmi tiket/i }))
+
+    await waitFor(() => expect(mocks.selfAssignTicket).toHaveBeenCalledWith(5))
+    // UI mora pokazati agenta kao dodjeljenog i sakriti dugme
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: /preuzmi tiket/i })).not.toBeInTheDocument()
+    )
+    expect(screen.getByText('Selma Mujić')).toBeInTheDocument()
+  })
+
+  it('shows error message when self-assign fails (backend reject — already assigned)', async () => {
+    mocks.getTicketById.mockResolvedValueOnce(UNASSIGNED_OPEN_TICKET)
+    mocks.getTicketComments.mockResolvedValueOnce([])
+    mocks.selfAssignTicket.mockRejectedValueOnce({
+      response: { data: { poruka: 'Tiket je već dodijeljen drugom agentu.' } },
+    })
+
+    renderTicketDetail({ role: 'AGENT', userId: 11 }, '5')
+
+    await waitFor(() => expect(screen.getByRole('button', { name: /preuzmi tiket/i })).toBeInTheDocument())
+
+    fireEvent.click(screen.getByRole('button', { name: /preuzmi tiket/i }))
+
+    await waitFor(() =>
+      expect(screen.getByRole('alert')).toHaveTextContent(/već dodijeljen/i)
+    )
   })
 })
