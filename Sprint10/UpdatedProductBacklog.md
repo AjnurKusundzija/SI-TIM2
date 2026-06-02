@@ -86,7 +86,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-67](#pb-67) | Login via broj telefona                            | Feature        | 2         | M         | Backlog | Sprint 11 |
 | [PB-68](#pb-68) | Reset lozinke putem emaila                         | Feature        | 4         | S         | Backlog | Sprint 11 |
 | [PB-69](#pb-69) | AI Chatbot za klijente (Groq)                      | Feature        | 3         | M         | Backlog | Sprint 11 |
-| [PB-70](#pb-70) | MCP Admin Copilot                                  | Feature        | 2         | XL        | Backlog | Sprint 10 |
+| [PB-70](#pb-70) | MCP Admin Copilot                                  | Feature        | 2         | XL        | Done    | Sprint 10 |
 
 ---
 
