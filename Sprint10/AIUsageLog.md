@@ -132,17 +132,17 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 | Polje | Detalji |
 |---|---|
-| Datum | 27.05.2026 |
+| Datum | 31.05.2026 |
 | Sprint broj | Sprint 10 |
-| Alat koji je korišten | ChatGPT / GitHub Copilot |
-| Svrha korištenja | Dovršetak PB-29 funkcionalnosti pregleda rasporeda timova za administratora. |
-| Kratak opis zadatka ili upita | AI je korišten za pomoć pri organizaciji prikaza timova, članova timova, filtera i administratorske preraspodjele agenata kroz sekciju Timovi. |
-| Šta je AI predložio ili generisao | Predložena je struktura UI prikaza timova, filteri za pregled agenata po timu, osnovna logika za prikaz članova tima i organizacija backend endpointa za dohvat timova i agenata. |
-| Šta je tim prihvatio | Prihvaćen je prikaz timova sa članovima i filterima, kao i logika da administrator može pregledati raspored timova i vršiti preraspodjelu agenata. |
-| Šta je tim izmijenio | Tim je prilagodio nazive polja, prikaz filtera i način prikaza članova tima prema postojećem dizajnu aplikacije. |
-| Šta je tim odbacio | Odbačeni su prijedlozi koji su uvodili previše kompleksan team management van trenutnog scope-a Sprinta 10. |
-| Rizici, problemi ili greške koje su uočene | Potencijalni rizik bio je neusklađenost prikaza timova sa postojećim podacima u bazi i potreba da se ne izgube postojeće dodjele agenata. |
-| Ko je koristio alat | Ajdin Dželo|
+| Alat koji je korišten | Claude Code (Anthropic, Opus) |
+| Svrha korištenja | Implementacija PB-29 funkcionalnosti pregleda i upravljanja timovima za administratore (US-24). |
+| Kratak opis zadatka ili upita | AI je korišten za implementaciju nove sekcije „Timovi“ dostupne isključivo administratorima. Zahtijevano je prikazivanje svih timova sa njihovim aktivnim članovima, prikaz statistike timova, podrška za filtriranje i sortiranje, te mogućnost preraspodjele agenata između timova direktno iz pregleda timova uz odgovarajuće validacije i audit log evidenciju. |
+| Šta je AI predložio ili generisao | Predložena je kompletna backend i frontend implementacija sekcije Timovi, uključujući prikaz svih timova i njihovih članova, prikaz imena, prezimena i kategorije stručnosti agenata, statistike timova (broj aktivnih agenata i broj otvorenih tiketa), filtre i sortiranje, kao i funkcionalnost preraspodjele agenata između timova. Predložena je i backend validacija koja sprječava preraspodjelu neaktivnih agenata te audit log zapis sa vremenom izmjene i administratorom koji je izvršio promjenu. |
+| Šta je tim prihvatio | Prihvaćen je prikaz timova sa aktivnim članovima, prikaz statistike timova, filtriranje i sortiranje, mogućnost preraspodjele agenata direktno iz sekcije Timovi, audit log evidencija promjena i backend validacija poslovnih pravila. |
+| Šta je tim izmijenio | Dodatno je definisano da sekcija Timovi ne postoji za druge role i da joj može pristupiti isključivo administrator. Također je uvedeno pravilo da agent ne može biti preraspodijeljen u drugi tim ukoliko ima barem jedan otvoreni tiket koji mu je trenutno dodijeljen. |
+| Šta je tim odbacio | Odbačen je prijedlog automatskog premještanja ili zatvaranja otvorenih tiketa tokom preraspodjele agenta. Zadržano je pravilo da administrator može izvršiti preraspodjelu tek nakon što agent riješi ili proslijedi sve otvorene tikete. |
+| Rizici, problemi ili greške koje su uočene | Postoji rizik da se stanje tiketa ili status agenta promijeni između učitavanja stranice i pokušaja preraspodjele. Zbog toga je implementirana dodatna backend validacija koja prije svake preraspodjele provjerava aktivnost agenta i postojanje otvorenih dodijeljenih tiketa. |
+| Ko je koristio alat | Ajdin Dželo |
 
 ---
 
