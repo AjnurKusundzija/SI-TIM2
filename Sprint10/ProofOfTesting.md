@@ -206,4 +206,3 @@ npx vitest run src/test/TicketDetail.test.jsx src/test/ticketService.test.js
 
 ---
 
-**Napomena:** Ukupno je dodano 64 nova testa za PB-61 i PB-62. Svi su prošli. Postojeći test suite (520 backend + 324 frontend = 844 testa) ostao je zelen nakon refaktoriranja FAQ Page komponente za podršku admin moda (uz dodavanje AuthContext mocka u tri postojeća FAQ test fajla: `FaqUi.test.jsx`, `FaqSystem.test.jsx`, `FaqAcceptance.test.jsx`). Jedini failing test je `AuthPerformanceTests.Login_ShouldCompleteWithinTimeLimit_InTestEnvironment` koji je flaky timing test nevezan za PB-61/PB-62.
