@@ -18,7 +18,7 @@ Implementirati AI-potpomognute funkcionalnosti sistema kroz modul prijedloga odg
 | SB-02 | PB-58 AI uvidi za administratore | US-98, US-99 | Uma | Done | `AIInsightsPanel`, `AIInsightsCard` na admin dashboardu; backend `AIService.GetAdminInsightsAsync`; AI Uvidi dugme u Headeru |
 | SB-03 | PB-59 Redizajn korisničkog sučelja | US-100 | Uma | Done | Kompletni revamp `Sidebar`, `Header`, `AppLayout`, `AdminDashboardSection`; navy color palette; `uiStore.js`; stat kartice s trend indikatorima |
 | SB-04 | PB-31 Proširenje prosljeđivanja tiketa — admin preraspodjela | US-101 | Uma | Done | Administrator može otvoriti forward modal iz `TicketDetail`; admin ne može slati poruke u chat |
-| SB-05 | PB-29 Dovršetak — pregled rasporeda timova za administratora | US-24 | Ajdin | In Progress | Admin pristupa sekciji Timovi i vidi sve timove s članovima, filterima i preraspodjelu agenata |
+| SB-05 | PB-29 Dovršetak — pregled rasporeda timova za administratora | US-24 | Ajdin | Done | Admin pristupa sekciji Timovi i vidi sve timove s članovima, filterima i preraspodjelu agenata |
 | SB-06 | PB-60 Interni komentari na tiketima | US-102, US-103 | Eldar | Done | Interne bilješke vidljive samo osoblju, skrivene od klijenta; vizualno razlikovane od regularnih poruka |
 | SB-07 | PB-61 Admin CRUD FAQ | US-104 | Ajnur Kušundžija | Done | Administrator može kreirati, uređivati i brisati FAQ stavke direktno iz UI; backend `FaqController`/`FaqService`/`FaqRepository` prošireni sa CRUD endpointima uz `[Authorize(Roles = "ADMINISTRATOR")]`; frontend `Faq.jsx` proširen admin UX-om (forma, validacija, confirm delete) uz čuvanje read-only prikaza za klijente |
 | SB-08 | PB-62 Assign to me — samodjelovanje tiketa | US-105 | Ajnur Kušundžija | Done | Agent jednim klikom preuzima nedodijeljeni tiket na sebe; backend `SelfAssignTicketAsync` + endpoint `POST /api/tickets/{id}/self-assign` (samo AGENT) sa race condition zaštitom; frontend „Preuzmi tiket" dugme u `TicketDetail` vidljivo samo agentu za otvoren i nedodijeljen tiket |
@@ -130,6 +130,7 @@ Implementirati AI-potpomognute funkcionalnosti sistema kroz modul prijedloga odg
 - Administrator može vršiti preraspodjelu agenta između timova direktno iz sekcije Timovi, a ne samo iz detalja tiketa
 - Kada administrator izvrši preraspodjelu, sistem mora prikazati potvrdu i evidentirati promjenu u audit log sa timestamp-om i imenom administratora
 - Sistem ne smije dozvoliti preraspodjelu ako je agent neaktivan
+- Sistem ne smije dozvoliti preraspodjelu ako agent ima dodijeljenih otvorenih tiketa
 
 ---
 
