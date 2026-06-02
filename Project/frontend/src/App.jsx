@@ -24,6 +24,7 @@ import PackageManagement from './pages/PackageManagement'
 import UsersList from './pages/UsersList'
 import CreateUser from './pages/CreateUser'
 import AuditLogPage from './pages/AuditLog/AuditLogPage'
+import TeamsPage from './pages/Teams/TeamsPage'
 
 
 
@@ -74,6 +75,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={['ADMINISTRATOR']}>
               <AuditLogPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teams"
+          element={
+            <ProtectedRoute allowedRoles={['ADMINISTRATOR']}>
+              <TeamsPage />
             </ProtectedRoute>
           }
         />
