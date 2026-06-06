@@ -1,0 +1,65 @@
+name: Docker Build, Push and Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop # Samo da testiram
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # 1. Buildamo lokalne image-e unutar Project foldera (tim zadržava čist compose fajl)
+      - name: Build local images
+        working-directory: ./Project
+        run: docker compose build
+
+      # 2. Tagiramo lokalne buildove u adzelo2 format i pushamo na Docker Hub
+      - name: Tag and Push Images to Docker Hub
+        run: |
+          # API
+          docker tag project-api:latest adzelo2/si_deploy:api-latest
+          docker push adzelo2/si_deploy:api-latest
+          
+          # MCP Server
+          docker tag project-mcp-server:latest adzelo2/si_deploy:mcp-latest
+          docker push adzelo2/si_deploy:mcp-latest
+          
+          # Frontend
+          docker tag project-frontend:latest adzelo2/si_deploy:frontend-latest
+          docker push adzelo2/si_deploy:frontend-latest
+
+  deploy:
+    needs: build-and-push # Čeka da se build i push uspješno završe
+    runs-on: ubuntu-latest
+    steps:
+      # 3. Spajanje na server i osvježavanje produkcije
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 46.224.179.251
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # Podesi točnu putanju do foldera na serveru gdje ti je produkcijski docker-compose.yml:
+            cd ~/dzelo
+            
+            # Ugasi trenutne kontejnere
+            docker compose down -v
+            
+            # Povuci najnovije image-e s Docker Huba (koje je GitHub upravo pushao)
+            docker compose pull
+            
+            # Pokreni sve ponovo u pozadini
+            docker compose up -d
