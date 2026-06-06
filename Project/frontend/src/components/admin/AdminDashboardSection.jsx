@@ -66,6 +66,132 @@ const REPORT_TYPES = [
   { value: "AVG_RESOLUTION", label: "Prosj. rješavanje" },
 ];
 
+const PERIOD_LABELS = {
+  day: "Danas",
+  week: "Ova sedmica",
+  month: "Ovaj mjesec",
+  year: "Ova godina",
+  alltime: "Svi tiketi",
+};
+
+function escapeCSV(value) {
+  if (value == null) return "";
+  const str = String(value);
+  // Quote values that contain special CSV chars OR start with formula-trigger chars (Excel safety)
+  if (str.includes(",") || str.includes('"') || str.includes("\n") ||
+      str.startsWith("=") || str.startsWith("+") || str.startsWith("-") || str.startsWith("@")) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
+
+function buildReportCSV(reportType, reportResult, period, customFrom, customTo) {
+  const reportLabel = REPORT_TYPES.find((r) => r.value === reportType)?.label ?? reportType;
+  const periodLabel = period === "custom" ? `${customFrom} — ${customTo}` : (PERIOD_LABELS[period] ?? period);
+  const exportDate = new Date().toLocaleDateString("bs-BA");
+
+  // Section header — escapeCSV quotes it so Excel doesn't treat "===" as a formula
+  const section = (title) => escapeCSV(`=== ${title.toUpperCase()} ===`);
+
+  const lines = [
+    `Izvještaj,${escapeCSV(reportLabel)}`,
+    `Period,${escapeCSV(periodLabel)}`,
+    `Datum exporta,${exportDate}`,
+    "",
+  ];
+
+  if (!reportResult?.hasData) {
+    lines.push("Nema podataka");
+    return lines.join("\n");
+  }
+
+  const data = reportResult.data;
+
+  if (reportType === "TICKET_COUNT") {
+    lines.push(section("Sažetak"));
+    lines.push(`Ukupno tiketa,${data.totalCount ?? 0}`);
+    if (data.bucketGranularityLabel) {
+      lines.push(`Granularnost,${escapeCSV(data.bucketGranularityLabel)}`);
+    }
+    if (data.buckets?.length > 0) {
+      lines.push("", section("Pregled po periodu"));
+      lines.push("Period,Tiketa");
+      data.buckets.forEach((row) => lines.push(`${escapeCSV(row.label)},${row.ticketCount}`));
+    }
+  } else if (reportType === "TICKET_STATUS" && data.items) {
+    lines.push(section("Status tiketa"));
+    lines.push("Status,Broj,%");
+    data.items.forEach((row) =>
+      lines.push(`${escapeCSV(STATUS_LABELS[row.status] ?? row.status)},${row.count},${row.percentage}`)
+    );
+  } else if (reportType === "PROBLEM_TYPE" && data.items) {
+    lines.push(section("Tip problema"));
+    lines.push("Tip problema,Broj");
+    data.items.forEach((row) =>
+      lines.push(`${escapeCSV(PROBLEM_LABELS[row.name] ?? row.name)},${row.count}`)
+    );
+  } else if (reportType === "TEAM_WORKLOAD" && data.items) {
+    lines.push(section("Ukupno po agentu / tehničaru"));
+    lines.push("Agent / Tehničar,Uloga,Zatvoreno u periodu");
+    data.items.forEach((row) =>
+      lines.push(`${escapeCSV(row.fullName)},${escapeCSV(row.role)},${row.resolvedCount}`)
+    );
+    if (data.periodRows?.length > 0 && data.agentNames?.length > 0) {
+      const periodTitle = data.bucketGranularityLabel ?? "Pregled po periodu";
+      lines.push("", section(periodTitle));
+      lines.push(`Period,${data.agentNames.map(escapeCSV).join(",")}`);
+      data.periodRows.forEach((row) =>
+        lines.push(`${escapeCSV(row.label)},${row.counts.join(",")}`)
+      );
+    }
+  } else if (reportType === "USER_RATINGS") {
+    lines.push(section("Sažetak"));
+    lines.push(`Prosječna ocjena,${data.averageRating != null ? formatRating(data.averageRating) : ""}`);
+    lines.push(`Ocijenjenih tiketa,${data.ratedTicketsCount ?? 0}`);
+    if (data.distribution?.length > 0) {
+      lines.push("", section("Distribucija ocjena"));
+      lines.push("Ocjena,Broj tiketa");
+      data.distribution.forEach((d) => lines.push(`${d.stars},${d.count}`));
+    }
+    if (data.buckets?.length > 0) {
+      const periodTitle = data.bucketGranularityLabel ?? "Trend po periodu";
+      lines.push("", section(periodTitle));
+      lines.push("Period,Prosj. ocjena,Broj");
+      data.buckets.forEach((row) =>
+        lines.push(`${escapeCSV(row.label)},${row.avgRating != null ? row.avgRating.toFixed(1) : ""},${row.count}`)
+      );
+    }
+  } else if (reportType === "FIRST_RESPONSE") {
+    lines.push(section("Sažetak"));
+    lines.push(`Prosj. 1. odgovor,${data.avgFirstResponseMinutes != null ? formatMinutes(data.avgFirstResponseMinutes) : ""}`);
+    lines.push(`S odgovorom,${data.ticketsWithResponseCount ?? 0}`);
+    lines.push(`Ukupno tiketa,${data.totalTicketsCount ?? 0}`);
+    if (data.buckets?.length > 0) {
+      const periodTitle = data.bucketGranularityLabel ?? "Pregled po periodu";
+      lines.push("", section(periodTitle));
+      lines.push("Period,Tiketa,S odgovorom,Prosj. (min)");
+      data.buckets.forEach((row) =>
+        lines.push(`${escapeCSV(row.label)},${row.ticketCount},${row.ticketsWithResponseCount},${row.avgFirstResponseMinutes ?? ""}`)
+      );
+    }
+  } else if (reportType === "AVG_RESOLUTION") {
+    lines.push(section("Sažetak"));
+    lines.push(`Prosj. rješavanje,${data.avgResolutionHours != null ? formatHours(data.avgResolutionHours) : ""}`);
+    lines.push(`Zatvoreno,${data.closedTicketsCount ?? 0}`);
+    lines.push(`Ukupno tiketa,${data.totalTicketsCount ?? 0}`);
+    if (data.buckets?.length > 0) {
+      const periodTitle = data.bucketGranularityLabel ?? "Pregled po periodu";
+      lines.push("", section(periodTitle));
+      lines.push("Period,Tiketa,Zatvoreno,Prosj. (h)");
+      data.buckets.forEach((row) =>
+        lines.push(`${escapeCSV(row.label)},${row.ticketCount},${row.closedCount},${row.avgResolutionHours ?? ""}`)
+      );
+    }
+  }
+
+  return lines.join("\n");
+}
+
 function formatDuration(totalMinutes) {
   if (totalMinutes == null) return null;
   const mins = Math.round(totalMinutes);
@@ -227,6 +353,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const [reportType, setReportType] = useState(null);
   const [reportResult, setReportResult] = useState(null);
   const [reportLoading, setReportLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
   const { aiPanelOpen, closeAiPanel, setAlert, adminCopilotOpen, closeAdminCopilot } = useUIStore();
 
@@ -334,6 +461,38 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     setReportType(type);
     void fetchReport(type);
   }, [fetchReport]);
+
+  const handleExport = useCallback(async () => {
+    const type = reportType ?? "TICKET_COUNT";
+    if (period === "custom" && customFrom > customTo) {
+      setPeriodError("Datum kraja mora biti nakon datuma početka.");
+      return;
+    }
+    setPeriodError(null);
+    setExportLoading(true);
+    try {
+      const q = buildQuery();
+      const result = await generateReport({ reportType: type, period: q.period, from: q.from, to: q.to });
+      const csv = buildReportCSV(type, result, period, customFrom, customTo);
+      const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const now = new Date();
+      const datePart = now.toISOString().slice(0, 10);
+      const timePart = now.toTimeString().slice(0, 5).replace(":", "-");
+      const typePart = type.toLowerCase();
+      a.download = `report_${typePart}_${datePart}_${timePart}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      // no-op — network error visible in dev tools
+    } finally {
+      setExportLoading(false);
+    }
+  }, [reportType, period, customFrom, customTo, buildQuery]);
 
   const th = "py-3 px-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide";
   const td = "py-3 px-4 text-sm text-gray-700";
@@ -1048,11 +1207,15 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
             </div>
             <button
               type="button"
-              disabled
-              title="Export će biti dostupan u budućoj verziji"
-              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-gray-300 bg-gray-50 rounded-lg cursor-not-allowed border border-gray-100"
+              onClick={() => { void handleExport(); }}
+              disabled={exportLoading}
+              className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                exportLoading
+                  ? "text-gray-300 bg-gray-50 cursor-not-allowed border-gray-100"
+                  : "text-navy-700 bg-navy-50 hover:bg-navy-100 cursor-pointer border-navy-100"
+              }`}
             >
-              <Download size={13} />
+              {exportLoading ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />}
               Export
             </button>
           </div>
