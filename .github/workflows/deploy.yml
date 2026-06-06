@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - develop # Samo da testiram
 
 jobs:
   build-and-push:
