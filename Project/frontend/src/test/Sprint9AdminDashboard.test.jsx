@@ -250,8 +250,8 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
       data: { totalCount: 7 },
       showLargePeriodWarning: false,
     })
-    global.URL.createObjectURL = vi.fn(() => 'blob:mock')
-    global.URL.revokeObjectURL = vi.fn()
+    URL.createObjectURL = vi.fn(() => 'blob:mock')
+    URL.revokeObjectURL = vi.fn()
   })
 
   it('reports mod NE prikazuje KPI kartice i NE poziva dashboard endpoint', async () => {
