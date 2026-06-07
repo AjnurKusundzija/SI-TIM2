@@ -72,7 +72,7 @@ describe('Reports page (/reports)', () => {
     expect(screen.getByText(/generisanje izvještaja za odabrani vremenski period/i)).toBeInTheDocument()
   })
 
-  it('prikazuje disabled Export dugme', async () => {
+  it('prikazuje aktivan Export dugme', async () => {
     render(
       <MemoryRouter>
         <Reports />
@@ -80,7 +80,7 @@ describe('Reports page (/reports)', () => {
     )
 
     await waitFor(() => expect(screen.getByText('Export')).toBeInTheDocument())
-    expect(screen.getByRole('button', { name: /export/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /export/i })).not.toBeDisabled()
   })
 
   it('prikazuje vremenski period i generisanje izvještaja', async () => {
