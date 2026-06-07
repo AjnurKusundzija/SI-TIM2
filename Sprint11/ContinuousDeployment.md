@@ -89,7 +89,7 @@ Sljedeći **GitHub Secrets** moraju biti postavljeni u repozitoriju (`Settings �
 Svi servisi koriste varijable definirane u `.env` fajlu. Predložak se nalazi na:
 
 ```
-Project/.env.example
+Project/.env
 ```
 
 ### Obavezne varijable
