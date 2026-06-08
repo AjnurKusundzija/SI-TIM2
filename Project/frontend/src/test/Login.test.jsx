@@ -72,4 +72,47 @@ describe('Login page', () => {
       expect(mocks.login).not.toHaveBeenCalled()
     })
   })
+
+  // US-119: login forma vizualno naznačava da se može unijeti email ili telefon
+  it('label indicates email or phone number can be entered (US-119)', () => {
+    render(<Login />)
+    expect(screen.getByLabelText(/email adresa ili broj telefona/i)).toBeInTheDocument()
+  })
+
+  // US-119: placeholder pokazuje +387 format broja telefona
+  it('placeholder shows +387 phone number format (US-119)', () => {
+    render(<Login />)
+    expect(screen.getByPlaceholderText(/\+387/i)).toBeInTheDocument()
+  })
+
+  // US-119: prijava sa brojem telefona (+387) poziva login servis
+  it('calls login with phone number when +387 format is submitted (US-119)', async () => {
+    mocks.login.mockResolvedValueOnce(undefined)
+    render(<Login />)
+
+    fireEvent.change(screen.getByLabelText(/email adresa ili broj telefona/i), {
+      target: { value: '+38761234567' },
+    })
+    fireEvent.change(screen.getByLabelText(/lozinka/i), {
+      target: { value: 'Password123!' },
+    })
+    fireEvent.submit(screen.getByRole('button', { name: /prijavi se/i }).closest('form'))
+
+    await waitFor(() => {
+      expect(mocks.login).toHaveBeenCalledWith('+38761234567', 'Password123!')
+    })
+  })
+
+  // US-119: prijava sa emailom i dalje radi (korisnici bez broja telefona)
+  it('still allows login with email address (US-119)', async () => {
+    mocks.login.mockResolvedValueOnce(undefined)
+    render(<Login />)
+
+    fillForm('korisnik@firma.ba', 'Password123!')
+    fireEvent.submit(screen.getByRole('button', { name: /prijavi se/i }).closest('form'))
+
+    await waitFor(() => {
+      expect(mocks.login).toHaveBeenCalledWith('korisnik@firma.ba', 'Password123!')
+    })
+  })
 })
