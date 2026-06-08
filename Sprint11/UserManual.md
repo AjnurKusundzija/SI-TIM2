@@ -186,7 +186,8 @@ Kliknuti na "Pošalji".
 
 Sistem kreira tiket i dodjeljuje mu jedinstveni identifikator.
 
-[SLIKA 3 – Kreiranje tiketa]
+![Kreiranje tiketa](images/slika3v1.png)
+![Lista tiketa](images/slika3v2.png)
 
 ---
 
@@ -208,7 +209,7 @@ Prikazuju se:
 
 Korisnik vidi listu svih svojih tiketa.
 
-[SLIKA 4 – Lista tiketa]
+![Detalji tiketa](images/slika4.png)
 
 ---
 
@@ -229,7 +230,7 @@ Prikazuju se:
 
 Korisnik dobija kompletan pregled stanja tiketa.
 
-[SLIKA 5 – Detalji tiketa]
+![Komunikacija kroz tiket](images/slika5.png)
 
 ---
 
@@ -251,7 +252,7 @@ Kliknuti na "Pošalji".
 
 Poruka se evidentira u historiji komunikacije.
 
-[SLIKA 6 – Komunikacija kroz tiket]
+![Profil korisnika](images/slika6.png)
 
 ---
 
@@ -269,6 +270,11 @@ Koraci:
 ### Očekivani rezultat
 
 Ocjena se sprema u sistem.
+![FAQ](images/slika7v1.png)
+
+![Paketi i pretplate](images/slika7v2.png)
+
+![Notifikacije](images/slika7v3.png)
 
 ---
 
@@ -282,8 +288,7 @@ Na profilu korisnik može:
 
 Agenti i tehničari dodatno vide statistiku rada.
 
-[SLIKA 7 – Profil korisnika]
-
+![AI prijedlog odgovora](images/slika8.png)
 ---
 
 # 13. Paketi i pretplate
@@ -298,7 +303,7 @@ Klijent može pregledati:
 
 Prikaz svih aktivnih usluga korisnika.
 
-[SLIKA 8 – Paketi i pretplate]
+![AI Insights](images/slka9.png)
 
 ---
 
@@ -315,7 +320,7 @@ Korisnik može:
 
 Brže pronalaženje odgovora bez kreiranja tiketa.
 
-[SLIKA 9 – FAQ]
+![MCP Admin Copilot](images/slika10.png)
 
 ---
 
@@ -351,7 +356,7 @@ Prikazuje:
 
 Administrator dobija pregled stanja sistema.
 
-[SLIKA 11 – AI Insights]
+![Upravljanje korisnicima](images/slika12.png)
 
 ---
 
@@ -388,7 +393,7 @@ Administrator može:
 
 Promjene se spremaju i odmah postaju vidljive u sistemu.
 
-[SLIKA 13 – Upravljanje korisnicima]
+![Upravljanje timovima](images/slika14.png)
 
 ---
 
@@ -427,7 +432,7 @@ Klikom na Export moguće je preuzeti CSV datoteku.
 
 Generisan izvještaj i preuzeta CSV datoteka.
 
-[SLIKA 15 – Izvještaji]
+![Izvještaji](images/slika16.png)
 
 ---
 
