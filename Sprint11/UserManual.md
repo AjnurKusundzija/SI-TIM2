@@ -411,7 +411,8 @@ Administrator može:
 
 Timovi postaju dostupni za dodjelu tiketa.
 
-[SLIKA 14 – Upravljanje timovima]
+![Timovi](images/slika21.jpg)
+![Tiimovi](images/slika20.jpg)
 
 ---
 
