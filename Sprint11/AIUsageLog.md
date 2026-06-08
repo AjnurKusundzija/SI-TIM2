@@ -37,4 +37,40 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 ---
 
+## Unos #2
+
+| Polje | Detalji |
+|---|---|
+| Datum | 08.06.2026 |
+| Sprint broj | Sprint 11 |
+| Alat koji je korišten | Claude Code (Anthropic, Sonnet) |
+| Svrha korištenja | Implementacija PB-67 (Login via broj telefona) prema acceptance kriterijima iz Sprint Backloga 11 (US-119) |
+| Kratak opis zadatka ili upita | Proširenje autentifikacije na dual-identifier login: klijent se može prijaviti emailom ili brojem telefona u formatu +387. Zadatak je uključivao: implementaciju custom validacijskog atributa `EmailOrBiHPhoneAttribute` koji prihvata ispravne email adrese ili +387 BiH brojeve, proširenje `LoginRequestDto` s jedinstvenim string identifikatorom umjesto zasebnih email/phone polja, detekciju tipa identifikatora u `AuthService.LoginAsync` (ako počinje s `+` ili je numerički → telefon, inače email), implementaciju `GetByPhoneAsync` metode u `UserRepository`, ažuriranje Login forme da label i placeholder naznačuju prihvaćanje oba formata, te pisanje unit testova za `AuthService` (3 nova) i `EmailOrBiHPhoneAttributeTests` (9 testova) |
+| Šta je AI predložio ili generisao | Custom `EmailOrBiHPhoneAttribute` klasa koja nasljeđuje `ValidationAttribute` i provjerava regex za email (`^[^@\s]+@[^@\s]+\.[^@\s]+$`) i BiH telefon (`^\+387\d{8,9}$`); prošireni `LoginRequestDto` s poljem `Identifier` umjesto `Email`; logiku detekcije u `LoginAsync` koja poziva `GetByPhoneAsync` ili `GetByEmailAsync` ovisno o tipu unosa; `UserRepository.GetByPhoneAsync` koja pretražuje po `PhoneNumber` koloni; ažurirani `Login.jsx` s labelom `"Email ili broj telefona"` i placeholderom `"npr. user@example.com ili +38761234567"`; kompletan set unit testova (`LoginAsync_ValidPhoneNumber_UsesGetByPhoneAsync`, `LoginAsync_PhoneNumberNotFound_ReturnsNull`, `LoginAsync_EmailIdentifier_UsesGetByEmailAsync_NotPhone`, i 9 atribut testova) |
+| Šta je tim prihvatio | Dual-identifier pristup s jedinstvenim `Identifier` poljem; `EmailOrBiHPhoneAttribute` s regex validacijom za email i +387 format; detekcija putem `StartsWith("+")` provjere; `GetByPhoneAsync` lookup; ažurirani label i placeholder na Login formi; set unit testova koji pokriva pozitivne i negativne slučajeve |
+| Šta je tim izmijenio | Regex za telefon prilagođen da zahtijeva tačno +387 prefiks bez generičkog međunarodnog formata (jer sistem podržava samo BiH brojeve); poruka greške pri neispravnom formatu usklađena s ostatkom aplikacije (generička, ne otkriva koji dio je neispravan) |
+| Šta je tim odbacio | Prijedlog odvojenih polja `Email` i `PhoneNumber` u login formi s radio button selekcijom — odbačeno kao nepotrebno kompleksno za UI; prijedlog da se telefon pohrani bez + prefiksa u bazi — odbačeno jer ostali dijelovi sistema koriste međunarodni format |
+| Rizici, problemi ili greške koje su uočene | AI je inicijalno predložio generički međunarodni telefon regex (`^\+\d{7,15}$`) koji bi propustio nevažeće BiH brojeve — ispravno sužen na `^\+387\d{8,9}$`; unit test za `GetByEmailAsync` tok je inicijalno koristio email koji je izgledao kao telefon, što je uzrokovalo pogrešan branch u testu — ispravljeno eksplicitnim test inputom koji ne počinje s `+` |
+| Ko je koristio alat | Uma Mahmutovic |
+
+---
+
+## Unos #3
+
+| Polje | Detalji |
+|---|---|
+| Datum | 08.06.2026 |
+| Sprint broj | Sprint 11 |
+| Alat koji je korišten | Claude Code (Anthropic, Sonnet) |
+| Svrha korištenja | Implementacija PB-65 (SLA praćenje i upozorenja) prema acceptance kriterijima iz Sprint Backloga 11 (US-115, US-116) |
+| Kratak opis zadatka ili upita | Implementacija SLA sistema koji definira rokove po prioritetu tiketa, vizuelno prikazuje preostalo vrijeme s boja-kodiranjem i šalje notifikacije agentu kada se rok bliži ili je prekoračen. Zadatak je uključivao: implementaciju `ISlaService` i `SlaService` s metodama `GetSlaInfo` (rok, preostalo vrijeme, status boje, is breached) i `CountBreaches` (broj otvorenih tiketa s prekoračenim SLA), definiranje rokova po prioritetu (CRITICAL 2h, HIGH 8h, MEDIUM/NORMAL 24h, LOW 72h), integraciju u `TicketController` da vraća SLA info uz svaki tiket za agente i administratore, kreiranje `SlaIndicator.jsx` frontend komponente s boja-kodiranim prikazom, integraciju SLA breach countera na admin dashboardu, te pisanje testova za `SlaServiceTests.cs` (12) i `SlaIndicator.test.jsx` (8) |
+| Šta je AI predložio ili generisao | `SlaDeadlines` dictionary koji mapira `TicketPriority` enum na sate (`CRITICAL: 2, HIGH: 8, MEDIUM: 24, LOW: 72`); `SlaInfoDto` s poljima `DeadlineUtc`, `RemainingHours`, `RemainingMinutes`, `Status` (GREEN/YELLOW/RED), `IsBreached`, `BreachTimestamp`; `GetSlaInfo` koja izračunava procenat preostalog vremena i dodjeljuje status (>50% GREEN, 20-50% YELLOW, <20% ili prošlo RED); `CountBreaches` koja broji tikete gdje je `IsBreached = true` i status nije Closed; integraciju u postojeći `TicketListItemDto` i `TicketDetailDto`; `SlaIndicator.jsx` koji prikazuje crveni/žuti/zeleni badge s formatiranim preostalim vremenom ili "SLA prekoračen" porukom; tihi placeholder (`—`) za zatvorene tikete; SignalR notifikacijski okidač za SLA_WARNING (< 20%) i SLA_BREACH događaje; kompletan set unit testova za svaki prioritet i threshold |
+| Šta je tim prihvatio | Cjelokupni `SlaService` s `GetSlaInfo` i `CountBreaches` metodama; rokovi po prioritetu (CRITICAL 2h, HIGH 8h, MEDIUM 24h, LOW 72h); trostepeno boja-kodiranje (GREEN/YELLOW/RED) s threshold-ima 50% i 20%; tihi prikaz (`—`) za zatvorene tikete u `SlaIndicator` komponenti; integracija SLA breach countera na admin dashboardu; unit testovi za sve prioritete i granične vrijednosti |
+| Šta je tim izmijenio | SLA notifikacija je implementirana kao novi `NotificationType` enum entry umjesto zasebnog SignalR kanala, kako bi se koristila postojeća `NotificationHub` infrastruktura |
+| Šta je tim odbacio | Prijedlog za SLA konfiguraciju kroz bazu podataka (admin podešava rokove) — odbačeno kao prekomplicovano za MVP scope (hardkodirano u `SlaService`); prijedlog da se SLA breach pohranjuje u posebnu `SlaBreachLog` tabelu — odbačeno jer se breach može izračunati iz `Ticket.CreatedDate` i prioriteta bez dodatne migracije; automatsko zatvaranje tiketa nakon SLA breacheva — eksplicitno odbačeno, van scope |
+| Rizici, problemi ili greške koje su uočene | Unit test za `CountBreaches` sa zatvorenim tiketima je inicijalno propustio jer je AI mockao samo `IsBreached` bez postavljanja `Status` na Closed — ispravljeno kompletnim mock objektom |
+| Ko je koristio alat | Uma Mahmutovic |
+
+---
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
