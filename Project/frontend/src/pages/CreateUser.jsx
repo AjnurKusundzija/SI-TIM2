@@ -38,8 +38,8 @@ function validateField(name, value, role) {
       return ''
     case 'phone':
       if (!value) return ''
-      if (!/^0[6-9][0-9]{7,8}$/.test(value))
-        return 'Unesite ispravan bosanski broj (npr. 061234567).'
+      if (!/^\+387[0-9]{8,9}$/.test(value))
+        return 'Unesite broj u međunarodnom formatu (npr. +38761234567).'
       return ''
     case 'password':
       if (!value || value.length < 8) return 'Lozinka mora imati barem 8 karaktera.'
@@ -400,7 +400,7 @@ export default function CreateUser() {
           <Field
             label="Broj telefona"
             error={fieldErrors.phone}
-            hint="Format: 061234567"
+            hint="Format: +38761234567"
           >
             <input
               id="phone"
@@ -409,7 +409,7 @@ export default function CreateUser() {
               value={formData.phone}
               onChange={handleChange}
               onBlur={handleBlur}
-              placeholder="061 234 567"
+              placeholder="+38761234567"
               style={inputStyle(!!fieldErrors.phone)}
             />
           </Field>

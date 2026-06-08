@@ -7,7 +7,7 @@ import EmptyState from '../components/common/EmptyState'
 import Badge from '../components/common/Badge'
 import TicketPreviewPanel from '../components/tickets/TicketPreviewPanel'
 
-const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok' }
+const PRIORITY_LABELS = { LOW: 'Nizak', MEDIUM: 'Srednji', HIGH: 'Visok', CRITICAL: 'Kritičan' }
 const STATUS_LABELS = { OPEN: 'Otvoren', CLOSED: 'Zatvoren', CLOSURE_REQUESTED: 'Čeka se' }
 const TYPE_LABELS = {
     INTERNET: 'Internet',

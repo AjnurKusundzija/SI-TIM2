@@ -20,6 +20,12 @@ namespace TelecomSupportSystem.DAL.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
         }
 
+        public async Task<User?> GetByPhoneAsync(string phone)
+        {
+            var normalized = phone.Trim();
+            return await _context.Users.FirstOrDefaultAsync(u => u.Phone == normalized);
+        }
+
         public async Task<User?> GetByIdAsync(int userId)
             => await _context.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.UserId == userId);
 

@@ -19,3 +19,8 @@ export async function generateReport({ reportType, period = 'month', from, to })
   })
   return response.data
 }
+
+export async function getSlaBreachCount() {
+  const response = await api.get('/admin/sla-breach-count')
+  return response.data.breachCount
+}

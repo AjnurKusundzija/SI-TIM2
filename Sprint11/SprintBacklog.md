@@ -16,7 +16,7 @@ Finalizirati sistem kroz implementaciju CSV exporta izvještaja, Linked Tickets 
 |---|---|---|---|---|---|
 | SB-01 | PB-46 Export izvještaja | US-112 | Uma | Done | Client-side CSV generisanje za svih 7 tipova izvještaja; metadata header (naziv, period, datum exporta); UTF-8 BOM za Excel; loading spinner tokom fetha; uvijek aktivan Export button |
 | SB-02 | PB-64 Linked Tickets — veza između tiketa | US-113, US-114 | [Odgovorna osoba] | Backlog | Bidirekciona veza; tipovi veze (duplikat, nastavak, vezano uz); prevencija cikličnih veza i samopovezivanja; samo agenti i tehničari |
-| SB-03 | PB-65 SLA praćenje i upozorenja | US-115, US-116 | [Odgovorna osoba] | Backlog | SLA rokovi po prioritetu; boja-kodirani countdown; notifikacije za blizak rok i breach; evidencija u historiji tiketa; SLA breach counter na dashboardu |
+| SB-03 | PB-65 SLA praćenje i upozorenja | US-115, US-116 | Uma | Done | SLA rokovi po prioritetu; boja-kodirani countdown; notifikacije za blizak rok i breach; evidencija u historiji tiketa; SLA breach counter na dashboardu |
 | SB-04 | PB-66 Bulk akcije na tiketima | US-117, US-118 | [Odgovorna osoba] | Backlog | Checkboxes na listi tiketa; bulk zatvaranje/prioritet/dodjela/prosljeđivanje; potvrda za destruktivne akcije; sažetak rezultata; samo admin i agenti |
 | SB-05 | PB-67 Login via broj telefona | US-119 | [Odgovorna osoba] | Backlog | Međunarodni format (+387...); jedinstvenost broja; dual login email/telefon; validacija pri registraciji |
 
@@ -99,7 +99,6 @@ Finalizirati sistem kroz implementaciju CSV exporta izvještaja, Linked Tickets 
 - Sistem mora poslati zasebnu notifikaciju kada SLA bude prekoračen
 - Administratorski dashboard mora prikazivati ukupan broj tiketa s prekoračenim SLA
 - Broj prekoračenih SLA tiketa mora biti vidljiv u admin Sidebar status chipu uz postojeće alertove
-- Sistem ne smije dodjeljivati nove tikete agentima čiji bi workload uzrokovao SLA prekoračenje
 - SLA upozorenja moraju biti vizualno jasno razlikovana od regularnih notifikacija
 
 ---

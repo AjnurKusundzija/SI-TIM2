@@ -13,5 +13,11 @@ namespace TelecomSupportSystem.BLL.DTOs
         public DateTime CreatedDate { get; set; }
         public DateTime? ClosedDate { get; set; }
         public bool HasAssignment { get; set; }
+
+        // SLA (US-115) — null for CLOSED tickets
+        public DateTime? SlaDeadline { get; set; }
+        public double? SlaRemainingMinutes { get; set; }
+        public string? SlaStatus { get; set; }
+        public bool SlaIsBreached { get; set; }
     }
 }

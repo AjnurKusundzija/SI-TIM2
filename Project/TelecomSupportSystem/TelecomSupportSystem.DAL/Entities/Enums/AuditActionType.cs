@@ -20,6 +20,7 @@ namespace TelecomSupportSystem.DAL.Entities.Enums
         PACKAGE_DEACTIVATED = 16,
         SUBSCRIPTION_ASSIGNED = 17,
         SUBSCRIPTION_DEACTIVATED = 18,
-        AGENT_REASSIGNED = 19
+        AGENT_REASSIGNED = 19,
+        SLA_BREACH = 20
     }
 }

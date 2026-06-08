@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock('../services/adminService', () => ({
   getAdminDashboard: mocks.getAdminDashboard,
   generateReport: mocks.generateReport,
+  getSlaBreachCount: vi.fn().mockResolvedValue(0),
 }))
 
 vi.mock('recharts', () => ({

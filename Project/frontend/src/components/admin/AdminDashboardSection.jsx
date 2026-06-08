@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAdminDashboard, generateReport } from "../../services/adminService";
+import { getAdminDashboard, generateReport, getSlaBreachCount } from "../../services/adminService";
 import AIInsightsPanel from "./AIInsightsPanel";
 import AdminCopilotPanel from "./AdminCopilotPanel";
 import { useUIStore } from "../../store/uiStore";
@@ -355,7 +355,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const [reportLoading, setReportLoading] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
-  const { aiPanelOpen, closeAiPanel, setAlert, adminCopilotOpen, closeAdminCopilot } = useUIStore();
+  const { aiPanelOpen, closeAiPanel, setAlert, adminCopilotOpen, closeAdminCopilot, setSlaBreachCount, slaBreachCount } = useUIStore();
 
   const buildQuery = useCallback(() => {
     const q = { period };
@@ -377,7 +377,10 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const loadDashboard = useCallback(async () => {
     try {
       const q = buildQuery();
-      const data = await getAdminDashboard({ period: q.period, from: q.from, to: q.to });
+      const [data, breachCount] = await Promise.all([
+        getAdminDashboard({ period: q.period, from: q.from, to: q.to }),
+        getSlaBreachCount().catch(() => 0),
+      ]);
       setDashboard(data);
       const stale = data.staleTicketsCount ?? 0;
       const pending = data.closureRequestedCount ?? 0;
@@ -385,6 +388,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
         ? `/tickets?stale=true&snapshot=true&period=${buildQuery().period}`
         : `/tickets?status=CLOSURE_REQUESTED&snapshot=true&period=${buildQuery().period}`;
       setAlert(stale + pending, stale + pending > 0 ? alertUrl : '');
+      setSlaBreachCount(breachCount);
       setBannerDismissed(false);
       setError(null);
     } catch {
@@ -392,7 +396,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     } finally {
       setLoading(false);
     }
-  }, [buildQuery, setAlert]);
+  }, [buildQuery, setAlert, setSlaBreachCount]);
 
   const validatePeriod = useCallback(() => {
     if (period === "custom" && customFrom > customTo) {
@@ -1012,6 +1016,14 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
                 accent="red"
                 onClick={() => drillDown({ stale: "true", snapshot: "true" })}
                 trend={dashboard.staleTicketsCount > 0 ? { value: -1, label: "Zahtijeva pažnju" } : undefined}
+              />
+              <StatCard
+                icon={AlertCircle}
+                label="SLA prekoračenja"
+                value={slaBreachCount}
+                accent="red"
+                onClick={() => drillDown({ slaBreached: "true" })}
+                trend={slaBreachCount > 0 ? { value: -1, label: "SLA prekoračeno" } : undefined}
               />
             </div>
           </div>

@@ -92,7 +92,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { unreadCount } = useNotifications();
-  const { alertTicketCount, alertTicketUrl } = useUIStore();
+  const { alertTicketCount, alertTicketUrl, slaBreachCount } = useUIStore();
   const isAdmin = user?.role === 'ADMINISTRATOR';
   const links = navConfig[user?.role] || [];
 
@@ -236,7 +236,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* Bottom status — admin only */}
         {isAdmin && (
-          <div className="px-4 py-3 border-t border-slate-200 flex-shrink-0">
+          <div className="px-4 py-3 border-t border-slate-200 flex-shrink-0 space-y-2">
             {alertTicketCount > 0 && alertTicketUrl ? (
               <button
                 onClick={() => { navigate(alertTicketUrl); onClose(); }}
@@ -258,6 +258,20 @@ export default function Sidebar({ isOpen, onClose }) {
                   <p className="text-[10px] text-emerald-500 mt-0.5">Nema tiketa na čekanju</p>
                 </div>
               </div>
+            )}
+            {slaBreachCount > 0 && (
+              <button
+                onClick={() => { navigate('/tickets?slaBreached=true'); onClose(); }}
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-red-50 border border-red-100 hover:bg-red-100 transition-colors text-left"
+              >
+                <AlertTriangle size={14} className="text-red-500 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-red-700 leading-tight">
+                    {slaBreachCount} SLA prekoračenja
+                  </p>
+                  <p className="text-[10px] text-red-400 mt-0.5">Klikni za pregled →</p>
+                </div>
+              </button>
             )}
           </div>
         )}
