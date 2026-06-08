@@ -73,4 +73,22 @@ AI Usage Log ne sluzi za kaznjavanje koristenja AI, nego za transparentnost i pr
 
 ---
 
+## Unos #4
+
+| Polje | Detalji |
+|---|---|
+| Datum | 08.06.2026 |
+| Sprint broj | Sprint 11 |
+| Alat koji je korišten | ChatGPT |
+| Svrha korištenja | Izrada i proširenje završne projektne dokumentacije za Sprint 11 i finalnu isporuku projekta |
+| Kratak opis zadatka ili upita | Alat je korišten za pripremu dokumentacije vezane za završni sprint i završnu isporuku projekta. Zadatak je uključivao pisanje korisničkog priručnika, završnog izvještaja o radu tima, sprint retrospektive, usklađivanje dokumentacije sa stvarnim Sprint 11 backlog statusima, objašnjenje načina dodavanja slika u Markdown dokumentaciju na GitHubu i pripremu tekstova u GitHub Markdown formatu spremnom za direktno kopiranje u `.md` fajlove. |
+| Šta je AI predložio ili generisao | AI je generisao prošireni User Manual za Helpdesk i Ticketing sistem, završni izvještaj o radu tima, Sprint 11 Retrospective dokument, Markdown kod za ubacivanje slika iz `Sprint11/images` foldera, objašnjenje kako se slike referenciraju u `.md` dokumentu, te pomoćne tekstove za završnu dokumentaciju. Predložena je struktura dokumentacije sa sekcijama: kome je sistem namijenjen, korisničke uloge, prijava u sistem, testni korisnici, glavni ekrani, korisnički tokovi, očekivani rezultati, ograničenja sistema i preporuke za korištenje. |
+| Šta je tim prihvatio | Tim je prihvatio Markdown strukturu dokumenata, prošireni sadržaj korisničkog priručnika, opis korisničkih uloga, opis glavnih ekrana, korak-po-korak upute za korisničke tokove, Sprint 11 retrospektivu, te formatiranje dokumenata za GitHub `.md` fajlove. Prihvaćeno je i korištenje relativnih putanja za slike u formatu `images/naziv-slike.png`, jer se slike nalaze u folderu `Sprint11/images`. |
+| Šta je tim izmijenio | Tim je dodatno uskladio sadržaj sa stvarnim stanjem Sprint 11 backloga. Posebno je naglašeno da je PB-46 Export izvještaja završen, dok su PB-64 Linked Tickets, PB-65 SLA praćenje i upozorenja, PB-66 Bulk akcije i PB-67 Login putem broja telefona ostali u backlog statusu. Također je potvrđeno da PB-68 i PB-69 ne postoje u Sprint 11 backlogu i ne smiju se navoditi kao dio Sprint 11 funkcionalnosti. |
+| Šta je tim odbacio | Odbačeno je navođenje funkcionalnosti koje nisu stvarno završene u Sprintu 11. Iz dokumentacije su isključene PB-68 i PB-69 stavke jer ne postoje u Sprint 11 backlogu. Odbačeno je i predstavljanje Linked Tickets, SLA praćenja, Bulk akcija i login putem telefona kao završenih funkcionalnosti, jer su prema backlogu ostale u statusu Backlog. |
+| Rizici, problemi ili greške koje su uočene | Uočena je mogućnost nekonzistentnosti između završne dokumentacije i stvarnog Sprint 11 backloga. Glavni rizik bio je da se u završnom izvještaju ili korisničkom priručniku greškom navedu funkcionalnosti koje nisu implementirane. Problem je riješen dodatnom provjerom statusa Sprint 11 backlog stavki i usklađivanjem dokumentacije sa stvarnim stanjem. Također je uočeno da slike u Markdown dokumentu moraju imati tačne relativne putanje kako bi se prikazivale na GitHubu. |
+| Ko je koristio alat | Lejan Kozlić |
+
+---
+
 Napomena: Ovaj AI Usage Log je zivi dokument i azurira se kroz sprintove.
