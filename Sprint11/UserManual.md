@@ -127,7 +127,9 @@ Otvoriti URL sistema.
 
 ## Korak 2
 
-Unijeti email adresu i lozinku.
+Unijeti email adresu ili broj telefona u međunarodnom formatu (+387...) i lozinku.
+
+**Napomena:** Klijenti se mogu prijaviti i emailom i brojem telefona (npr. +38761234567). Agenti, tehničari i administratori prijavljuju se isključivo emailom.
 
 ## Korak 3
 
@@ -303,7 +305,7 @@ Klijent može pregledati:
 
 Prikaz svih aktivnih usluga korisnika.
 
-![AI Insights](images/slka9.png)
+![AI Insights](images/slika9.png)
 
 ---
 

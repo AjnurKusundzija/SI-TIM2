@@ -49,7 +49,7 @@ Najvažnije dokumentovane funkcionalnosti finalne verzije su kompletan životni 
 
 ## Planirano, ali nije završeno
 
-Prema Sprint 11 finalnom izvještaju i `UpdatedProductBacklog.md`, sljedeće stavke su odgođene i nisu završene:
+Prema Sprint 11 finalnom izvještaju i `FinalProductBacklog.md`, sljedeće stavke su odgođene i nisu završene:
 
 - PB-64 Linked Tickets (Deferred),
 - PB-66 Bulk akcije na tiketima (Deferred).
@@ -79,4 +79,4 @@ Finalni izvještaj dodatno navodi da nisu realizovani:
 
 ## Šta nije dio finalne isporuke
 
-Finalna isporuka ne treba biti predstavljena kao da uključuje Linked Tickets, SLA praćenje i upozorenja, bulk akcije nad tiketima, login putem telefonskog broja, mobilnu aplikaciju, CRM integracije, napredni BI dashboard ili automatsku AI preraspodjelu tiketa.
+Finalna isporuka ne treba biti predstavljena kao da uključuje Linked Tickets, bulk akcije nad tiketima, mobilnu aplikaciju, CRM integracije, napredni BI dashboard ili automatsku AI preraspodjelu tiketa.

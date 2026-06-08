@@ -395,17 +395,16 @@ Problem je riješen kroz postepenu migraciju na novi dizajn sistem i dodatno tes
 
 Ako bi se razvoj projekta nastavio, fokus bi bio na:
 
-- završetku Sprint 11 funkcionalnosti,
-- Linked Tickets modulu,
-- SLA praćenju i upozorenjima,
-- Bulk akcijama,
-- Login funkcionalnosti putem telefona,
+- Linked Tickets modulu (PB-64, Deferred),
+- Bulk akcijama na tiketima (PB-66, Deferred),
+- automatizovanim testovima za PB-52 (upravljanje paketima),
 - proširenju AI funkcionalnosti,
-- real-time notifikacijama,
 - mobilnoj aplikaciji,
 - CRM integracijama,
+- naprednom BI dashboardu,
 - dodatnoj optimizaciji performansi,
-- većoj pokrivenosti automatizovanim testovima.
+- E2E testovima (Playwright/Cypress),
+- cloud storage integraciji za upload fajlova.
 
 ---
 

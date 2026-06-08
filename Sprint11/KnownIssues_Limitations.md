@@ -49,7 +49,7 @@ Prema finalnom izvještaju i finalnom backlogu, odgođene ili nisu završene:
 
 ## Dijelovi koji se ne smiju predstavljati kao potpuno kompletni
 
-- Sprint 11 backlog stavke PB-64, PB-65, PB-66 i PB-67 ne smiju se predstavljati kao završene.
+- Sprint 11 backlog stavke PB-64 i PB-66 ne smiju se predstavljati kao završene (Deferred — nisu implementirane).
 - PB-52 ne smije se predstavljati kao automatski testiran na istom nivou kao ostale funkcionalnosti; dokumentovana je manualna verifikacija.
 - Produkcijski deployment ne smije se predstavljati kao spreman za čuvanje trajnih produkcijskih podataka dok god resetuje bazu.
 - MCP Admin Copilot ne smije se predstavljati kao sistem koji samostalno mijenja podatke ili izvršava akcije.
