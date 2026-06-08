@@ -115,7 +115,7 @@ namespace TelecomSupportSystem.Tests.Sprint9
                 FirstName = "Sys",
                 LastName = "Test",
                 Email = "sys.test@t.ba",
-                Phone = "061111000",
+                Phone = "+38761111000",
                 Password = TestPassword,
                 Role = Role.CLIENT,
                 Location = Location.SARAJEVO,
