@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TelecomSupportSystem.DAL.Entities;
+using TelecomSupportSystem.DAL.Entities.Enums;
 using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
 namespace TelecomSupportSystem.DAL.Repositories
@@ -43,6 +44,12 @@ namespace TelecomSupportSystem.DAL.Repositories
             await _context.Notifications
                 .Where(n => n.UserId == userId && !n.IsRead)
                 .ExecuteUpdateAsync(s => s.SetProperty(n => n.IsRead, true));
+        }
+
+        public async Task<bool> ExistsAsync(int ticketId, NotificationType type)
+        {
+            return await _context.Notifications.AnyAsync(n =>
+                n.TicketId == ticketId && n.NotificationType == type);
         }
     }
 }

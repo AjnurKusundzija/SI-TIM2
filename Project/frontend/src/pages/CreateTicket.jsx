@@ -16,6 +16,7 @@ const PRIORITIES = [
   { value: 'LOW', label: 'Nizak' },
   { value: 'MEDIUM', label: 'Srednji' },
   { value: 'HIGH', label: 'Visok' },
+  { value: 'CRITICAL', label: 'Kritičan' },
 ]
 
 export default function CreateTicket() {

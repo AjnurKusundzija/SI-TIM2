@@ -51,7 +51,7 @@ namespace TelecomSupportSystem.Tests.Sprint9
             FirstName = "Novi",
             LastName = "Korisnik",
             Email = email,
-            Phone = "061123456",
+            Phone = "+38761123456",
             Password = "StrongPass!23",
             Role = role,
             Location = Location.SARAJEVO,
@@ -149,7 +149,7 @@ namespace TelecomSupportSystem.Tests.Sprint9
             {
                 FirstName = "Novo",
                 LastName = "Prezime",
-                Phone = "061888888",
+                Phone = "+38761888888",
                 Location = Location.TUZLA,
             };
 
@@ -158,7 +158,7 @@ namespace TelecomSupportSystem.Tests.Sprint9
             _userRepo.Verify(r => r.UpdateAsync(It.Is<User>(u =>
                 u.FirstName == "Novo"
                 && u.LastName == "Prezime"
-                && u.Phone == "061888888"
+                && u.Phone == "+38761888888"
                 && u.Location == Location.TUZLA)), Times.Once);
         }
 

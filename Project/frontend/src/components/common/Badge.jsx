@@ -48,7 +48,7 @@ const labels = {
   LOW: 'NIZAK',
   MEDIUM: 'SREDNJI',
   HIGH: 'VISOK',
-  CRITICAL: 'KRITICAN',
+  CRITICAL: 'KRITIČAN',
   // Role badges
   CLIENT: 'KLIJENT',
   AGENT: 'AGENT',

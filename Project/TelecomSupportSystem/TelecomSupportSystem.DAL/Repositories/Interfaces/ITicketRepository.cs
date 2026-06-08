@@ -36,5 +36,8 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
 
         // Dashboard: N najrecentnijih tiketa sortiranih po zadnjoj aktivnosti
         Task<IEnumerable<Ticket>> GetRecentAssignedTicketsAsync(int userId, int count);
+
+        // SLA worker: sve otvorene tikete sa dodijeljenim korisnicima
+        Task<IEnumerable<Ticket>> GetOpenTicketsAsync();
     }
 }

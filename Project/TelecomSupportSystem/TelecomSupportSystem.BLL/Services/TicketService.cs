@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TelecomSupportSystem.BLL.DTOs.Attachments;
+using TelecomSupportSystem.BLL.DTOs.Sla;
 using NotificationType = TelecomSupportSystem.DAL.Entities.Enums.NotificationType;
 
 namespace TelecomSupportSystem.BLL.Services
@@ -22,6 +23,7 @@ namespace TelecomSupportSystem.BLL.Services
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly ICommentService _commentService;
         private readonly IAuditLogService? _auditLogService;
+        private readonly ISlaService? _slaService;
 
         // PB-56 + audit log: primarni konstruktor sa IAttachmentRepository i opcionalnim IAuditLogService.
         public TicketService(
@@ -31,7 +33,8 @@ namespace TelecomSupportSystem.BLL.Services
             INotificationService notificationService,
             IAttachmentRepository attachmentRepository,
             ICommentService commentService,
-            IAuditLogService? auditLogService = null)
+            IAuditLogService? auditLogService = null,
+            ISlaService? slaService = null)
         {
             _ticketRepository    = ticketRepository;
             _teamRepository      = teamRepository;
@@ -40,6 +43,7 @@ namespace TelecomSupportSystem.BLL.Services
             _attachmentRepository = attachmentRepository;
             _commentService      = commentService;
             _auditLogService     = auditLogService;
+            _slaService          = slaService;
         }
 
         // PB-56: kompatibilni overload za postojeće testove koji ne testiraju attachment funkcionalnost.
@@ -51,7 +55,7 @@ namespace TelecomSupportSystem.BLL.Services
             INotificationService notificationService,
             ICommentService commentService)
             : this(ticketRepository, teamRepository, userRepository, notificationService,
-                   new TelecomSupportSystem.DAL.Repositories.NullAttachmentRepository(), commentService, null)
+                   new TelecomSupportSystem.DAL.Repositories.NullAttachmentRepository(), commentService, null, null)
         {
         }
 
@@ -118,6 +122,14 @@ namespace TelecomSupportSystem.BLL.Services
                 .ToList();
         }
 
+        private (DateTime? deadline, double? remainingMinutes, string? status, bool isBreached) GetSlaFields(Ticket t)
+        {
+            if (_slaService is null || t.Status == TicketStatus.CLOSED)
+                return (null, null, null, false);
+            var sla = _slaService.GetSlaInfo(t);
+            return (sla.Deadline, sla.RemainingMinutes, sla.Status, sla.IsBreached);
+        }
+
         // PB-56: validacija/upis attachmenta je centralizovana u AttachmentStorage.
         // US-14, US-30: Dohvata detalje tiketa uz provjeru pristupa prema roli
         public async Task<TicketDetailDto> GetTicketByIdAsync(int ticketId, int userId, string role)
@@ -151,6 +163,7 @@ namespace TelecomSupportSystem.BLL.Services
                 .FirstOrDefault();
 
             bool isStaff = role is "ADMINISTRATOR" or "AGENT" or "TECHNICIAN";
+            var (slaDeadline, slaRem, slaStatus, slaBreached) = isStaff ? GetSlaFields(ticket) : (null, (double?)null, null, false);
 
             return new TicketDetailDto
             {
@@ -191,7 +204,11 @@ namespace TelecomSupportSystem.BLL.Services
                     UploadedByName = a.User is null
                         ? string.Empty
                         : $"{a.User.FirstName} {a.User.LastName}".Trim()
-                }).ToList()
+                }).ToList(),
+                SlaDeadline          = slaDeadline,
+                SlaRemainingMinutes  = slaRem,
+                SlaStatus            = slaStatus,
+                SlaIsBreached        = slaBreached,
             };
         }
 
@@ -501,18 +518,26 @@ namespace TelecomSupportSystem.BLL.Services
                 _                          => throw new UnauthorizedAccessException("Pristup nije dozvoljen.")
             };
 
-            return tickets.Select(t => new MyTicketDto
+            return tickets.Select(t =>
             {
-                TicketId        = t.TicketId,
-                Title           = t.Title,
-                Description     = t.Description,
-                Status          = t.Status.ToString(),
-                Priority        = t.Priority.ToString(),
-                InternalPriority = t.InternalPriority?.ToString(),
-                ProblemCategory = t.ProblemCategory.ToString(),
-                CreatedDate     = t.CreatedDate,
-                ClosedDate      = t.ClosedDate,
-                HasAssignment   = t.Assignments.Count > 0,
+                var (slaDeadline, slaRem, slaStatus, slaBreached) = GetSlaFields(t);
+                return new MyTicketDto
+                {
+                    TicketId        = t.TicketId,
+                    Title           = t.Title,
+                    Description     = t.Description,
+                    Status          = t.Status.ToString(),
+                    Priority        = t.Priority.ToString(),
+                    InternalPriority = t.InternalPriority?.ToString(),
+                    ProblemCategory = t.ProblemCategory.ToString(),
+                    CreatedDate     = t.CreatedDate,
+                    ClosedDate      = t.ClosedDate,
+                    HasAssignment   = t.Assignments.Count > 0,
+                    SlaDeadline         = slaDeadline,
+                    SlaRemainingMinutes = slaRem,
+                    SlaStatus           = slaStatus,
+                    SlaIsBreached       = slaBreached,
+                };
             });
         }
 
@@ -521,17 +546,25 @@ namespace TelecomSupportSystem.BLL.Services
         {
             var tickets = await _ticketRepository.GetOpenAssignedTicketsAsync(userId);
 
-            return tickets.Select(t => new MyTicketDto
+            return tickets.Select(t =>
             {
-                TicketId        = t.TicketId,
-                Title           = t.Title,
-                Description     = t.Description,
-                Status          = t.Status.ToString(),
-                Priority        = t.Priority.ToString(),
-                InternalPriority = t.InternalPriority?.ToString(),
-                ProblemCategory = t.ProblemCategory.ToString(),
-                CreatedDate     = t.CreatedDate,
-                ClosedDate      = t.ClosedDate
+                var (slaDeadline, slaRem, slaStatus, slaBreached) = GetSlaFields(t);
+                return new MyTicketDto
+                {
+                    TicketId        = t.TicketId,
+                    Title           = t.Title,
+                    Description     = t.Description,
+                    Status          = t.Status.ToString(),
+                    Priority        = t.Priority.ToString(),
+                    InternalPriority = t.InternalPriority?.ToString(),
+                    ProblemCategory = t.ProblemCategory.ToString(),
+                    CreatedDate     = t.CreatedDate,
+                    ClosedDate      = t.ClosedDate,
+                    SlaDeadline         = slaDeadline,
+                    SlaRemainingMinutes = slaRem,
+                    SlaStatus           = slaStatus,
+                    SlaIsBreached       = slaBreached,
+                };
             });
         }
 
@@ -550,7 +583,7 @@ namespace TelecomSupportSystem.BLL.Services
                 InternalPriority = t.InternalPriority?.ToString(),
                 ProblemCategory = t.ProblemCategory.ToString(),
                 CreatedDate     = t.CreatedDate,
-                ClosedDate      = t.ClosedDate
+                ClosedDate      = t.ClosedDate,
             });
         }
 
@@ -559,10 +592,11 @@ namespace TelecomSupportSystem.BLL.Services
         private static (double experience, double rating, double availability) GetWeightsByPriority(Priority priority)
             => priority switch
             {
-                Priority.LOW    => (0.6, 0.3, 0.1),
-                Priority.MEDIUM => (0.5, 0.3, 0.2),
-                Priority.HIGH   => (0.3, 0.2, 0.5),
-                _               => (0.5, 0.3, 0.2)
+                Priority.LOW      => (0.6, 0.3, 0.1),
+                Priority.MEDIUM   => (0.5, 0.3, 0.2),
+                Priority.HIGH     => (0.3, 0.2, 0.5),
+                Priority.CRITICAL => (0.2, 0.1, 0.7),
+                _                 => (0.5, 0.3, 0.2)
             };
 
         // US-55, US-56: Izračunava relativni score za svakog agenta unutar kandidatskog skupa

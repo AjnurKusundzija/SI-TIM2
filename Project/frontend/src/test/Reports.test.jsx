@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock('../services/adminService', () => ({
   getAdminDashboard: mocks.getAdminDashboard,
   generateReport: vi.fn().mockResolvedValue({ hasData: true, data: {} }),
+  getSlaBreachCount: vi.fn().mockResolvedValue(0),
 }))
 
 vi.mock('../context/AuthContext', () => ({

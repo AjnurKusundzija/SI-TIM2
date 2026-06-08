@@ -188,6 +188,49 @@ public class AuthServiceTests
             () => sut.LoginAsync(new LoginRequestDto { Email = user.Email, Password = TestPassword }));
     }
 
+    // ─── US-119 Phone login ───────────────────────────────────────────────────
+
+    // US-119: prijava brojem telefona (+387) koristi GetByPhoneAsync, ne GetByEmailAsync
+    [Fact]
+    public async Task LoginAsync_ValidPhoneNumber_UsesGetByPhoneAsync()
+    {
+        const string phone = "+38761234567";
+        var user = MakeUser();
+        _userRepo.Setup(r => r.GetByPhoneAsync(phone)).ReturnsAsync(user);
+
+        var result = await _sut.LoginAsync(new LoginRequestDto { Email = phone, Password = TestPassword });
+
+        Assert.NotNull(result);
+        _userRepo.Verify(r => r.GetByPhoneAsync(phone), Times.Once);
+        _userRepo.Verify(r => r.GetByEmailAsync(It.IsAny<string>()), Times.Never);
+    }
+
+    // US-119: broj telefona koji ne postoji u sistemu vraća null (nema pristupa)
+    [Fact]
+    public async Task LoginAsync_PhoneNumberNotFound_ReturnsNull()
+    {
+        const string phone = "+38761000000";
+        _userRepo.Setup(r => r.GetByPhoneAsync(phone)).ReturnsAsync((User?)null);
+
+        var result = await _sut.LoginAsync(new LoginRequestDto { Email = phone, Password = TestPassword });
+
+        Assert.Null(result);
+    }
+
+    // US-119: email login i dalje radi za korisnike bez broja telefona
+    [Fact]
+    public async Task LoginAsync_EmailIdentifier_UsesGetByEmailAsync_NotPhone()
+    {
+        var user = MakeUser();
+        _userRepo.Setup(r => r.GetByEmailAsync(user.Email)).ReturnsAsync(user);
+
+        var result = await _sut.LoginAsync(new LoginRequestDto { Email = user.Email, Password = TestPassword });
+
+        Assert.NotNull(result);
+        _userRepo.Verify(r => r.GetByEmailAsync(user.Email), Times.Once);
+        _userRepo.Verify(r => r.GetByPhoneAsync(It.IsAny<string>()), Times.Never);
+    }
+
     // ─── RefreshAsync ─────────────────────────────────────────────────────────
 
     [Fact]

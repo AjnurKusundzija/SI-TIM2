@@ -190,6 +190,10 @@ namespace TelecomSupportSystem.BLL.Services
             if (existing != null)
                 throw new InvalidOperationException("Email adresa je već zauzeta.");
 
+            if (!string.IsNullOrEmpty(dto.Phone) &&
+                !System.Text.RegularExpressions.Regex.IsMatch(dto.Phone, @"^\+387[0-9]{8,9}$"))
+                throw new ArgumentException("Broj telefona mora biti u međunarodnom formatu (npr. +38761234567).");
+
             var user = new User
             {
                 FirstName = dto.FirstName,
@@ -240,6 +244,10 @@ namespace TelecomSupportSystem.BLL.Services
                 location = user.Location.ToString(),
                 teamId = user.TeamId
             };
+
+            if (!string.IsNullOrEmpty(dto.Phone) &&
+                !System.Text.RegularExpressions.Regex.IsMatch(dto.Phone, @"^\+387[0-9]{8,9}$"))
+                throw new ArgumentException("Broj telefona mora biti u međunarodnom formatu (npr. +38761234567).");
 
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;

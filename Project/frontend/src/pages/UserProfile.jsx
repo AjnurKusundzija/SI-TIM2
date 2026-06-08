@@ -17,8 +17,8 @@ function validateField(name, value, role) {
       return value?.trim() ? '' : 'Prezime je obavezno.'
     case 'phone':
       if (!value) return ''
-      if (!/^0[6-9][0-9]{6,7}$/.test(value))
-        return 'Unesite ispravan bosanski broj (npr. 061234567).'
+      if (!/^\+387[0-9]{8,9}$/.test(value))
+        return 'Unesite broj u međunarodnom formatu (npr. +38761234567).'
       return ''
     case 'teamId':
       if (role === 'AGENT' && !value) return 'Odaberite tim za agenta.'
@@ -475,7 +475,7 @@ export default function UserProfile() {
                   <p className="px-3 py-2 bg-slate-50 rounded-xl text-slate-500 cursor-not-allowed border border-slate-200">{profile.email}</p>
                 </div>
                 <div>
-                  <Field label="Telefon" error={fieldErrors.phone} hint="Format: 061234567">
+                  <Field label="Telefon" error={fieldErrors.phone} hint="Format: +38761234567">
                     <input type="text" name="phone" value={editForm.phone || ''} onChange={handleEditChange} onBlur={handleBlur} style={inputStyle(!!fieldErrors.phone)} />
                   </Field>
                 </div>

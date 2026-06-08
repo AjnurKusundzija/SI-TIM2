@@ -104,7 +104,7 @@ namespace TelecomSupportSystem.Tests.Sprint9
                 FirstName = "Novi",
                 LastName = "Klijent",
                 Email = "novi.klijent@test.ba",
-                Phone = "061123456",
+                Phone = "+38761123456",
                 Password = TestPassword,
                 Role = Role.CLIENT,
                 Location = Location.TUZLA,
@@ -204,14 +204,14 @@ namespace TelecomSupportSystem.Tests.Sprint9
             {
                 FirstName = "Novo",
                 LastName = "Ime",
-                Phone = "061999999",
+                Phone = "+38761999999",
                 Location = Location.BIHAC,
             });
 
             result.Should().BeOfType<OkObjectResult>();
             var updated = await context.Users.FindAsync(2);
             updated!.FirstName.Should().Be("Novo");
-            updated.Phone.Should().Be("061999999");
+            updated.Phone.Should().Be("+38761999999");
             updated.Location.Should().Be(Location.BIHAC);
             updated.Role.Should().Be(Role.CLIENT);
         }

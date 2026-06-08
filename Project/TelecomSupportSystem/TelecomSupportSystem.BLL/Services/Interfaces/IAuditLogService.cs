@@ -41,5 +41,10 @@ namespace TelecomSupportSystem.BLL.Services.Interfaces
         /// Dohvata korisnike koji imaju audit log zapise.
         /// </summary>
         Task<List<AuditLogUserDto>> GetAuditLogUsersAsync();
+
+        /// <summary>
+        /// Provjerava postoji li AuditLog zapis za dati actionType i entityId.
+        /// </summary>
+        Task<bool> ExistsAsync(AuditActionType actionType, string entityId);
     }
 }

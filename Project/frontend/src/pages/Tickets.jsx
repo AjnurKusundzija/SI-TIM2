@@ -7,6 +7,7 @@ import { Search, Ticket } from "lucide-react";
 import { formatDateOnly } from "../utils/formatDate";
 import EmptyState from "../components/common/EmptyState";
 import Badge from "../components/common/Badge";
+import SlaIndicator from "../components/common/SlaIndicator";
 import TicketPreviewPanel from "../components/tickets/TicketPreviewPanel";
 
 const STATUS_LABELS = {
@@ -14,7 +15,7 @@ const STATUS_LABELS = {
   CLOSED: "Zatvoren",
   CLOSURE_REQUESTED: "Čeka se",
 };
-const PRIORITY_LABELS = { LOW: "Nizak", MEDIUM: "Srednji", HIGH: "Visok" };
+const PRIORITY_LABELS = { LOW: "Nizak", MEDIUM: "Srednji", HIGH: "Visok", CRITICAL: "Kritičan" };
 const INTERNAL_PRIORITY_LABELS = {
   LOW: "Nizak",
   MEDIUM: "Srednji",
@@ -30,7 +31,7 @@ const TYPE_LABELS = {
 };
 
 function SkeletonTable({ hasInternalPriority }) {
-  const colCount = hasInternalPriority ? 6 : 5;
+  const colCount = hasInternalPriority ? 7 : 6;
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
       <div className="hidden md:block">
@@ -96,12 +97,14 @@ export default function Tickets({ assignedOnly = false }) {
   const drillSnapshot = searchParams.get("snapshot") === "true";
   const drillUnassigned = searchParams.get("unassigned") === "true";
   const drillStale = searchParams.get("stale") === "true";
+  const drillSlaBreached = searchParams.get("slaBreached") === "true";
   const hasDrillDown = !!(
     drillStatus ||
     drillCategory ||
     drillFrom ||
     drillUnassigned ||
-    drillStale
+    drillStale ||
+    drillSlaBreached
   );
 
   const [tickets, setTickets] = useState([]);
@@ -168,6 +171,7 @@ export default function Tickets({ assignedOnly = false }) {
           t.status === "OPEN" || t.status === "CLOSURE_REQUESTED";
         if (!isStaleStatus || created > staleBefore) return false;
       }
+      if (drillSlaBreached && !t.slaIsBreached) return false;
       if (search) {
         const s = search.toLowerCase();
         if (
@@ -189,6 +193,7 @@ export default function Tickets({ assignedOnly = false }) {
     drillSnapshot,
     drillUnassigned,
     drillStale,
+    drillSlaBreached,
     now,
   ]);
 
@@ -299,6 +304,11 @@ export default function Tickets({ assignedOnly = false }) {
                       Interni Prioritet
                     </th>
                   )}
+                  {isStaff && (
+                    <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">
+                      SLA
+                    </th>
+                  )}
                   <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">
                     Tip
                   </th>
@@ -341,6 +351,16 @@ export default function Tickets({ assignedOnly = false }) {
                           )}
                         </td>
                       )}
+                      {isStaff && (
+                        <td className="px-5 py-3">
+                          <SlaIndicator
+                            slaStatus={t.slaStatus}
+                            slaRemainingMinutes={t.slaRemainingMinutes}
+                            slaIsBreached={t.slaIsBreached}
+                            compact
+                          />
+                        </td>
+                      )}
                       <td className="px-5 py-3 text-sm text-gray-600">
                         {TYPE_LABELS[t.problemCategory] ?? t.problemCategory}
                       </td>
@@ -373,6 +393,14 @@ export default function Tickets({ assignedOnly = false }) {
                     <Badge value={t.priority} />
                     {isStaff && t.internalPriority && (
                       <Badge value={t.internalPriority} />
+                    )}
+                    {isStaff && t.slaStatus && (
+                      <SlaIndicator
+                        slaStatus={t.slaStatus}
+                        slaRemainingMinutes={t.slaRemainingMinutes}
+                        slaIsBreached={t.slaIsBreached}
+                        compact
+                      />
                     )}
                   </div>
                   <p className="text-xs text-gray-400 mt-1">
