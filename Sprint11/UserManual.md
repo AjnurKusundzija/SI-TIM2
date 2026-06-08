@@ -338,7 +338,7 @@ Koraci:
 
 Sistem generiše prijedlog odgovora koji korisnik može izmijeniti prije slanja.
 
-[SLIKA 10 – AI prijedlog odgovora]
+![AI prijedlog](images/slika17.jpg)
 
 ---
 
@@ -376,7 +376,7 @@ Omogućava postavljanje pitanja o sistemu putem chat interfejsa.
 
 Sistem generiše odgovor na osnovu podataka iz baze.
 
-[SLIKA 12 – MCP Admin Copilot]
+![AI prijedlog 2](images/slika18.jpg)
 
 ---
 
