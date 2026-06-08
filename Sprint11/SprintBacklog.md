@@ -15,9 +15,7 @@ Finalizirati sistem kroz implementaciju CSV exporta izvještaja, Linked Tickets 
 | ID | Naziv zadatka ili storyja | Povezani US | Odgovorna osoba ili osobe | Status | Napomena |
 |---|---|---|---|---|---|
 | SB-01 | PB-46 Export izvještaja | US-112 | Uma | Done | Client-side CSV generisanje za svih 7 tipova izvještaja; metadata header (naziv, period, datum exporta); UTF-8 BOM za Excel; loading spinner tokom fetha; uvijek aktivan Export button |
-| SB-02 | PB-64 Linked Tickets — veza između tiketa | US-113, US-114 | [Odgovorna osoba] | Backlog | Bidirekciona veza; tipovi veze (duplikat, nastavak, vezano uz); prevencija cikličnih veza i samopovezivanja; samo agenti i tehničari |
 | SB-03 | PB-65 SLA praćenje i upozorenja | US-115, US-116 | Uma | Done | SLA rokovi po prioritetu; boja-kodirani countdown; notifikacije za blizak rok i breach; evidencija u historiji tiketa; SLA breach counter na dashboardu |
-| SB-04 | PB-66 Bulk akcije na tiketima | US-117, US-118 | [Odgovorna osoba] | Backlog | Checkboxes na listi tiketa; bulk zatvaranje/prioritet/dodjela/prosljeđivanje; potvrda za destruktivne akcije; sažetak rezultata; samo admin i agenti |
 | SB-05 | PB-67 Login via broj telefona | US-119 | Uma | Done | Međunarodni format (+387...); dual login email/telefon; `EmailOrBiHPhoneAttribute` validacija; `GetByPhoneAsync` lookup u `AuthService`; placeholder i label na Login formi |
 
 ---
@@ -42,36 +40,6 @@ Finalizirati sistem kroz implementaciju CSV exporta izvještaja, Linked Tickets 
 - Ako custom period validacija ne prođe (datum početka > datum kraja), sistem prikazuje grešku i ne pokreće export
 - Tokom fetcha dugme prikazuje loading spinner i onemogućeno je za ponovni klik
 - Ako API poziv ne uspije, Export dugme se vraća u normalno stanje bez rušenja stranice
-
----
-
-## PB-64 Linked Tickets — veza između tiketa
-
-### US-113
-*Kao agent ili tehničar, želim kreirati bidirekcionalnu vezu između tiketa koji se odnose na isti problem ili su na drugi način međusobno zavisni, kako bih mogao pratiti kontekst složenih slučajeva koji obuhvataju više tiketa.*
-
-**Acceptance Criteria:**
-- Kada je korisnik agent ili tehničar, sistem mora prikazati opciju za dodavanje veze u sekciji detalja tiketa
-- Korisnik mora moći odabrati tip veze: „Duplikat od", „Nastavak od" ili „Vezano uz"
-- Korisnik mora moći pretražiti i odabrati ciljni tiket po ID-u ili naslovu
-- Kreiranje veze mora biti bidirekciono — oba tiketa prikazuju vezu
-- Sistem mora spriječiti samopovezivanje (tiket ne može biti vezan za sebe)
-- Sistem mora spriječiti ciklične veze (A→B→A)
-- Sistem ne smije prikazati opciju za dodavanje veza klijentima
-- Kreiranje veze mora biti evidentirano u historiji tiketa
-
----
-
-### US-114
-*Kao agent, tehničar ili administrator, želim pregledati i ukloniti veze između tiketa direktno iz prikaza detalja tiketa, kako bih imao potpuni kontekst slučaja i mogao upravljati vezama.*
-
-**Acceptance Criteria:**
-- Sekcija detalja tiketa mora prikazivati listu svih linked tiketa sa: tipom veze, ID-jem tiketa, naslovom i trenutnim statusom
-- Klik na linked tiket mora navigirati na prikaz tog tiketa
-- Agent ili tehničar može ukloniti vezu; uklanjanje je bidirekciono (uklanja se s oba tiketa)
-- Administrator može pregledati veze ali ne može uklanjati (read-only prikaz za admina)
-- Sistem ne smije prikazati sekciju linked tiketa klijentima
-- Ako tiket nema nijednu vezu, sekcija ne prikazuje praznu listu nego je skrivena ili prikazuje poruku „Nema vezanih tiketa"
 
 ---
 
@@ -100,34 +68,6 @@ Finalizirati sistem kroz implementaciju CSV exporta izvještaja, Linked Tickets 
 - Administratorski dashboard mora prikazivati ukupan broj tiketa s prekoračenim SLA
 - Broj prekoračenih SLA tiketa mora biti vidljiv u admin Sidebar status chipu uz postojeće alertove
 - SLA upozorenja moraju biti vizualno jasno razlikovana od regularnih notifikacija
-
----
-
-## PB-66 Bulk akcije na tiketima
-
-### US-117
-*Kao agent ili administrator, želim odabrati više tiketa odjednom koristeći checkboxe na listi tiketa, kako bih mogao izvršiti akcije na više tiketa istovremeno.*
-
-**Acceptance Criteria:**
-- Lista tiketa mora prikazivati checkbox uz svaki red za agente i administratore
-- „Odaberi sve" checkbox mora biti dostupan za odabir/poništenje odabira svih vidljivih tiketa
-- Broj odabranih tiketa mora biti prikazan kada je odabran barem jedan
-- Toolbar za bulk akcije mora se prikazati kada je odabran barem jedan tiket
-- Klijenti ne smiju vidjeti checkboxe niti bulk akcijske kontrole
-- Odabrani tiketi moraju biti vizualno istaknuti u listi
-
----
-
-### US-118
-*Kao agent ili administrator, želim izvršiti bulk akcije nad odabranim tiketima (zatvaranje, promjena prioriteta, dodjela agentu, prosljeđivanje timu), kako bih efikasnije upravljao većim brojem tiketa.*
-
-**Acceptance Criteria:**
-- Dostupne bulk akcije moraju uključivati: zatvaranje tiketa, promjenu prioriteta, dodjelu agentu i prosljeđivanje timu
-- Sistem mora tražiti potvrdu prije destruktivnih operacija (zatvaranje, prosljeđivanje)
-- Nakon izvršavanja, sistem mora prikazati sažetak: broj uspješnih i neuspješnih operacija
-- Ako neki tiketi ne mogu biti obrađeni (npr. već zatvoreni), sistem mora prikazati koji su i zašto
-- Bulk akcije moraju poštovati ista autorizacijska pravila kao individualne akcije na tiketima
-- Nakon bulk akcije, lista tiketa mora biti osvježena bez potrebe za ručnim reloadom
 
 ---
 
