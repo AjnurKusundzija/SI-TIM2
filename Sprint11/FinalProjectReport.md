@@ -2,51 +2,48 @@
 
 ## Uvod
 
-Tokom trajanja projekta tim je radio na razvoju modernog helpdesk i ticketing sistema namijenjenog telekom okruženju. Projekat je razvijan iterativno kroz više sprintova koristeći Scrum metodologiju rada. Svaki sprint imao je jasno definisane ciljeve, backlog stavke, acceptance kriterije i očekivane isporuke.
+Tokom trajanja projekta tim je radio na razvoju modernog helpdesk i ticketing sistema namijenjenog telekom okruženju. Projekat je razvijan iterativno kroz Scrum metodologiju rada, pri čemu je svaki sprint imao jasno definisane ciljeve, Product Backlog stavke, acceptance kriterije i očekivane isporuke.
 
-Kroz razvoj projekta fokus nije bio samo na implementaciji osnovnih funkcionalnosti za rad sa tiketima, već i na unapređenju korisničkog iskustva, automatizaciji određenih procesa, poboljšanju administrativnih mogućnosti i integraciji AI funkcionalnosti koje olakšavaju svakodnevni rad korisnika sistema.
+Cilj projekta nije bio samo implementirati osnovni sistem za rad sa tiketima, već razviti kompletno rješenje koje podržava korisnike, agente, tehničare i administratore kroz cijeli životni ciklus korisničke podrške. Tokom razvoja posebna pažnja posvećena je korisničkom iskustvu, automatizaciji procesa, izvještavanju, upravljanju korisnicima i timovima te integraciji AI funkcionalnosti koje unapređuju svakodnevni rad korisnika sistema.
 
-Projekat je uspješno završen uz kontinuiranu saradnju svih članova tima, redovne sprint planinge, review sastanke, retrospektive i stalnu komunikaciju između frontend i backend dijela sistema.
+Projekat je realizovan kroz kontinuiranu saradnju članova tima, redovne sprint planning sastanke, sprint review sastanke, retrospektive, code review aktivnosti, testiranje i integraciju frontend i backend komponenti sistema.
 
 ---
 
 # Svrha projekta
 
-Svrha projekta bila je razvoj centralizovanog sistema za upravljanje korisničkom podrškom koji omogućava jednostavno kreiranje, praćenje, obradu i zatvaranje korisničkih zahtjeva kroz tiket sistem.
+Svrha projekta bila je razvoj centralizovanog helpdesk sistema koji omogućava efikasno kreiranje, dodjelu, praćenje, obradu i zatvaranje korisničkih zahtjeva kroz strukturirani ticketing sistem.
 
-Cilj je bio omogućiti svim učesnicima procesa podrške da na jednom mjestu imaju pristup informacijama potrebnim za rad, uz jasnu raspodjelu odgovornosti između različitih korisničkih uloga.
+Sistem je razvijen s ciljem da:
 
-Pored osnovnog ticket workflow-a, cilj projekta bio je implementirati:
+- unaprijedi proces korisničke podrške,
+- omogući jednostavniju komunikaciju između korisnika i osoblja,
+- poboljša organizaciju rada agenata i tehničara,
+- olakša upravljanje korisnicima i timovima,
+- pruži administratorima bolji uvid u stanje sistema,
+- automatizuje određene poslovne procese,
+- omogući korištenje AI funkcionalnosti za podršku radu korisnika.
 
-- efikasniju komunikaciju između korisnika i podrške,
-- pregled aktivnosti nad tiketima,
-- upravljanje korisnicima i timovima,
-- upravljanje paketima i pretplatama,
-- AI podršku zaposlenicima,
-- AI analitiku za administratore,
-- modernizovan i pregledan korisnički interfejs.
-
-Na taj način sistem omogućava bržu obradu zahtjeva, bolju organizaciju rada i kvalitetnije korisničko iskustvo.
+Na taj način sistem doprinosi efikasnijem radu podrške, većoj transparentnosti procesa i kvalitetnijem korisničkom iskustvu.
 
 ---
 
 # Problem koji sistem rješava
 
-U mnogim organizacijama korisnička podrška se i dalje oslanja na kombinaciju e-mail komunikacije, Excel tabela i različitih nepovezanih sistema za evidenciju zahtjeva.
+Mnoge organizacije i dalje koriste kombinaciju e-mail komunikacije, Excel tabela i nepovezanih alata za evidenciju korisničkih zahtjeva.
 
-Takav pristup dovodi do problema kao što su:
+Takav pristup dovodi do:
 
-- gubitak informacija,
-- otežano praćenje statusa zahtjeva,
-- nejasna odgovornost za tiket,
-- sporija komunikacija sa korisnicima,
-- otežana analiza rada timova,
-- nedostatak centralizovane evidencije aktivnosti,
-- otežano upravljanje velikim brojem korisnika i zahtjeva.
+- gubitka informacija,
+- sporijeg rješavanja problema,
+- nejasne odgovornosti za tiket,
+- otežanog praćenja statusa zahtjeva,
+- dupliranja aktivnosti,
+- otežane analize rada timova,
+- ograničenih mogućnosti izvještavanja,
+- loše organizacije korisničke podrške.
 
-Razvijeni sistem rješava navedene probleme kroz jedinstvenu platformu za upravljanje tiketima, komunikacijom, korisnicima, timovima i administrativnim procesima.
-
-Dodatno, integracijom AI funkcionalnosti omogućeno je brže generisanje odgovora i donošenje odluka zasnovanih na podacima.
+Razvijeni sistem rješava navedene probleme kroz jedinstvenu platformu koja objedinjuje upravljanje tiketima, komunikacijom, korisnicima, timovima, pretplatama, izvještajima i AI funkcionalnostima.
 
 ---
 
@@ -56,14 +53,15 @@ Dodatno, integracijom AI funkcionalnosti omogućeno je brže generisanje odgovor
 
 Klijent predstavlja krajnjeg korisnika sistema.
 
-Njegove funkcionalnosti uključuju:
+Omogućene funkcionalnosti:
 
-- kreiranje novih tiketa,
+- kreiranje tiketa,
 - pregled vlastitih tiketa,
-- komunikaciju sa podrškom,
+- komunikacija sa podrškom,
 - pregled historije zahtjeva,
-- pregled aktivnih paketa i pretplata,
-- korištenje FAQ sekcije.
+- pregled paketa i pretplata,
+- korištenje FAQ sadržaja,
+- ocjenjivanje zatvorenih tiketa.
 
 ---
 
@@ -71,36 +69,37 @@ Njegove funkcionalnosti uključuju:
 
 Agent predstavlja prvi nivo korisničke podrške.
 
-Njegove odgovornosti uključuju:
+Omogućene funkcionalnosti:
 
 - pregled dodijeljenih tiketa,
-- komunikaciju sa korisnicima,
-- preuzimanje nedodijeljenih tiketa,
+- komunikacija sa korisnicima,
+- preuzimanje tiketa,
+- prosljeđivanje tiketa,
+- upravljanje prioritetima,
 - korištenje AI prijedloga odgovora,
-- prosljeđivanje tiketa tehničarima,
-- praćenje vlastitog statusa dostupnosti.
+- pregled statusa dostupnosti.
 
 ---
 
 ## Tehničar
 
-Tehničar rješava složenije tehničke probleme.
+Tehničar rješava kompleksnije tehničke probleme.
 
-Njegove funkcionalnosti uključuju:
+Omogućene funkcionalnosti:
 
 - pregled tehničkih tiketa,
-- komunikaciju sa korisnicima i agentima,
+- ažuriranje statusa,
+- komunikacija kroz tiket,
 - korištenje AI prijedloga odgovora,
-- ažuriranje statusa tiketa,
 - rad sa internim komentarima.
 
 ---
 
 ## Administrator
 
-Administrator ima najviši nivo privilegija.
+Administrator ima najviši nivo pristupa sistemu.
 
-Njegove funkcionalnosti uključuju:
+Omogućene funkcionalnosti:
 
 - upravljanje korisnicima,
 - upravljanje timovima,
@@ -108,83 +107,90 @@ Njegove funkcionalnosti uključuju:
 - upravljanje pretplatama,
 - pregled audit logova,
 - upravljanje FAQ sadržajem,
-- korištenje AI Insights modula,
+- korištenje AI Insights funkcionalnosti,
 - korištenje MCP Admin Copilot modula,
-- preraspodjelu agenata i tehničara.
+- preraspodjela agenata i tehničara,
+- pregled izvještaja i statistika.
 
 ---
 
 # Glavne implementirane funkcionalnosti
 
-Tokom razvoja implementiran je veliki broj funkcionalnosti.
+## Upravljanje tiketima
 
-## Ticket Management
-
-- Kreiranje tiketa
-- Pregled tiketa
-- Dodjela tiketa
-- Promjena statusa
-- Prioriteti tiketa
-- Historija aktivnosti
-- Zatvaranje tiketa
+- kreiranje tiketa,
+- pregled detalja tiketa,
+- dodjela tiketa,
+- automatska dodjela tiketa,
+- promjena statusa,
+- upravljanje prioritetima,
+- zatvaranje tiketa,
+- historija aktivnosti.
 
 ## Komunikacija
 
-- Razmjena poruka kroz tiket
-- Interni komentari za osoblje
-- Evidencija komunikacije
-- Historija aktivnosti
+- komunikacija kroz tiket,
+- evidencija poruka,
+- interni komentari za osoblje,
+- sistemske poruke unutar workflow-a.
 
 ## Upravljanje korisnicima
 
-- Kreiranje korisnika
-- Uređivanje korisnika
-- Aktivacija i deaktivacija naloga
-- Pregled korisničkih profila
+- kreiranje korisnika,
+- uređivanje korisnika,
+- deaktivacija korisnika,
+- pregled korisničkih profila,
+- role-based pristup.
 
 ## Upravljanje timovima
 
-- Kreiranje timova
-- Dodjela agenata timovima
-- Pregled opterećenja timova
-- Availability status agenata
+- pregled timova,
+- upravljanje članovima timova,
+- availability status agenata,
+- pregled opterećenja timova.
 
 ## Paketi i pretplate
 
-- Katalog paketa
-- Dodjela paketa klijentima
-- Upravljanje pretplatama
-- Evidencija promjena pretplata
+- katalog paketa,
+- dodjela pretplata klijentima,
+- pregled pretplata,
+- audit log aktivnosti nad pretplatama.
 
 ## Audit log
 
-- Evidentiranje aktivnosti korisnika
-- Praćenje administrativnih akcija
-- Pregled historije promjena
+- evidencija aktivnosti korisnika,
+- praćenje administrativnih akcija,
+- pregled historije promjena.
 
 ## FAQ modul
 
-- Pregled FAQ sadržaja
-- Kreiranje FAQ stavki
-- Uređivanje FAQ stavki
-- Brisanje FAQ stavki
+- pregled FAQ sadržaja,
+- kreiranje FAQ stavki,
+- uređivanje FAQ stavki,
+- brisanje FAQ stavki.
 
 ## AI funkcionalnosti
 
-- AI prijedlog odgovora za agente
-- AI prijedlog odgovora za tehničare
-- AI Insights za administratore
-- MCP Admin Copilot
-- AI podrška za analizu sistema
+- AI prijedlog odgovora za agente,
+- AI prijedlog odgovora za tehničare,
+- AI Insights za administratore,
+- MCP Admin Copilot,
+- AI podrška za analizu sistema.
 
-## Redizajn korisničkog interfejsa
+## Izvještavanje
 
-- Novi Sidebar
-- Novi Header
-- Novi Dashboard
-- Nova navigacija
-- Navy tema aplikacije
-- Poboljšani UX elementi
+- dashboard statistike,
+- administrativni izvještaji,
+- CSV export izvještaja.
+
+## Korisnički interfejs
+
+- redizajnirani Sidebar,
+- redizajnirani Header,
+- redizajnirani Dashboard,
+- nova navigacija,
+- navy dizajn sistem,
+- unaprijeđeno korisničko iskustvo.
 
 ---
 
@@ -192,24 +198,23 @@ Tokom razvoja implementiran je veliki broj funkcionalnosti.
 
 ## Sprint 6
 
-Sprint 6 bio je fokusiran na unapređenje ticket modula.
+Sprint 6 bio je fokusiran na unapređenje ticket modula i komunikacije.
 
-Implementirane funkcionalnosti:
+Implementirano:
 
 - detaljan prikaz tiketa,
 - komunikacija kroz tiket,
-- pregled svih tiketa za administratore,
-- pregled tiketa za agente,
-- FAQ modul,
+- pregled svih tiketa za agente i administratore,
+- FAQ funkcionalnosti,
 - unapređenje autorizacije.
 
-Sprint je uspješno završen i Product Owner je dao maksimalnu ocjenu.
+Sprint je uspješno završen i pozitivno ocijenjen od strane Product Ownera.
 
 ---
 
 ## Sprint 7
 
-Fokus sprinta bio je na workflow logici.
+Sprint 7 bio je fokusiran na ticket workflow logiku.
 
 Implementirano:
 
@@ -217,7 +222,7 @@ Implementirano:
 - upravljanje prioritetima,
 - pregled dodijeljenih tiketa,
 - zatvaranje tiketa,
-- ažuriranje statusa,
+- promjena statusa tiketa,
 - prosljeđivanje tiketa.
 
 Sprint je uspješno završen i ocijenjen sa 100%.
@@ -226,7 +231,7 @@ Sprint je uspješno završen i ocijenjen sa 100%.
 
 ## Sprint 8
 
-Sprint 8 bio je usmjeren na korisničke profile, statistiku i notifikacije.
+Sprint 8 bio je fokusiran na korisničke profile, statistiku i notifikacije.
 
 Implementirano:
 
@@ -235,25 +240,26 @@ Implementirano:
 - statistika rada agenata,
 - statistika rada tehničara,
 - ocjenjivanje tiketa,
-- upravljanje paketima.
+- pregled paketa i pretplata.
 
-Sprint je uspješno završen uz veoma pozitivne komentare Product Ownera.
+Sprint je uspješno završen uz pozitivne komentare Product Ownera.
 
 ---
 
 ## Sprint 9
 
-Sprint 9 bio je fokusiran na administrativne funkcionalnosti.
+Sprint 9 bio je fokusiran na administrativne funkcionalnosti i upravljanje paketima.
 
 Implementirano:
 
 - upravljanje korisnicima,
-- upravljanje paketima,
+- katalog paketa,
+- dodjela pretplata klijentima,
 - audit log sistem,
 - upload priloga,
 - pregled timova.
 
-Sprint je dobio 100% bodova.
+Sprint je ocijenjen sa 100%.
 
 ---
 
@@ -263,33 +269,55 @@ Sprint 10 predstavljao je jedan od najkompleksnijih sprintova projekta.
 
 Implementirano:
 
-- AI prijedlog odgovora,
-- AI Insights,
-- MCP Admin Copilot,
-- interni komentari,
-- assign-to-me funkcionalnost,
-- availability status,
-- admin FAQ CRUD,
-- kompletan redizajn sistema.
+- PB-57 AI prijedlog odgovora za agente i tehničare,
+- PB-58 AI Insights za administratore,
+- PB-59 kompletan redizajn korisničkog interfejsa,
+- PB-31 proširenje administrativne preraspodjele tiketa,
+- PB-60 interni komentari,
+- PB-61 Admin CRUD FAQ,
+- PB-62 Assign To Me funkcionalnost,
+- PB-63 Agent Availability Status,
+- PB-70 MCP Admin Copilot.
 
-Sprint je ocijenjen sa 100% bodova i Product Owner je posebno pohvalio kvalitet implementacije i izgled sistema.
+Sprint je dobio 100% bodova, a Product Owner je posebno pohvalio kvalitet implementacije i izgled sistema.
+
+---
+
+## Sprint 11
+
+Sprint 11 predstavlja završni sprint projekta.
+
+Do trenutka izrade ovog izvještaja završena je:
+
+- PB-46 Export izvještaja.
+
+Preostale stavke Sprint 11 backloga:
+
+- PB-64 Linked Tickets,
+- PB-65 SLA praćenje i upozorenja,
+- PB-66 Bulk akcije na tiketima,
+- PB-67 Login putem broja telefona.
+
+Navedene funkcionalnosti nalaze se u backlogu i nisu završene u trenutku izrade ovog izvještaja.
 
 ---
 
 # Šta je završeno
 
-Tim je uspješno završio sve funkcionalnosti planirane kroz sprint backlog.
+Tim je uspješno završio sve funkcionalnosti planirane kroz Sprint 6, Sprint 7, Sprint 8, Sprint 9 i Sprint 10.
 
 Završeni su:
 
 - ticket workflow,
+- komunikacijski modul,
 - korisnički moduli,
-- administrativni moduli,
-- FAQ sistem,
+- timski moduli,
+- paketni moduli,
 - audit log sistem,
-- paketni sistem,
+- FAQ sistem,
 - AI funkcionalnosti,
 - MCP Admin Copilot,
+- CSV export izvještaja,
 - redizajn korisničkog interfejsa,
 - dokumentacija,
 - testiranje.
@@ -298,25 +326,27 @@ Završeni su:
 
 # Šta je djelimično završeno
 
-Dio funkcionalnosti vezanih za buduća proširenja AI sistema ostao je na nivou pripreme arhitekture.
+Djelimično završene funkcionalnosti odnose se na Sprint 11 backlog stavke koje su planirane, ali nisu implementirane do kraja projekta:
 
-To uključuje:
-
-- naprednije AI analize,
-- automatsko generisanje izvještaja,
-- proširenu AI automatizaciju.
+- Linked Tickets,
+- SLA praćenje,
+- Bulk akcije,
+- Login putem broja telefona.
 
 ---
 
 # Šta nije završeno
 
-Nisu realizovane funkcionalnosti koje nisu bile dio definisanog opsega projekta:
+Nisu realizovane funkcionalnosti koje nisu bile dio završene implementacije:
 
+- Linked Tickets,
+- SLA upozorenja,
+- Bulk akcije nad tiketima,
+- Login putem telefonskog broja,
 - mobilna aplikacija,
-- integracija sa eksternim CRM sistemima,
+- CRM integracije,
 - napredni BI dashboard,
-- automatska AI preraspodjela tiketa,
-- višekanalne notifikacije.
+- automatska AI preraspodjela tiketa.
 
 ---
 
@@ -327,63 +357,66 @@ Najvažnije tehničke odluke tokom projekta bile su:
 - ASP.NET Core backend arhitektura,
 - React frontend aplikacija,
 - Entity Framework Core ORM,
+- Service-Repository arhitektura,
+- REST API komunikacija,
 - Role-Based Authorization,
 - Docker okruženje,
-- Poseban AI servisni sloj,
+- poseban AI servisni sloj,
 - MCP server kao zaseban servis,
-- Audit log sistem,
-- Service-Repository arhitektura,
-- REST API komunikacija.
+- audit log arhitektura.
 
 ---
 
 # Najveći problemi tokom razvoja i način rješavanja
 
-Najveći izazovi bili su:
-
 ## Merge konflikti
 
-Rješavani su kroz Pull Request review proces i dodatne integracione testove.
+Pojavljivali su se zbog paralelnog razvoja više funkcionalnosti.
+
+Rješavani su kroz Pull Request review proces i dodatno integraciono testiranje.
 
 ## Migracije baze podataka
 
+Više funkcionalnosti zahtijevalo je izmjene šeme baze podataka.
+
 Problem je riješen standardizacijom procesa migracija i dodatnim provjerama prije merge-a.
 
-## AI integracija
+## Integracija AI funkcionalnosti
 
-AI funkcionalnosti zahtijevale su dodatna testiranja i prilagođavanje postojećoj arhitekturi.
+AI funkcionalnosti zahtijevale su dodatna testiranja i prilagođavanje postojećoj arhitekturi sistema.
 
-## Redizajn sistema
+Rješenje je bilo odvajanje AI logike u poseban servisni sloj.
 
-Veliki broj UI komponenti morao je biti refaktorisan kako bi se postigla konzistentnost novog dizajna.
+## Redizajn korisničkog interfejsa
 
-## Integracija većeg broja paralelnih funkcionalnosti
+Sprint 10 zahtijevao je refaktorisanje velikog broja zajedničkih komponenti.
 
-Problem je riješen kroz redovne sastanke, jasnu raspodjelu zadataka i kontinuiranu komunikaciju članova tima.
+Problem je riješen kroz postepenu migraciju na novi dizajn sistem i dodatno testiranje.
 
 ---
 
 # Šta bi tim unaprijedio da se projekat nastavlja
 
-Ako bi se razvoj projekta nastavio, tim bi fokus stavio na:
+Ako bi se razvoj projekta nastavio, fokus bi bio na:
 
-- naprednije AI mogućnosti,
-- automatsku klasifikaciju tiketa,
-- prediktivnu analitiku,
-- mobilnu aplikaciju,
-- real-time notifikacije,
-- dodatne administratorske izvještaje,
-- integraciju sa CRM sistemima,
-- dodatnu optimizaciju performansi,
-- proširenje MCP Copilot funkcionalnosti,
-- veći broj automatizovanih testova.
+- završetku Sprint 11 funkcionalnosti,
+- Linked Tickets modulu,
+- SLA praćenju i upozorenjima,
+- Bulk akcijama,
+- Login funkcionalnosti putem telefona,
+- proširenju AI funkcionalnosti,
+- real-time notifikacijama,
+- mobilnoj aplikaciji,
+- CRM integracijama,
+- dodatnoj optimizaciji performansi,
+- većoj pokrivenosti automatizovanim testovima.
 
 ---
 
 # Zaključak
 
-Projekat je uspješno realizovan kroz više sprintova i predstavlja kompletno helpdesk rješenje sa podrškom za upravljanje tiketima, korisnicima, timovima, paketima, administrativnim procesima i AI funkcionalnostima.
+Projekat je uspješno rezultirao razvojem modernog helpdesk i ticketing sistema koji podržava upravljanje tiketima, komunikaciju, korisnike, timove, pakete, pretplate, audit logove, izvještavanje i AI funkcionalnosti.
 
-Tim je tokom razvoja pokazao visok nivo saradnje, uspješno savladao tehničke izazove i implementirao sve ključne funkcionalnosti definisane projektnim zahtjevima.
+Tim je kroz više sprintova kontinuirano unapređivao sistem, uspješno rješavao tehničke izazove i implementirao sve ključne funkcionalnosti planirane za završene sprintove.
 
-Posebno značajan rezultat projekta predstavlja integracija AI funkcionalnosti i MCP Admin Copilot modula, koji sistemu daju dodatnu vrijednost i predstavljaju temelj za buduća proširenja i unapređenja.
+Posebno značajan rezultat projekta predstavljaju AI funkcionalnosti, MCP Admin Copilot modul i kompletan redizajn korisničkog interfejsa, koji sistemu daju dodatnu vrijednost i predstavljaju osnovu za buduća proširenja i unapređenja.
