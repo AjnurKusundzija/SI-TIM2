@@ -139,8 +139,7 @@ Sistem prikazuje dashboard odgovarajuće korisničke uloge.
 
 Mjesto za sliku:
 
-[SLIKA 1 – Login ekran]
-
+![Login ekran](images/slikaa1.png)
 ---
 
 # 6. Dashboard
@@ -158,7 +157,7 @@ Prikazuje:
 
 Korisnik dobija pregled najvažnijih informacija odmah nakon prijave.
 
-[SLIKA 2 – Dashboard]
+![Dashboard](images/slika2.png)
 
 ---
 
