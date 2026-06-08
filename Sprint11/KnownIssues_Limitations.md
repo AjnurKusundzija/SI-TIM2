@@ -29,12 +29,10 @@
 
 ## Nezavršene funkcionalnosti
 
-Prema finalnom izvještaju i finalnom backlogu, nisu završene:
+Prema finalnom izvještaju i finalnom backlogu, odgođene ili nisu završene:
 
-- Linked Tickets,
-- SLA praćenje i upozorenja,
-- Bulk akcije na tiketima,
-- Login putem broja telefona,
+- Linked Tickets (Deferred),
+- Bulk akcije na tiketima (Deferred),
 - mobilna aplikacija,
 - CRM integracije,
 - napredni BI dashboard,

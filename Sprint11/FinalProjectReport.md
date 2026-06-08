@@ -287,24 +287,22 @@ Sprint je dobio 100% bodova, a Product Owner je posebno pohvalio kvalitet implem
 
 Sprint 11 predstavlja završni sprint projekta.
 
-Do trenutka izrade ovog izvještaja završena je:
+Završene su:
 
-- PB-46 Export izvještaja.
-
-Preostale stavke Sprint 11 backloga:
-
-- PB-64 Linked Tickets,
+- PB-46 Export izvještaja,
 - PB-65 SLA praćenje i upozorenja,
-- PB-66 Bulk akcije na tiketima,
 - PB-67 Login putem broja telefona.
 
-Navedene funkcionalnosti nalaze se u backlogu i nisu završene u trenutku izrade ovog izvještaja.
+Odgođene stavke (Deferred) — nisu implementirane:
+
+- PB-64 Linked Tickets,
+- PB-66 Bulk akcije na tiketima.
 
 ---
 
 # Šta je završeno
 
-Tim je uspješno završio sve funkcionalnosti planirane kroz Sprint 6, Sprint 7, Sprint 8, Sprint 9 i Sprint 10.
+Tim je uspješno završio sve funkcionalnosti planirane kroz Sprint 6, Sprint 7, Sprint 8, Sprint 9, Sprint 10 i Sprint 11.
 
 Završeni su:
 
@@ -318,6 +316,8 @@ Završeni su:
 - AI funkcionalnosti,
 - MCP Admin Copilot,
 - CSV export izvještaja,
+- SLA praćenje i upozorenja,
+- login putem broja telefona,
 - redizajn korisničkog interfejsa,
 - dokumentacija,
 - testiranje.
@@ -326,12 +326,10 @@ Završeni su:
 
 # Šta je djelimično završeno
 
-Djelimično završene funkcionalnosti odnose se na Sprint 11 backlog stavke koje su planirane, ali nisu implementirane do kraja projekta:
+Djelimično završene funkcionalnosti odnose se na Sprint 11 backlog stavke koje su planirane, ali nisu implementirane:
 
-- Linked Tickets,
-- SLA praćenje,
-- Bulk akcije,
-- Login putem broja telefona.
+- Linked Tickets (PB-64, Deferred),
+- Bulk akcije na tiketima (PB-66, Deferred).
 
 ---
 
@@ -339,10 +337,8 @@ Djelimično završene funkcionalnosti odnose se na Sprint 11 backlog stavke koje
 
 Nisu realizovane funkcionalnosti koje nisu bile dio završene implementacije:
 
-- Linked Tickets,
-- SLA upozorenja,
-- Bulk akcije nad tiketima,
-- Login putem telefonskog broja,
+- Linked Tickets (Deferred),
+- Bulk akcije nad tiketima (Deferred),
 - mobilna aplikacija,
 - CRM integracije,
 - napredni BI dashboard,

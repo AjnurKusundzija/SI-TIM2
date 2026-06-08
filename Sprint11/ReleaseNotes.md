@@ -39,6 +39,8 @@ Prema finalnom izvještaju i ažuriranom Product Backlogu, isporučeno je:
 - AI prijedlog odgovora za agente i tehničare,
 - AI Insights za administratore,
 - MCP Admin Copilot,
+- SLA praćenje i upozorenja za agente i administratore,
+- login putem broja telefona (+387 format) kao alternativa email prijavi,
 - redizajnirani korisnički interfejs.
 
 ## Najvažnije funkcionalnosti
@@ -47,12 +49,10 @@ Najvažnije dokumentovane funkcionalnosti finalne verzije su kompletan životni 
 
 ## Planirano, ali nije završeno
 
-Prema Sprint 11 finalnom izvještaju i `UpdatedProductBacklog.md`, sljedeće stavke su ostale u backlogu i nisu završene:
+Prema Sprint 11 finalnom izvještaju i `UpdatedProductBacklog.md`, sljedeće stavke su odgođene i nisu završene:
 
-- PB-64 Linked Tickets,
-- PB-65 SLA praćenje i upozorenja,
-- PB-66 Bulk akcije na tiketima,
-- PB-67 Login putem broja telefona.
+- PB-64 Linked Tickets (Deferred),
+- PB-66 Bulk akcije na tiketima (Deferred).
 
 Finalni izvještaj dodatno navodi da nisu realizovani:
 

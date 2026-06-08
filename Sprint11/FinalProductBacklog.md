@@ -81,9 +81,9 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-62](#pb-62) | Assign to me — samodjelovanje tiketa               | Feature        | 2         | S         | Done    | Sprint 10 |
 | [PB-63](#pb-63) | Agent availability status                          | Feature        | 3         | S         | Done    | Sprint 10 |
 | [PB-64](#pb-64) | Linked Tickets — veza između tiketa                | Feature        | 2         | M         | Deferred | — |
-| [PB-65](#pb-65) | SLA praćenje i upozorenja                          | Feature        | 2         | M         | Backlog | Sprint 11 |
+| [PB-65](#pb-65) | SLA praćenje i upozorenja                          | Feature        | 2         | M         | Done    | Sprint 11 |
 | [PB-66](#pb-66) | Bulk akcije na tiketima                            | Feature        | 3         | M         | Deferred | — |
-| [PB-67](#pb-67) | Login via broj telefona                            | Feature        | 2         | M         | Backlog | Sprint 11 |
+| [PB-67](#pb-67) | Login via broj telefona                            | Feature        | 2         | M         | Done    | Sprint 11 |
 | [PB-70](#pb-70) | MCP Admin Copilot                                  | Feature        | 2         | XL        | Done    | Sprint 10 |
 
 ---
@@ -866,7 +866,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 11
 
 ---
@@ -891,7 +891,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Tip Stavke:** Feature
 - **Prioritet:** 2
 - **Procjena složenosti ili napora:** M
-- **Status:** Backlog
+- **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 11
 
 ---
