@@ -38,20 +38,4 @@ Decision Log treba pokazati da tim ne radi nasumično, nego svjesno donosi i pra
 
 ---
 
-## Odluka #3
-
-| Polje | Detalji |
-|---|---|
-| **ID odluke** | [PLACEHOLDER] |
-| **Datum** | [PLACEHOLDER] |
-| **Kratak naziv odluke** | [PLACEHOLDER] |
-| **Opis problema ili pitanja** | [PLACEHOLDER] |
-| **Razmatrane opcije** | [PLACEHOLDER] |
-| **Odabrana opcija** | [PLACEHOLDER] |
-| **Razlog izbora** | [PLACEHOLDER] |
-| **Posljedice odluke** | [PLACEHOLDER] |
-| **Status odluke** | [PLACEHOLDER] |
-
----
-
 Napomena: Ovaj Decision Log je živi dokument i ažurira se kroz sprintove.
