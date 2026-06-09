@@ -231,6 +231,9 @@ Frontend koraci: `npm install --legacy-peer-deps` → `eslint src/` → `vitest 
 
 ## 4. Dokaz rezultata testiranja (CI logovi)
 
+> Detaljan dokaz testiranja za Sprint 11 funkcionalnosti (PB-46, PB-65, PB-67) sa log izlazima i pokrićem acceptance kriterija dostupan je u [ProofOfTesting.md](ProofOfTesting.md).
+
+
 ### Sprint 10 — cjelokupni CI run (kraj Sprint 10)
 
 ```

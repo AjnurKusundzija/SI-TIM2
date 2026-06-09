@@ -70,7 +70,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 | [PB-49](#pb-49) | Notifikacije                                       | Feature        | 1         | L         | Done    | Sprint 8  |
 | [PB-50](#pb-50) | Prosječno vrijeme prvog odgovora (admin izvještaj) | Feature        | 2         | S         | Done    | Sprint 9  |
 | [PB-51](#pb-51) | Upravljanje korisničkim nalozima                   | Feature        | 1         | L         | Done    | Sprint 9  |
-| [PB-52](#pb-52) | Upravljanje katalogom paketa i pretplata           | Feature        | 2         | M         | Done    | Sprint 9  |
+| [PB-52](#pb-52) | Upravljanje katalogom paketa i pretplata           | Feature        | 2         | M         | Partial | Sprint 9  |
 | [PB-53](#pb-53) | Pregled audit log-a aktivnosti                     | Feature        | 2         | M         | Done    | Sprint 9  |
 | [PB-56](#pb-56) | Prilozi na tiketima                                | Feature        | 2         | M         | Done    | Sprint 9  |
 | [PB-57](#pb-57) | AI prijedlog odgovora za agente i tehničare        | Feature        | 2         | M         | Done    | Sprint 10 |
@@ -730,6 +730,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Status:** Done
 - **Veza sa sprintom ili release planom:** Sprint 9
 - **Napomena:** Implementirano: novi entiteti `CatalogPackage`, `ClientSubscription`, `SubscriptionAuditLog`; EF migracija `AddCatalogPackagesAndSubscriptions`; REST API kontroleri (`PackageCatalogController`, `ClientSubscriptionController`); administratorski UI (`PackageManagement.jsx`, `ClientSubscriptionsSection.jsx`); 409 Conflict za duplikate. Funkcionalnost je verifikovana manualno kroz UI; automatizovani testovi su evidentirani kao tehnički dug za naredni sprint.
+- **Razlog za Partial:** Sva poslovna logika i UI su implementirani, ali nedostaju automatizovani unit/integracijski testovi. Acceptance kriterij testne pokrivenosti nije ispunjen.
 
 ---
 
