@@ -1,6 +1,6 @@
 ## Sprint cilj
 
-Cilj Sprinta 11 je finalizirati sistem kroz implementaciju preostalih funkcionalnosti Product Backloga, dodatno unaprijediti ticket workflow, proširiti autentikacijske mogućnosti korisnika, implementirati SLA mehanizme za praćenje kvaliteta usluge, omogućiti masovne operacije nad tiketima te razviti AI chatbot za klijente koji će pružati podršku kroz postojeću bazu znanja i FAQ sadržaj.
+Cilj Sprinta 11 je finalizirati sistem kroz implementaciju preostalih funkcionalnosti Product Backloga, dodatno unaprijediti ticket workflow, proširiti autentikacijske mogućnosti korisnika i implementirati SLA mehanizme za praćenje kvaliteta usluge.
 
 Sprint 11 predstavlja završni razvojni sprint projekta i fokusiran je na funkcionalnosti koje sistem približavaju realnom produkcijskom okruženju. Nakon što su prethodni sprintovi uspostavili osnovnu arhitekturu sistema, ticket workflow, korisničke role, administrativne module, AI prijedloge odgovora i AI administrativne uvide, cilj ovog sprinta je dodatno unaprijediti operativnu efikasnost sistema i kvalitet korisničkog iskustva za sve učesnike procesa podrške.
 
@@ -21,9 +21,6 @@ Kroz Sprint 11 tim završava razvoj svih planiranih funkcionalnosti projekta i p
 - Implementacija CSV exporta za svih 7 tipova izvještaja (PB-46) — Done
 - Client-side CSV generisanje s metadata headerom i UTF-8 BOM podrškom
 - Export izvještaja kompatibilan sa Microsoft Excel alatima
-- Implementacija Linked Tickets funkcionalnosti (PB-64)
-- Kreiranje bidirekcionalnih veza između povezanih tiketa
-- Prevencija cikličnih veza i samopovezivanja tiketa
 - Implementacija SLA praćenja po prioritetu tiketa (PB-65)
 - Vizualna SLA upozorenja i evidencija SLA breach događaja
 - Praćenje vremena odgovora i vremena rješavanja tiketa
