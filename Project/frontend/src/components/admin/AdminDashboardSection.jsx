@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAdminDashboard, generateReport, getSlaBreachCount } from "../../services/adminService";
+import { getAdminDashboard, generateReport } from "../../services/adminService";
 import AIInsightsPanel from "./AIInsightsPanel";
 import AdminCopilotPanel from "./AdminCopilotPanel";
 import { useUIStore } from "../../store/uiStore";
@@ -353,9 +353,8 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const [reportType, setReportType] = useState(null);
   const [reportResult, setReportResult] = useState(null);
   const [reportLoading, setReportLoading] = useState(false);
-  const [exportLoading, setExportLoading] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
-  const { aiPanelOpen, closeAiPanel, setAlert, adminCopilotOpen, closeAdminCopilot, setSlaBreachCount, slaBreachCount } = useUIStore();
+  const { aiPanelOpen, closeAiPanel, setAlert, adminCopilotOpen, closeAdminCopilot } = useUIStore();
 
   const buildQuery = useCallback(() => {
     const q = { period };
@@ -377,10 +376,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
   const loadDashboard = useCallback(async () => {
     try {
       const q = buildQuery();
-      const [data, breachCount] = await Promise.all([
-        getAdminDashboard({ period: q.period, from: q.from, to: q.to }),
-        getSlaBreachCount().catch(() => 0),
-      ]);
+      const data = await getAdminDashboard({ period: q.period, from: q.from, to: q.to });
       setDashboard(data);
       const stale = data.staleTicketsCount ?? 0;
       const pending = data.closureRequestedCount ?? 0;
@@ -388,7 +384,6 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
         ? `/tickets?stale=true&snapshot=true&period=${buildQuery().period}`
         : `/tickets?status=CLOSURE_REQUESTED&snapshot=true&period=${buildQuery().period}`;
       setAlert(stale + pending, stale + pending > 0 ? alertUrl : '');
-      setSlaBreachCount(breachCount);
       setBannerDismissed(false);
       setError(null);
     } catch {
@@ -396,7 +391,7 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     } finally {
       setLoading(false);
     }
-  }, [buildQuery, setAlert, setSlaBreachCount]);
+  }, [buildQuery, setAlert]);
 
   const validatePeriod = useCallback(() => {
     if (period === "custom" && customFrom > customTo) {
@@ -465,38 +460,6 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
     setReportType(type);
     void fetchReport(type);
   }, [fetchReport]);
-
-  const handleExport = useCallback(async () => {
-    const type = reportType ?? "TICKET_COUNT";
-    if (period === "custom" && customFrom > customTo) {
-      setPeriodError("Datum kraja mora biti nakon datuma početka.");
-      return;
-    }
-    setPeriodError(null);
-    setExportLoading(true);
-    try {
-      const q = buildQuery();
-      const result = await generateReport({ reportType: type, period: q.period, from: q.from, to: q.to });
-      const csv = buildReportCSV(type, result, period, customFrom, customTo);
-      const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      const now = new Date();
-      const datePart = now.toISOString().slice(0, 10);
-      const timePart = now.toTimeString().slice(0, 5).replace(":", "-");
-      const typePart = type.toLowerCase();
-      a.download = `report_${typePart}_${datePart}_${timePart}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch {
-      // no-op — network error visible in dev tools
-    } finally {
-      setExportLoading(false);
-    }
-  }, [reportType, period, customFrom, customTo, buildQuery]);
 
   const th = "py-3 px-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide";
   const td = "py-3 px-4 text-sm text-gray-700";
@@ -1017,14 +980,6 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
                 onClick={() => drillDown({ stale: "true", snapshot: "true" })}
                 trend={dashboard.staleTicketsCount > 0 ? { value: -1, label: "Zahtijeva pažnju" } : undefined}
               />
-              <StatCard
-                icon={AlertCircle}
-                label="SLA prekoračenja"
-                value={slaBreachCount}
-                accent="red"
-                onClick={() => drillDown({ slaBreached: "true" })}
-                trend={slaBreachCount > 0 ? { value: -1, label: "SLA prekoračeno" } : undefined}
-              />
             </div>
           </div>
 
@@ -1219,15 +1174,11 @@ export default function AdminDashboardSection({ mode = "metrics" }) {
             </div>
             <button
               type="button"
-              onClick={() => { void handleExport(); }}
-              disabled={exportLoading}
-              className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
-                exportLoading
-                  ? "text-gray-300 bg-gray-50 cursor-not-allowed border-gray-100"
-                  : "text-navy-700 bg-navy-50 hover:bg-navy-100 cursor-pointer border-navy-100"
-              }`}
+              disabled
+              title="Export će biti dostupan u budućoj verziji"
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-gray-300 bg-gray-50 rounded-lg cursor-not-allowed border border-gray-100"
             >
-              {exportLoading ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />}
+              <Download size={13} />
               Export
             </button>
           </div>

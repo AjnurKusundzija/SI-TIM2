@@ -14,8 +14,4 @@ export const useUIStore = create((set) => ({
   alertTicketCount: 0,
   alertTicketUrl: '',
   setAlert: (count, url) => set({ alertTicketCount: count, alertTicketUrl: url }),
-
-  // SLA breach count — set by AdminDashboardSection on dashboard load (US-116)
-  slaBreachCount: 0,
-  setSlaBreachCount: (count) => set({ slaBreachCount: count }),
 }))
