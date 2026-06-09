@@ -4,7 +4,6 @@
 
 - Produkcijski deployment resetuje bazu pri svakom deploymentu na `main`, jer koristi `docker compose down -v` i briše Docker volumen.
 - Backend se može resetovati ako SQL Server nije spreman ni nakon retry mehanizma.
-- Dokumentovan je flaky performansni test `AuthPerformanceTests.Login_ShouldCompleteWithinTimeLimit_InTestEnvironment`.
 
 ## Tehnička ograničenja
 
