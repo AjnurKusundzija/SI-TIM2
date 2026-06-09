@@ -196,6 +196,85 @@ Omogućene funkcionalnosti:
 
 # Pregled rada kroz sprintove
 
+## Sprint 1
+
+Sprint 1 bio je fokusiran na uspostavljanje temelja tima i projekta.
+
+Izrađeno:
+
+- Team Charter — sastav tima, pravila rada i komunikacije,
+- Product Vision — problem, ciljni korisnici, MVP scope,
+- Stakeholder Map — identifikacija svih zainteresovanih strana,
+- inicijalni Product Backlog.
+
+Sprint je uspješno završen.
+
+---
+
+## Sprint 2
+
+Sprint 2 bio je fokusiran na definisanje zahtjeva sistema.
+
+Izrađeno:
+
+- Acceptance Criteria za User Stories,
+- strukturisana lista User Stories iz perspektive korisnika,
+- NFR zahtjevi (performansa, sigurnost, dostupnost).
+
+Sprint je uspješno završen.
+
+---
+
+## Sprint 3
+
+Sprint 3 bio je fokusiran na arhitekturalnu i analitičku dokumentaciju.
+
+Izrađeno:
+
+- Risk Register — identifikacija i procjena projektnih rizika,
+- Domain Model — ključni entiteti i njihove veze,
+- Use Case Model — UML dijagrami funkcionalnih zahtjeva,
+- Architecture Overview — inicijalni pregled sistema,
+- Test Strategy — pristup testiranju, alati i odgovornosti.
+
+Sprint je uspješno završen.
+
+---
+
+## Sprint 4
+
+Sprint 4 bio je fokusiran na inicijalni tehnički setup.
+
+Izrađeno:
+
+- Definition of Done,
+- Initial Release Plan,
+- osnovni skeleton projekta (folderi, konfiguracija, arhitektura),
+- inicijalna struktura repozitorija sa razvojnim okruženjem.
+
+Sprint je uspješno završen.
+
+---
+
+## Sprint 5
+
+Sprint 5 bio je fokusiran na prvu funkcionalnu implementaciju sistema.
+
+Implementirano:
+
+- login korisnika sa JWT autentifikacijom,
+- kreiranje tiketa,
+- pregled vlastitih tiketa.
+
+Izrađeno:
+
+- AI Usage Log,
+- Decision Log.
+
+Sprint je uspješno završen.
+
+---
+
 ## Sprint 6
 
 Sprint 6 bio je fokusiran na unapređenje ticket modula i komunikacije.
@@ -326,19 +405,19 @@ Završeni su:
 
 # Šta je djelimično završeno
 
-Djelimično završene funkcionalnosti odnose se na Sprint 11 backlog stavke koje su planirane, ali nisu implementirane:
-
-- Linked Tickets (PB-64, Deferred),
-- Bulk akcije na tiketima (PB-66, Deferred).
+- PB-52 Upravljanje katalogom paketa i pretplata — funkcionalnost je implementirana i verificirana manualno kroz UI, ali nema automatizovanih unit/integracijskih testova. Acceptance kriterij testne pokrivenosti nije ispunjen.
 
 ---
 
 # Šta nije završeno
 
-Nisu realizovane funkcionalnosti koje nisu bile dio završene implementacije:
+Sljedeće funkcionalnosti su planirane, ali nisu implementirane (Deferred):
 
-- Linked Tickets (Deferred),
-- Bulk akcije nad tiketima (Deferred),
+- Linked Tickets (PB-64) — odgođeno iz Sprinta 11, nije implementirano,
+- Bulk akcije na tiketima (PB-66) — odgođeno iz Sprinta 11, nije implementirano.
+
+Funkcionalnosti koje nisu bile u scope projekta:
+
 - mobilna aplikacija,
 - CRM integracije,
 - napredni BI dashboard,

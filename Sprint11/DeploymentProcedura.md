@@ -285,6 +285,50 @@ docker compose logs sqlserver
 
 ---
 
+## Pokretanje testova
+
+### Backend testovi
+
+```bash
+cd Project/TelecomSupportSystem
+dotnet test TelecomSupportSystem.Tests
+```
+
+Sa filterima po domenu:
+
+```bash
+# Samo Auth testovi
+dotnet test TelecomSupportSystem.Tests --filter "FullyQualifiedName~Auth"
+
+# Bez performansnih testova (preporučeno za lokalni razvoj)
+dotnet test TelecomSupportSystem.Tests --filter "Category!=Performance"
+```
+
+Sa code coverage izvještajem:
+
+```bash
+dotnet test TelecomSupportSystem.Tests --collect:"XPlat Code Coverage"
+```
+
+### Frontend testovi
+
+```bash
+cd Project/frontend
+npx vitest run
+```
+
+Sa coverage izvještajem:
+
+```bash
+npx vitest run --coverage
+```
+
+### Napomena o performansnim testovima
+
+`AuthPerformanceTests.Login_ShouldCompleteWithinTimeLimit_InTestEnvironment` je dokumentovan kao flaky u CI okruženju i ne blokira build. Preporučuje se pokretanje bez performansnih testova pri lokalnoj provjeri.
+
+---
+
 ## Produkcijski URL
 
 Nakon uspješnog CD pipeline-a, aplikacija je dostupna na:
