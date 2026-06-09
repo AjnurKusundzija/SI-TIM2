@@ -237,47 +237,22 @@ Frontend koraci: `npm install --legacy-peer-deps` → `eslint src/` → `vitest 
 ### Sprint 10 — cjelokupni CI run (kraj Sprint 10)
 
 ```
-Backend test suite: 521 total — 520 passed, 1 skipped/failed (flaky AuthPerformanceTests)
-Frontend test suite: 324 total — 324 passed
-```
+Backend test suite: 
+Run dotnet test --no-build -c Release
+Test run for /home/runner/work/SI-TIM2/SI-TIM2/Project/TelecomSupportSystem/TelecomSupportSystem.Tests/bin/Release/net10.0/TelecomSupportSystem.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
 
-### Sprint 11 — novi testovi (dodani u Sprint 11)
+Passed!  - Failed:     0, Passed:   571, Skipped:     0, Total:   571, Duration: 8 s - TelecomSupportSystem.Tests.dll (net10.0)
 
-**PB-46 CSV Export — frontend**
-```
- ✓ src/test/Sprint9AdminDashboard.test.jsx  (17 tests) 1897ms
- Test Files  1 passed (1)
-      Tests  17 passed (17)
-   Start at  15:45:41
-   Duration  8.54s
-```
+Frontend test suite:
+Run npx vitest run
 
-**PB-67 Login via broj telefona — frontend**
-```
- ✓ src/test/Login.test.jsx  (8 tests) 915ms
- Test Files  1 passed (1)
-      Tests  8 passed (8)
-   Start at  14:33:54
-   Duration  8.33s
-```
+RUN  v1.6.1 /home/runner/work/SI-TIM2/SI-TIM2/Project/frontend
+ Test Files  57 passed (57)
+      Tests  348 passed (348)
+   Start at  13:29:04
+   Duration  38.06s (transform 1.71s, setup 10.64s, collect 11.71s, tests 19.92s, environment 52.40s, prepare 7.67s)
 
-**PB-67 Login via broj telefona — backend Auth suite**
-```
-Passed!  - Failed: 0, Passed: 103, Skipped: 0, Total: 103, Duration: 11 s
-```
-
-**PB-65 SLA praćenje — frontend**
-```
- ✓ src/test/SlaIndicator.test.jsx  (8 tests) 74ms
- Test Files  1 passed (1)
-      Tests  8 passed (8)
-   Start at  14:38:09
-   Duration  8.92s
-```
-
-**PB-65 SLA praćenje — backend**
-```
-Passed!  - Failed: 0, Passed: 12, Skipped: 0, Total: 12, Duration: 65 ms
 ```
 
 ---

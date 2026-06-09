@@ -856,7 +856,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** M
 - **Status:** Deferred
 - **Veza sa sprintom ili release planom:** —
-- **Napomena:** Odgođeno iz Sprinta 11 — nije implementirano, nije u scope završnog sprinta.
+- **Napomena:** Odgođeno iz Sprinta 11. Funkcionalnost zahtijeva novu šemu baze (junction tabela za veze između tiketa), logiku detekcije cikličnih veza i proširenje prikaza detalja tiketa. Implementacija je procijenjena kao previše rizična za završni sprint čiji je primarni cilj bio stabilizacija, dokumentacija i provjerivi deployment. Tim je prioritizovao PB-65 (SLA) i PB-67 (login via telefon) kao funkcionalnosti višeg prioriteta za Sprint 11. Stavka je ostavljena za eventualni budući razvoj.
 
 ---
 
@@ -881,7 +881,7 @@ Ovaj dokument služi za praćenje i upravljanje zadacima u okviru razvoja proizv
 - **Procjena složenosti ili napora:** M
 - **Status:** Deferred
 - **Veza sa sprintom ili release planom:** —
-- **Napomena:** Odgođeno iz Sprinta 11 — nije implementirano, nije u scope završnog sprinta.
+- **Napomena:** Odgođeno iz Sprinta 11. Funkcionalnost zahtijeva dodavanje checkbox sistema na listu tiketa, višestruke bulk operacije (zatvaranje, promjena prioriteta, dodjela, prosljeđivanje), dijalog za potvrdu destruktivnih akcija i prikaz sažetka rezultata. Opseg izmjena bio je prevelik za završni sprint fokusiran na stabilizaciju i finalnu dokumentaciju, a stavka je prioriteta 3 što ju je učinilo prirodnim kandidatom za odgađanje. Stavka je ostavljena za eventualni budući razvoj.
 
 ---
 

@@ -41,53 +41,106 @@ Svaka korisnička uloga ima različita ovlaštenja i pristup određenim funkcion
 
 Može:
 
-- Kreirati tiket
-- Pregledati vlastite tikete
-- Komunicirati sa podrškom
-- Pregledati pakete i pretplate
-- Koristiti FAQ
-- Ocijeniti zatvoreni tiket
+- Kreirati tiket (sa ili bez privitaka)
+- Pregledati vlastite tikete (otvorene i zatvorene)
+- Komunicirati sa podrškom putem poruka unutar tiketa
+- Dodavati privitke na tiket
+- Zatražiti zatvaranje tiketa
+- Prihvatiti ili odbiti prijedlog zatvaranja tiketa
+- Pregledati detalje svakog vlastitog tiketa (opis, status, prioritet, historija komunikacije)
+- Pregledati aktivne pakete i historiju pretplata
+- Koristiti FAQ (pregledati i pretraživati odgovore)
+- Ocijeniti zatvoreni tiket (ocjena 1–5 sa opcionim komentarom)
+- Pregledati i urediti vlastiti profil (email, lozinka)
+- Primati i čitati notifikacije o promjenama na tiketima
+- Prijaviti se emailom ili brojem telefona u međunarodnom formatu
 
 Ne može:
 
 - Vidjeti tuđe tikete
-- Upravljati korisnicima
-- Upravljati timovima
+- Mijenjati status tiketa
+- Upravljati korisnicima, timovima ili paketima
 - Pristupati administrativnim funkcijama
+- Koristiti AI funkcionalnosti
+- Pregledati audit logove ili izvještaje
 
 ## Agent
 
 Može:
 
-- Pregledati tikete
-- Komunicirati sa korisnicima
-- Koristiti AI prijedlog odgovora
-- Dodjeljivati prioritete
-- Prosljeđivati tikete
-- Pregledati korisničke profile
+- Pregledati sve tikete u sistemu
+- Pregledati vlastite dodijeljene tikete (otvorene i zatvorene odvojeno)
+- Dodijeliti tiket sebi (self-assign)
+- Komunicirati sa korisnicima putem poruka unutar tiketa
+- Dodavati interne komentare (vidljivi samo osoblju, ne klijentu)
+- Dodavati privitke na komentare
+- Koristiti AI prijedlog odgovora za generisanje nacrta poruke
+- Postavljati i mijenjati interni prioritet tiketa
+- Prosljeđivati tiket drugom agentu (sa odabirom konkretnog agenta)
+- Prosljeđivati tiket tehničaru
+- Pokrenuti automatsko prosljeđivanje tiketa
+- Pregledati listu dostupnih agenata i njihove skorove za prosljeđivanje
+- Zatvoriti tiket
+- Forsirati zatvaranje tiketa (force-close)
+- Pregledati korisničke profile i statistike korisnika
+- Pregledati vlastite radne statistike
+- Upravljati vlastitom dostupnošću (availability)
+- Pregledati timove kojima pripada
+- Pregledati i urediti vlastiti profil (email, lozinka)
+- Primati i čitati notifikacije
+
+Ne može:
+
+- Upravljati korisnicima (kreiranje, deaktivacija)
+- Upravljati timovima
+- Pregledati audit logove
+- Generisati izvještaje
+- Koristiti AI Insights ili MCP Admin Copilot
+- Upravljati paketima ili pretplatama
 
 ## Tehničar
 
 Može:
 
-- Pregledati dodijeljene tikete
+- Pregledati dodijeljene tikete (otvorene i zatvorene)
 - Mijenjati status tiketa
-- Koristiti AI prijedlog odgovora
-- Dodavati interne komentare
+- Komunicirati kroz tiket (slanje poruka korisniku)
+- Dodavati interne komentare (vidljivi samo osoblju, ne klijentu)
+- Dodavati privitke na komentare
+- Koristiti AI prijedlog odgovora za generisanje nacrta poruke
+- Pregledati profil korisnika koji je kreirao tiket
+- Pregledati vlastite radne statistike
+- Upravljati vlastitom dostupnošću (availability)
+- Pregledati i urediti vlastiti profil (email, lozinka)
+- Primati i čitati notifikacije
+
+Ne može:
+
+- Pregledati tikete koji mu nisu dodijeljeni
+- Prosljeđivati tikete ili forsirati zatvaranje
+- Upravljati korisnicima, timovima ili paketima
+- Pregledati audit logove ili generisati izvještaje
+- Koristiti AI Insights ili MCP Admin Copilot
 
 ## Administrator
 
 Može:
 
-- Upravljati korisnicima
-- Upravljati timovima
-- Upravljati paketima
-- Upravljati pretplatama
-- Upravljati FAQ sadržajem
-- Pregledati audit logove
-- Koristiti AI Insights
-- Koristiti MCP Admin Copilot
-- Generisati izvještaje
+- Upravljati korisnicima (kreirati, uređivati, aktivirati, deaktivirati; ne može deaktivirati vlastiti nalog)
+- Upravljati timovima (kreirati timove, dodavati i mijenjati članove, preraspoređivati timove)
+- Upravljati paketima iz kataloga (kreirati, uređivati, brisati, mijenjati status aktivnosti)
+- Upravljati pretplatama klijenata (pregledati, kreirati, deaktivirati)
+- Upravljati FAQ sadržajem (kreirati, uređivati, brisati unose)
+- Pregledati sve tikete u sistemu
+- Forsirati zatvaranje tiketa
+- Pregledati audit logove sa filtriranjem po tipu akcije i korisniku
+- Koristiti AI Insights (trendovi, statistike sistema, preporuke)
+- Koristiti MCP Admin Copilot (chat interfejs za postavljanje pitanja nad podacima sistema)
+- Pregledati dashboard sa statistikama sistema i brojem SLA kršenja
+- Generisati izvještaje (broj tiketa, status tiketa, opterećenje timova, ocjene) i eksportirati CSV
+- Pregledati i uređivati korisničke profile i statistike
+- Pregledati i urediti vlastiti profil (email, lozinka)
+- Primati i čitati notifikacije
 
 ---
 
@@ -129,8 +182,6 @@ Otvoriti URL sistema.
 
 Unijeti email adresu ili broj telefona u međunarodnom formatu (+387...) i lozinku.
 
-**Napomena:** Klijenti se mogu prijaviti i emailom i brojem telefona (npr. +38761234567). Agenti, tehničari i administratori prijavljuju se isključivo emailom.
-
 ## Korak 3
 
 Kliknuti na dugme "Prijava".
@@ -139,9 +190,7 @@ Kliknuti na dugme "Prijava".
 
 Sistem prikazuje dashboard odgovarajuće korisničke uloge.
 
-Mjesto za sliku:
-
-![Login ekran](images/slikaa1.png)
+![Login ekran](images/homepage.png)
 ---
 
 # 6. Dashboard
@@ -150,7 +199,7 @@ Dashboard predstavlja početni ekran nakon prijave.
 
 Prikazuje:
 
-- Statistiku
+- Statistiku (uz odgovarajuću autorizaciju)
 - Najnovije aktivnosti
 - Brze akcije
 - Pregled tiketa
@@ -159,7 +208,8 @@ Prikazuje:
 
 Korisnik dobija pregled najvažnijih informacija odmah nakon prijave.
 
-![Dashboard](images/slika2.png)
+![Dashboard agenta/tehničara](images/agentdashboard.png)
+![Dashboard admina](images/admindashboard.png)
 
 ---
 
@@ -167,7 +217,7 @@ Korisnik dobija pregled najvažnijih informacija odmah nakon prijave.
 
 ## Korak 1
 
-Otvoriti:
+Kao klijent, otvoriti:
 
 Moji tiketi → Novi tiket
 
@@ -188,8 +238,8 @@ Kliknuti na "Pošalji".
 
 Sistem kreira tiket i dodjeljuje mu jedinstveni identifikator.
 
-![Kreiranje tiketa](images/slika3v1.png)
-![Lista tiketa](images/slika3v2.png)
+![Klijentski dashboard](images/clientdashboard.png)
+![Kreiranje tiketa](images/createticket.png)
 
 ---
 
@@ -211,7 +261,7 @@ Prikazuju se:
 
 Korisnik vidi listu svih svojih tiketa.
 
-![Detalji tiketa](images/slika4.png)
+![Detalji tiketa](images/tickets.png)
 
 ---
 
@@ -232,7 +282,11 @@ Prikazuju se:
 
 Korisnik dobija kompletan pregled stanja tiketa.
 
-![Komunikacija kroz tiket](images/slika5.png)
+![Preview tiketa](images/ticketpreview.png)
+
+Klikom na puni prikaz otvaramo detalje tiketa:
+
+![Detalji tiketa](images/ticketdetails.png)
 
 ---
 
@@ -240,7 +294,7 @@ Korisnik dobija kompletan pregled stanja tiketa.
 
 ## Korak 1
 
-Otvoriti tiket.
+Otvoriti tiket (puni prikaz).
 
 ## Korak 2
 
@@ -253,8 +307,6 @@ Kliknuti na "Pošalji".
 ### Očekivani rezultat
 
 Poruka se evidentira u historiji komunikacije.
-
-![Profil korisnika](images/slika6.png)
 
 ---
 
@@ -272,11 +324,11 @@ Koraci:
 ### Očekivani rezultat
 
 Ocjena se sprema u sistem.
-![FAQ](images/slika7v1.png)
+![Potvrdite zatvaranje tiketa](images/slika7v1.png)
 
-![Paketi i pretplate](images/slika7v2.png)
+![Ocjenite tiket](images/slika7v2.png)
 
-![Notifikacije](images/slika7v3.png)
+![Uspješno ocjenjivanje](images/slika7v3.png)
 
 ---
 
@@ -288,12 +340,39 @@ Na profilu korisnik može:
 - Promijeniti email
 - Promijeniti lozinku
 
-Agenti i tehničari dodatno vide statistiku rada.
+Agenti i tehničari dodatno vide radnu statistiku: broj obrađenih tiketa, prosječno vrijeme prvog odgovora i prosječno vrijeme rješavanja.
 
-![AI prijedlog odgovora](images/slika8.png)
+![Profil klijenta](images/profileview.png)
+
 ---
 
-# 13. Paketi i pretplate
+# 13. Notifikacije
+
+Sve korisničke uloge primaju notifikacije o relevantnim događajima u sistemu.
+
+Notifikacije se prikazuju klikom na ikonu zvona u gornjem desnom uglu navigacijske trake ili u sidebar-u. Broj nepročitanih notifikacija prikazan je kao badge na ikoni.
+
+Događaji koji generišu notifikacije:
+
+- Promjena statusa tiketa
+- Nova poruka na tiketu
+- Dodjela tiketa
+- Zahtjev za zatvaranjem tiketa
+- Prihvatanje ili odbijanje zatvaranja tiketa
+
+## Označavanje kao pročitano
+
+Kliknuti na pojedinačnu notifikaciju da je označite kao pročitanu, ili koristiti opciju "Označi sve kao pročitano" za masovno označavanje.
+
+### Očekivani rezultat
+
+Broj na badgeu se smanjuje, pročitane notifikacije mijenjaju izgled.
+
+[Pregled notifikacija](images/notifs.png)
+
+---
+
+# 14. Paketi i pretplate
 
 Klijent može pregledati:
 
@@ -305,11 +384,11 @@ Klijent može pregledati:
 
 Prikaz svih aktivnih usluga korisnika.
 
-![AI Insights](images/slika9.png)
+![Paketi i pretplate](images/subscriptions.png)
 
 ---
 
-# 14. FAQ
+# 15. FAQ
 
 FAQ sadrži odgovore na najčešća pitanja.
 
@@ -322,145 +401,292 @@ Korisnik može:
 
 Brže pronalaženje odgovora bez kreiranja tiketa.
 
-![MCP Admin Copilot](images/slika10.png)
+![FAQ](images/faq.png)
 
 ---
 
-# 15. AI prijedlog odgovora
+# 16. Administracija FAQ-a
+
+Dostupno administratorima.
+
+Administrator može kreirati, uređivati i brisati FAQ unose.
+
+## Kreiranje novog FAQ unosa
+
+## Korak 1
+
+Otvoriti sekciju FAQ u admin panelu.
+
+## Korak 2
+
+Kliknuti na "Novi unos".
+
+## Korak 3
+
+Unijeti pitanje i odgovor.
+
+## Korak 4
+
+Kliknuti "Sačuvaj".
+
+### Očekivani rezultat
+
+Novi FAQ unos postaje vidljiv svim korisnicima sistema.
+
+## Uređivanje i brisanje
+
+Klikom na postojeći unos moguće ga je urediti ili obrisati. Brisanje je trajno.
+
+---
+
+# 17. AI prijedlog odgovora
 
 Dostupno agentima i tehničarima.
 
 Koraci:
 
 1. Otvoriti tiket
-2. Kliknuti "AI prijedlog odgovora"
+2. Kliknuti "AI prijedlog"
 3. Sačekati generisanje prijedloga
+4. Prihvatiti, generisati novi prijedlog ili odbaciti
+5. Nakon prihvatanja prijedloga isti se upiše u text box chat-a i može se poslati
 
 ### Očekivani rezultat
 
 Sistem generiše prijedlog odgovora koji korisnik može izmijeniti prije slanja.
 
-![AI prijedlog](images/slika17.jpg)
+![Generisanje AI prijedloga](images/aisugg1.png)
+![Generisani AI prijedlog](images/aisugg2.png)
 
 ---
 
-# 16. AI Insights
+# 18. AI Uvidi
 
 Dostupno administratorima.
 
-Prikazuje:
+AI Uvidi panel analizira trenutne metrike admin dashboarda (broj tiketa, vremena odgovora, ocjene, opterećenje agenata) koristeći Gemini AI i vraća strukturisane uvide.
 
-- Trendove
-- Statistike
-- Preporuke
+## Korak 1
+
+Otvoriti Admin Dashboard.
+
+## Korak 2
+
+Kliknuti na dugme AI Uvidi u gornjem desnom dijelu dashboarda. Otvara se bočni panel.
+
+## Korak 3
+
+Kliknuti na "Generiši". Sistem šalje trenutne metrike dashboarda AI servisu.
+
+## Korak 4
+
+Sačekati dok AI analizira metrike.
 
 ### Očekivani rezultat
 
-Administrator dobija pregled stanja sistema.
+Panel prikazuje tri sekcije:
 
-![Upravljanje korisnicima](images/slika12.png)
+- **Narativni sažetak** — tekstualni opis trenutnog stanja sistema
+- **Anomalije** — detektovane nepravilnosti sa naslovom i opisom (npr. neobično visok broj nezatvorenih tiketa)
+- **Preporuke** — prijedlozi akcija sa naslovom i opisom; preporuke vezane za određenu kategoriju tiketa sadrže link koji direktno filtrira tikete te kategorije na dashboardu
+
+Kliknuti "Osvježi" za ponovnu analizu sa najnovijim metrikama.
+
+**Napomena:** Uvidi se generišu na osnovu metrika trenutno prikazanog perioda na dashboardu. Promjenom perioda na dashboardu i ponovnim klikom na "Osvježi" dobijaju se uvidi za novi period.
+
+![AI Uvidi](images/aiinsights.png)
 
 ---
 
-# 17. MCP Admin Copilot
+# 19. MCP Admin Copilot
 
 Dostupno administratorima.
 
-Omogućava postavljanje pitanja o sistemu putem chat interfejsa.
+MCP Admin Copilot je chat interfejs koji administratoru omogućava postavljanje slobodnih pitanja o živim podacima sistema. Odgovori se generišu u realnom vremenu putem MCP servera koji direktno upituje bazu podataka.
 
-### Primjeri pitanja
+## Korak 1
 
-- Koji tim ima najveće opterećenje?
-- Koliko je otvorenih tiketa?
-- Koji korisnici imaju najviše zahtjeva?
+Kliknuti na dugme **MCP Copilot** u gornjem desnom uglu navigacijske trake. Otvara se chat panel.
 
-### Očekivani rezultat
+## Korak 2
 
-Sistem generiše odgovor na osnovu podataka iz baze.
+Odabrati jedan od prijedloga pitanja koji se prikazuju u praznom panelu ili upisati vlastito pitanje u polje za unos na dnu panela.
 
-![AI prijedlog 2](images/slika18.jpg)
+### Prijedlozi pitanja
 
----
+- Koji tim je najopterećeniji?
+- Prikaži tikete bez odgovora duže od 2 sata
+- Koji problemi se ponavljaju, a nisu pokriveni FAQ-om?
 
-# 18. Administracija korisnika
+## Korak 3
 
-Administrator može:
-
-- Kreirati korisnika
-- Urediti korisnika
-- Aktivirati korisnika
-- Deaktivirati korisnika
+Kliknuti na dugme za slanje (ili pritisnuti Enter).
 
 ### Očekivani rezultat
 
-Promjene se spremaju i odmah postaju vidljive u sistemu.
+Sistem šalje pitanje MCP serveru koji analizira žive podatke i vraća odgovor u chat. Razgovor se čuva tokom sesije — moguće je postavljati više pitanja u nizu unutar istog panela.
 
-![Upravljanje timovima](images/slika14.png)
+**Napomena:** Ako MCP server nije dostupan, sistem prikazuje poruku greške. Panel se zatvara klikom na X ili pritiskom tipke Escape.
+
+![AI MCP](images/aimcp.png)
 
 ---
 
-# 19. Administracija timova
+# 20. Administracija korisnika
 
-Administrator može:
+Dostupno administratorima.
 
-- Kreirati tim
-- Dodavati članove
-- Mijenjati članove tima
+## Pregled korisnika
+
+Otvoriti sekciju Korisnici. Prikazuje se lista svih korisnika u sistemu sa mogućnošću pretraživanja i filtriranja po ulozi i statusu.
+
+## Kreiranje korisnika
+
+## Korak 1
+
+Kliknuti na "Novi korisnik".
+
+## Korak 2
+
+Popuniti: ime i prezime, email, broj telefona, ulogu (Klijent, Agent, Tehničar, Administrator).
+
+## Korak 3
+
+Kliknuti "Sačuvaj".
 
 ### Očekivani rezultat
 
-Timovi postaju dostupni za dodjelu tiketa.
+Korisnik je kreiran i može se odmah prijaviti u sistem.
 
-![Timovi](images/slika21.jpg)
-![Tiimovi](images/slika20.jpg)
+## Uređivanje korisnika
+
+Kliknuti na korisnika u listi, izmijeniti podatke i sačuvati.
+
+## Deaktivacija i reaktivacija
+
+Kliknuti na korisnika, zatim "Deaktiviraj" ili "Reaktiviraj". Deaktivirani korisnik se ne može prijaviti u sistem.
+
+**Napomena:** Administrator ne može deaktivirati vlastiti nalog.
+
+![Upravljanje korisnicima](images/users.png)
 
 ---
 
-# 20. Izvještaji
+# 21. Administracija timova
 
-Administrator može generisati izvještaje.
+Dostupno administratorima.
 
-Podržani izvještaji:
+## Pregled timova
+
+Otvoriti sekciju Timovi. Prikazuje se lista svih timova i njihovi članovi.
+
+## Kreiranje tima
+
+## Korak 1
+
+Kliknuti na "Novi tim".
+
+## Korak 2
+
+Unijeti naziv tima i odabrati kategoriju tiketa kojom se tim bavi.
+
+## Korak 3
+
+Dodati članove tima iz liste dostupnih agenata i tehničara.
+
+## Korak 4
+
+Kliknuti "Sačuvaj".
+
+### Očekivani rezultat
+
+Tim je kreiran i dostupan za dodjelu tiketa.
+
+## Izmjena članova
+
+Kliknuti na tim, dodati ili ukloniti članove i sačuvati izmjene.
+
+![Pregled timovi](images/teams.png)
+
+---
+
+# 22. Izvještaji
+
+Dostupno administratorima.
+
+## Korak 1
+
+Otvoriti sekciju Izvještaji.
+
+## Korak 2
+
+Odabrati tip izvještaja:
 
 - Broj tiketa
 - Status tiketa
 - Opterećenje timova
 - Ocjene korisnika
 
-### Export
+## Korak 3
 
-Klikom na Export moguće je preuzeti CSV datoteku.
+Odabrati vremenski period (npr. tekuća sedmica, tekući mjesec ili prilagođeni raspon datuma).
+
+## Korak 4
+
+Kliknuti "Generiši".
 
 ### Očekivani rezultat
 
-Generisan izvještaj i preuzeta CSV datoteka.
+Izvještaj se prikazuje na ekranu sa grafičkim i tabelarnim prikazom podataka.
 
-![Izvještaji](images/slika16.png)
+## Export
 
----
+Kliknuti na "Export" za preuzimanje izvještaja kao CSV datoteke.
 
-# 21. Ograničenja sistema
-
-Klijent ne može:
-
-- Pregledati tuđe tikete
-- Upravljati korisnicima
-- Mijenjati statuse tiketa
-
-Agent ne može:
-
-- Upravljati korisnicima
-- Upravljati timovima
-
-Tehničar ne može:
-
-- Pristupati administrativnim funkcijama
-
-Sistem ne dozvoljava pristup funkcijama za koje korisnik nema odgovarajuća ovlaštenja.
+![Izvještaji](images/reports.png)
 
 ---
 
-# 22. Preporuke za korištenje
+# 23. Audit log
+
+Dostupno administratorima.
+
+Audit log bilježi sve važne akcije izvršene u sistemu (kreiranje, izmjena i brisanje korisnika, timova, tiketa, FAQ unosa i dr.) zajedno sa informacijom o korisniku koji je izvršio akciju i vremenom akcije.
+
+## Korak 1
+
+Otvoriti sekciju Audit log.
+
+## Korak 2
+
+Prikazuje se hronološka lista svih zabilježenih akcija.
+
+## Filtriranje
+
+Listu je moguće filtrirati po:
+
+- Tipu akcije (npr. kreiranje korisnika, zatvaranje tiketa)
+- Korisniku koji je izvršio akciju
+
+## Korak 3
+
+Kliknuti na unos za pregled detalja konkretne akcije.
+
+### Očekivani rezultat
+
+Administrator dobija kompletan uvid u historiju aktivnosti sistema za potrebe nadzora i revizije.
+
+---
+
+# 24. Ograničenja sistema
+
+Sistem automatski primjenjuje ovlaštenja definisana za svaku ulogu. Pokušaj pristupa funkciji bez odgovarajućih ovlaštenja rezultuje greškom pristupa.
+
+Detaljna lista ovlaštenja i ograničenja po ulogama nalazi se u sekciji 3 ovog priručnika.
+
+---
+
+# 25. Preporuke za korištenje
 
 - Koristiti FAQ prije kreiranja tiketa.
 - Prilikom prijave problema dati što detaljniji opis.
@@ -470,6 +696,6 @@ Sistem ne dozvoljava pristup funkcijama za koje korisnik nema odgovarajuća ovla
 
 ---
 
-# 23. Zaključak
+# 26. Zaključak
 
 Helpdesk i Ticketing Sistem predstavlja centralizovano rješenje za upravljanje korisničkom podrškom. Sistem omogućava efikasno upravljanje tiketima, korisnicima, timovima, paketima i izvještajima, uz dodatnu podršku AI funkcionalnosti koje unapređuju svakodnevni rad korisnika i administratora.
