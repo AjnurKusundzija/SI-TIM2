@@ -75,7 +75,6 @@ Finalni izvještaj dodatno navodi da nisu realizovani:
 
 - Dokumentovano je da produkcijski deployment resetuje bazu zbog brisanja Docker volumena.
 - Dokumentovano je da backend može biti resetovan ako SQL Server ne bude spreman ni nakon retry mehanizma.
-- Dokumentovano je da postoji flaky performansni test `AuthPerformanceTests.Login_ShouldCompleteWithinTimeLimit_InTestEnvironment`, nevezan za PB-62.
 
 ## Šta nije dio finalne isporuke
 
