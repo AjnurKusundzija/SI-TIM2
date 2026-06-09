@@ -152,6 +152,9 @@ builder.Services.AddScoped<ICatalogPackageService, CatalogPackageService>();
 builder.Services.AddScoped<IClientSubscriptionService, ClientSubscriptionService>();
 // Audit Log
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+// SLA (US-115, US-116)
+builder.Services.AddScoped<ISlaService, SlaService>();
+builder.Services.AddHostedService<SlaWorker>();
 // US-24: Team Overview and Agent Reassignment
 builder.Services.AddScoped<ITeamService, TeamService>();
 // PB-57, PB-58: AI suggestions (Gemini)

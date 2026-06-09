@@ -190,7 +190,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Email adresa
+                Email adresa ili broj telefona
               </label>
               <input
                 id="email"
@@ -199,7 +199,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-navy-500 focus:border-navy-500 outline-none transition-all placeholder:text-gray-400"
-                placeholder="you@example.com"
+                placeholder="you@example.com ili +387XXXXXXXX"
               />
             </div>
 
