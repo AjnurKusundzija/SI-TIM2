@@ -10,6 +10,8 @@ namespace TelecomSupportSystem.DAL.Entities.Enums
         TICKET_FORWARDED = 2,
         STATUS_CHANGED = 3,
         TICKET_RESPONSE = 4,
-        TICKET_CLOSED = 5
+        TICKET_CLOSED = 5,
+        SLA_WARNING = 6,
+        SLA_BREACH = 7
     }
 }

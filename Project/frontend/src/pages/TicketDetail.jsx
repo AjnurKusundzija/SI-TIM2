@@ -49,6 +49,7 @@ import Modal from '../components/common/Modal'
 import AttachmentList, { FilesDrivePanel, AttachmentLightbox } from '../components/common/AttachmentList'
 import FileUpload from '../components/common/FileUpload'
 import AISuggestionModal from '../components/common/AISuggestionModal'
+import SlaIndicator from '../components/common/SlaIndicator'
 import { formatDateTime } from '../utils/formatDate'
 
 const MAX_COMMENT_LENGTH = 1000
@@ -1072,6 +1073,18 @@ export default function TicketDetail() {
                                 </div>
                             </dl>
                         </div>
+
+                        {/* SLA sekcija — samo za osoblje, samo otvoreni tiketi (US-115) */}
+                        {(user?.role === 'AGENT' || user?.role === 'ADMINISTRATOR' || user?.role === 'TECHNICIAN') && ticket.slaStatus && (
+                            <div className="px-5 py-4">
+                                <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-3">SLA rok</p>
+                                <SlaIndicator
+                                    slaStatus={ticket.slaStatus}
+                                    slaRemainingMinutes={ticket.slaRemainingMinutes}
+                                    slaIsBreached={ticket.slaIsBreached}
+                                />
+                            </div>
+                        )}
 
                         {/* Svi prilozi — agregiran Drive prikaz */}
                         <FilesDrivePanel attachments={allAttachments} onOpenAttachment={setLightboxId} />

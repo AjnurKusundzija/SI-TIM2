@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock('../services/adminService', () => ({
   getAdminDashboard: mocks.getAdminDashboard,
   generateReport: mocks.generateReport,
+  getSlaBreachCount: vi.fn().mockResolvedValue(0),
 }))
 
 vi.mock('recharts', () => ({
@@ -250,6 +251,8 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
       data: { totalCount: 7 },
       showLargePeriodWarning: false,
     })
+    URL.createObjectURL = vi.fn(() => 'blob:mock')
+    URL.revokeObjectURL = vi.fn()
   })
 
   it('reports mod NE prikazuje KPI kartice i NE poziva dashboard endpoint', async () => {
@@ -271,10 +274,12 @@ describe('AdminDashboardSection (reports mode) — generisanje + export (PB-45 /
     )
   })
 
-  it('Export dugme postoji ali je disabled (US-85)', () => {
+  it('Export dugme je aktivno i pokreće preuzimanje CSV-a (US-85)', async () => {
     renderReports()
     const exportBtn = screen.getByRole('button', { name: /Export/i })
-    expect(exportBtn).toBeDisabled()
+    expect(exportBtn).not.toBeDisabled()
+    fireEvent.click(exportBtn)
+    await waitFor(() => expect(mocks.generateReport).toHaveBeenCalled())
   })
 
   it('klik na chip poziva generateReport sa odabranim tipom', async () => {

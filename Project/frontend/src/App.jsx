@@ -4,7 +4,6 @@ import { NotificationProvider } from './context/NotificationContext'
 import AppLayout from './components/layout/AppLayout'
 import ProtectedRoute from './components/layout/ProtectedRoute'
 
-import Home from './pages/Home'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import MyTickets from './pages/MyTickets'
@@ -33,9 +32,8 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
       <Route
-        path="/login"
+        path="/"
         element={user ? <Navigate to="/dashboard" replace /> : <Login />}
       />
 
@@ -103,7 +101,8 @@ function AppRoutes() {
 
       </Route>
 
-      <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />
+      <Route path="/login" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to={user ? '/dashboard' : '/'} replace />} />
     </Routes>
   )
 }

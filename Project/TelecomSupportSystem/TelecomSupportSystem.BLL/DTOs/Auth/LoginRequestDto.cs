@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TelecomSupportSystem.BLL.Helpers;
 
 namespace TelecomSupportSystem.BLL.DTOs.Auth
 {
     public class LoginRequestDto
     {
         [Required]
-        [EmailAddress]
+        [EmailOrBiHPhone]
         public string Email { get; set; } = string.Empty;
 
         [Required]

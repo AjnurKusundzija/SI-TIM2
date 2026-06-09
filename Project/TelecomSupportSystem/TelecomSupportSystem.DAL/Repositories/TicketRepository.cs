@@ -164,6 +164,16 @@ namespace TelecomSupportSystem.DAL.Repositories
                 .ToList();
         }
 
+        // SLA worker: svi otvoreni tiketi s dodijeljenim korisnicima
+        public async Task<IEnumerable<Ticket>> GetOpenTicketsAsync()
+        {
+            return await _context.Tickets
+                .Where(t => t.Status != TicketStatus.CLOSED)
+                .Include(t => t.Assignments)
+                    .ThenInclude(a => a.User)
+                .ToListAsync();
+        }
+
         // PB-42: Tiketi gdje je korisnik aktivno dodijeljen (svi statusi), s komentarima i ocjenama
         public async Task<IEnumerable<Ticket>> GetAssignedTicketsForStatsAsync(int userId)
         {

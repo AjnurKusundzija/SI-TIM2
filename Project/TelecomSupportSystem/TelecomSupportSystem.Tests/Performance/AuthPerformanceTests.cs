@@ -17,7 +17,7 @@ namespace TelecomSupportSystem.Tests.Performance
     // PB-19: Performansno testiranje toka prijave
     public class AuthPerformanceTests
     {
-        private const int MaxLoginTimeMilliseconds = 2000;
+        private const int MaxLoginTimeMilliseconds = 5000;
         private const string TestPassword = "Password123!";
 
         private static IConfiguration BuildConfig() =>

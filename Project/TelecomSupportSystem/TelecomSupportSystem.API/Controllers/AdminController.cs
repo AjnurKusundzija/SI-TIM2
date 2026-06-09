@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TelecomSupportSystem.BLL.Services.Interfaces;
+using TelecomSupportSystem.DAL.Repositories.Interfaces;
 
 namespace TelecomSupportSystem.API.Controllers
 {
@@ -10,10 +11,17 @@ namespace TelecomSupportSystem.API.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IReportService _reportService;
+        private readonly ISlaService? _slaService;
+        private readonly ITicketRepository? _ticketRepository;
 
-        public AdminController(IReportService reportService)
+        public AdminController(
+            IReportService reportService,
+            ISlaService? slaService = null,
+            ITicketRepository? ticketRepository = null)
         {
             _reportService = reportService;
+            _slaService = slaService;
+            _ticketRepository = ticketRepository;
         }
 
         // PB-45 / US-71: GET /api/admin/dashboard
@@ -32,6 +40,18 @@ namespace TelecomSupportSystem.API.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        // US-116: GET /api/admin/sla-breach-count
+        [HttpGet("sla-breach-count")]
+        public async Task<IActionResult> GetSlaBreachCount()
+        {
+            if (_slaService is null || _ticketRepository is null)
+                return Ok(new { breachCount = 0 });
+
+            var tickets = await _ticketRepository.GetOpenTicketsAsync();
+            var count = _slaService.CountBreaches(tickets);
+            return Ok(new { breachCount = count });
         }
     }
 }

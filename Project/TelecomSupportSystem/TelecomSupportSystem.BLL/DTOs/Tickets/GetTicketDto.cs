@@ -17,5 +17,11 @@ namespace TelecomSupportSystem.BLL.DTOs.Tickets
         public string? AssignedAgentName { get; set; }
         public string? AssignmentMessage { get; set; }
         public IEnumerable<TelecomSupportSystem.BLL.DTOs.Attachments.AttachmentDto> Attachments { get; set; } = new List<TelecomSupportSystem.BLL.DTOs.Attachments.AttachmentDto>();
+
+        // SLA (US-115) — null for CLOSED tickets
+        public DateTime? SlaDeadline { get; set; }
+        public double? SlaRemainingMinutes { get; set; }
+        public string? SlaStatus { get; set; }
+        public bool SlaIsBreached { get; set; }
     }
 }

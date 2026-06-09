@@ -6,6 +6,7 @@ namespace TelecomSupportSystem.DAL.Repositories.Interfaces
     public interface IUserRepository
     {
         Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByPhoneAsync(string phone);
         Task<User?> GetByIdAsync(int userId);
         Task UpdateAsync(User user);
 

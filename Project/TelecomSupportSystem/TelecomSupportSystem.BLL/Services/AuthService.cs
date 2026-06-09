@@ -31,18 +31,23 @@ namespace TelecomSupportSystem.BLL.Services
             _auditLogService = auditLogService ?? new NoOpAuditLogService();
         }
 
+        private static bool IsPhoneNumber(string input)
+            => System.Text.RegularExpressions.Regex.IsMatch(input, @"^\+387[0-9]{8,10}$");
+
         public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto loginDto, string? ipAddress = null)
         {
-            var user = await _userRepository.GetByEmailAsync(loginDto.Email);
+            var identifier = loginDto.Email.Trim();
+            var user = IsPhoneNumber(identifier)
+                ? await _userRepository.GetByPhoneAsync(identifier)
+                : await _userRepository.GetByEmailAsync(identifier);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {
-                // Log failed login attempt (without userId since user doesn't exist)
                 await _auditLogService.LogAsync(
                     AuditActionType.USER_LOGIN_FAILED,
                     "User",
                     null,
-                    $"Neuspješan pokušaj prijave za: {loginDto.Email}",
+                    $"Neuspješan pokušaj prijave za: {identifier}",
                     ipAddress: ipAddress
                 );
                 return null;
@@ -201,6 +206,7 @@ namespace TelecomSupportSystem.BLL.Services
             public Task<DTOs.AuditLogs.AuditLogDetailDto?> GetAuditLogDetailAsync(int id) => throw new NotSupportedException();
             public Task<List<string>> GetActionTypesAsync() => throw new NotSupportedException();
             public Task<List<DTOs.AuditLogs.AuditLogUserDto>> GetAuditLogUsersAsync() => throw new NotSupportedException();
+            public Task<bool> ExistsAsync(AuditActionType actionType, string entityId) => Task.FromResult(false);
         }
     }
 }

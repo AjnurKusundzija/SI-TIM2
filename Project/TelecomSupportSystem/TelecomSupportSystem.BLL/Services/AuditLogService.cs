@@ -205,6 +205,13 @@ namespace TelecomSupportSystem.BLL.Services
             }
         }
 
+        public async Task<bool> ExistsAsync(AuditActionType actionType, string entityId)
+        {
+            var actionTypeStr = actionType.ToString();
+            return await _dbContext.AuditLogs.AnyAsync(a =>
+                a.ActionType == actionTypeStr && a.EntityId == entityId);
+        }
+
         public async Task<List<AuditLogUserDto>> GetAuditLogUsersAsync()
         {
             try
